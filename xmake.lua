@@ -4,8 +4,9 @@ add_repositories("levilamina https://github.com/LiteLDev/xmake-repo.git")
 add_repositories("iceblcokmc https://github.com/IceBlcokMC/xmake-repo.git")
 
 add_requires("nodejs 23.5.0") -- iceblockmc
+add_requires("levilamina develop") -- levilamina
+add_requires("levibuildscript 0.2.0")
 add_requires(
-    "endstone 0.5.7.1",
     "expected-lite 0.8.0",
     "entt 3.14.0",
     "microsoft-gsl 4.0.0",
@@ -32,7 +33,7 @@ if is_plat("windows") then
 end
 
 
-target("Js_Engine")
+target("Komomo")
     add_defines(
         "NOMINMAX",
         "UNICODE",
@@ -41,6 +42,7 @@ target("Js_Engine")
     add_files("src/**.cc")
     add_includedirs("src")
     add_packages("nodejs")
+    add_packages("levilamina", "levibuildscript")
     add_packages(
         "fmt",
         "expected-lite",
@@ -50,7 +52,6 @@ target("Js_Engine")
         "boost",
         "glm",
         "concurrentqueue",
-        "endstone",
         "magic_enum"
     )
     set_kind("shared")
@@ -88,15 +89,17 @@ target("Js_Engine")
     end
 
     -- ScriptX
-    add_includedirs("third-party/scriptx/src/include")
+    add_includedirs("ScriptX/src/include")
     add_files(
-        "third-party/scriptx/src/**.cc",
-        "third-party/scriptx/backend/V8/**.cc"
+        "ScriptX/src/**.cc",
+        "ScriptX/backend/V8/**.cc"
     )
     add_defines(
         "SCRIPTX_BACKEND_V8",
-        "SCRIPTX_BACKEND_TRAIT_PREFIX=../third-party/scriptx/backend/V8/trait/Trait"
+        "SCRIPTX_BACKEND_TRAIT_PREFIX=../ScriptX/backend/V8/trait/Trait"
     )
+
+    add_rules("@levibuildscript/linkrule")
 
     if is_plat("windows") then
         -- add_links("third-party/nodejs/win/lib/libnode.lib")
@@ -110,7 +113,7 @@ target("Js_Engine")
         add_defines("DEBUG")
     end
 
-    set_basename("js_engine")
+    set_basename("Komomo")
     after_build(function(target)
         local output_dir = path.join(os.projectdir(), "bin")
         local ext = ".dll";

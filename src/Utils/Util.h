@@ -6,7 +6,7 @@
 #include <vector>
 
 
-namespace jse {
+namespace Komomo {
 
 template <typename T>
 inline bool FindVector(std::vector<T> const& vec, T const& value) {

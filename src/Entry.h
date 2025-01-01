@@ -1,31 +1,29 @@
 #pragma once
-#include "endstone/plugin/plugin.h"
 
-namespace jse {
+#include <array>
 
-class PluginDescriptionBuilderImpl : public endstone::detail::PluginDescriptionBuilder {
+#include <ll/api/mod/NativeMod.h>
+
+namespace Komomo {
+
+class Entry {
 public:
-    PluginDescriptionBuilderImpl() {
-        description  = "JavaScript Engine";
-        contributors = {"engsr6982", "zimuya4153", "killcerr"}; // Github Username
-        website      = "https://github.com/engsr6982/Js_Engine";
-    }
-};
+    static Entry& getInstance();
 
-class Entry : public endstone::Plugin {
-public:
-    static Entry* getInstance();
+    Entry() : mSelf(*ll::mod::NativeMod::current()) {}
 
-    void onLoad() override;
+    [[nodiscard]] ll::mod::NativeMod& getSelf() const { return mSelf; }
 
-    void onEnable() override;
+    bool load();
 
-    void onDisable() override;
+    bool enable();
 
-    endstone::PluginDescription const& getDescription() const override;
+    bool disable();
+
+    bool unload();
 
 private:
-    PluginDescriptionBuilderImpl builder;
-    endstone::PluginDescription  description_ = builder.build("js_engine", "0.1.0");
+    ll::mod::NativeMod& mSelf;
 };
-} // namespace jse
+
+}; // namespace Komomo

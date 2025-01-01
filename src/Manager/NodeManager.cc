@@ -1,6 +1,6 @@
 #pragma warning(disable : 4996)
 #include "NodeManager.h"
-#include "API/APIHelper.h"
+// #include "API/APIHelper.h"
 #include "BindAPI.h"
 #include "EngineData.h"
 #include "Entry.h"
@@ -19,7 +19,7 @@
 #include <utility>
 
 
-namespace jse {
+namespace Komomo {
 
 
 NodeManager& NodeManager::getInstance() {
@@ -41,9 +41,9 @@ void NodeManager::initNodeJs() {
     cppgc::InitializeProcess();
     std::vector<string> errors;
     if (node::InitializeNodeWithArgs(&mArgs, &mExecArgs, &errors) != 0) {
-        Entry::getInstance()->getLogger().critical("Failed to initialize Node.js: ");
+        Entry::getInstance().getSelf().getLogger().error("Failed to initialize Node.js: ");
         for (auto const& error : errors) {
-            Entry::getInstance()->getLogger().critical(error);
+            Entry::getInstance().getSelf().getLogger().error(error);
         }
         return;
     }
@@ -84,7 +84,7 @@ EngineWrapper* NodeManager::newScriptEngine() {
         node::CommonEnvironmentSetup::Create(mPlatform.get(), &errors, mArgs, mExecArgs);
     if (!envSetup) {
         for (auto const& err : errors)
-            Entry::getInstance()->getLogger().error("Faild to create environment setup: {}", err);
+            Entry::getInstance().getSelf().getLogger().error("Faild to create environment setup: {}", err);
         return nullptr;
     }
 
@@ -109,7 +109,7 @@ EngineWrapper* NodeManager::newScriptEngine() {
         isolate,
         [](void* arg) {
             static_cast<ScriptEngine*>(arg)->destroy();
-            Entry::getInstance()->getLogger().debug("Destroyed engine: {}", arg);
+            Entry::getInstance().getSelf().getLogger().debug("Destroyed engine: {}", arg);
         },
         engine
     );
@@ -156,7 +156,7 @@ bool NodeManager::NpmInstall(string npmExecuteDir) {
     );
     if (!setup) {
         for (const std::string& err : errors)
-            Entry::getInstance()->getLogger().error("CommonEnvironmentSetup Error: {}", err.c_str());
+            Entry::getInstance().getSelf().getLogger().error("CommonEnvironmentSetup Error: {}", err.c_str());
         return false;
     }
     npmExecuteDir = ReplaceStr(npmExecuteDir, "\\", "/");
@@ -196,7 +196,7 @@ bool NodeManager::NpmInstall(string npmExecuteDir) {
         }
         success = node::SpinEventLoop(env).FromMaybe(1) == 0;
     } catch (...) {
-        Entry::getInstance()->getLogger().error("Failed to run npm install");
+        Entry::getInstance().getSelf().getLogger().error("Failed to run npm install");
     }
 
     node::Stop(env);
@@ -224,8 +224,8 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
     string dirname  = path.parent_path().string();
     string filename = path.string();
 #endif
-    Entry::getInstance()->getLogger().debug("dirname: {}", dirname);
-    Entry::getInstance()->getLogger().debug("filename: {}", filename);
+    Entry::getInstance().getSelf().getLogger().debug("dirname: {}", dirname);
+    Entry::getInstance().getSelf().getLogger().debug("filename: {}", filename);
 
     try {
         EngineScope enter(wrapper->mEngine);
@@ -271,7 +271,7 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
         }
 
         node::SetProcessExitHandler(env, [id{wrapper->mID}](node::Environment* env_, int exit_code) {
-            Entry::getInstance()->getLogger().debug("Node.js process exit with code: {}", exit_code);
+            Entry::getInstance().getSelf().getLogger().debug("Node.js process exit with code: {}", exit_code);
             NodeManager::getInstance().destroyEngine(id);
         });
 
@@ -299,7 +299,7 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
 std::optional<string> NodeManager::readFileContent(const fs::path& path) {
     std::ifstream file(path);
     if (!file.is_open()) {
-        Entry::getInstance()->getLogger().error("Cannot open file: {}", path.string());
+        Entry::getInstance().getSelf().getLogger().error("Cannot open file: {}", path.string());
         return std::nullopt;
     }
     string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());

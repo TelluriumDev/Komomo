@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Utils/Using.h"
 #include "node.h"
 #include <filesystem>
@@ -8,7 +9,7 @@
 #include <vector>
 
 
-namespace jse {
+namespace Komomo {
 
 
 struct EngineWrapper {
