@@ -1,5 +1,6 @@
 #include "Loader/ModManager.h"
 #include "Entry.h"
+#include "Loader/Mod.h"
 #include "Manager/EngineData.h"
 #include "Manager/NodeManager.h"
 
@@ -22,14 +23,17 @@ namespace Komomo {
 
 KomomoModManager::KomomoModManager() : ll::mod::ModManager(ModManagerName) {}
 KomomoModManager::~KomomoModManager() = default;
+std::vector<std::string> KomomoModManager::getPluginFileFilters() const { return {".js"}; }
+
 
 ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
+
     auto& manager = NodeManager::getInstance();
     auto  wrapper = manager.newScriptEngine();
 
     EngineScope scope(wrapper->mEngine);
     auto        data = ENGINE_DATA();
-    auto        file = fs::current_path().string() + "\\plugins\\" + manifest.name + "\\" + manifest.entry; //!!!!!
+    auto        file = fs::current_path() / ll::mod::getModsRoot() / manifest.name / manifest.entry;
     try {
         auto path = fs::path(file);
 
@@ -66,14 +70,16 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
         // data->tryParsePermissions(builder);
 
         // 创建插件实例
-        auto mod = std::make_shared<ll::mod::Mod>(manifest);
+        auto mod = std::make_shared<KomomoMod>(manifest);
         // auto mod   = new JavaScriptPlugin(data->mID, builder.build(data->tryParseName(), data->tryParseVersion()));
         data->mMod = mod;
 
+        mod->id = data->mID;
 
         mod->onLoad([&data](ll::mod::Mod&) {
-            data   = ENGINE_DATA();
-            auto        engine = NodeManager::getInstance().getEngine(data->mID);
+            // data               = ENGINE_DATA();
+            auto engine = NodeManager::getInstance().getEngine(data->mID);
+
             EngineScope scope(engine->mEngine);
             try {
                 ENGINE_DATA()->callOnLoad();
@@ -81,9 +87,9 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             CatchNotReturn;
             return true;
         });
-        auto id = data->mID;
-        mod->onEnable([&id](ll::mod::Mod& mod) {
-            auto        engine = NodeManager::getInstance().getEngine(id);
+        // auto id = data->mID;
+        mod->onEnable([&data](ll::mod::Mod& mod) {
+            auto        engine = NodeManager::getInstance().getEngine(data->mID);
             EngineScope scope(engine->mEngine);
             try {
                 ENGINE_DATA()->callOnEnable();
@@ -91,8 +97,7 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             CatchNotReturn;
             return true;
         });
-        mod->onDisable([](ll::mod::Mod&) {
-            auto        data   = ENGINE_DATA();
+        mod->onDisable([&data](ll::mod::Mod&) {
             auto        engine = NodeManager::getInstance().getEngine(data->mID);
             EngineScope scope(engine->mEngine);
             try {
@@ -101,15 +106,13 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             CatchNotReturn;
             return true;
         });
-        mod->onUnload([](ll::mod::Mod&) {
-            auto data = ENGINE_DATA();
+        mod->onUnload([&data](ll::mod::Mod&) {
             NodeManager::getInstance().destroyEngine(data->mID);
             return true;
         });
 
-        addMod(manifest.name, mod);
 
-        // return mod->onLoad().transform([&, this] {  });
+        return mod->onLoad().transform([&, this] { addMod(manifest.name, mod); });
 
     } catch (script::Exception& e) {
         Entry::getInstance().getSelf().getLogger().error("Failed to load plugin: {}", file);
@@ -128,5 +131,50 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
 }
 
 // TODO: 实现 unload 方法
-ll::Expected<> KomomoModManager::unload(std::string_view name) { return {}; }
+ll::Expected<> KomomoModManager::unload(std::string_view name) {
+    try {
+
+        auto mod = std::static_pointer_cast<KomomoMod>(getMod(name));
+
+
+        auto& scriptEngine = *NodeManager::getInstance().getEngine(mod->id);
+
+        scriptEngine.mEngine->getData().reset();
+        NodeManager::getInstance().destroyEngine(scriptEngine.mID);
+        scriptEngine.mEngine->destroy(); // TODO: use unique_ptr to manage the engine.
+        mod->id = 0;
+        eraseMod(name);
+
+        return {};
+    } catch (const std::exception& e) {
+        return ll::makeStringError("Failed to unload plugin {0}: {1}");
+    }
+}
+
+std::vector<std::string> KomomoModManager::filterMods(const fs::path& directory) {
+    std::vector<std::string> mods;
+    if (!fs::exists(directory)) {
+        return mods;
+    }
+
+    for (const auto& entry : fs::directory_iterator(directory)) {
+        if (!entry.is_directory()) {
+            continue;
+        }
+
+        fs::path package = entry.path() / "package.json";
+        if (!fs::exists(package)) {
+            continue;
+        }
+
+        auto main = NodeManager::findMainScript(package);
+        if (!main) {
+            continue;
+        }
+
+        mods.push_back((entry.path() / *main).string());
+    }
+
+    return mods;
+}
 } // namespace Komomo

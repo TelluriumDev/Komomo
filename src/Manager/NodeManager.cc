@@ -79,9 +79,12 @@ EngineWrapper* NodeManager::newScriptEngine() {
     }
     EngineID id = NextEngineID++;
 
-    std::vector<string>                           errors;
+    std::vector<string>           errors;
+    node::EnvironmentFlags::Flags flags = static_cast<node::EnvironmentFlags::Flags>(
+        node::EnvironmentFlags::kNoRegisterESMLoader | node::EnvironmentFlags::kNoCreateInspector
+    );
     std::unique_ptr<node::CommonEnvironmentSetup> envSetup =
-        node::CommonEnvironmentSetup::Create(mPlatform.get(), &errors, mArgs, mExecArgs);
+        node::CommonEnvironmentSetup::Create(mPlatform.get(), &errors, mArgs, mExecArgs, flags);
     if (!envSetup) {
         for (auto const& err : errors)
             Entry::getInstance().getSelf().getLogger().error("Faild to create environment setup: {}", err);
@@ -363,4 +366,4 @@ bool NodeManager::packageIsEsm(const fs::path& packagePath) {
 }
 
 
-} // namespace jse
+} // namespace Komomo

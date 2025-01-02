@@ -31,6 +31,7 @@ namespace Komomo {
 
 std::shared_ptr<KomomoModManager> komomoModManager;
 
+
 Entry& Entry::getInstance() {
     static Entry instance;
     return instance;
@@ -60,6 +61,14 @@ bool Entry::disable() { return true; }
 bool Entry::unload() { return true; }
 
 // endstone::PluginDescription const& Entry::getDescription() const { return description_; }
+
+auto getKomomoModManager() -> KomomoModManager& {
+    if (!komomoModManager) {
+        throw std::runtime_error("modManager is null");
+    }
+
+    return *komomoModManager;
+}
 
 } // namespace Komomo
 

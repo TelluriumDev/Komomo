@@ -100,6 +100,7 @@ target("Komomo")
     )
 
     add_rules("@levibuildscript/linkrule")
+    add_rules("@levibuildscript/modpacker")
 
     if is_plat("windows") then
         -- add_links("third-party/nodejs/win/lib/libnode.lib")

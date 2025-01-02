@@ -1,14 +1,17 @@
 #pragma once
 
-#include <array>
+#include "Loader/ModManager.h"
 
 #include <ll/api/mod/NativeMod.h>
+#include <memory>
 
 namespace Komomo {
 
+// extern std::shared_ptr<KomomoModManager> komomoModManager;
 class Entry {
 public:
     static Entry& getInstance();
+
 
     Entry() : mSelf(*ll::mod::NativeMod::current()) {}
 
@@ -22,8 +25,10 @@ public:
 
     bool unload();
 
+
 private:
     ll::mod::NativeMod& mSelf;
 };
 
+[[nodiscard]] auto getKomomoModManager() -> KomomoModManager&;
 }; // namespace Komomo
