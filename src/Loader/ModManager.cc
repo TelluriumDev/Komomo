@@ -1,9 +1,10 @@
 #include "Loader/ModManager.h"
+#include "API/APIHelper.h"
 #include "Entry.h"
 #include "Loader/Mod.h"
 #include "Manager/EngineData.h"
 #include "Manager/NodeManager.h"
-#include "API/APIHelper.h"
+
 
 #include <ll/api/Expected.h>
 #include <ll/api/mod/Mod.h>
@@ -77,7 +78,8 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             CatchNotReturn;
             return true;
         });
-        mod->onDisable([&data](ll::mod::Mod&) {
+        mod->onDisable([&data](ll::mod::Mod& mod) {
+            // if (!data) return true;
             auto        engine = NodeManager::getInstance().getEngine(data->mID);
             EngineScope scope(engine->mEngine);
             try {
@@ -87,6 +89,7 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             return true;
         });
         mod->onUnload([&data](ll::mod::Mod&) {
+            if (!data) return true;
             NodeManager::getInstance().destroyEngine(data->mID);
             return true;
         });

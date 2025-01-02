@@ -31,6 +31,7 @@ void EnableListener(EngineID engineId, EventId eventId) {
         ll::event::ListenerPtr eventPtr = eventBus.emplaceListener<ll::event::ServerStartedEvent>(
             [engineId, eventId, &eventPtr](const ll::event::ServerStartedEvent& event) {
                 CallBackNoCancelEvent(engineId, eventId, eventPtr);
+                return Local<Value>();
             }
         );
         break;
@@ -39,6 +40,7 @@ void EnableListener(EngineID engineId, EventId eventId) {
         ll::event::ListenerPtr eventPtr = eventBus.emplaceListener<ll::event::PlayerJoinEvent>(
             [engineId, eventId, &eventPtr](const ll::event::PlayerJoinEvent& event) {
                 CallBackNoCancelEvent(engineId, eventId, eventPtr, PlayerClass::newPlayer(&event.self()));
+                return Local<Value>();
             }
         );
         break;
@@ -71,6 +73,7 @@ bool removeEventListener(const std::string& eventName, ScriptEngine* engine, con
 
 
 Local<Value> EventClass::emplaceListener(const Arguments& args) {
+    CheckArgsCount(args, 2);
     try {
         return Boolean::newBoolean(
             addEventListener(args[0].asString().toString(), EngineScope::currentEngine(), args[1].asFunction())
@@ -80,7 +83,8 @@ Local<Value> EventClass::emplaceListener(const Arguments& args) {
 }
 
 Local<Value> EventClass::removeListener(const Arguments& args) {
-    CheckArgsCount(args, 2) try {
+    CheckArgsCount(args, 2);
+    try {
         return Boolean::newBoolean(
             removeEventListener(args[0].asString().toString(), EngineScope::currentEngine(), args[1].asFunction())
         );
