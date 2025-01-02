@@ -116,36 +116,18 @@ target("Komomo")
 
     set_basename("Komomo")
     after_build(function(target)
---         local output_dir = path.join(os.projectdir(), "bin")
---         local ext = ".dll";
---         if (is_plat("linux")) then
---             ext = ".so";
---         end
--- 
---         os.cp(target:targetfile(), path.join(output_dir, target:basename() .. ext))
--- 
---         os.cp(path.join(os.projectdir(), "lib"), path.join(os.projectdir(), "bin", "js_engine"))
--- 
---         local pdb_path = path.join(output_dir, target:basename() .. ".pdb")
---         if os.isfile(target:symbolfile()) then 
---             os.cp(target:symbolfile(), pdb_path) 
---         end
--- 
---         cprint("${bright green}[plugin Packer]: ${reset}plugin already generated to " .. output_dir)
---     end)
-          local mod_packer = import("scripts.after_build")
-
-        local tag = os.iorun("git describe --tags --abbrev=0 --always")
-        local major, minor, patch, suffix = tag:match("v(%d+)%.(%d+)%.(%d+)(.*)")
-        if not major then
-            print("Failed to parse version tag, using 0.0.0")
-            major, minor, patch = 0, 0, 0
+        local output_dir = path.join(os.projectdir(), "bin")
+        local ext = ".dll";
+        if (is_plat("linux")) then
+            ext = ".so";
         end
-        local mod_define = {
-            modName = target:name(),
-            modFile = path.filename(target:targetfile()),
-            modVersion = major .. "." .. minor .. "." .. patch,
-        }
-        
-        mod_packer.pack_mod(target,mod_define)
+
+        os.cp(target:targetfile(), path.join(output_dir, target:basename() .. ext))
+
+        os.cp(path.join(os.projectdir(), "lib"), path.join(os.projectdir(), "bin", "js_engine"))
+
+        local pdb_path = path.join(output_dir, target:basename() .. ".pdb")
+        if os.isfile(target:symbolfile()) then 
+            os.cp(target:symbolfile(), pdb_path) 
+        end
     end)
