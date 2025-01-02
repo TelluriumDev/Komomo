@@ -21,6 +21,7 @@ using script::selectOverloadedFunc;
 using script::String;
 using script::Value;
 using script::ValueKind;
+using script::Global;
 
 // stl
 #include <filesystem>

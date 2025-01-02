@@ -31,4 +31,5 @@ private:
 };
 
 [[nodiscard]] auto getKomomoModManager() -> KomomoModManager&;
+[[nodiscard]] auto getSelfModInstance() -> ll::mod::NativeMod&;
 }; // namespace Komomo

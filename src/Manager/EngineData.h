@@ -1,21 +1,15 @@
 #pragma once
-#include "Entry.h"
+
 #include "Loader/JavaScriptPlugin.h"
-#include "Utils/Convert.h"
 #include "Utils/StringUtils.h"
 #include "Utils/Using.h"
-// #include "endstone/command/command.h"
-// #include "endstone/permissions/permission.h"
-// #include "endstone/permissions/permission_default.h"
-// #include "endstone/plugin/plugin_load_order.h"
-#include "ll/api/mod/Mod.h"
-#include "magic_enum/magic_enum.hpp"
-#include <cstddef>
+
+#include <ll/api/mod/Mod.h>
+
 #include <cstdint>
 #include <memory>
-#include <optional>
-#include <utility>
-#include <vector>
+
+
 #define TRY_PARSE_MACRO(NAME, KEY, TYPE, SCRIPT_TYPE, DEFAULT)                                                         \
     TYPE tryParse##NAME() {                                                                                            \
         try {                                                                                                          \
@@ -87,71 +81,71 @@ public:
     // );
 
 public:
-//     void tryParseCommands(JsPluginDescriptionBuilder& jbuilder) {
-//         if (mRegisterInfo.isEmpty()) return;
-//         auto obj = mRegisterInfo.get();
-//         if (!obj.has("commands")) {
-//             return;
-//         }
-// 
-//         auto cmds = obj.get("commands").asObject();
-//         auto keys = cmds.getKeyNames();
-//         for (auto& key : keys) {
-//             auto cmdObj  = cmds.get(key).asObject();
-//             auto builder = endstone::detail::CommandBuilder(key);
-// 
-//             // 描述
-//             if (cmdObj.has("description")) {
-//                 builder.description(ConvertFromScriptX<string>(cmdObj.get("description")));
-//             }
-// 
-//             // 用法
-//             if (cmdObj.has("usages")) {
-//                 auto usages = ConvertFromScriptX<std::vector<string>>(cmdObj.get("usages"));
-//                 for (const auto& usage : usages) {
-//                     builder.usages(usage);
-//                 }
-//             }
-// 
-//             // 权限
-//             if (cmdObj.has("permissions")) {
-//                 auto permissions = ConvertFromScriptX<std::vector<string>>(cmdObj.get("permissions"));
-//                 for (const auto& permission : permissions) {
-//                     builder.permissions(permission);
-//                 }
-//             }
-// 
-//             jbuilder.commands.emplace(key, std::move(builder));
-//         }
-//     }
-// 
-// 
-//     void tryParsePermissions(JsPluginDescriptionBuilder& jbuilder) {
-//         if (mRegisterInfo.isEmpty()) return;
-//         auto obj = mRegisterInfo.get();
-//         if (!obj.has("permissions")) {
-//             return;
-//         }
-// 
-//         auto perms = obj.get("permissions").asObject();
-//         auto keys  = perms.getKeyNames();
-//         for (auto& key : keys) {
-//             auto permObj = perms.get(key).asObject();
-//             auto builder = endstone::detail::PermissionBuilder(key);
-// 
-//             // 设置描述
-//             if (permObj.has("description")) {
-//                 builder.description(ConvertFromScriptX<string>(permObj.get("description")));
-//             }
-// 
-//             // 设置默认权限
-//             if (permObj.has("default")) {
-//                 builder.default_(ConvertFromScriptX<endstone::PermissionDefault>(permObj.get("default")));
-//             }
-// 
-//             jbuilder.permissions.emplace(key, std::move(builder));
-//         }
-//     }
+    //     void tryParseCommands(JsPluginDescriptionBuilder& jbuilder) {
+    //         if (mRegisterInfo.isEmpty()) return;
+    //         auto obj = mRegisterInfo.get();
+    //         if (!obj.has("commands")) {
+    //             return;
+    //         }
+    //
+    //         auto cmds = obj.get("commands").asObject();
+    //         auto keys = cmds.getKeyNames();
+    //         for (auto& key : keys) {
+    //             auto cmdObj  = cmds.get(key).asObject();
+    //             auto builder = endstone::detail::CommandBuilder(key);
+    //
+    //             // 描述
+    //             if (cmdObj.has("description")) {
+    //                 builder.description(ConvertFromScriptX<string>(cmdObj.get("description")));
+    //             }
+    //
+    //             // 用法
+    //             if (cmdObj.has("usages")) {
+    //                 auto usages = ConvertFromScriptX<std::vector<string>>(cmdObj.get("usages"));
+    //                 for (const auto& usage : usages) {
+    //                     builder.usages(usage);
+    //                 }
+    //             }
+    //
+    //             // 权限
+    //             if (cmdObj.has("permissions")) {
+    //                 auto permissions = ConvertFromScriptX<std::vector<string>>(cmdObj.get("permissions"));
+    //                 for (const auto& permission : permissions) {
+    //                     builder.permissions(permission);
+    //                 }
+    //             }
+    //
+    //             jbuilder.commands.emplace(key, std::move(builder));
+    //         }
+    //     }
+    //
+    //
+    //     void tryParsePermissions(JsPluginDescriptionBuilder& jbuilder) {
+    //         if (mRegisterInfo.isEmpty()) return;
+    //         auto obj = mRegisterInfo.get();
+    //         if (!obj.has("permissions")) {
+    //             return;
+    //         }
+    //
+    //         auto perms = obj.get("permissions").asObject();
+    //         auto keys  = perms.getKeyNames();
+    //         for (auto& key : keys) {
+    //             auto permObj = perms.get(key).asObject();
+    //             auto builder = endstone::detail::PermissionBuilder(key);
+    //
+    //             // 设置描述
+    //             if (permObj.has("description")) {
+    //                 builder.description(ConvertFromScriptX<string>(permObj.get("description")));
+    //             }
+    //
+    //             // 设置默认权限
+    //             if (permObj.has("default")) {
+    //                 builder.default_(ConvertFromScriptX<endstone::PermissionDefault>(permObj.get("default")));
+    //             }
+    //
+    //             jbuilder.permissions.emplace(key, std::move(builder));
+    //         }
+    //     }
 };
 
 
@@ -163,4 +157,4 @@ public:
 
 #undef CALL_PLUGIN_MACRO
 
-} // namespace jse
+} // namespace Komomo

@@ -3,18 +3,13 @@
 #include "Loader/Mod.h"
 #include "Manager/EngineData.h"
 #include "Manager/NodeManager.h"
+#include "API/APIHelper.h"
 
-#include "Utils/Util.h"
-#include "ll/api/Expected.h"
-#include "ll/api/mod/Mod.h"
+#include <ll/api/Expected.h>
+#include <ll/api/mod/Mod.h>
 
 #include <filesystem>
 #include <memory>
-
-
-#define CatchNotReturn                                                                                                 \
-    catch (...) {                                                                                                      \
-    }
 
 
 constexpr auto ModManagerName = "KomomoJS";
@@ -53,21 +48,6 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             return ll::makeStringError("Failed to load mod");
         }
 
-        // 解析注册数据
-        // JsPluginDescriptionBuilder builder{};
-        // builder.description        = data->tryParseDescription();
-        // builder.load               = data->tryParseLoad();
-        // builder.authors            = data->tryParseAuthors();
-        // builder.contributors       = data->tryParseContributors();
-        // builder.website            = data->tryParseWebsite();
-        // builder.prefix             = data->tryParsePrefix();
-        // builder.provides           = data->tryParseProvides();
-        // builder.depend             = data->tryParseDepend();
-        // builder.soft_depend        = data->tryParseSoftDepend();
-        // builder.load_before        = data->tryParseLoadBefore();
-        // builder.default_permission = data->tryParseDefaultPermission();
-        // data->tryParseCommands(builder);
-        // data->tryParsePermissions(builder);
 
         // 创建插件实例
         auto mod = std::make_shared<KomomoMod>(manifest);

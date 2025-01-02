@@ -1,18 +1,14 @@
 #include "Entry.h"
-
 #include "Loader/JavaScriptPluginLoader.h"
 #include "Loader/ModManager.h"
 #include "Manager/NodeManager.h"
-#include "Utils/Using.h"
-#include "ll/api/mod/ModManager.h"
-#include "ll/api/mod/ModManagerRegistry.h"
-// #include "endstone/plugin/plugin_manager.h"
+
+#include <ll/api/mod/ModManager.h>
+#include <ll/api/mod/ModManagerRegistry.h>
 
 
-#include <filesystem>
 #include <memory>
-#include <thread>
-#include <utility>
+
 
 #if (defined(WIN32) || defined(_WIN32)) && defined(DEBUG)
 #include <debugapi.h>
@@ -30,6 +26,9 @@ void registerPluginManager(const std::shared_ptr<Komomo::KomomoModManager>& pm) 
 namespace Komomo {
 
 std::shared_ptr<KomomoModManager> komomoModManager;
+
+std::unique_ptr<std::reference_wrapper<ll::mod::NativeMod>>
+    selfModInstance; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 
 Entry& Entry::getInstance() {
@@ -52,6 +51,7 @@ bool Entry::load() {
     // pluginManager.loadPlugins(std::move(jse::JavaScriptPluginLoader::filterPlugins(fs::current_path() /
 
     komomoModManager = std::make_shared<KomomoModManager>();
+    selfModInstance  = std::make_unique<std::reference_wrapper<ll::mod::NativeMod>>(getSelf());
     registerPluginManager(komomoModManager = std::make_shared<KomomoModManager>());
     return true;
 }
@@ -60,7 +60,6 @@ bool Entry::enable() { return true; }
 bool Entry::disable() { return true; }
 bool Entry::unload() { return true; }
 
-// endstone::PluginDescription const& Entry::getDescription() const { return description_; }
 
 auto getKomomoModManager() -> KomomoModManager& {
     if (!komomoModManager) {
@@ -70,6 +69,13 @@ auto getKomomoModManager() -> KomomoModManager& {
     return *komomoModManager;
 }
 
+auto getSelfModInstance() -> ll::mod::NativeMod& {
+    if (!selfModInstance) {
+        throw std::runtime_error("selfPluginInstance is null");
+    }
+
+    return *selfModInstance;
+}
 } // namespace Komomo
 
 #include <ll/api/mod/RegisterHelper.h>
