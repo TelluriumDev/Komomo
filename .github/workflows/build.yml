@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, windows-2022]
+        os: [windows-2022]
 
     name: Build with ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -45,22 +45,6 @@ jobs:
       - uses: xmake-io/github-action-setup-xmake@v1
         # with:
         #   xmake-version: branch@master
-
-      - name: Set up Clang(Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update -y -q
-          sudo apt-get install -y -q lsb-release wget software-properties-common gnupg
-          sudo wget https://apt.llvm.org/llvm.sh
-          sudo chmod +x llvm.sh
-          sudo ./llvm.sh ${{env.LLVM_VERSION}}
-          sudo apt-get install -y -q libc++-${{env.LLVM_VERSION}}-dev libc++abi-${{env.LLVM_VERSION}}-dev
-          sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang-${{env.LLVM_VERSION}} 100
-          sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-${{env.LLVM_VERSION}} 100
-          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${{env.LLVM_VERSION}} 100
-          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${{env.LLVM_VERSION}} 100
-          sudo update-alternatives --install /usr/bin/llvm-cov llvm-cov /usr/bin/llvm-cov-${{env.LLVM_VERSION}} 100
-          sudo update-alternatives --install /usr/bin/ld ld /usr/bin/ld.lld-${{env.LLVM_VERSION}} 100
       - run: |
           git submodule update --init --recursive
   
@@ -84,7 +68,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, windows-2022]
+        os: [windows-2022]
 
     name: Pack with ${{ matrix.os }}
     runs-on: ubuntu-22.04
@@ -96,7 +80,6 @@ jobs:
 
       - name: Download depends
         run: |
-          curl -o bin-linux.zip -L https://github.com/IceBlcokMC/node/releases/download/v16.20.2/bin-linux.zip
           curl -o bin-windows.zip -L https://github.com/IceBlcokMC/node/releases/download/v16.20.2/bin-windows.zip
           curl -o node_modules.zip -L https://github.com/IceBlcokMC/node/releases/download/v16.20.2/node_modules.zip
 
@@ -104,7 +87,6 @@ jobs:
         run: |
           mkdir deps
           mkdir deps/node_modules
-          unzip -a -q bin-linux.zip -d deps/
           unzip -a -q bin-windows.zip -d deps/
           unzip -a -q node_modules.zip -d deps/node_modules/
 
@@ -114,7 +96,7 @@ jobs:
           mkdir full/plugins
 
           cp -r bin/* full/plugins/
-          cp -a deps/node_modules/. full/plugins/js_engine/node_modules/
+          cp -a deps/node_modules/. full/plugins/Komomo/node_modules/
 
           if [ "${{ matrix.os}}" == "windows-2022" ]; then
             cp deps/libnode.dll full/
