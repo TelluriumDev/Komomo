@@ -111,7 +111,6 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
 
         // return mod->onLoad().transform([&, this] {  });
 
-
     } catch (script::Exception& e) {
         Entry::getInstance().getSelf().getLogger().error("Failed to load plugin: {}", file);
         Entry::getInstance().getSelf().getLogger().error("JavaScript error: {}", e.what());

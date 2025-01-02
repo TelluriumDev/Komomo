@@ -38,7 +38,7 @@ Entry& Entry::getInstance() {
 
 bool Entry::load() {
 #if (defined(WIN32) || defined(_WIN32)) && defined(DEBUG)
-    getLogger().info("Waiting for VC debugger attach...");
+    getSelf().getLogger().info("Waiting for VC debugger attach...");
     // while (!IsDebuggerPresent()) {
     //     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     // }
