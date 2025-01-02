@@ -80,8 +80,8 @@ jobs:
 
       - name: Download depends
         run: |
-          curl -o bin-windows.zip -L https://github.com/IceBlcokMC/node/releases/download/v16.20.2/bin-windows.zip
-          curl -o node_modules.zip -L https://github.com/IceBlcokMC/node/releases/download/v16.20.2/node_modules.zip
+          curl -o bin-windows.zip -L https://github.com/IceBlcokMC/node/releases/download/v23.5.0/bin-windows.zip
+          curl -o node_modules.zip -L https://github.com/IceBlcokMC/node/releases/download/v23.5.0/node_modules.zip
 
       - name: Unzip depends
         run: |
