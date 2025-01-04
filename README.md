@@ -1,6 +1,6 @@
 # Komomo
 
-| 中文 | [English](./README-EN.md) |
+| 中文 |
 
 Komomo 基于 ScriptX 和 NodeJs 实现，支持在 LeviLamina 中运行 JavaScript 插件。
 
