@@ -1,8 +1,10 @@
 #include "API/Event/Event.h"
+#include "API/APIHelper.h"
 #include "API/Player/Player.h"
 #include "Event.h"
 #include "Manager/EngineData.h"
 #include "Utils/Using.h"
+#include "ll/api/event/EventBus.h"
 
 #include <ll/api/event/player/PlayerJoinEvent.h>
 #include <ll/api/event/server/ServerStartedEvent.h>
@@ -16,7 +18,10 @@ ClassDefine<EventClass> EventClassBuilder = defineClass<EventClass>("Event")
 
                                                 .build();
 
+
 std::unordered_map<EngineID, std::vector<EventData>> map;
+
+EventData::~EventData() { ll::event::EventBus::getInstance().removeListener(listener); }
 
 // 使用枚举代替魔法值
 enum class EventList : int { onServerStarted = 0, onPlayerJoin };
@@ -71,9 +76,15 @@ bool removeEventListener(const std::string& eventName, ScriptEngine* engine, con
     return false;
 }
 
+void removeEngineAllEventListener(EngineID engineId) { map.erase(engineId); }
+
+void removeAllEventListener() { map.clear(); }
+
 
 Local<Value> EventClass::emplaceListener(const Arguments& args) {
     CheckArgsCount(args, 2);
+    CheckArgType(args[0], ValueKind::kString);
+    CheckArgType(args[1], ValueKind::kFunction);
     try {
         return Boolean::newBoolean(
             addEventListener(args[0].asString().toString(), EngineScope::currentEngine(), args[1].asFunction())
@@ -84,6 +95,8 @@ Local<Value> EventClass::emplaceListener(const Arguments& args) {
 
 Local<Value> EventClass::removeListener(const Arguments& args) {
     CheckArgsCount(args, 2);
+    CheckArgType(args[0], ValueKind::kString);
+    CheckArgType(args[1], ValueKind::kFunction);
     try {
         return Boolean::newBoolean(
             removeEventListener(args[0].asString().toString(), EngineScope::currentEngine(), args[1].asFunction())

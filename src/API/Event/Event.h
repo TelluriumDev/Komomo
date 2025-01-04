@@ -22,6 +22,8 @@ struct EventData {
     Global<Function>       callback;
     ll::event::ListenerPtr listener;
     bool                   isListening = false;
+
+    ~EventData();
 };
 
 // {引擎ID : [监听器] }}
@@ -31,7 +33,6 @@ class EventClass : public ScriptClass {
 
 public:
     EventClass();
-
     static Local<Value> emplaceListener(const Arguments& args);
     static Local<Value> removeListener(const Arguments& args);
 };
