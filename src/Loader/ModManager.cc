@@ -66,7 +66,6 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
 
             EngineScope scope(engine->mEngine);
             try {
-                ENGINE_DATA()->callOnLoad();
             }
             CatchNotReturn;
             return true;
@@ -76,7 +75,6 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             auto        engine = NodeManager::getInstance().getEngine(data->mID);
             EngineScope scope(engine->mEngine);
             try {
-                ENGINE_DATA()->callOnEnable();
             }
             CatchNotReturn;
             return true;
@@ -86,7 +84,6 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             auto        engine = NodeManager::getInstance().getEngine(data->mID);
             EngineScope scope(engine->mEngine);
             try {
-                ENGINE_DATA()->callOnDisable();
                 removeEngineAllEventListener(engine->mID);
             }
             CatchNotReturn;

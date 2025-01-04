@@ -17,19 +17,9 @@ namespace Komomo {
 
 inline void BindAPI(ScriptEngine* engine) {
 
-    //     // enum class
-    //     EnumAPI::RegisterEnum(engine);
-    //
-    //     // static class
-    //     engine->registerNativeClass(JSEAPI::builder);
-    //
-    //     // instance class
     engine->registerNativeClass<PlayerClass>(PlayerClassBuilder);
     engine->registerNativeClass<EventClass>(EventClassBuilder);
     engine->registerNativeClass<SimpleFormClass>(simpleFormClassBuilder);
-    //     engine->registerNativeClass<PluginDescriptionAPI>(PluginDescriptionAPI::builder);
-    //     engine->registerNativeClass<PermissibleAPI>(PermissibleAPI::builder);
-    //     engine->registerNativeClass<CommandSenderAPI>(CommandSenderAPI::builder);
 }
 
 
