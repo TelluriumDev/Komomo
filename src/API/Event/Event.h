@@ -17,13 +17,10 @@
 #define EventId int
 
 struct EventData {
-    EventData(EventId id, const Local<Function>& callback) : id(id), callback(callback) {};
+    EventData(EventId id, const Global<Function>& callback) : id(id), callback(callback) {};
     EventId                id;
     Global<Function>       callback;
     ll::event::ListenerPtr listener;
-    bool                   isListening = false;
-
-    ~EventData();
 };
 
 // {引擎ID : [监听器] }}
@@ -41,13 +38,12 @@ extern ClassDefine<EventClass> EventClassBuilder;
 
 #define CallBackNoCancelEvent(EngineID, EventID, EventPtr, ...)                                                        \
     for (auto& data : map[EngineID]) {                                                                                 \
-        if (data.id == EventID && data.isListening == false) {                                                         \
+        if (data.id == EventID) {                                                         \
             script::EngineScope engineScope(*NodeManager::getInstance().getEngine(EngineID));                          \
             try {                                                                                                      \
-                data.listener = EventPtr;                                                                              \
                 data.callback.get().call({}, __VA_ARGS__);                                                             \
-                data.isListening = true;                                                                               \
+                data.listener    = std::move(EventPtr);                                                                \
             }                                                                                                          \
             Catch;                                                                                                     \
         }                                                                                                              \
-    }\
+    }

@@ -5,7 +5,7 @@
 #include <mc/world/Container.h>
 
 class ContainerClass : public ScriptClass {
-private:
+public:
     Container* mContainer;
 
 public:

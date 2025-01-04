@@ -37,11 +37,23 @@ void PrintException(script::Exception const& e, string const& func, string const
         return Local<Value>();                                                                                         \
     }
 
+#define CheckArgsCountReturn(args, count, Return)                                                                      \
+    if (args.size() < count) {                                                                                         \
+        PrintArgsTooFew();                                                                                             \
+        return Return;                                                                                                 \
+    }
+
 // 检查参数类型
 #define CheckArgType(arg, type)                                                                                        \
     if (arg.getKind() != type) {                                                                                       \
         PrintWrongArgType();                                                                                           \
         return Local<Value>();                                                                                         \
+    }
+
+#define CheckArgTypeReturn(arg, type, Return)                                                                          \
+    if (arg.getKind() != type) {                                                                                       \
+        PrintWrongArgType();                                                                                           \
+        return Return;                                                                                                 \
     }
 
 // 异常捕获
@@ -52,6 +64,15 @@ void PrintException(script::Exception const& e, string const& func, string const
     catch (...) {                                                                                                      \
         PrintScriptError("Unknown error");                                                                             \
         return Local<Value>();                                                                                         \
+    }
+
+#define CatchReturn(Return)                                                                                            \
+    catch (script::Exception const& e) {                                                                               \
+        PrintScriptError(e) return Return;                                                                             \
+    }                                                                                                                  \
+    catch (...) {                                                                                                      \
+        PrintScriptError("Unknown error");                                                                             \
+        return Return;                                                                                                 \
     }
 
 #define CatchNotReturn                                                                                                 \

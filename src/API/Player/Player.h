@@ -5,7 +5,7 @@
 #include <mc/world/actor/player/Player.h>
 
 class PlayerClass : public ScriptClass {
-private:
+public:
     Player* mPlayer;
 
 public:
@@ -32,7 +32,7 @@ public: /* Member */
     Local<Value> getBlockingStartTimeStamp();
     Local<Value> getChunkRadius();
     Local<Value> getDirection();
-    Local<Value> getEnchantmentSeed(); 
+    Local<Value> getEnchantmentSeed();
     Local<Value> getLuck();
     Local<Value> getMapIndex();
     Local<Value> getMaxItemCooldownLeft();

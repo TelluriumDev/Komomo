@@ -5,7 +5,7 @@
 #include <mc/world/actor/Actor.h>
 
 class ActorClass : public ScriptClass {
-private:
+public:
     Actor* mActor;
 
 public:
@@ -15,7 +15,6 @@ public:
     static Local<Object> newActor(Actor* actor);
 
 public: /* Member */
-    
 public: /* Method */
 };
 

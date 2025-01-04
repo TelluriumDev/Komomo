@@ -8,6 +8,7 @@
 
 #include <ll/api/event/player/PlayerJoinEvent.h>
 #include <ll/api/event/server/ServerStartedEvent.h>
+#include <utility>
 
 using namespace Komomo;
 
@@ -21,8 +22,6 @@ ClassDefine<EventClass> EventClassBuilder = defineClass<EventClass>("Event")
 
 std::unordered_map<EngineID, std::vector<EventData>> map;
 
-EventData::~EventData() { ll::event::EventBus::getInstance().removeListener(listener); }
-
 // 使用枚举代替魔法值
 enum class EventList : int { onServerStarted = 0, onPlayerJoin };
 
@@ -35,7 +34,7 @@ void EnableListener(EngineID engineId, EventId eventId) {
     case EventList::onServerStarted: {
         ll::event::ListenerPtr eventPtr = eventBus.emplaceListener<ll::event::ServerStartedEvent>(
             [engineId, eventId, &eventPtr](const ll::event::ServerStartedEvent& event) {
-                CallBackNoCancelEvent(engineId, eventId, eventPtr);
+                if (eventPtr) CallBackNoCancelEvent(engineId, eventId, eventPtr);
                 return Local<Value>();
             }
         );
@@ -56,7 +55,7 @@ void EnableListener(EngineID engineId, EventId eventId) {
 bool addEventListener(const std::string& eventName, ScriptEngine* engine, const Local<Function>& func) {
     auto      event_enum = magic_enum::enum_cast<EventList>(eventName);
     auto      eventId    = int(event_enum.value());
-    EventData data{eventId, func};
+    EventData data{eventId, Global<Function>(func)};
     auto      enginedata = GET_ENGINE_DATA(engine);
     map[enginedata->mID].push_back(data);
     EnableListener(enginedata->mID, eventId);
@@ -69,6 +68,7 @@ bool removeEventListener(const std::string& eventName, ScriptEngine* engine, con
     auto enginedata = GET_ENGINE_DATA(engine);
     for (auto it = map[enginedata->mID].begin(); it != map[enginedata->mID].end(); ++it) {
         if (it->id == eventId && it->callback.get() == func) {
+            ll::event::EventBus::getInstance().removeListener(std::move(it->listener));
             map[enginedata->mID].erase(it);
             return true;
         }
@@ -76,7 +76,12 @@ bool removeEventListener(const std::string& eventName, ScriptEngine* engine, con
     return false;
 }
 
-void removeEngineAllEventListener(EngineID engineId) { map.erase(engineId); }
+void removeEngineAllEventListener(EngineID engineId) {
+    if (map.find(engineId) == map.end()) return;
+    for (auto& data : map[engineId]) {
+        ll::event::EventBus::getInstance().removeListener(std::move(data.listener));
+    }
+}
 
 void removeAllEventListener() { map.clear(); }
 

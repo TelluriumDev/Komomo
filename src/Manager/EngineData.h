@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Loader/JavaScriptPlugin.h"
 #include "Utils/StringUtils.h"
 #include "Utils/Using.h"
 

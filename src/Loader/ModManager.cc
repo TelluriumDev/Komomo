@@ -4,6 +4,7 @@
 #include "Loader/Mod.h"
 #include "Manager/EngineData.h"
 #include "Manager/NodeManager.h"
+#include "Utils/Using.h"
 
 
 #include <ll/api/Expected.h>
@@ -11,6 +12,8 @@
 
 #include <filesystem>
 #include <memory>
+
+void removeEngineAllEventListener(EngineID id);
 
 
 constexpr auto ModManagerName = "KomomoJS";
@@ -84,12 +87,15 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             EngineScope scope(engine->mEngine);
             try {
                 ENGINE_DATA()->callOnDisable();
+                removeEngineAllEventListener(engine->mID);
             }
             CatchNotReturn;
             return true;
         });
         mod->onUnload([&data](ll::mod::Mod&) {
             if (!data) return true;
+            auto engine = NodeManager::getInstance().getEngine(data->mID);
+            // removeEngineAllEventListener(engine->mID)
             NodeManager::getInstance().destroyEngine(data->mID);
             return true;
         });
@@ -119,12 +125,12 @@ ll::Expected<> KomomoModManager::unload(std::string_view name) {
 
         auto mod = std::static_pointer_cast<KomomoMod>(getMod(name));
 
-
         auto& scriptEngine = *NodeManager::getInstance().getEngine(mod->id);
 
         scriptEngine.mEngine->getData().reset();
+        removeEngineAllEventListener(mod->id);
         NodeManager::getInstance().destroyEngine(scriptEngine.mID);
-        scriptEngine.mEngine->destroy(); // TODO: use unique_ptr to manage the engine.
+        // scriptEngine.mEngine->destroy(); // TODO: use unique_ptr to manage the engine.
         mod->id = 0;
         eraseMod(name);
 

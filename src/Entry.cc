@@ -1,5 +1,4 @@
 #include "Entry.h"
-#include "Loader/JavaScriptPluginLoader.h"
 #include "Loader/ModManager.h"
 #include "Manager/NodeManager.h"
 

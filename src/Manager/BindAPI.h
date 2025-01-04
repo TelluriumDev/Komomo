@@ -8,6 +8,7 @@
 // #include "API/PluginAPI.h"
 // #include "API/PluginDescriptionAPI.h"
 #include "API/Event/Event.h"
+#include "API/Form/SimpleForm.h"
 #include "API/Player/Player.h"
 #include "Utils/Using.h"
 
@@ -25,7 +26,7 @@ inline void BindAPI(ScriptEngine* engine) {
     //     // instance class
     engine->registerNativeClass<PlayerClass>(PlayerClassBuilder);
     engine->registerNativeClass<EventClass>(EventClassBuilder);
-    //     engine->registerNativeClass<LoggerAPI>(LoggerAPI::builder);
+    engine->registerNativeClass<SimpleFormClass>(simpleFormClassBuilder);
     //     engine->registerNativeClass<PluginDescriptionAPI>(PluginDescriptionAPI::builder);
     //     engine->registerNativeClass<PermissibleAPI>(PermissibleAPI::builder);
     //     engine->registerNativeClass<CommandSenderAPI>(CommandSenderAPI::builder);
