@@ -115,13 +115,4 @@ target("Komomo")
     end
 
     set_basename("Komomo")
-    after_build(function(target)
-        local output_dir = path.join(os.projectdir(), "bin")
-        local ext = ".dll";
-        os.cp(target:targetfile(), path.join(output_dir, target:basename() .. ext))
-        os.cp(path.join(os.projectdir(), "lib"), path.join(os.projectdir(), "bin", "Komomo"))
-        local pdb_path = path.join(output_dir, target:basename() .. ".pdb")
-        if os.isfile(target:symbolfile()) then 
-            os.cp(target:symbolfile(), pdb_path) 
-        end
-    end)
+    -- after_build(function(target)end)
