@@ -13,8 +13,6 @@
 #include <uv.h>
 #include <v8-cppgc.h>
 
-
-
 #include <filesystem>
 #include <memory>
 #include <thread>

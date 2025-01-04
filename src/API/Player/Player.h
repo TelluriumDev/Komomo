@@ -37,7 +37,7 @@ public: /* Member */
     Local<Value> getMapIndex();
     Local<Value> getMaxItemCooldownLeft();
     Local<Value> getName();
-    Local<Value> getNewEnchantmentSeed(); //? Return Void
+    // Local<Value> getNewEnchantmentSeed(); //? Return Void
     Local<Value> getInteractText();
     Local<Value> getPlayerIndex();
     Local<Value> getPlayerLevel();

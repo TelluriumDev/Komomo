@@ -4,7 +4,7 @@ add_repositories("levilamina https://github.com/LiteLDev/xmake-repo.git")
 add_repositories("iceblcokmc https://github.com/IceBlcokMC/xmake-repo.git")
 
 add_requires("nodejs 23.5.0") -- iceblockmc
-add_requires("levilamina develop") -- levilamina
+add_requires("levilamina release") -- levilamina
 add_requires("levibuildscript 0.2.0")
 add_requires(
     "expected-lite 0.8.0",
@@ -68,9 +68,9 @@ target("Komomo")
     if is_plat("windows") then
         add_cxxflags("/Zc:__cplusplus")
         add_cxflags(
-            "/EHa",
+            "/EHs",
             "/utf-8",
-            -- "/W4",
+            "/WX",
             "/sdl"
         )
     elseif is_plat("linux") then

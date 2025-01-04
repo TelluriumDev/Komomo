@@ -6,13 +6,85 @@
 
 using namespace Komomo;
 
-ClassDefine<PlayerClass> PlayerClassBuilder = defineClass<PlayerClass>("Player")
-                                                  .constructor(nullptr)
+ClassDefine<PlayerClass> PlayerClassBuilder =
+    defineClass<PlayerClass>("Player")
+        .constructor(nullptr)
 
-                                                  .instanceProperty("getXuid", &PlayerClass::getXuid)
+        .instanceProperty("xuid", &PlayerClass::getXuid)
+        .instanceProperty("uuid", &PlayerClass::getUUID)
+        .instanceProperty("realName", &PlayerClass::getRealName)
+        .instanceProperty("name", &PlayerClass::getName)
+        .instanceProperty("IPAndPort", &PlayerClass::getIPAndPort)
+        .instanceProperty("localeCode", &PlayerClass::getLocaleCode)
+        .instanceProperty("shadowRadius", &PlayerClass::getShadowRadius)
+        .instanceProperty("speed", &PlayerClass::getSpeed)
+        .instanceProperty("userId", &PlayerClass::getUserId)
+        .instanceProperty("itemUseDuration", &PlayerClass::getItemUseDuration)
+        .instanceProperty("itemUseStartupProgress", &PlayerClass::getItemUseStartupProgress)
+        .instanceProperty("itemUseIntervalProgress", &PlayerClass::getItemUseIntervalProgress)
+        .instanceProperty("maxChunkBuildRadius", &PlayerClass::getMaxChunkBuildRadius)
+        .instanceProperty("blockedUsingDamagedShieldTimeStamp", &PlayerClass::getBlockedUsingDamagedShieldTimeStamp)
+        .instanceProperty("blockedUsingShieldTimeStamp", &PlayerClass::getBlockedUsingShieldTimeStamp)
+        .instanceProperty("blockingStartTimeStamp", &PlayerClass::getBlockingStartTimeStamp)
+        .instanceProperty("chunkRadius", &PlayerClass::getChunkRadius)
+        .instanceProperty("direction", &PlayerClass::getDirection)
+        .instanceProperty("enchantmentSeed", &PlayerClass::getEnchantmentSeed)
+        .instanceProperty("luck", &PlayerClass::getLuck)
+        .instanceProperty("mapIndex", &PlayerClass::getMapIndex)
+        .instanceProperty("maxItemCooldownLeft", &PlayerClass::getMaxItemCooldownLeft)
+        // .instanceProperty("getNewEnchantmentSeed", &PlayerClass::getNewEnchantmentSeed)
+        .instanceProperty("interactText", &PlayerClass::getInteractText)
+        .instanceProperty("playerIndex", &PlayerClass::getPlayerIndex)
+        .instanceProperty("playerLevel", &PlayerClass::getPlayerLevel)
+        .instanceProperty("selectedItemSlot", &PlayerClass::getSelectedItemSlot)
+        .instanceProperty("serverId", &PlayerClass::getServerId)
+        .instanceProperty("sleepRotation", &PlayerClass::getSleepRotation)
+        .instanceProperty("usedPotion", &PlayerClass::getUsedPotion)
+        .instanceProperty("xpEarnedAtCurrentLevel", &PlayerClass::getXpEarnedAtCurrentLevel)
+        .instanceProperty("xpNeededForNextLevel", &PlayerClass::getXpNeededForNextLevel)
 
+        .instanceProperty("isLoading", &PlayerClass::isLoading)
+        .instanceProperty("isPlayerInitialized", &PlayerClass::isPlayerInitialized)
+        .instanceProperty("isImmobile", &PlayerClass::isImmobile)
+        .instanceProperty("isSleeping", &PlayerClass::isSleeping)
+        .instanceProperty("isTeacher", &PlayerClass::isTeacher)
+        .instanceProperty("isSimulated", &PlayerClass::isSimulated)
+        .instanceProperty("isFireImmune", &PlayerClass::isFireImmune)
+        .instanceProperty("isInTrialMode", &PlayerClass::isInTrialMode)
+        .instanceProperty("isBlocking", &PlayerClass::isBlocking)
+        .instanceProperty("isSilentObserver", &PlayerClass::isSilentObserver)
+        .instanceProperty("isEmoting", &PlayerClass::isEmoting)
+        .instanceProperty("isFlying", &PlayerClass::isFlying)
+        .instanceProperty("isForcedRespawn", &PlayerClass::isForcedRespawn)
+        .instanceProperty("isHostingPlayer", &PlayerClass::isHostingPlayer)
+        .instanceProperty("isHungry", &PlayerClass::isHungry)
+        .instanceProperty("isHurt", &PlayerClass::isHurt)
+        .instanceProperty("isInRaid", &PlayerClass::isInRaid)
+        .instanceProperty("isRespawningFromTheEnd", &PlayerClass::isRespawningFromTheEnd)
+        .instanceProperty("isSleepingLongEnough", &PlayerClass::isSleepingLongEnough)
+        .instanceProperty("isSpawned", &PlayerClass::isSpawned)
+        .instanceProperty("isUsingItem", &PlayerClass::isUsingItem)
+        .instanceProperty("isValidSpawn", &PlayerClass::isValidSpawn)
 
-                                                  .build();
+        .instanceProperty("canStartSleepInBed", &PlayerClass::canStartSleepInBed)
+        .instanceProperty("canExistWhenDisallowMob", &PlayerClass::canExistWhenDisallowMob)
+        .instanceProperty("canFreeze", &PlayerClass::canFreeze)
+        .instanceProperty("canChangeDimensionsUsingPortal", &PlayerClass::canChangeDimensionsUsingPortal)
+        .instanceProperty("canInteractWithOtherEntitiesInGame", &PlayerClass::canInteractWithOtherEntitiesInGame)
+        .instanceProperty("canObstructSpawningAndBlockPlacement", &PlayerClass::canObstructSpawningAndBlockPlacement)
+        .instanceProperty("canBeSeenOnMap", &PlayerClass::canBeSeenOnMap)
+        .instanceProperty("canJump", &PlayerClass::canJump)
+        .instanceProperty("canOpenContainerScreen", &PlayerClass::canOpenContainerScreen)
+        .instanceProperty("canSleep", &PlayerClass::canSleep)
+        .instanceProperty("canUseOperatorBlocks", &PlayerClass::canUseOperatorBlocks)
+
+        .instanceProperty("hasDiedBefore", &PlayerClass::hasDiedBefore)
+        .instanceProperty("hasBedPosition", &PlayerClass::hasBedPosition)
+        .instanceProperty("hasOpenContainer", &PlayerClass::hasOpenContainer)
+        .instanceProperty("hasOwnedChunkSource", &PlayerClass::hasOwnedChunkSource)
+        .instanceProperty("hasRespawnAnchorPosition", &PlayerClass::hasRespawnAnchorPosition)
+        .instanceProperty("hasRespawnPosition", &PlayerClass::hasRespawnPosition)
+        .build();
 
 
 PlayerClass::PlayerClass(Player* player) : ScriptClass(ConstructFromCpp<PlayerClass>{}) { this->mPlayer = player; };
@@ -31,11 +103,8 @@ Local<Value> PlayerClass::getXuid() {
     try {
         if (!mPlayer) return Local<Value>();
         std::string xuid;
-        try {
-            xuid = mPlayer->getXuid();
-        } catch (...) {
-            xuid = ll::service::PlayerInfo::getInstance().fromName(mPlayer->getRealName())->xuid;
-        }
+        xuid = mPlayer->getXuid();
+        if (xuid.empty()) xuid = ll::service::PlayerInfo::getInstance().fromName(mPlayer->getRealName())->xuid;
         return String::newString(xuid);
     }
     Catch;
