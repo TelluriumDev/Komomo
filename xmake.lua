@@ -118,14 +118,8 @@ target("Komomo")
     after_build(function(target)
         local output_dir = path.join(os.projectdir(), "bin")
         local ext = ".dll";
-        if (is_plat("linux")) then
-            ext = ".so";
-        end
-
         os.cp(target:targetfile(), path.join(output_dir, target:basename() .. ext))
-
-        os.cp(path.join(os.projectdir(), "lib"), path.join(os.projectdir(), "bin", "js_engine"))
-
+        os.cp(path.join(os.projectdir(), "lib"), path.join(os.projectdir(), "bin", "Komomo"))
         local pdb_path = path.join(output_dir, target:basename() .. ".pdb")
         if os.isfile(target:symbolfile()) then 
             os.cp(target:symbolfile(), pdb_path) 
