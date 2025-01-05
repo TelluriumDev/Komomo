@@ -1,5 +1,6 @@
 #include "API/Player/Player.h"
 #include "API/APIHelper.h"
+#include "API/ItemStack/ItemStack.h"
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
 
@@ -236,7 +237,19 @@ Local<Value> PlayerClass::setAbility(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-// LLAPI bool addAndRefresh(class ItemStack& item);
+Local<Value> PlayerClass::addAndRefresh(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    try {
+        if (!mPlayer) return Local<Value>();
+        if (IsInstanceOf<ItemStackClass>(args[0])) {
+            auto engine         = EngineScope::currentEngine();
+            auto itemStackClass = engine->getNativeInstance<ItemStackClass>(args[0]);
+            return Boolean ::newBoolean(mPlayer->addAndRefresh(*itemStackClass->mItemStack));
+        } else PrintWrongArgType();
+        return Boolean::newBoolean(false);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
 // MCAPI void broadcastPlayerSpawnedMobEvent(::ActorType spawnedType, ::MobSpawnMethod spawnMethod);
 
 Local<Value> PlayerClass::canUseAbility(const Arguments& args) {
