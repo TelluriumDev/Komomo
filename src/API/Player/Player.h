@@ -65,6 +65,7 @@ public: /* Member */
     Local<Value> isHungry();
     Local<Value> isHurt();
     Local<Value> isInRaid();
+    Local<Value> isOperator();
     Local<Value> isRespawningFromTheEnd();
     Local<Value> isSleepingLongEnough();
     Local<Value> isSpawned();
@@ -94,6 +95,37 @@ public: /* Method */
     Local<Value> disconnect(const Arguments& args);
     Local<Value> sendMessage(const Arguments& args);
     Local<Value> setAbility(const Arguments& args);
+    // Local<Value> addAndRefresh(const Arguments& args);
+    // Local<Value> broadcastPlayerSpawnedMobEvent(const Arguments& args);
+    Local<Value> canUseAbility(const Arguments& args);
+    Local<Value> causeFoodExhaustion(const Arguments& args);
+    // Local<Value> checkBed(const Arguments& args);
+    Local<Value> checkNeedAutoJump(const Arguments& args);
+    // Local<Value> checkSpawnBlock(const Arguments& args);
+    Local<Value> clearRespawnPosition(const Arguments& args);
+    Local<Value> completeUsingItem(const Arguments& args);
+    Local<Value> eat(const Arguments& args); // two overloads
+    // Local<Value> equippedArmorItemCanBeMoved(const Arguments& args);
+    // Local<Value> fireDimensionChangedEvent(const Arguments& args);
+    Local<Value> forceAllowEating(const Arguments& args);
+    // Local<Value> getAbilities(const Arguments& args); // two overloads
+    // Local<Value> getAgent(const Arguments& args);
+    // Local<Value> getAgentID(const Arguments& args);
+    // Local<Value> getAgentIfAllowed(const Arguments& args);
+    // Local<Value> getBedPosition(const Arguments& args);
+    // Local<Value> getCapePos(const Arguments& args);
+    // Local<Value> getContainerManager(const Arguments& args);
+    // Local<Value> getContainerRegistryAccess(const Arguments& args);
+    // Local<Value> getContainerRegistryTracker(const Arguments& args);
+    // Local<Value> getCurrentActiveShield(const Arguments& args);
+    // Local<Value> getDestroyProgress(const Arguments& args);
+    // Local<Value> getDynamicContainerSerialization(const Arguments& args);
+    // Local<Value> getExpectedSpawnDimensionId(const Arguments& args);
+    // Local<Value> getGameMode(const Arguments& args);
+    // Local<Value> getInventory(const Arguments& args);
+    // Local<Value> getItemCooldownLeft(const Arguments& args); // two overloads
+    // Local<Value> getItemInteractText(const Arguments& args);
+    // Local<Value> getItemStackNetManager(const Arguments& args); // two overloads
 };
 
 extern ClassDefine<PlayerClass> PlayerClassBuilder;

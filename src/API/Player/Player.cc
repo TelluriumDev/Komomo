@@ -168,6 +168,7 @@ Local<Value> PlayerClass::isHostingPlayer() { CallFunction(Boolean, isHostingPla
 Local<Value> PlayerClass::isHungry() { CallFunction(Boolean, isHungry()); };
 Local<Value> PlayerClass::isHurt() { CallFunction(Boolean, isHurt()); };
 Local<Value> PlayerClass::isInRaid() { CallFunction(Boolean, isInRaid()); };
+Local<Value> PlayerClass::isOperator() { CallFunction(Boolean, isOperator()); };
 Local<Value> PlayerClass::isRespawningFromTheEnd() { CallFunction(Boolean, isRespawningFromTheEnd()); };
 Local<Value> PlayerClass::isSleepingLongEnough() { CallFunction(Boolean, isSleepingLongEnough()); };
 Local<Value> PlayerClass::isSpawned() { CallFunction(Boolean, isSpawned()); };
@@ -234,3 +235,134 @@ Local<Value> PlayerClass::setAbility(const Arguments& args) {
     }
     CatchReturn(Boolean::newBoolean(false));
 }
+
+// LLAPI bool addAndRefresh(class ItemStack& item);
+// MCAPI void broadcastPlayerSpawnedMobEvent(::ActorType spawnedType, ::MobSpawnMethod spawnMethod);
+
+Local<Value> PlayerClass::canUseAbility(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kNumber);
+    try {
+        if (!mPlayer) return Local<Value>();
+        return Boolean::newBoolean(mPlayer->canUseAbility(ConvertFromScriptX<AbilitiesIndex>(args[0])));
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> PlayerClass::causeFoodExhaustion(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kNumber);
+    try {
+        if (!mPlayer) return Local<Value>();
+        mPlayer->causeFoodExhaustion(args[0].asNumber().toFloat());
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+//  MCAPI bool checkBed(::BlockSource* spawnBlockSource, ::Vec3 const* const positionToCheck);
+
+Local<Value> PlayerClass::checkNeedAutoJump(const Arguments& args) {
+    CheckArgsCount(args, 2);
+    CheckArgType(args[0], ValueKind::kNumber);
+    CheckArgType(args[1], ValueKind::kNumber);
+    try {
+        if (!mPlayer) return Local<Value>();
+        return Boolean::newBoolean(
+            mPlayer->checkNeedAutoJump(args[0].asNumber().toFloat(), args[1].asNumber().toFloat())
+        );
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+// MCAPI bool checkSpawnBlock(::BlockSource const& region) const;
+
+Local<Value> PlayerClass::clearRespawnPosition(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        mPlayer->clearRespawnPosition();
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> PlayerClass::completeUsingItem(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        mPlayer->completeUsingItem();
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> PlayerClass::eat(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    try {
+        if (!mPlayer) return Local<Value>();
+        if (args.size() == 1) {
+            // TODO: MCAPI void eat(::ItemStack const& instance);
+            //     mPlayer->eat();
+            return Boolean::newBoolean(false);
+        } else {
+            mPlayer->eat(args[0].asNumber().toInt32(), args[1].asNumber().toFloat());
+            return Boolean::newBoolean(true);
+        }
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+// MCAPI bool equippedArmorItemCanBeMoved(::ItemStack const& item) const;
+
+// MCAPI void fireDimensionChangedEvent(::DimensionType fromDimension, ::DimensionType toDimension);
+
+Local<Value> PlayerClass::forceAllowEating(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        return Boolean::newBoolean(mPlayer->forceAllowEating());
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+// MCAPI ::LayeredAbilities const& getAbilities() const;
+// MCAPI ::LayeredAbilities& getAbilities();
+
+// MCAPI ::Agent* getAgent() const;
+
+// MCAPI ::ActorUniqueID getAgentID() const;
+
+// MCAPI ::Agent* getAgentIfAllowed(bool callerCanAccessOtherAgents, ::ActorUniqueID callerAgentID) const;
+
+// MCAPI ::BlockPos const& getBedPosition() const;
+
+// MCAPI ::Vec3 getCapePos(float a);
+
+// MCAPI ::std::weak_ptr<::IContainerManager> getContainerManager() const;
+
+// MCAPI ::gsl::not_null<::StackRefResult<::IContainerRegistryAccess>> getContainerRegistryAccess() const;
+
+// MCAPI ::gsl::not_null<::StackRefResult<::IContainerRegistryTracker>> getContainerRegistryTracker() const;
+
+// MCAPI ::ItemStack const& getCurrentActiveShield() const;
+
+// MCAPI float getDestroyProgress(::Block const& block);
+
+// MCAPI ::gsl::not_null<::StackRefResult<::IDynamicContainerSerialization>> getDynamicContainerSerialization() const;
+
+// MCAPI ::DimensionType getExpectedSpawnDimensionId() const;
+
+// MCAPI ::BlockPos const& getExpectedSpawnPosition() const;
+
+// MCAPI ::GameMode& getGameMode() const;
+
+// MCAPI ::Container& getInventory();
+
+// TODO: getItemCooldownLeft
+// MCAPI int getItemCooldownLeft(::HashedString const& type) const;
+// MCAPI int getItemCooldownLeft(uint64 typeHash) const;
+
+// MCAPI ::ItemStack const& getItemInUse() const;
+
+// MCAPI ::std::string getItemInteractText(::Item const& item) const;
+
+// MCAPI ::ItemStackNetManagerBase const* getItemStackNetManager() const;
+// MCAPI ::ItemStackNetManagerBase* getItemStackNetManager();
