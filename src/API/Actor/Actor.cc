@@ -1,6 +1,6 @@
 #include "API/Actor/Actor.h"
 
-ClassDefine<ActorClass> ActorClassBuilder = defineClass<ActorClass>("Actor")
+ClassDefine<ActorClass> actorClassBuilder = defineClass<ActorClass>("Actor")
                                                 .constructor(nullptr)
 
                                                 .build();

@@ -11,7 +11,7 @@
 
 using namespace Komomo;
 
-ClassDefine<PlayerClass> PlayerClassBuilder =
+ClassDefine<PlayerClass> playerClassBuilder =
     defineClass<PlayerClass>("Player")
         .constructor(nullptr)
 

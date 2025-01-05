@@ -18,4 +18,4 @@ public: /* Member */
 public: /* Method */
 };
 
-extern ClassDefine<ActorClass> ActorClassBuilder;
+extern ClassDefine<ActorClass> actorClassBuilder;

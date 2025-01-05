@@ -34,7 +34,7 @@ public:
     static Local<Value> removeListener(const Arguments& args);
 };
 
-extern ClassDefine<EventClass> EventClassBuilder;
+extern ClassDefine<EventClass> eventClassBuilder;
 
 #define CallBackNoCancelEvent(EngineID, EventID, EventPtr, ...)                                                        \
     for (auto& data : map[EngineID]) {                                                                                 \

@@ -1,10 +1,10 @@
 #include "API/Container/Container.h"
 
 
-ClassDefine<ContainerClass> ActorClassBuilder = defineClass<ContainerClass>("Actor")
-                                                    .constructor(nullptr)
+ClassDefine<ContainerClass> containerClassBuilder = defineClass<ContainerClass>("Container")
+                                                        .constructor(nullptr)
 
-                                                    .build();
+                                                        .build();
 
 ContainerClass::ContainerClass(Container* container) : ScriptClass(ConstructFromCpp<ContainerClass>{}) {
     this->mContainer = container;
@@ -13,4 +13,3 @@ ContainerClass::ContainerClass(Container* container) : ScriptClass(ConstructFrom
 Local<Object> ContainerClass::newContainer(Container* container) {
     return (new ContainerClass(container))->getScriptObject();
 }
-

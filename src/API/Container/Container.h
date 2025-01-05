@@ -18,4 +18,4 @@ public: /* Member */
 public: /* Method */
 };
 
-extern ClassDefine<ContainerClass> ContainerClassBuilder;
+extern ClassDefine<ContainerClass> containerClassBuilder;

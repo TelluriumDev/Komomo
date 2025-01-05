@@ -128,4 +128,4 @@ public: /* Method */
     // Local<Value> getItemStackNetManager(const Arguments& args); // two overloads
 };
 
-extern ClassDefine<PlayerClass> PlayerClassBuilder;
+extern ClassDefine<PlayerClass> playerClassBuilder;

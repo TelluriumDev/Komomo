@@ -12,7 +12,7 @@
 
 using namespace Komomo;
 
-ClassDefine<EventClass> EventClassBuilder = defineClass<EventClass>("Event")
+ClassDefine<EventClass> eventClassBuilder = defineClass<EventClass>("Event")
 
                                                 .function("emplaceListener", &EventClass::emplaceListener)
                                                 .function("removeListener", &EventClass::removeListener)
