@@ -1,18 +1,17 @@
 #pragma once
-
-
-#include <Utils/Using.h>
-#include <fmt/format.h>
-#include <magic_enum/magic_enum.hpp>
-
-
+#include "Utils/Using.h"
+#include "fmt/format.h"
+#include "magic_enum/magic_enum.hpp"
+#include <boost/pfr.hpp>
 #include <cstddef>
 #include <type_traits>
 #include <unordered_map>
-#include <variant>
+#include <vector>
 
 
 namespace Komomo {
+template <typename T>
+constexpr bool IsReflectable = std::is_aggregate_v<T> && !(requires(T& a) { a.operator[]; });
 
 // C++ -> ScriptX
 // std::string、char* -> String
@@ -21,12 +20,13 @@ namespace Komomo {
 // std::vector<T> -> Array<T>
 // std::unordered_map<K, V> -> Object<string, V>
 // enum<T> -> Number
-namespace ConvertCppToScriptX {
+namespace IConvertCppToScriptX {
 
 // 基础模板
 template <typename T, typename Enable = void>
 struct ToScriptType {
-    static_assert(sizeof(T) == 0, "Unsupported type conversion");
+    // static_assert(sizeof(T) == 0, "Unsupported type conversion");
+    using Type = void;
 };
 
 // 特化类型
@@ -77,16 +77,9 @@ struct ToScriptType<T, std::enable_if_t<std::is_enum_v<T>>> {
     using Type = Number;
 };
 
-struct Variant {
-    std::variant<String, Number, Boolean, Array, Object, Unsupported> value;
 
-    template <typename T>
-    Variant(const T& value) : value(value) {}
-};
-
-// 实现
 template <typename T>
-Local<Value> ConvertToScriptImpl(const T& value) {
+Local<Value> DoScriptTypeConvert(const T& value) {
     using ScriptType = typename ToScriptType<T>::Type;
 
     if constexpr (std::is_enum_v<T>) {
@@ -102,19 +95,46 @@ Local<Value> ConvertToScriptImpl(const T& value) {
     } else if constexpr (std::is_same_v<ScriptType, Array>) {
         auto arr = Array::newArray(); // vector<T> -> array
         for (const auto& item : value) {
-            arr.add(ConvertToScriptImpl(item));
+            arr.add(DoScriptTypeConvert(item));
         }
         return arr;
     } else if constexpr (std::is_same_v<ScriptType, Object>) {
         auto obj = Object::newObject(); // unordered_map<K, V> -> object
         for (const auto& [key, val] : value) {
-            obj.set(fmt::to_string(key), ConvertToScriptImpl(val));
+            obj.set(fmt::to_string(key), DoScriptTypeConvert(val));
         }
         return obj;
     }
+    return Local<Value>();
+}
+template <typename T>
+constexpr bool IsScriptTypeConvertible = !std::is_same_v<typename ToScriptType<T>::Type, void>;
+template <typename T>
+void DoReflectConvert(const T& value, Local<Object>& res) {
+    boost::pfr::for_each_field(value, [&](auto& field, std::size_t index) {
+        if constexpr (IsScriptTypeConvertible<std::remove_cvref_t<decltype(field)>>) {
+            res.set(boost::pfr::names_as_array<std::remove_cvref_t<T>>()[index], DoScriptTypeConvert(field));
+        } else if constexpr (IsReflectable<std::remove_cvref_t<decltype(field)>>) {
+            Local<Object> obj = Object::newObject();
+            DoReflectConvert(field, obj);
+            res.set(boost::pfr::names_as_array<std::remove_cvref_t<T>>()[index], obj);
+        }
+    });
+}
+// 实现
+template <typename T>
+Local<Value> ConvertToScriptImpl(const T& value) {
+    if constexpr (IsScriptTypeConvertible<T>) {
+        return DoScriptTypeConvert(value);
+    } else if constexpr (IsReflectable<T>) {
+        Local<Object> res = Object::newObject();
+        DoReflectConvert(value, res);
+        return res;
+    }
+    return Local<Value>();
 }
 
-} // namespace ConvertCppToScriptX
+} // namespace IConvertCppToScriptX
 
 
 // ScriptX -> C++
@@ -125,7 +145,7 @@ Local<Value> ConvertToScriptImpl(const T& value) {
 // Array<T> -> std::vector<T>
 // Array<Value> -> std::vector<T>
 // Object<Value> -> std::unordered_map<std::string, T>
-namespace ConvertScriptXToCpp {
+namespace IConvertScriptXToCpp {
 
 // 基础模板
 template <typename T, typename Enable = void>
@@ -200,18 +220,39 @@ struct FromScriptType<T, std::enable_if_t<std::is_enum_v<T>>> {
     }
 };
 
-} // namespace ConvertScriptXToCpp
+template <typename T>
+struct FromScriptType<T, std::enable_if_t<IsReflectable<T>>> {
+    static T Convert(const Local<Value>& value, T res = {}) {
+        auto obj = value.asObject();
+        boost::pfr::for_each_field(res, [&](auto& field, std::size_t index) {
+            field = FromScriptType<std::remove_cvref_t<T>>::Convert(
+                obj.get(boost::pfr::names_as_array<std::remove_cvref_t<T>>()[index])
+            );
+        });
+        return res;
+    }
+};
+
+} // namespace IConvertScriptXToCpp
 
 
 template <typename T>
 Local<Value> ConvertToScriptX(const T& value) {
-    return ConvertCppToScriptX::ConvertToScriptImpl(value);
+    return IConvertCppToScriptX::ConvertToScriptImpl(value);
 }
 
 template <typename T>
 T ConvertFromScriptX(const Local<Value>& value) {
-    return ConvertScriptXToCpp::FromScriptType<T>::Convert(value);
+    return IConvertScriptXToCpp::FromScriptType<T>::Convert(value);
 }
 
+template <typename T>
+std::vector<T> ConvertFromScriptXArgs(Arguments const& args) {
+    std::vector<T> result;
+    for (size_t i = 0; i < args.size(); i++) {
+        result.push_back(ConvertFromScriptX<T>(args[i]));
+    }
+    return result;
+}
 
 } // namespace Komomo
