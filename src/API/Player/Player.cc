@@ -1,8 +1,13 @@
 #include "API/Player/Player.h"
 #include "API/APIHelper.h"
+#include "Utils/Convert.h"
 #include "Utils/Using.h"
 
+
 #include <ll/api/service/PlayerInfo.h>
+
+#include <mc/world/actor/player/AbilitiesIndex.h>
+
 
 using namespace Komomo;
 
@@ -191,3 +196,41 @@ Local<Value> PlayerClass::hasOpenContainer() { CallFunction(Boolean, hasOpenCont
 Local<Value> PlayerClass::hasOwnedChunkSource() { CallFunction(Boolean, hasOwnedChunkSource()); };
 Local<Value> PlayerClass::hasRespawnAnchorPosition() { CallFunction(Boolean, hasRespawnAnchorPosition()); };
 Local<Value> PlayerClass::hasRespawnPosition() { CallFunction(Boolean, hasRespawnPosition()); };
+
+/* Method */
+
+Local<Value> PlayerClass::disconnect(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kString);
+    try {
+        if (!mPlayer) return Local<Value>();
+        mPlayer->disconnect(args[0].asString().toString());
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+};
+
+Local<Value> PlayerClass::sendMessage(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kString);
+    try {
+        if (!mPlayer) return Local<Value>();
+        mPlayer->sendMessage(args[0].asString().toString());
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> PlayerClass::setAbility(const Arguments& args) {
+
+    CheckArgsCount(args, 2);
+    CheckArgType(args[0], ValueKind::kNumber);
+    CheckArgType(args[1], ValueKind::kBoolean);
+
+    try {
+        if (!mPlayer) return Local<Value>();
+        mPlayer->setAbility(ConvertFromScriptX<AbilitiesIndex>(args[0]), args[1].asBoolean().value());
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}

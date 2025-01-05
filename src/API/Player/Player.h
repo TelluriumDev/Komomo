@@ -91,6 +91,9 @@ public: /* Member */
     Local<Value> hasRespawnPosition();
 
 public: /* Method */
+    Local<Value> disconnect(const Arguments& args);
+    Local<Value> sendMessage(const Arguments& args);
+    Local<Value> setAbility(const Arguments& args);
 };
 
 extern ClassDefine<PlayerClass> PlayerClassBuilder;
