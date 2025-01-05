@@ -95,7 +95,7 @@ public: /* Method */
     Local<Value> disconnect(const Arguments& args);
     Local<Value> sendMessage(const Arguments& args);
     Local<Value> setAbility(const Arguments& args);
-    // Local<Value> addAndRefresh(const Arguments& args);
+    Local<Value> addAndRefresh(const Arguments& args);
     // Local<Value> broadcastPlayerSpawnedMobEvent(const Arguments& args);
     Local<Value> canUseAbility(const Arguments& args);
     Local<Value> causeFoodExhaustion(const Arguments& args);

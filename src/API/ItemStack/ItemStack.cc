@@ -1,6 +1,8 @@
 #include "API/ItemStack/ItemStack.h"
 
-ClassDefine<ItemStackClass> itemStackClassBuilder = defineClass<ItemStackClass>("ItemStack").build();
+ClassDefine<ItemStackClass> itemStackClassBuilder = defineClass<ItemStackClass>("ItemStack")
+    .constructor(nullptr)
+    .build();
 
 ItemStackClass::ItemStackClass(ItemStack* itemStack) : ScriptClass(ConstructFromCpp<ItemStackClass>{}) {
     this->mItemStack = itemStack;

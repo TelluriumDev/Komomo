@@ -57,6 +57,7 @@ bool addEventListener(const std::string& eventName, ScriptEngine* engine, const 
     auto      eventId    = int(event_enum.value());
     EventData data{eventId, Global<Function>(func)};
     auto      enginedata = GET_ENGINE_DATA(engine);
+    if (map.find(enginedata->mID) == map.end()) map[enginedata->mID] = {};
     map[enginedata->mID].push_back(data);
     EnableListener(enginedata->mID, eventId);
     return true;

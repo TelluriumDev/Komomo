@@ -19,7 +19,7 @@ ClassDefine<CustomFormClass> customFormClassBuilder =
         .instanceFunction("appendDropdown", &CustomFormClass::appendDropdown)
         .instanceFunction("appendSlider", &CustomFormClass::appendSlider)
         .instanceFunction("appendStepSlider", &CustomFormClass::appendStepSlider)
-        .instanceFunction("appendColorPicker", &CustomFormClass::sendTo)
+        .instanceFunction("sendTo", &CustomFormClass::sendTo)
 
 
         .build();
@@ -236,25 +236,25 @@ Local<Value> CustomFormClass::sendTo(const Arguments& args) {
             auto playerClass = engine->getNativeInstance<PlayerClass>(args[0]);
             form->sendTo(
                 *playerClass->mPlayer,
-                [e{EngineScope::currentEngine()}, callback{script::Global(args[1].asFunction())}, this](
+                [_engine{EngineScope::currentEngine()}, callback{script::Global(args[1].asFunction())}](
                     Player&                           player,
                     ll::form::CustomFormResult const& customFormResult,
                     ll::form::FormCancelReason        reason
                 ) {
+                    EngineScope scope(_engine);
                     try {
-                        EngineScope scope(e);
                         callback.get().call(
                             {},
                             PlayerClass::newPlayer(&player),
                             ConvertToScriptX(customFormResult.value()),
-                            ConvertToScriptX(reason.value())
+                            ConvertToScriptX(reason)
                         );
                     }
                     Catch;
                     return Local<Value>();
                 }
             );
-            return Boolean::newBoolean(true);
+            return Boolean::newBoolean(false);
         } else {
             auto engine      = EngineScope::currentEngine();
             auto playerClass = engine->getNativeInstance<PlayerClass>(args[0]);

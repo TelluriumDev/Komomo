@@ -125,7 +125,6 @@ ll::Expected<> KomomoModManager::unload(std::string_view name) {
         auto& scriptEngine = *NodeManager::getInstance().getEngine(mod->id);
 
         scriptEngine.mEngine->getData().reset();
-        removeEngineAllEventListener(mod->id);
         NodeManager::getInstance().destroyEngine(scriptEngine.mID);
         // scriptEngine.mEngine->destroy(); // TODO: use unique_ptr to manage the engine.
         mod->id = 0;

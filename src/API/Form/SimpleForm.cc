@@ -75,8 +75,8 @@ Local<Value> SimpleFormClass::appendButton(const Arguments& args) {
                 args[2].asString().toString(),
                 args[3].asString().toString(),
                 [engine{EngineScope::currentEngine()}, callback{script::Global(args[3].asFunction())}](Player& player) {
+                    EngineScope scope(engine);
                     try {
-                        EngineScope  scope(engine);
                         Local<Value> result = callback.get().call({}, PlayerClass::newPlayer(&player));
                     }
                     Catch;
@@ -85,12 +85,11 @@ Local<Value> SimpleFormClass::appendButton(const Arguments& args) {
             );
         } else {
             CheckArgType(args[1], ValueKind::kFunction);
-
             form->appendButton(
                 args[0].asString().toString(),
                 [engine{EngineScope::currentEngine()}, callback{script::Global(args[1].asFunction())}](Player& player) {
+                    EngineScope scope(engine);
                     try {
-                        EngineScope  scope(engine);
                         Local<Value> result = callback.get().call({}, PlayerClass::newPlayer(&player));
                     }
                     Catch;
@@ -106,18 +105,21 @@ Local<Value> SimpleFormClass::appendButton(const Arguments& args) {
 Local<Value> SimpleFormClass::sendTo(const Arguments& args) {
     CheckArgsCount(args, 1);
     try {
-        if (!IsInstanceOf<PlayerClass>(args[0])) return Boolean::newBoolean(false);
+        if (!IsInstanceOf<PlayerClass>(args[0])) {
+            PrintWrongArgType();
+            return Boolean::newBoolean(false);
+        };
         if (args.size() >= 2) {
             CheckArgType(args[1], ValueKind::kFunction);
             auto engine      = EngineScope::currentEngine();
             auto playerClass = engine->getNativeInstance<PlayerClass>(args[0]);
             form->sendTo(
                 *playerClass->mPlayer,
-                [e{EngineScope::currentEngine()},
+                [&engine,
                  callback{script::Global(args[1].asFunction())
                  }](Player& player, int id, ll::form::FormCancelReason reason) {
                     try {
-                        EngineScope scope(e);
+                        EngineScope scope(engine);
                         callback.get().call(
                             {},
                             PlayerClass::newPlayer(&player),

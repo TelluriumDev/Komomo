@@ -20,6 +20,8 @@
 #include <utility>
 
 
+void removeEngineAllEventListener(EngineID engineId);
+
 namespace Komomo {
 
 
@@ -136,6 +138,7 @@ bool NodeManager::destroyEngine(EngineID id) {
 
     auto& warpper      = mEngines[id];
     warpper.mIsRunning = false;
+    removeEngineAllEventListener(id);
 
     node::Stop(warpper.mEnvSetup->env());
 
