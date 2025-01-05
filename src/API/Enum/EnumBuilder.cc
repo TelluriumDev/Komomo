@@ -2,25 +2,90 @@
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
 
+
+#include <mc/world/actor/ActionEvent.h>
+#include <mc/world/actor/ActorCategory.h>
 #include <mc/world/actor/ActorDamageCause.h>
+#include <mc/world/actor/ActorDataIDs.h>
+#include <mc/world/actor/ActorDefinitionEventType.h>
+#include <mc/world/actor/ActorDefinitionGroup.h>
+#include <mc/world/actor/ActorDefinitionParseStatus.h>
+#include <mc/world/actor/ActorEvent.h>
+#include <mc/world/actor/ActorFilterGroup.h>
+#include <mc/world/actor/ActorFlags.h>
+#include <mc/world/actor/ActorInitializationMethod.h>
+#include <mc/world/actor/ActorLinkType.h>
+#include <mc/world/actor/ActorLocation.h>
+#include <mc/world/actor/ActorTargetFilter.h>
+#include <mc/world/actor/ActorTerrainInterlockData.h>
+#include <mc/world/actor/ActorType.h>
+#include <mc/world/actor/ActorTypeNamespaceRules.h>
+#include <mc/world/actor/ArmorMaterialType.h>
+#include <mc/world/actor/ArmorTextureType.h>
+#include <mc/world/actor/DataItemType.h>
+#include <mc/world/actor/DefinitionEventType.h>
+#include <mc/world/actor/HorseInventoryEnum.h>
+#include <mc/world/actor/KeyOrNameResult.h>
+#include <mc/world/actor/MobSpawnMethod.h>
+#include <mc/world/actor/PaletteColor.h>
+#include <mc/world/actor/ParticleType.h>
+#include <mc/world/actor/RenderContextType.h>
+#include <mc/world/actor/RenderParam.h>
+#include <mc/world/actor/SerializedAbilitiesData.h>
+#include <mc/world/actor/SkeletalHierarchyIndex.h>
+#include <mc/world/actor/SpawnRuleEnum.h>
+#include <mc/world/actor/TravelType.h>
+#include <mc/world/actor/TypeExecutingEvent.h>
 
 #include <string>
 #include <unordered_map>
 
 
-#define REGISTER_ENUM_MACRO(ENUM, NAME)                                                                                \
+#define REGISTER_ENUM_MACRO(NAMESPACE, ENUM, NAME)                                                                     \
     for (auto [value, key] : magic_enum::enum_entries<ENUM>()) {                                                       \
-        enumMap[NAME][key] = static_cast<int>(value);                                                                  \
+        NAMESPACE[NAME][key] = static_cast<int>(value);                                                                \
     }
 
 namespace Komomo::EnumAPI {
 
 void RegisterEnum(ScriptEngine* engine) {
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> enumMap;
-
-    REGISTER_ENUM_MACRO(ActorDamageCause, "ActorDamageCause")
-
-    engine->set("Enums", ConvertToScriptX(enumMap));
+    // Actor
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> ActorEnum;
+    // REGISTER_ENUM_MACRO(ActorEnum, ActionEvent::<unnamed>, "ActionEvent")
+    REGISTER_ENUM_MACRO(ActorEnum, ActionEvent::ActionState, "ActionState");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorDamageCause, "ActorDamageCause");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorCategory, "ActorCategory");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorDataIDs, "ActorDataIDs");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorDefinitionEventType, "ActorDefinitionEventType");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorDefinitionGroup::LoadStatus, "LoadStatus");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorDefinitionParseStatus, "ActorDefinitionParseStatus");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorEvent, "ActorEvent");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorFilterGroup::Processing, "Processing");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorFlags, "ActorFlags");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorInitializationMethod, "ActorInitialzationMethod");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorLinkType, "ActorLinkType");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorLocation, "ActorLocation");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorTargetFilter::ConditionType, "ConditionType");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorTerrainInterlockData::VisibilityState, "VisibilityState");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorType, "ActorType");
+    REGISTER_ENUM_MACRO(ActorEnum, ActorTypeNamespaceRules, "ActorTypeNamespaceRules");
+    REGISTER_ENUM_MACRO(ActorEnum, ArmorMaterialType, "ArmorMaterialType");
+    REGISTER_ENUM_MACRO(ActorEnum, ArmorTextureType, "ArmorTextureType");
+    REGISTER_ENUM_MACRO(ActorEnum, DataItemType, "DataItemType");
+    REGISTER_ENUM_MACRO(ActorEnum, DefinitionEventType, "DefinitionEventType");
+    REGISTER_ENUM_MACRO(ActorEnum, HorseInventoryEnum, "HorseInventoryEnum");
+    REGISTER_ENUM_MACRO(ActorEnum, KeyOrNameResult::ResultType, "ResultType");
+    REGISTER_ENUM_MACRO(ActorEnum, MobSpawnMethod, "MobSpawnMethod");
+    REGISTER_ENUM_MACRO(ActorEnum, PaletteColor, "PaletteColor");
+    REGISTER_ENUM_MACRO(ActorEnum, ParticleType, "ParticleType");
+    REGISTER_ENUM_MACRO(ActorEnum, RenderContextType, "RenderContextType");
+    REGISTER_ENUM_MACRO(ActorEnum, RenderParam, "RenderParam");
+    REGISTER_ENUM_MACRO(ActorEnum, SerializedAbilitiesData::SerializedAbilitiesLayer, "SerializedAbilitiesLayer");
+    REGISTER_ENUM_MACRO(ActorEnum, SkeletalHierarchyIndex, "SkeletalHierarchyIndex");
+    REGISTER_ENUM_MACRO(ActorEnum, SpawnRuleEnum, "SpawnRuleEnum");
+    REGISTER_ENUM_MACRO(ActorEnum, TravelType, "TravelType");
+    REGISTER_ENUM_MACRO(ActorEnum, TypeExecutingEvent, "TypeExecutingEvent");
+    engine->set("ActorEnum", ConvertToScriptX(ActorEnum));
 }
 
 #undef REGISTER_ENUM_MACRO
