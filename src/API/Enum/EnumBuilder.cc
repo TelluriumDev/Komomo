@@ -2,7 +2,7 @@
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
 
-#include <mc/network/packet/ModalFormCancelReason.h>
+
 #include <mc/world/actor/ActionEvent.h>
 #include <mc/world/actor/ActorCategory.h>
 #include <mc/world/actor/ActorDamageCause.h>
@@ -37,6 +37,19 @@
 #include <mc/world/actor/TravelType.h>
 #include <mc/world/actor/TypeExecutingEvent.h>
 
+#include <mc/world/actor/player/AbilitiesIndex.h>
+#include <mc/world/actor/player/AbilitiesLayer.h>
+#include <mc/world/actor/player/Ability.h>
+#include <mc/world/actor/player/BedSleepingResult.h>
+#include <mc/world/actor/player/LoadingState.h>
+#include <mc/world/actor/player/Player.h>
+#include <mc/world/actor/player/PlayerSpawnFallbackType.h>
+#include <mc/world/actor/player/PlayerUISlot.h>
+#include <mc/world/actor/player/SkinAdjustments.h>
+#include <mc/world/actor/player/TrustedSkinFlag.h>
+
+#include <mc/network/packet/ModalFormCancelReason.h>
+
 #include <string>
 #include <unordered_map>
 
@@ -51,8 +64,6 @@ namespace Komomo::EnumAPI {
 void RegisterEnum(ScriptEngine* engine) {
     // Actor
     static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> ActorEnum;
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> FormEnum;
-
     // REGISTER_ENUM_MACRO(ActorEnum, ActionEvent::<unnamed>, "ActionEvent")
     REGISTER_ENUM_MACRO(ActorEnum, ActionEvent::ActionState, "ActionState");
     REGISTER_ENUM_MACRO(ActorEnum, ActorDamageCause, "ActorDamageCause");
@@ -87,11 +98,28 @@ void RegisterEnum(ScriptEngine* engine) {
     REGISTER_ENUM_MACRO(ActorEnum, SpawnRuleEnum, "SpawnRuleEnum");
     REGISTER_ENUM_MACRO(ActorEnum, TravelType, "TravelType");
     REGISTER_ENUM_MACRO(ActorEnum, TypeExecutingEvent, "TypeExecutingEvent");
-
-    REGISTER_ENUM_MACRO(FormEnum, ModalFormCancelReason, "ModalFormCancelResult");
-
-    engine->set("FormEnum", ConvertToScriptX(FormEnum));
     engine->set("ActorEnum", ConvertToScriptX(ActorEnum));
+
+    // Player
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> PlayerEnum;
+    REGISTER_ENUM_MACRO(PlayerEnum, AbilitiesIndex, "AbilitiesIndex");
+    REGISTER_ENUM_MACRO(PlayerEnum, AbilitiesLayer, "AbilitiesLayer");
+    REGISTER_ENUM_MACRO(PlayerEnum, Ability::Type, "Type");
+    REGISTER_ENUM_MACRO(PlayerEnum, Ability::Options, "Options");
+    REGISTER_ENUM_MACRO(PlayerEnum, BedSleepingResult, "BedSleepingResult");
+    REGISTER_ENUM_MACRO(PlayerEnum, LoadingState, "LoadingState");
+    REGISTER_ENUM_MACRO(PlayerEnum, Player::SpawnPositionState, "SpawnPositionState");
+    REGISTER_ENUM_MACRO(PlayerEnum, PlayerSpawnFallbackType, "PlayerSpawnFallbackType");
+    REGISTER_ENUM_MACRO(PlayerEnum, PlayerUISlot, "PlayerUISlot");
+    REGISTER_ENUM_MACRO(PlayerEnum, SkinAdjustments::AnimBits, "AnimBits");
+    REGISTER_ENUM_MACRO(PlayerEnum, TrustedSkinFlag, "TrustedSkinFlagS");
+    engine->set("PlayerEnum", ConvertToScriptX(PlayerEnum));
+
+    // Form
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> FormEnum;
+    REGISTER_ENUM_MACRO(FormEnum, ModalFormCancelReason, "ModalFormCancelResult");
+    engine->set("FormEnum", ConvertToScriptX(FormEnum));
+
 }
 
 #undef REGISTER_ENUM_MACRO
