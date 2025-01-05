@@ -1,6 +1,7 @@
 #include "API/Player/Player.h"
 #include "API/APIHelper.h"
 #include "API/ItemStack/ItemStack.h"
+#include "API/ItemStack/ItemStack.h"
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
 
