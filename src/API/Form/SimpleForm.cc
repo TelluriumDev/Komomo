@@ -1,6 +1,8 @@
 #include "API/Form/SimpleForm.h"
 #include "API/APIHelper.h"
 #include "API/Player/Player.h"
+#include "Utils/Convert.h"
+
 
 using namespace Komomo;
 
@@ -105,10 +107,35 @@ Local<Value> SimpleFormClass::sendTo(const Arguments& args) {
     CheckArgsCount(args, 1);
     try {
         if (!IsInstanceOf<PlayerClass>(args[0])) return Boolean::newBoolean(false);
-        auto engine      = EngineScope::currentEngine();
-        auto playerClass = engine->getNativeInstance<PlayerClass>(args[0]);
-        form->sendTo(*playerClass->mPlayer);
-        return Boolean::newBoolean(true);
+        if (args.size() >= 2) {
+            CheckArgType(args[1], ValueKind::kFunction);
+            auto engine      = EngineScope::currentEngine();
+            auto playerClass = engine->getNativeInstance<PlayerClass>(args[0]);
+            form->sendTo(
+                *playerClass->mPlayer,
+                [e{EngineScope::currentEngine()},
+                 callback{script::Global(args[1].asFunction())
+                 }](Player& player, int id, ll::form::FormCancelReason reason) {
+                    try {
+                        EngineScope scope(e);
+                        callback.get().call(
+                            {},
+                            PlayerClass::newPlayer(&player),
+                            Number::newNumber(id),
+                            ConvertToScriptX(reason.value())
+                        );
+                    }
+                    Catch;
+                    return Local<Value>();
+                }
+            );
+            return Boolean::newBoolean(true);
+        } else {
+            auto engine      = EngineScope::currentEngine();
+            auto playerClass = engine->getNativeInstance<PlayerClass>(args[0]);
+            form->sendTo(*playerClass->mPlayer);
+            return Boolean::newBoolean(true);
+        }
     }
     CatchReturn(Boolean::newBoolean(false));
 }

@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <type_traits>
 #include <unordered_map>
+#include <variant>
 
 
 namespace Komomo {
@@ -74,6 +75,13 @@ struct ToScriptType<std::unordered_map<K, V>> {
 template <typename T>
 struct ToScriptType<T, std::enable_if_t<std::is_enum_v<T>>> {
     using Type = Number;
+};
+
+struct Variant {
+    std::variant<String, Number, Boolean, Array, Object, Unsupported> value;
+
+    template <typename T>
+    Variant(const T& value) : value(value) {}
 };
 
 // 实现

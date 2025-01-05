@@ -11,6 +11,7 @@ using script::EngineScope;
 // using script::Exception;
 using script::ExitEngineScope;
 using script::Function;
+using script::Global;
 using script::Local;
 using script::Number;
 using script::Object;
@@ -21,7 +22,7 @@ using script::selectOverloadedFunc;
 using script::String;
 using script::Value;
 using script::ValueKind;
-using script::Global;
+using script::Unsupported;
 
 // stl
 #include <filesystem>

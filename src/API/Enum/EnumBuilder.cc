@@ -2,25 +2,31 @@
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
 
+
+#include <mc/network/packet/ModalFormCancelReason.h>
 #include <mc/world/actor/ActorDamageCause.h>
+
 
 #include <string>
 #include <unordered_map>
 
 
-#define REGISTER_ENUM_MACRO(ENUM, NAME)                                                                                \
+#define REGISTER_ENUM_MACRO(NAMESPACE, ENUM, NAME)                                                                     \
     for (auto [value, key] : magic_enum::enum_entries<ENUM>()) {                                                       \
-        enumMap[NAME][key] = static_cast<int>(value);                                                                  \
+        NAMESPACE[NAME][key] = static_cast<int>(value);                                                                \
     }
 
 namespace Komomo::EnumAPI {
 
 void RegisterEnum(ScriptEngine* engine) {
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> enumMap;
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> PlayerEnum;
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> FormEnum;
 
-    REGISTER_ENUM_MACRO(ActorDamageCause, "ActorDamageCause")
 
-    engine->set("Enums", ConvertToScriptX(enumMap));
+    REGISTER_ENUM_MACRO(FormEnum, ModalFormCancelReason, "ModalFormCancelReason");
+
+    engine->set("FormEnum", ConvertToScriptX(FormEnum));
+    engine->set("PlayerEnum", ConvertToScriptX(PlayerEnum));
 }
 
 #undef REGISTER_ENUM_MACRO
