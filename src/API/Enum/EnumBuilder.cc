@@ -2,7 +2,7 @@
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
 
-
+#include <mc/network/packet/ModalFormCancelReason.h>
 #include <mc/world/actor/ActionEvent.h>
 #include <mc/world/actor/ActorCategory.h>
 #include <mc/world/actor/ActorDamageCause.h>
@@ -51,6 +51,8 @@ namespace Komomo::EnumAPI {
 void RegisterEnum(ScriptEngine* engine) {
     // Actor
     static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> ActorEnum;
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> FormEnum;
+
     // REGISTER_ENUM_MACRO(ActorEnum, ActionEvent::<unnamed>, "ActionEvent")
     REGISTER_ENUM_MACRO(ActorEnum, ActionEvent::ActionState, "ActionState");
     REGISTER_ENUM_MACRO(ActorEnum, ActorDamageCause, "ActorDamageCause");
@@ -85,6 +87,10 @@ void RegisterEnum(ScriptEngine* engine) {
     REGISTER_ENUM_MACRO(ActorEnum, SpawnRuleEnum, "SpawnRuleEnum");
     REGISTER_ENUM_MACRO(ActorEnum, TravelType, "TravelType");
     REGISTER_ENUM_MACRO(ActorEnum, TypeExecutingEvent, "TypeExecutingEvent");
+
+    REGISTER_ENUM_MACRO(FormEnum, ModalFormCancelReason, "ModalFormCancelResult");
+
+    engine->set("FormEnum", ConvertToScriptX(FormEnum));
     engine->set("ActorEnum", ConvertToScriptX(ActorEnum));
 }
 
