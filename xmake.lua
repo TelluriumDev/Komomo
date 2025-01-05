@@ -4,7 +4,7 @@ add_repositories("levilamina https://github.com/LiteLDev/xmake-repo.git")
 add_repositories("iceblcokmc https://github.com/IceBlcokMC/xmake-repo.git")
 
 add_requires("nodejs 23.5.0") -- iceblockmc
-add_requires("levilamina 1.0.0-rc1") -- levilamina
+add_requires("levilamina 1.0.0-rc.1") -- levilamina
 add_requires("levibuildscript 0.2.0")
 add_requires(
     "expected-lite 0.8.0",
