@@ -1,10 +1,10 @@
 add_rules("mode.debug", "mode.release")
 
-add_repositories("levilamina https://github.com/LiteLDev/xmake-repo.git")
+add_repositories("liteldev-repo https://github.com/LiteLDev/xmake-repo.git")
 add_repositories("iceblcokmc https://github.com/IceBlcokMC/xmake-repo.git")
 
 add_requires("nodejs 23.5.0") -- iceblockmc
-add_requires("levilamina v1.0.0-rc.1") -- levilamina
+add_requires("levilamina 1.0.0-rc.2", {configs = {target_type = "server"}})
 add_requires("levibuildscript 0.2.0")
 add_requires(
     "expected-lite 0.8.0",
@@ -17,21 +17,13 @@ add_requires(
     "magic_enum 0.9.7"
 )
 
-local fmt_version = "fmt >=10.0.0 <11.0.0";
-if is_plat("windows") then
-    add_requires(fmt_version)
-elseif is_plat("linux") then
-    set_toolchains("clang")
-    add_requires("libelf 0.8.13")
-    add_requires(fmt_version, {configs = {header_only = true}})
-end
+add_requires("fmt >=10.0.0 <11.0.0")
 
-if is_plat("windows") then
-    if not has_config("vs_runtime") then
-        set_runtimes("MD")
-    end
-end
 
+
+if not has_config("vs_runtime") then
+    set_runtimes("MD")
+end
 
 target("Komomo")
     add_defines(
@@ -42,8 +34,8 @@ target("Komomo")
     add_files("src/**.cc")
     add_includedirs("src")
     add_packages("nodejs")
-    add_packages("levilamina", "levibuildscript")
     add_packages(
+        "LeviLamina",
         "fmt",
         "expected-lite",
         "entt",
@@ -58,35 +50,13 @@ target("Komomo")
     set_languages("cxx20")
     set_symbols("debug")
     -- set_exceptions("none")
-
-    -- EndStone Entt
-    add_defines("ENTT_SPARSE_PAGE=2048")
-    add_defines("ENTT_PACKED_PAGE=128")
-
-
-    -- 根据不同平台设定编译参数
-    if is_plat("windows") then
-        add_cxxflags("/Zc:__cplusplus")
-        add_cxflags(
+    add_cxxflags("/Zc:__cplusplus")
+    add_cxflags(
             "/EHs",
             "/utf-8",
             "/WX",
             "/sdl"
         )
-    elseif is_plat("linux") then
-        add_cxflags(
-            "-fPIC",
-            "-stdlib=libc++",
-            "-fdeclspec",
-            {force = true}
-        )
-        add_ldflags(
-            "-stdlib=libc++",
-            {force = true}
-        )
-        add_packages("libelf")
-        add_syslinks("dl", "pthread", "c++", "c++abi")
-    end
 
     -- ScriptX
     add_includedirs("ScriptX/src/include")
@@ -102,12 +72,9 @@ target("Komomo")
     add_rules("@levibuildscript/linkrule")
     add_rules("@levibuildscript/modpacker")
 
-    if is_plat("windows") then
-        -- add_links("third-party/nodejs/win/lib/libnode.lib")
-    elseif is_plat("linux") then
-        add_rpathdirs("$ORIGIN/../") -- ./plugins/js_engine/libnode.so.93
-        -- add_links("third-party/nodejs/linux/libnode.so")
-    end
+
+    -- add_links("third-party/nodejs/win/lib/libnode.lib")
+
 
 
     if is_mode("debug") then
