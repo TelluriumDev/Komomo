@@ -313,8 +313,12 @@ Local<Value> PlayerClass::eat(const Arguments& args) {
     try {
         if (!mPlayer) return Local<Value>();
         if (args.size() == 1) {
-            // TODO: MCAPI void eat(::ItemStack const& instance);
-            //     mPlayer->eat();
+            if (IsInstanceOf<ItemStackClass>(args[0])) {
+                auto engine         = EngineScope::currentEngine();
+                auto itemStackClass = engine->getNativeInstance<ItemStackClass>(args[0]);
+                mPlayer->eat(*itemStackClass->mItemStack);
+                return Boolean::newBoolean(true);
+            } else PrintWrongArgType();
             return Boolean::newBoolean(false);
         } else {
             mPlayer->eat(args[0].asNumber().toInt32(), args[1].asNumber().toFloat());
@@ -324,7 +328,19 @@ Local<Value> PlayerClass::eat(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-// MCAPI bool equippedArmorItemCanBeMoved(::ItemStack const& item) const;
+Local<Value> PlayerClass::equippedArmorItemCanBeMoved(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    try {
+        if (!mPlayer) return Local<Value>();
+        if (IsInstanceOf<ItemStackClass>(args[0])) {
+            auto engine         = EngineScope::currentEngine();
+            auto itemStackClass = engine->getNativeInstance<ItemStackClass>(args[0]);
+            return Boolean::newBoolean(mPlayer->equippedArmorItemCanBeMoved(*itemStackClass->mItemStack));
+        } else PrintWrongArgType();
+        return Boolean::newBoolean(false);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
 
 // MCAPI void fireDimensionChangedEvent(::DimensionType fromDimension, ::DimensionType toDimension);
 
@@ -356,6 +372,14 @@ Local<Value> PlayerClass::forceAllowEating(const Arguments& args) {
 // MCAPI ::gsl::not_null<::StackRefResult<::IContainerRegistryTracker>> getContainerRegistryTracker() const;
 
 // MCAPI ::ItemStack const& getCurrentActiveShield() const;
+// Local<Value> PlayerClass::getCurrentActiveShield(const Arguments& args) {
+//     try {
+//         if (!mPlayer) return Local<Value>();
+//         return ItemStackClass::newItemStack(mPlayer->getCurrentActiveShield());
+// --------Failed there because const ItemStack cannot be converted to ItemStack*--------
+//     }
+//     Catch;
+// }
 
 // MCAPI float getDestroyProgress(::Block const& block);
 
@@ -369,9 +393,21 @@ Local<Value> PlayerClass::forceAllowEating(const Arguments& args) {
 
 // MCAPI ::Container& getInventory();
 
-// TODO: getItemCooldownLeft
-// MCAPI int getItemCooldownLeft(::HashedString const& type) const;
-// MCAPI int getItemCooldownLeft(uint64 typeHash) const;
+// Cannot use getItemCooldownLeft(HashedString) because HashedString not implemented
+Local<Value> PlayerClass::getItemCooldownLeft(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    try {
+        // if (IsInstanceOf<HashedString>(args[0])) {
+        //     auto engine            = EngineScope::currentEngine();
+        //     auto hashedStringClass = engine->getNativeInstance<HashedStringClass>(args[0]);
+        //     return Number::newNumber(mPlayer->getItemCooldownLeft(*HashedStringClass->mHashString));
+        // } else {
+        CheckArgType(args[0], ValueKind::kNumber);
+        return Number::newNumber(mPlayer->getItemCooldownLeft(args[0].asNumber().toInt64()));
+        // }
+    }
+    Catch;
+}
 
 // MCAPI ::ItemStack const& getItemInUse() const;
 
@@ -382,7 +418,6 @@ Local<Value> PlayerClass::forceAllowEating(const Arguments& args) {
 
 // MCAPI ::BuildPlatform getPlatform() const;
 
-// MCAPI ::std::string const& getPlatformOnlineId() const;
 Local<Value> PlayerClass::getPlatformOnlineId(const Arguments& args) {
     try {
         if (!mPlayer) return Local<Value>();
@@ -408,6 +443,14 @@ Local<Value> PlayerClass::getPlayerSessionId(const Arguments& args) {
 // MCAPI ::BlockPos const& getRespawnAnchorPosition() const;
 
 // MCAPI ::ItemStack const& getSelectedItem() const;
+// Local<Value> PlayerClass::getSelectedItem(const Arguments& args) {
+//     try {
+//         if (!mPlayer) return Local<Value>();
+//         return ItemStackClass::newItemStack(mPlayer->getSelectedItem());
+// --------Failed there because const ItemStack cannot be converted to ItemStack*--------
+//     }
+//     Catch;
+// }
 
 // MCAPI ::SerializedSkin const& getSkin() const;
 
@@ -422,7 +465,18 @@ Local<Value> PlayerClass::getPlayerSessionId(const Arguments& args) {
 
 // MCAPI ::std::vector<::ActorUniqueID> const& getTrackedBosses();
 
-// MCAPI uint getXpNeededForLevelRange(int startlevel, int endlevel) const;
+Local<Value> PlayerClass::getXpNeededForLevelRange(const Arguments& args) {
+    CheckArgsCount(args, 2);
+    CheckArgType(args[0], ValueKind::kNumber);
+    CheckArgType(args[1], ValueKind::kNumber);
+    try {
+        if (!mPlayer) return Local<Value>();
+        return Number::newNumber(
+            mPlayer->getXpNeededForLevelRange(args[0].asNumber().toInt32(), args[1].asNumber().toInt32())
+        );
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
 
 // MCAPI bool hasOpenContainerOfContainerType(::ContainerType containerType) const;
 
@@ -437,11 +491,16 @@ Local<Value> PlayerClass::getPlayerSessionId(const Arguments& args) {
 
 // MCAPI bool isHiddenFrom(::Mob& target) const;
 
-// MCAPI bool isHostingPlayer() const;
-
 // MCAPI bool isItemOnCooldown(::HashedString const& type) const;
 
-// MCAPI void passengerCheckMovementStats();
+Local<Value> PlayerClass::passengerCheckMovementStats(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        mPlayer->passengerCheckMovementStats();
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
 
 // MCAPI void playPredictiveSynchronizedSound(
 //     ::SharedTypes::Legacy::LevelSoundEvent type,
@@ -606,7 +665,8 @@ Local<Value> PlayerClass::getPlayerSessionId(const Arguments& args) {
 // MCAPI static bool isDangerousVolumeForSpawn(::BlockSource& region, ::AABB const& centeredAABB);
 
 // MCAPI static ::Player const* tryGetFromComponent(::PlayerComponent const&, ::ActorOwnerComponent const&, bool);
-// MCAPI static ::Player* tryGetFromComponent(::PlayerComponent const&, ::ActorOwnerComponent& actor, bool includeRemoved);
+// MCAPI static ::Player* tryGetFromComponent(::PlayerComponent const&, ::ActorOwnerComponent& actor, bool
+// includeRemoved);
 
 // MCAPI static ::Player* tryGetFromEntity(::EntityContext& entity, bool includeRemoved);
 // MCAPI static ::Player* tryGetFromEntity(::StackRefResult<::EntityContext> entity, bool includeRemoved);
