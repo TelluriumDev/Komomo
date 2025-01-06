@@ -11,9 +11,7 @@ namespace Komomo {
 
 KomomoMod::KomomoMod(const ll::mod::Manifest& manifest) : ll::mod::Mod(std::move(manifest)) {}
 
-KomomoMod::~KomomoMod() {
-    release();
-    }
+KomomoMod::~KomomoMod() { release(); }
 
 std::shared_ptr<ll::mod::Mod> KomomoMod::current() {
     return Komomo::getKomomoModManager().getMod(ENGINE_DATA()->mMod->getName());

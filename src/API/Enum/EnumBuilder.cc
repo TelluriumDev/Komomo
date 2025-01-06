@@ -119,7 +119,6 @@ void RegisterEnum(ScriptEngine* engine) {
     static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> FormEnum;
     REGISTER_ENUM_MACRO(FormEnum, ModalFormCancelReason, "ModalFormCancelResult");
     engine->set("FormEnum", ConvertToScriptX(FormEnum));
-
 }
 
 #undef REGISTER_ENUM_MACRO

@@ -34,4 +34,4 @@ inline std::optional<std::string> RuntimeFormat(std::string const& fmt, Args... 
 }
 
 
-} // namespace jse
+} // namespace Komomo

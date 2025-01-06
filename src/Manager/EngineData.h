@@ -19,8 +19,6 @@ struct EngineData {
 
 public:
     explicit EngineData(uint64_t engineID) : mID(engineID) {}
-
-    
 };
 
 

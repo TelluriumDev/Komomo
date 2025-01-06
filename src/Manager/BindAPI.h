@@ -24,7 +24,6 @@ inline void BindAPI(ScriptEngine* engine) {
     engine->registerNativeClass<ContainerClass>(containerClassBuilder);
     engine->registerNativeClass<ItemStackClass>(itemStackClassBuilder);
     engine->registerNativeClass<ActorClass>(actorClassBuilder);
-
 }
 
 

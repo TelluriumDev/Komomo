@@ -14,6 +14,7 @@ class KomomoMod : public ll::mod::Mod {
 
 private:
     EngineID id;
+
 public:
     KomomoMod(const ll::mod::Manifest& manifest);
     ~KomomoMod();

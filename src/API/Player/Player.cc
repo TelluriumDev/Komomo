@@ -728,26 +728,23 @@ Local<Value> PlayerClass::setSelectedItem(const Arguments& args) {
 // MCAPI void setUsedPotion(bool used);
 Local<Value> PlayerClass::setUsedPotion(const Arguments& args) {
     CheckArgsCount(args, 1);
-    CheckArgType(args[0],ValueKind::kBoolean);
+    CheckArgType(args[0], ValueKind::kBoolean);
     try {
         if (!mPlayer) return Local<Value>();
         mPlayer->setUsedPotion(args[0].asBoolean().value());
         return Boolean::newBoolean(true);
-    } CatchReturn(Boolean::newBoolean(false));
+    }
+    CatchReturn(Boolean::newBoolean(false));
 }
 
 // MCAPI bool shouldShowCredits() const;
-Local<Value> PlayerClass::shouldShowCredits() {CallVoidMethod(shouldShowCredits());
-    
-}
+Local<Value> PlayerClass::shouldShowCredits() { CallVoidMethod(shouldShowCredits()); }
 
 // MCAPI void startCooldown(::Item const* item, bool updateClient);
 // MCAPI void startCooldown(::HashedString const& type, int tickDuration, bool updateClient);
 
 // MCAPI void startDestroying();
-Local<Value> PlayerClass::startDestroying() {
-    CallVoidMethod(startDestroying());
-}
+Local<Value> PlayerClass::startDestroying() { CallVoidMethod(startDestroying()); }
 
 // MCAPI void
 // startItemUseOn(uchar face, ::BlockPos const& blockPos, ::BlockPos const& buildBlockPos, ::ItemStack const& item);
@@ -755,13 +752,13 @@ Local<Value> PlayerClass::startDestroying() {
 // MCAPI void startUsingItem(::ItemStack const& instance, int duration);
 Local<Value> PlayerClass::startUsingItem(const Arguments& args) {
     CheckArgsCount(args, 2);
-    CheckArgType(args[1],ValueKind::kNumber);
+    CheckArgType(args[1], ValueKind::kNumber);
     try {
         if (!mPlayer) return Local<Value>();
         if (IsInstanceOf<ItemStackClass>(args[0])) {
             auto engine         = EngineScope::currentEngine();
             auto itemStackClass = engine->getNativeInstance<ItemStackClass>(args[0]);
-            mPlayer->startUsingItem(*itemStackClass->mItemStack,args[1].asNumber().toInt32());
+            mPlayer->startUsingItem(*itemStackClass->mItemStack, args[1].asNumber().toInt32());
             return Boolean::newBoolean(true);
         } else PrintWrongArgType();
         return Boolean::newBoolean(false);
@@ -770,66 +767,45 @@ Local<Value> PlayerClass::startUsingItem(const Arguments& args) {
 }
 
 
-
 // MCAPI void stopDestroying();
-Local<Value> PlayerClass::stopDestroying() {
-    CallVoidMethod(stopDestroying());
-}
+Local<Value> PlayerClass::stopDestroying() { CallVoidMethod(stopDestroying()); }
 
 // MCAPI void stopGliding();
-Local<Value> PlayerClass::stopGliding() {
-    CallVoidMethod(stopGliding());
-}
+Local<Value> PlayerClass::stopGliding() { CallVoidMethod(stopGliding()); }
 
 // MCAPI void stopItemUseOn(::BlockPos const& blockPos, ::ItemStack const& item);
 
 // MCAPI void stopUsingItem();
-Local<Value> PlayerClass::stopUsingItem() {
-    CallVoidMethod(stopUsingItem());
-}
+Local<Value> PlayerClass::stopUsingItem() { CallVoidMethod(stopUsingItem()); }
 
 // MCAPI bool take(::Actor& actor, int, int favoredSlot);
 
 // MCAPI void tickArmor();
-Local<Value> PlayerClass::tickArmor() {
-    CallVoidMethod(tickArmor());
-}
+Local<Value> PlayerClass::tickArmor() { CallVoidMethod(tickArmor()); }
 
 // MCAPI void tryDisableShield();
-Local<Value> PlayerClass::tryDisableShield() {
-    CallVoidMethod(tryDisableShield());
-}
+Local<Value> PlayerClass::tryDisableShield() { CallVoidMethod(tryDisableShield()); }
 
 // MCAPI bool tryStartGliding();
-Local<Value> PlayerClass::tryStartGliding() {
-    CallVoidMethod(tryStartGliding());
-}
+Local<Value> PlayerClass::tryStartGliding() { CallVoidMethod(tryStartGliding()); }
 
 // MCAPI bool tryStartSleeping(::BlockPos const& blockPos);
 
 // MCAPI void unRegisterTrackedBoss(::ActorUniqueID mob);
 
 // MCAPI void updateBlockSourceTick();
-Local<Value> PlayerClass::updateBlockSourceTick() {
-    CallVoidMethod(updateBlockSourceTick());
-}
+Local<Value> PlayerClass::updateBlockSourceTick() { CallVoidMethod(updateBlockSourceTick()); }
 
 // MCAPI void updateInventoryTransactions();
-Local<Value> PlayerClass::updateInventoryTransactions() {
-    CallVoidMethod(updateInventoryTransactions());
-}
+Local<Value> PlayerClass::updateInventoryTransactions() { CallVoidMethod(updateInventoryTransactions()); }
 
 // MCAPI void updateSkin(::SerializedSkin const& skin, int clientSubID);
 
 // MCAPI void updateTouch();
-Local<Value> PlayerClass::updateTouch() {
-    CallVoidMethod(updateTouch());
-}
+Local<Value> PlayerClass::updateTouch() { CallVoidMethod(updateTouch()); }
 
 // MCAPI void updateTrackedBosses();
-Local<Value> PlayerClass::updateTrackedBosses() {
-    CallVoidMethod(updateTrackedBosses());
-}
+Local<Value> PlayerClass::updateTrackedBosses() { CallVoidMethod(updateTrackedBosses()); }
 
 // MCAPI void useSelectedItem(::ItemUseMethod itemUseMethod, bool consumeItem);
 

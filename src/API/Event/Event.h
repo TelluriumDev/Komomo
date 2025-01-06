@@ -38,11 +38,11 @@ extern ClassDefine<EventClass> eventClassBuilder;
 
 #define CallBackNoCancelEvent(EngineID, EventID, EventPtr, ...)                                                        \
     for (auto& data : map[EngineID]) {                                                                                 \
-        if (data.id == EventID) {                                                         \
+        if (data.id == EventID) {                                                                                      \
             script::EngineScope engineScope(*NodeManager::getInstance().getEngine(EngineID));                          \
             try {                                                                                                      \
                 data.callback.get().call({}, __VA_ARGS__);                                                             \
-                data.listener    = std::move(EventPtr);                                                                \
+                data.listener = std::move(EventPtr);                                                                   \
             }                                                                                                          \
             Catch;                                                                                                     \
         }                                                                                                              \
