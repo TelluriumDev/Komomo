@@ -228,7 +228,6 @@ Local<Value> PlayerClass::setAbility(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckArgType(args[1], ValueKind::kBoolean);
-
     try {
         if (!mPlayer) return Local<Value>();
         mPlayer->setAbility(ConvertFromScriptX<AbilitiesIndex>(args[0]), args[1].asBoolean().value());
@@ -380,3 +379,237 @@ Local<Value> PlayerClass::forceAllowEating(const Arguments& args) {
 
 // MCAPI ::ItemStackNetManagerBase const* getItemStackNetManager() const;
 // MCAPI ::ItemStackNetManagerBase* getItemStackNetManager();
+
+// MCAPI ::BuildPlatform getPlatform() const;
+
+// MCAPI ::std::string const& getPlatformOnlineId() const;
+Local<Value> PlayerClass::getPlatformOnlineId(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        return String::newString(mPlayer->getPlatformOnlineId());
+    }
+    Catch;
+}
+
+// MCAPI ::GameType getPlayerGameType() const;
+
+// MCAPI ::PlayerPermissionLevel getPlayerPermissionLevel() const;
+
+Local<Value> PlayerClass::getPlayerSessionId(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        return String::newString(mPlayer->getPlayerSessionId());
+    }
+    Catch;
+}
+
+// MCAPI ::ItemStack const& getPlayerUIItem(::PlayerUISlot slot);
+
+// MCAPI ::BlockPos const& getRespawnAnchorPosition() const;
+
+// MCAPI ::ItemStack const& getSelectedItem() const;
+
+// MCAPI ::SerializedSkin const& getSkin() const;
+
+// MCAPI ::SerializedSkin& getSkin();
+
+// MCAPI ::DimensionType getSpawnDimension() const;
+
+// MCAPI ::BlockPos const& getSpawnPosition() const;
+
+// MCAPI ::PlayerInventory const& getSupplies() const;
+// MCAPI ::PlayerInventory& getSupplies();
+
+// MCAPI ::std::vector<::ActorUniqueID> const& getTrackedBosses();
+
+// MCAPI uint getXpNeededForLevelRange(int startlevel, int endlevel) const;
+
+// MCAPI bool hasOpenContainerOfContainerType(::ContainerType containerType) const;
+
+// MCAPI bool hasResource(::ItemDescriptor const& resource);
+
+// MCAPI bool interact(::Actor& actor, ::Vec3 const& location);
+
+// MCAPI void
+// inventoryChanged(::Container&, int slot, ::ItemStack const& oldItem, ::ItemStack const& newItem, bool forceBalanced);
+
+// MCAPI bool is2DPositionRelevant(::DimensionType dimension, ::BlockPos const& position);
+
+// MCAPI bool isHiddenFrom(::Mob& target) const;
+
+// MCAPI bool isHostingPlayer() const;
+
+// MCAPI bool isItemOnCooldown(::HashedString const& type) const;
+
+// MCAPI void passengerCheckMovementStats();
+
+// MCAPI void playPredictiveSynchronizedSound(
+//     ::SharedTypes::Legacy::LevelSoundEvent type,
+//     ::Vec3 const&                          pos,
+//     ::Block const&                         block,
+//     ::ActorDefinitionIdentifier const&     entityType,
+//     bool                                   isGlobal
+// );
+// MCAPI void playPredictiveSynchronizedSound(
+//     ::SharedTypes::Legacy::LevelSoundEvent type,
+//     ::Vec3 const&                          pos,
+//     ::ActorDefinitionIdentifier const&     entityType,
+//     int                                    data,
+//     bool                                   isGlobal
+// );
+
+// MCAPI void recheckSpawnPosition();
+
+// MCAPI void registerTrackedBoss(::ActorUniqueID mob);
+
+// MCAPI void releaseUsingItem();
+
+// MCAPI void resendAllChunks();
+
+// MCAPI void resetPlayerLevel();
+
+// MCAPI void resetPublisherInitialSpawn();
+
+// MCAPI void resetToDefaultGameMode();
+
+// MCAPI void saveLastDeathLocation(::CompoundTag& tag) const;
+
+// MCAPI void sendEventPacket(::LegacyTelemetryEventPacket& packet) const;
+
+// MCAPI void sendPlayerTeleported();
+
+// MCAPI void sendSpawnExperienceOrbPacketToServer(::Vec3 const& pos, int count);
+
+// MCAPI void setAgent(::Agent* agent);
+
+// MCAPI void setBedRespawnPosition(::BlockPos const& bedPosition);
+
+// MCAPI void setBlockRespawnUntilClientMessage(bool val);
+
+// MCAPI void setChunkRadius(uint chunkRadius);
+
+// MCAPI void setContainerManagerModel(::std::shared_ptr<::ContainerManagerModel> manager);
+
+// MCAPI void setCursorSelectedItem(::ItemStack const& item);
+
+// MCAPI void setCursorSelectedItemGroup(::ItemGroup const& itemGroup);
+
+// MCAPI void setEmotingStatus(uint emoteTicks);
+
+// MCAPI void setEnchantmentSeed(int newSeed);
+
+// MCAPI void setHasDied(bool hasDied);
+
+// MCAPI void setHasSeenCredits(bool value);
+
+// MCAPI void setInventoryOptions(::InventoryOptions const& options);
+
+// MCAPI void setLastDeathDimension(::DimensionType dimension);
+
+// MCAPI void setLastDeathPos(::BlockPos pos);
+
+// MCAPI void setMapIndex(int mapIndex);
+
+// MCAPI void setName(::std::string const& newName);
+
+// MCAPI void setPermissions(::CommandPermissionLevel permissions);
+
+// MCAPI void setPlatformOnlineId(::std::string const& platformOnlineId);
+
+// MCAPI void setPlayerIndex(int index);
+
+// MCAPI void setPlayerUIItem(::PlayerUISlot slot, ::ItemStack const& item, bool forceBalance);
+
+// MCAPI void setRespawnPosition(::BlockPos const& inRespawnPosition, ::DimensionType dimension);
+// MCAPI void setRespawnPositionCandidate();
+
+// MCAPI void setRespawnReady(::Vec3 const& respawnPosition);
+
+// MCAPI void setSelectedItem(::ItemStack const& item);
+
+// MCAPI ::ItemStack const& setSelectedSlot(int slot);
+
+// MCAPI bool setSpawnBlockRespawnPosition(::BlockPos const& spawnBlockPosition, ::DimensionType dimension);
+
+// MCAPI void setUsedPotion(bool used);
+
+// MCAPI bool shouldShowCredits() const;
+
+// MCAPI void startCooldown(::Item const* item, bool updateClient);
+// MCAPI void startCooldown(::HashedString const& type, int tickDuration, bool updateClient);
+
+// MCAPI void startDestroying();
+
+// MCAPI void
+// startItemUseOn(uchar face, ::BlockPos const& blockPos, ::BlockPos const& buildBlockPos, ::ItemStack const& item);
+
+// MCAPI void startUsingItem(::ItemStack const& instance, int duration);
+
+// MCAPI void stopDestroying();
+
+// MCAPI void stopGliding();
+
+// MCAPI void stopItemUseOn(::BlockPos const& blockPos, ::ItemStack const& item);
+
+// MCAPI void stopUsingItem();
+
+// MCAPI bool take(::Actor& actor, int, int favoredSlot);
+
+// MCAPI void tickArmor();
+
+// MCAPI void tryDisableShield();
+
+// MCAPI bool tryStartGliding();
+
+// MCAPI void unRegisterTrackedBoss(::ActorUniqueID mob);
+
+// MCAPI void updateBlockSourceTick();
+
+// MCAPI void updateInventoryTransactions();
+
+// MCAPI void updateSkin(::SerializedSkin const& skin, int clientSubID);
+
+// MCAPI void updateTouch();
+
+// MCAPI void updateTrackedBosses();
+
+// MCAPI void useSelectedItem(::ItemUseMethod itemUseMethod, bool consumeItem);
+
+// static
+
+// MCAPI static ::std::optional<::Player::FixedSpawnPositionData_DEPRECATED> checkAndFixSpawnPosition_DEPRECATED(
+//     ::Vec3 const&                                  spawnPosition,
+//     ::std::vector<::gsl::not_null<::BlockSource*>> regions,
+//     ::AABB                                         aabb,
+//     bool                                           adjustYToSolidGround,
+//     bool,
+//     bool  searchUp,
+//     bool  positionFromSave,
+//     bool  spawningAtForcedSpawn,
+//     short dimensionHeight
+// );
+
+// MCAPI static bool checkNeedAutoJump(
+//     ::IConstBlockSource const&                         region,
+//     ::AABBShapeComponent const&                        aabbShape,
+//     ::ActorRotationComponent const&                    actorRotation,
+//     float                                              movementSpeed,
+//     ::StateVectorComponent const&                      stateVector,
+//     ::optional_ref<::GetCollisionShapeInterface const> collisionShapeInterface,
+//     float                                              inputMoveX,
+//     float                                              inputMoveZ
+// );
+
+// MCAPI static ::std::optional<::SDharedTypes::Legacy::LevelSoundEvent>
+// getCustomHurtSound(::Mob& mob, ::ActorDamageCause cause);
+
+// MCAPI static bool isDangerousVolumeForSpawn(::BlockSource& region, ::AABB const& centeredAABB);
+
+// MCAPI static ::Player const* tryGetFromComponent(::PlayerComponent const&, ::ActorOwnerComponent const&, bool);
+// MCAPI static ::Player* tryGetFromComponent(::PlayerComponent const&, ::ActorOwnerComponent& actor, bool includeRemoved);
+
+// MCAPI static ::Player* tryGetFromEntity(::EntityContext& entity, bool includeRemoved);
+// MCAPI static ::Player* tryGetFromEntity(::StackRefResult<::EntityContext> entity, bool includeRemoved);
+
+// MCAPI static void
+// updatePlayerGameTypeEntityData(::EntityContext& entity, ::GameType gameType, ::GameType defaultGameType);
