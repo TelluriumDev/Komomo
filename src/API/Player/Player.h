@@ -47,6 +47,8 @@ public: /* Member */
     Local<Value> getUsedPotion();
     Local<Value> getXpEarnedAtCurrentLevel();
     Local<Value> getXpNeededForNextLevel();
+    Local<Value> getPlayerSessionId();
+    Local<Value> getPlatformOnlineId();
 
     Local<Value> isLoading();
     Local<Value> isPlayerInitialized();
@@ -127,10 +129,8 @@ public: /* Method */
     // Local<Value> getItemInteractText(const Arguments& args);
     // Local<Value> getPlatform(const Arguments& args); // two overloads
     // Local<Value> getItemStackNetManager(const Arguments& args); // two overloads
-    Local<Value> getPlatformOnlineId(const Arguments& args);
     // Local<Value> getPlayerGameType(const Arguments& args);
     // Local<Value> getPlayerPermissionLevel(const Arguments& args);
-    Local<Value> getPlayerSessionId(const Arguments& args);
     // Local<Value> getPlayerUIItem(const Arguments& args);
     // Local<Value> getRespawnAnchorPosition(const Arguments& args);
     Local<Value> getSelectedItem(const Arguments& args);
@@ -149,23 +149,23 @@ public: /* Method */
     // Local<Value> isItemOnCooldown(const Arguments& args);
     Local<Value> passengerCheckMovementStats(const Arguments& args);
     // Local<Value> playPredictiveSynchronizedSound(const Arguments& args); // two overloads
-    Local<Value> recheckSpawnPosition(const Arguments& args);
+    Local<Value> recheckSpawnPosition();
     // Local<Value> registerTrackedBoss(const Arguments& args);
-    Local<Value> releaseUsingItem(const Arguments& args);
-    Local<Value> resendAllChunks(const Arguments& args);
-    Local<Value> resetPlayerLevel(const Arguments& args);
-    Local<Value> resetPublisherInitialSpawn(const Arguments& args);
-    Local<Value> resetToDefaultGameMode(const Arguments& args);
+    Local<Value> releaseUsingItem();
+    Local<Value> resendAllChunks();
+    Local<Value> resetPlayerLevel();
+    Local<Value> resetPublisherInitialSpawn();
+    Local<Value> resetToDefaultGameMode();
     // Local<Value> saveLastDeathLocation(const Arguments& args);
     // Local<Value> sendEventPacket(const Arguments& args);
-    Local<Value> sendPlayerTeleported(const Arguments& args);
+    Local<Value> sendPlayerTeleported();
     // Local<Value> sendSpawnExperienceOrbPacketToServer(const Arguments& args);
     // Local<Value> setAgent(const Arguments& args);
     // Local<Value> setBedRespawnPosition(const Arguments& args);
     Local<Value> setBlockRespawnUntilClientMessage(const Arguments& args);
     Local<Value> setChunkRadius(const Arguments& args);
     // Local<Value> setContainerManagerModel(const Arguments& args);
-    // Local<Value> setCursorSelectedItem(const Arguments& args);
+    Local<Value> setCursorSelectedItem(const Arguments& args);
     // Local<Value> setCursorSelectedItemGroup(const Arguments& args);
     Local<Value> setEmotingStatus(const Arguments& args);
     Local<Value> setEnchantmentSeed(const Arguments& args);
@@ -180,32 +180,34 @@ public: /* Method */
     Local<Value> setPlatformOnlineId(const Arguments& args);
     Local<Value> setPlayerIndex(const Arguments& args);
     // Local<Value> setPlayerUIItem(const Arguments& args);
-    Local<Value> setRespawnPosition(const Arguments& args); // two overloads
+    // Local<Value> setRespawnPosition(const Arguments& args);
+    Local<Value> setRespawnPositionCandidate();
     // Local<Value> setRespawnReady(const Arguments& args);
     Local<Value> setSelectedItem(const Arguments& args);
-    Local<Value> setSelectedSlot(const Arguments& args);
+    // Local<Value> setSelectedSlot(const Arguments& args);
     // Local<Value> setSpawnBlockRespawnPosition(const Arguments& args);
     Local<Value> setUsedPotion(const Arguments& args);
-    Local<Value> shouldShowCredits(const Arguments& args);
+    Local<Value> shouldShowCredits();
     // Local<Value> startCooldown(const Arguments& args); // two overloads
-    Local<Value> startDestroying(const Arguments& args);
+    Local<Value> startDestroying();
     // Local<Value> startItemUseOn(const Arguments& args);
     Local<Value> startUsingItem(const Arguments& args);
-    Local<Value> stopDestroying(const Arguments& args);
-    Local<Value> stopGliding(const Arguments& args);
+    Local<Value> stopDestroying();
+    Local<Value> stopGliding();
     // Local<Value> stopItemUseOn(const Arguments& args);
-    Local<Value> stopUsingItem(const Arguments& args);
+    Local<Value> stopUsingItem();
     // Local<Value> take(const Arguments& args);
-    Local<Value> tickArmor(const Arguments& args);
-    Local<Value> tryDisableShield(const Arguments& args);
-    Local<Value> tryStartGliding(const Arguments& args);
+    Local<Value> tickArmor();
+    Local<Value> tryDisableShield();
+    Local<Value> tryStartGliding();
     // Local<Value> unRegisterTrackedBoss(const Arguments& args);
-    Local<Value> updateBlockSourceTick(const Arguments& args);
-    Local<Value> updateInventoryTransactions(const Arguments& args);
+    Local<Value> updateBlockSourceTick();
+    Local<Value> updateInventoryTransactions();
     // Local<Value> updateSkin(const Arguments& args);
-    Local<Value> updateTouch(const Arguments& args);
-    Local<Value> updateTrackedBosses(const Arguments& args);
+    Local<Value> updateTouch();
+    Local<Value> updateTrackedBosses();
     // Local<Value> useSelectedItem(const Arguments& args);
+
     // static
     // Local<Value> checkAndFixSpawnPosition_DEPRECATED(const Arguments& args);
     // Local<Value> checkNeedAutoJump(const Arguments& args);

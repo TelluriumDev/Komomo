@@ -60,7 +60,7 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
 
         mod->id = data->mID;
 
-        mod->onLoad([&data](ll::mod::Mod&) {
+        mod->onLoad([data](ll::mod::Mod&) {
             // data               = ENGINE_DATA();
             auto engine = NodeManager::getInstance().getEngine(data->mID);
 
