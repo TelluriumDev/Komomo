@@ -1,13 +1,13 @@
 {
   "format_version": 2,
-  "tooth": "github.com/engsr6982/Js_Engine",
-  "version": "0.1.0",
+  "tooth": "github.com/TelluriumDev/Komomo",
+  "version": "0.0.1",
   "info": {
-    "name": "Js_Engine",
-    "description": "在 endstone 运行 javascript 插件",
+    "name": "Komomo",
+    "description": "在 LeviLamina 中运行 JavaScript 插件",
     "author": "All contributors",
     "tags": [
-      "platform:endstone",
+      "platform:levilamina",
       "type:mod"
     ]
   }
