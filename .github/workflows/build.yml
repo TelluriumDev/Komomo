@@ -71,8 +71,8 @@ jobs:
           mkdir full
           mkdir full/plugins
 
-          cp -r bin/* full/plugins/
-          cp -a deps/node_modules/. full/plugins/Komomo/node_modules/
+          Copy-Item -Recurse -Force bin/* full/plugins/
+          Copy-Item -Recurse -Force -Container deps/node_modules/. full/plugins/Komomo/node_modules/
           cp deps/libnode.dll full/
 
       - uses: actions/upload-artifact@v4
