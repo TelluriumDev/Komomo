@@ -7,19 +7,9 @@ add_requires("nodejs 23.5.0") -- iceblockmc
 add_requires("levilamina 1.0.0-rc.2", {configs = {target_type = "server"}})
 add_requires("levibuildscript 0.2.0")
 add_requires(
-    "expected-lite 0.8.0",
-    "entt 3.14.0",
     "microsoft-gsl 4.0.0",
-    "nlohmann_json 3.11.3",
-    "boost 1.85.0",
-    "glm 1.0.1",
-    "concurrentqueue 1.0.4",
-    "magic_enum 0.9.7"
+    "boost 1.85.0"
 )
-
-add_requires("fmt >=10.0.0 <11.0.0")
-
-
 
 if not has_config("vs_runtime") then
     set_runtimes("MD")
@@ -72,10 +62,7 @@ target("Komomo")
     add_rules("@levibuildscript/linkrule")
     add_rules("@levibuildscript/modpacker")
 
-
-    -- add_links("third-party/nodejs/win/lib/libnode.lib")
-
-
+    -- add_links("third-party/nodejs/win/lib/libnode.lib"
 
     if is_mode("debug") then
         add_defines("DEBUG")
