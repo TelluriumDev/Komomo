@@ -1,112 +1,119 @@
 #include "API/Event/Event.h"
 #include "API/APIHelper.h"
+#include "API/Event/Listener.h"
 #include "API/Player/Player.h"
 #include "Event.h"
-#include "Manager/EngineData.h"
-#include "Utils/Using.h"
-#include "ll/api/event/EventBus.h"
+#include "Utils/Convert.h"
+#include "ll/api/event/ListenerBase.h"
 
 #include <ll/api/event/player/PlayerJoinEvent.h>
 #include <ll/api/event/server/ServerStartedEvent.h>
-#include <utility>
+#include <ll/api/utils/HashUtils.h>
 
 using namespace Komomo;
 
-ClassDefine<EventClass> eventClassBuilder = defineClass<EventClass>("Event")
+ClassDefine<EventBusClass> eventBusClassBuilder = defineClass<EventBusClass>("EventBus")
+                                                      .constructor(nullptr)
 
-                                                .function("emplaceListener", &EventClass::emplaceListener)
-                                                .function("removeListener", &EventClass::removeListener)
-
-                                                .build();
-
-
-std::unordered_map<EngineID, std::vector<EventData>> map;
-
-// 使用枚举代替魔法值
-enum class EventList : int { onServerStarted = 0, onPlayerJoin };
-
-EventClass::EventClass() : ScriptClass(ConstructFromCpp<EventClass>{}) {};
+                                                      .function("emplaceListener", &EventBusClass::emplaceListener)
+                                                      .function("removeListener", &EventBusClass::removeListener)
 
 
-void EnableListener(EngineID engineId, EventId eventId) {
-    auto& eventBus = ll::event::EventBus::getInstance();
-    switch ((EventList)eventId) {
-    case EventList::onServerStarted: {
-        ll::event::ListenerPtr eventPtr = eventBus.emplaceListener<ll::event::ServerStartedEvent>(
-            [engineId, eventId, &eventPtr](const ll::event::ServerStartedEvent& event) {
-                if (eventPtr) CallBackNoCancelEvent(engineId, eventId, eventPtr);
-                return Local<Value>();
+                                                      .build();
+
+std::vector<ll::event::ListenerPtr> listeners;
+
+EventBusClass::EventBusClass() : ScriptClass(ConstructFromCpp<EventBusClass>{}) {};
+
+Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
+    CheckArgsCountReturn(args, 2, Boolean::newBoolean(false));
+    CheckArgTypeReturn(args[0], ValueKind::kString, Boolean::newBoolean(false));
+    CheckArgTypeReturn(args[1], ValueKind::kFunction, Boolean::newBoolean(false));
+
+    using ll::event::EventBus;
+    using ll::hash_utils::doHash;
+
+    try {
+        std::string            eventName = args[0].asString().toString();
+        auto                   priority  = ll::event::EventPriority::Normal;
+        ll::event::ListenerPtr listener  = nullptr;
+        if (args.size() >= 3) {
+            CheckArgTypeReturn(args[2], ValueKind::kNumber, Boolean::newBoolean(false));
+            priority = ConvertFromScriptX<ll::event::EventPriority>(args[2]);
+        }
+        switch (doHash(eventName)) {
+        case doHash("onServerStarted"): {
+            try {
+                listener = EventBus::getInstance().emplaceListener<ll::event::ServerStartedEvent>(
+                    [&args,
+                     engine{EngineScope::currentEngine()},
+                     func{Global<Function>(args[1].asFunction())}](ll::event::ServerStartedEvent& event) {
+                        EngineScope scope(engine);
+                        try {
+                            func.get().call({});
+                        }
+                        CatchNotReturn
+                    },
+                    priority
+                    // Komomo::getKomomoModManager().getMod(ENGINE_DATA()->mMod->getName())
+                );
+                listeners.push_back(listener);
+                return ListenerClass::newListenPtr(&listener);
             }
-        );
-        break;
-    }
-    case EventList::onPlayerJoin: {
-        ll::event::ListenerPtr eventPtr = eventBus.emplaceListener<ll::event::PlayerJoinEvent>(
-            [engineId, eventId, &eventPtr](const ll::event::PlayerJoinEvent& event) {
-                CallBackNoCancelEvent(engineId, eventId, eventPtr, PlayerClass::newPlayer(&event.self()));
-                return Local<Value>();
+            CatchNotReturn;
+            break;
+        }
+        case doHash("onPlayerJoin"): {
+            try {
+                listener = EventBus::getInstance().emplaceListener<ll::event::PlayerJoinEvent>(
+                    [&args,
+                     engine{EngineScope::currentEngine()},
+                     func{Global<Function>(args[1].asFunction())}](ll::event::PlayerJoinEvent& event) {
+                        EngineScope scope(engine);
+                        try {
+                            auto result = func.get().call({}, PlayerClass::newPlayer(&event.self()));
+                            if (result.isBoolean()) {
+                                if (result.asBoolean().value() == false) event.cancel();
+                            }
+                        }
+                        CatchNotReturn;
+                    },
+                    priority
+                    // Komomo::getKomomoModManager().getMod(ENGINE_DATA()->mMod->getName())
+                );
+                listeners.push_back(listener);
+                return ListenerClass::newListenPtr(&listener);
             }
-        );
-        break;
-    }
-    }
-}
-
-bool addEventListener(const std::string& eventName, ScriptEngine* engine, const Local<Function>& func) {
-    auto      event_enum = magic_enum::enum_cast<EventList>(eventName);
-    auto      eventId    = int(event_enum.value());
-    EventData data{eventId, Global<Function>(func)};
-    auto      enginedata = GET_ENGINE_DATA(engine);
-    if (map.find(enginedata->mID) == map.end()) map[enginedata->mID] = {};
-    map[enginedata->mID].push_back(data);
-    EnableListener(enginedata->mID, eventId);
-    return true;
-}
-
-bool removeEventListener(const std::string& eventName, ScriptEngine* engine, const Local<Function>& func) {
-    auto event_enum = magic_enum::enum_cast<EventList>(eventName);
-    auto eventId    = int(event_enum.value());
-    auto enginedata = GET_ENGINE_DATA(engine);
-    for (auto it = map[enginedata->mID].begin(); it != map[enginedata->mID].end(); ++it) {
-        if (it->id == eventId && it->callback.get() == func) {
-            ll::event::EventBus::getInstance().removeListener(std::move(it->listener));
-            map[enginedata->mID].erase(it);
-            return true;
+            CatchNotReturn;
+            break;
+        }
         }
     }
-    return false;
-}
-
-void removeEngineAllEventListener(EngineID engineId) {
-    if (map.find(engineId) == map.end()) return;
-    for (auto& data : map[engineId]) {
-        ll::event::EventBus::getInstance().removeListener(std::move(data.listener));
-    }
-}
-
-void removeAllEventListener() { map.clear(); }
-
-
-Local<Value> EventClass::emplaceListener(const Arguments& args) {
-    CheckArgsCount(args, 2);
-    CheckArgType(args[0], ValueKind::kString);
-    CheckArgType(args[1], ValueKind::kFunction);
-    try {
-        return Boolean::newBoolean(
-            addEventListener(args[0].asString().toString(), EngineScope::currentEngine(), args[1].asFunction())
-        );
-    }
     Catch;
+    return Local<Value>();
 }
 
-Local<Value> EventClass::removeListener(const Arguments& args) {
-    CheckArgsCount(args, 2);
-    CheckArgType(args[0], ValueKind::kString);
-    CheckArgType(args[1], ValueKind::kFunction);
+Local<Value> EventBusClass::removeListener(const Arguments& args) {
+    CheckArgsCountReturn(args, 1, Boolean::newBoolean(false));
+    using ll::event::EventBus;
     try {
-        return Boolean::newBoolean(
-            removeEventListener(args[0].asString().toString(), EngineScope::currentEngine(), args[1].asFunction())
-        );
+        if (IsInstanceOf<ListenerClass>(args[0])) {
+            auto engine        = EngineScope::currentEngine();
+            auto listenerClass = engine->getNativeInstance<ListenerClass>(args[0]);
+            if (listenerClass) {
+                return Boolean::newBoolean(EventBus::getInstance().removeListener(*listenerClass->listener));
+            }
+        }
     }
-    Catch;
+
+    CatchReturn(Boolean::newBoolean(false));
+    return Boolean::newBoolean(false);
+}
+
+void EventBusClass::removeAllListeners() {
+    using ll::event::EventBus;
+    for (auto& listener : listeners) {
+        EventBus::getInstance().removeListener(listener);
+    }
+    listeners.clear();
 }

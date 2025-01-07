@@ -20,8 +20,6 @@
 #include <utility>
 
 
-void removeEngineAllEventListener(EngineID engineId);
-
 namespace Komomo {
 
 
@@ -106,8 +104,7 @@ EngineWrapper* NodeManager::newScriptEngine() {
     engine->setData(std::make_shared<EngineData>(id)); // 设置引擎数据
 
     EngineScope scope(engine);
-    BindAPI(engine); // 绑定API
-
+    BindAPI(engine);
     // EngineWrapper warpper;
     mEngines.emplace(id, EngineWrapper{id, engine, std::move(envSetup)});
 
@@ -138,7 +135,6 @@ bool NodeManager::destroyEngine(EngineID id) {
 
     auto& warpper      = mEngines[id];
     warpper.mIsRunning = false;
-    removeEngineAllEventListener(id);
 
     node::Stop(warpper.mEnvSetup->env());
 

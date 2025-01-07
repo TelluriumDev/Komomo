@@ -4,6 +4,7 @@
 #include "API/Container/Container.h"
 #include "API/Enum/EnumBuilder.h"
 #include "API/Event/Event.h"
+#include "API/Event/Listener.h"
 #include "API/Form/CustomForm.h"
 #include "API/Form/SimpleForm.h"
 #include "API/ItemStack/ItemStack.h"
@@ -18,7 +19,8 @@ inline void BindAPI(ScriptEngine* engine) {
     EnumAPI::RegisterEnum(engine);
 
     engine->registerNativeClass<PlayerClass>(playerClassBuilder);
-    engine->registerNativeClass<EventClass>(eventClassBuilder);
+    engine->registerNativeClass<EventBusClass>(eventBusClassBuilder);
+    engine->registerNativeClass<ListenerClass>(listenerClassBuilder);
     engine->registerNativeClass<SimpleFormClass>(simpleFormClassBuilder);
     engine->registerNativeClass<CustomFormClass>(customFormClassBuilder);
     engine->registerNativeClass<ContainerClass>(containerClassBuilder);

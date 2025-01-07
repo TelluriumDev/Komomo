@@ -1,5 +1,6 @@
 #include "Loader/ModManager.h"
 #include "API/APIHelper.h"
+#include "API/Event/Event.h"
 #include "Entry.h"
 #include "Loader/Mod.h"
 #include "Manager/EngineData.h"
@@ -12,8 +13,6 @@
 
 #include <filesystem>
 #include <memory>
-
-void removeEngineAllEventListener(EngineID id);
 
 
 constexpr auto ModManagerName = "KomomoJS";
@@ -47,31 +46,32 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             manager.NpmInstall(path.parent_path().string());
         }
 
+
+        // 创建插件实例
+        auto mod   = std::make_shared<KomomoMod>(manifest);
+        data->mMod = mod;
+
+        mod->id = data->mID;
+
+
         if (!NodeManager::loadFile(wrapper, file, NodeManager::packageIsEsm(package))) {
             Entry::getInstance().getSelf().getLogger().error("Failed to load mod: {}", file);
             return ll::makeStringError("Failed to load mod");
         }
 
-
-        // 创建插件实例
-        auto mod = std::make_shared<KomomoMod>(manifest);
-        // auto mod   = new JavaScriptPlugin(data->mID, builder.build(data->tryParseName(), data->tryParseVersion()));
-        data->mMod = mod;
-
-        mod->id = data->mID;
-
         mod->onLoad([data](ll::mod::Mod&) {
-            // data               = ENGINE_DATA();
-            auto engine = NodeManager::getInstance().getEngine(data->mID);
+            auto        engine = NodeManager::getInstance().getEngine(data->mID);
+            EngineScope scope(engine->mEngine);
+            return true;
+        });
 
-            EngineScope scope(engine->mEngine);
-            try {
-            }
-            CatchNotReturn;
-            return true;
-        });
         // auto id = data->mID;
-        mod->onEnable([&data](ll::mod::Mod& mod) {
+        mod->onEnable([data](ll::mod::Mod&) {
+            auto        engine = NodeManager::getInstance().getEngine(data->mID);
+            EngineScope scope(engine->mEngine);
+            return true;
+        });
+        mod->onDisable([data](ll::mod::Mod& mod) {
             auto        engine = NodeManager::getInstance().getEngine(data->mID);
             EngineScope scope(engine->mEngine);
             try {
@@ -79,24 +79,12 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             CatchNotReturn;
             return true;
         });
-        mod->onDisable([&data](ll::mod::Mod& mod) {
-            // if (!data) return true;
-            auto        engine = NodeManager::getInstance().getEngine(data->mID);
-            EngineScope scope(engine->mEngine);
-            try {
-                removeEngineAllEventListener(engine->mID);
-            }
-            CatchNotReturn;
-            return true;
-        });
-        mod->onUnload([&data](ll::mod::Mod&) {
+        mod->onUnload([data](ll::mod::Mod& mod) {
             if (!data) return true;
             auto engine = NodeManager::getInstance().getEngine(data->mID);
-            // removeEngineAllEventListener(engine->mID)
             NodeManager::getInstance().destroyEngine(data->mID);
             return true;
         });
-
 
         return mod->onLoad().transform([&, this] { addMod(manifest.name, mod); });
 
@@ -124,10 +112,11 @@ ll::Expected<> KomomoModManager::unload(std::string_view name) {
 
         auto& scriptEngine = *NodeManager::getInstance().getEngine(mod->id);
 
+        EventBusClass::removeAllListeners();
+
         scriptEngine.mEngine->getData().reset();
+
         NodeManager::getInstance().destroyEngine(scriptEngine.mID);
-        // scriptEngine.mEngine->destroy(); // TODO: use unique_ptr to manage the engine.
-        mod->id = 0;
         eraseMod(name);
 
         return {};

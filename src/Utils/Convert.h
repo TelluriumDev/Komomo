@@ -1,15 +1,17 @@
 #pragma once
 #include "Utils/Using.h"
+#include "boost/pfr.hpp"
 #include "fmt/format.h"
 #include "magic_enum/magic_enum.hpp"
-#include <boost/pfr.hpp>
 #include <cstddef>
 #include <type_traits>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 
 
 namespace Komomo {
+
 template <typename T>
 constexpr bool IsReflectable = std::is_aggregate_v<T> && !(requires(T& a) { a.operator[]; });
 
@@ -77,7 +79,14 @@ struct ToScriptType<T, std::enable_if_t<std::is_enum_v<T>>> {
     using Type = Number;
 };
 
+// variant
+template <typename... Ts>
+struct ToScriptType<std::variant<Ts...>> {
+    using Type = Value;
+};
 
+template <typename T, std::size_t I = 0>
+Local<Value> VariantConvert(const T& value);
 template <typename T>
 Local<Value> DoScriptTypeConvert(const T& value) {
     using ScriptType = typename ToScriptType<T>::Type;
@@ -104,8 +113,21 @@ Local<Value> DoScriptTypeConvert(const T& value) {
             obj.set(fmt::to_string(key), DoScriptTypeConvert(val));
         }
         return obj;
+    } else if constexpr (std::is_same_v<ScriptType, Value>) {
+        return VariantConvert(value);
     }
     return Local<Value>();
+}
+template <typename T, std::size_t I>
+Local<Value> VariantConvert(const T& value) {
+    if (auto res = std::get_if<I>(&value)) {
+        return DoScriptTypeConvert(*res);
+    } else {
+        if constexpr (I + 1 < std::variant_size_v<T>) return VariantConvert<T, I + 1>(value);
+        else {
+            throw std::runtime_error("Invalid variant");
+        }
+    }
 }
 template <typename T>
 constexpr bool IsScriptTypeConvertible = !std::is_same_v<typename ToScriptType<T>::Type, void>;
@@ -225,7 +247,7 @@ struct FromScriptType<T, std::enable_if_t<IsReflectable<T>>> {
     static T Convert(const Local<Value>& value, T res = {}) {
         auto obj = value.asObject();
         boost::pfr::for_each_field(res, [&](auto& field, std::size_t index) {
-            field = FromScriptType<std::remove_cvref_t<T>>::Convert(
+            field = FromScriptType<std::remove_cvref_t<decltype(field)>>::Convert(
                 obj.get(boost::pfr::names_as_array<std::remove_cvref_t<T>>()[index])
             );
         });

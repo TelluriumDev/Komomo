@@ -243,12 +243,14 @@ Local<Value> CustomFormClass::sendTo(const Arguments& args) {
                 ) {
                     EngineScope scope(_engine);
                     try {
-                        callback.get().call(
-                            {},
-                            PlayerClass::newPlayer(&player),
-                            ConvertToScriptX(customFormResult.value()),
-                            ConvertToScriptX(reason)
-                        );
+                        if (customFormResult.has_value()) {
+                            callback.get()
+                                .call({}, PlayerClass::newPlayer(&player), ConvertToScriptX(customFormResult.value()));
+                        } else if (reason.has_value()) {
+                            callback.get().call({}, PlayerClass::newPlayer(&player), ConvertToScriptX(reason.value()));
+                        } else {
+                            callback.get().call({}, PlayerClass::newPlayer(&player));
+                        }
                     }
                     Catch;
                     return Local<Value>();
