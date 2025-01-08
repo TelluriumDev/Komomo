@@ -46,9 +46,7 @@ Komomo 基于 ScriptX 和 NodeJs 实现，支持在 LeviLamina 中运行 JavaScr
 ### 从源码编译
 
 
-### 从源码编译
-
-在编译之前，确保您已经安装了以下工具链：
+在编译之前，确保您已经安装了以下工具/工具链：
 
 - xmake
 - MSVC 2019 或更高版本 (仅限 Windows)
