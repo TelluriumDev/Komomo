@@ -112,7 +112,7 @@ ll::Expected<> KomomoModManager::unload(std::string_view name) {
 
         auto& scriptEngine = *NodeManager::getInstance().getEngine(mod->id);
 
-        EventBusClass::removeAllListeners();
+        EventBusClass::removeModAllListeners(mod->getName());
 
         scriptEngine.mEngine->getData().reset();
 

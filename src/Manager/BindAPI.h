@@ -8,6 +8,7 @@
 #include "API/Form/CustomForm.h"
 #include "API/Form/SimpleForm.h"
 #include "API/ItemStack/ItemStack.h"
+#include "API/Logger/Logger.h"
 #include "API/Player/Player.h"
 #include "Utils/Using.h"
 
@@ -26,6 +27,7 @@ inline void BindAPI(ScriptEngine* engine) {
     engine->registerNativeClass<ContainerClass>(containerClassBuilder);
     engine->registerNativeClass<ItemStackClass>(itemStackClassBuilder);
     engine->registerNativeClass<ActorClass>(actorClassBuilder);
+    engine->registerNativeClass<LoggerClass>(loggerClassBuilder);
 }
 
 

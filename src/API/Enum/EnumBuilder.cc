@@ -2,6 +2,9 @@
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
 
+#include <ll/api/event/ListenerBase.h>
+#include <ll/api/io/LogLevel.h>
+
 
 #include <mc/world/actor/ActionEvent.h>
 #include <mc/world/actor/ActorCategory.h>
@@ -119,6 +122,14 @@ void RegisterEnum(ScriptEngine* engine) {
     static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> FormEnum;
     REGISTER_ENUM_MACRO(FormEnum, ModalFormCancelReason, "ModalFormCancelResult");
     engine->set("FormEnum", ConvertToScriptX(FormEnum));
+
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> EventEnum;
+    REGISTER_ENUM_MACRO(EventEnum, ll::event::EventPriority, "EventPriority");
+    engine->set("EventEnum", ConvertToScriptX(EventEnum));
+
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> LoggerEnum;
+    REGISTER_ENUM_MACRO(LoggerEnum, ll::io::LogLevel, "LogLevel");
+    engine->set("LoggerEnum", ConvertToScriptX(LoggerEnum));
 }
 
 #undef REGISTER_ENUM_MACRO

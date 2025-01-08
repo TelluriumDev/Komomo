@@ -21,7 +21,7 @@ ClassDefine<EventBusClass> eventBusClassBuilder = defineClass<EventBusClass>("Ev
 
                                                       .build();
 
-std::vector<ll::event::ListenerPtr> listeners;
+std::unordered_map<std::string, std::vector<ll::event::ListenerPtr>> listeners;
 
 EventBusClass::EventBusClass() : ScriptClass(ConstructFromCpp<EventBusClass>{}) {};
 
@@ -55,9 +55,8 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
                         CatchNotReturn
                     },
                     priority
-                    // Komomo::getKomomoModManager().getMod(ENGINE_DATA()->mMod->getName())
                 );
-                listeners.push_back(listener);
+                listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
                 return ListenerClass::newListenPtr(&listener);
             }
             CatchNotReturn;
@@ -81,7 +80,7 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
                     priority
                     // Komomo::getKomomoModManager().getMod(ENGINE_DATA()->mMod->getName())
                 );
-                listeners.push_back(listener);
+                listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
                 return ListenerClass::newListenPtr(&listener);
             }
             CatchNotReturn;
@@ -110,10 +109,21 @@ Local<Value> EventBusClass::removeListener(const Arguments& args) {
     return Boolean::newBoolean(false);
 }
 
+void EventBusClass::removeModAllListeners(std::string modName) {
+    using ll::event::EventBus;
+    for (auto& listener : listeners[modName]) {
+        EventBus::getInstance().removeListener(listener);
+    }
+    listeners.erase(modName);
+}
+
+
 void EventBusClass::removeAllListeners() {
     using ll::event::EventBus;
     for (auto& listener : listeners) {
-        EventBus::getInstance().removeListener(listener);
+        for (auto& l : listener.second) {
+            EventBus::getInstance().removeListener(l);
+        }
     }
     listeners.clear();
 }
