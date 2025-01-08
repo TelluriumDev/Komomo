@@ -108,7 +108,7 @@ Local<Object> PlayerClass::newPlayer(Player* player) { return (new PlayerClass(p
 #define CallVoidMethod(Function)                                                                                       \
     try {                                                                                                              \
         if (!mPlayer) return Local<Value>();                                                                           \
-        mPlayer->##Function;                                                                                           \
+        mPlayer->Function;                                                                                             \
         return Boolean::newBoolean(true);                                                                              \
     }                                                                                                                  \
     CatchReturn(Boolean::newBoolean(false));

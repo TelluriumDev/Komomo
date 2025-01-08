@@ -120,12 +120,16 @@ Local<Value> SimpleFormClass::sendTo(const Arguments& args) {
                  }](Player& player, int id, ll::form::FormCancelReason reason) {
                     try {
                         EngineScope scope(engine);
-                        callback.get().call(
-                            {},
-                            PlayerClass::newPlayer(&player),
-                            Number::newNumber(id),
-                            ConvertToScriptX(reason.value())
-                        );
+                        if (reason.has_value()) {
+                            callback.get().call(
+                                {},
+                                PlayerClass::newPlayer(&player),
+                                Number::newNumber(id),
+                                ConvertToScriptX(reason.value())
+                            );
+                        } else {
+                            callback.get().call({}, PlayerClass::newPlayer(&player), Number::newNumber(id));
+                        }
                     }
                     Catch;
                     return Local<Value>();

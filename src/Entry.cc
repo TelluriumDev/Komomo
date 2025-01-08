@@ -51,7 +51,7 @@ bool Entry::load() {
 
     komomoModManager = std::make_shared<KomomoModManager>();
     selfModInstance  = std::make_unique<std::reference_wrapper<ll::mod::NativeMod>>(getSelf());
-    registerPluginManager(komomoModManager = std::make_shared<KomomoModManager>());
+    registerPluginManager(komomoModManager);
     return true;
 }
 
