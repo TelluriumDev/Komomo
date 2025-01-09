@@ -20,8 +20,9 @@ on:
 jobs:
   build:
     name: Build
-    matrix:
-      os: ["windows-latest","self-hosted"]
+    strategy:
+      matrix:
+        os: ["windows-latest", "self-hosted"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -41,7 +42,7 @@ jobs:
         #   xmake-version: branch@master
       - run: |
           git submodule update --init --recursive
-  
+
       - run: |
           xmake repo -u
 
