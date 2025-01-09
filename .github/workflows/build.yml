@@ -22,7 +22,7 @@ jobs:
     name: Build
     strategy:
       matrix:
-        os: ["windows-latest", "Singl"]
+        os: ["windows-latest","Singl","Xianyubb"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -54,13 +54,13 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-x64-${{ github.sha }}
+          name: ${{ github.event.repository.name }}-${{ matrix.os }}-x64-${{ github.sha }}
           path: |
             bin/
       - name: Download depends
         run: |
-          Invoke-WebRequest -Uri https://github.com/IceBlcokMC/node/releases/download/v22.12.0/bin-windows.zip -OutFile bin-windows.zip
-          Invoke-WebRequest -Uri https://github.com/IceBlcokMC/node/releases/download/v22.12.0/node_modules.zip -OutFile node_modules.zip
+          Invoke-WebRequest -Uri "https://github.com/IceBlcokMC/node/releases/download/v22.12.0/bin-windows.zip" -OutFile "bin-windows.zip" -UseBasicParsing
+          Invoke-WebRequest -Uri "https://github.com/IceBlcokMC/node/releases/download/v22.12.0/node_modules.zip" -OutFile "node_modules.zip" -UseBasicParsing
 
       - name: Unzip depends
         run: |
