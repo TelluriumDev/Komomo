@@ -22,7 +22,7 @@ jobs:
     name: Build
     strategy:
       matrix:
-        os: ["windows-latest","Singl"]
+        os: ["windows-latest", "Singl"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -80,7 +80,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-full-x64-${{ github.sha }}
+          name: ${{ github.event.repository.name }}-${{ matrix.os }}-full-x64-${{ github.sha }}
           include-hidden-files: true
           path: |
             full/
