@@ -1,7 +1,5 @@
 # Komomo
 
-| 中文 |
-
 Komomo 基于 ScriptX 和 NodeJs 实现，支持在 LeviLamina 中运行 JavaScript 插件。
 
 ## 安装
@@ -12,7 +10,7 @@ Komomo 基于 ScriptX 和 NodeJs 实现，支持在 LeviLamina 中运行 JavaScr
 
 > full 为完整包，包含 LibNodeJs 和 Komomo 的依赖库
 
-1. 将 Komomo-full.zip 解压，将压缩包内 libnode.dll 和 plugins 目录复制到 bedrock_server 的根目录下
+2. 将 Komomo-full.zip 解压，将压缩包内 libnode.dll 和 plugins 目录复制到 bedrock_server 的根目录下
 
 > 示例结构
 
@@ -28,7 +26,7 @@ Komomo 基于 ScriptX 和 NodeJs 实现，支持在 LeviLamina 中运行 JavaScr
 └── ...
 ```
 
-1. 启动你的 LeviLamina 服务器
+3. 启动你的 LeviLamina 服务器
 
 ## 开发
 
@@ -38,13 +36,13 @@ Komomo 基于 ScriptX 和 NodeJs 实现，支持在 LeviLamina 中运行 JavaScr
 
 ### 支持平台
 
-目前LeviLamina仅支持Windows平台，故本插件也仅支持Windows平台。
+目前 LeviLamina 仅支持 Windows 平台，故本插件也仅支持 Windows 平台。
+
 | Backend | Version | Support | CommonJs | ESM | package manager |
 | :------ | :------ | :------ | :------- | :-- | :-------------- |
 | NodeJs  | v23.5.0 | y       | y        | y   | npm             |
 
 ### 从源码编译
-
 
 在编译之前，确保您已经安装了以下工具/工具链：
 
