@@ -22,7 +22,7 @@ jobs:
     name: Build
     strategy:
       matrix:
-        os: ["windows-latest", "Xianyubb","Singl"]
+        os: ["windows-latest","Singl"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
