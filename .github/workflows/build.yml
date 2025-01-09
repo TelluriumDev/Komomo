@@ -59,24 +59,24 @@ jobs:
             bin/
       - name: Download depends
         run: |
-          curl -o bin-windows.zip -L https://github.com/IceBlcokMC/node/releases/download/v22.12.0/bin-windows.zip
-          curl -o node_modules.zip -L https://github.com/IceBlcokMC/node/releases/download/v22.12.0/node_modules.zip
+          Invoke-WebRequest -Uri https://github.com/IceBlcokMC/node/releases/download/v22.12.0/bin-windows.zip -OutFile bin-windows.zip
+          Invoke-WebRequest -Uri https://github.com/IceBlcokMC/node/releases/download/v22.12.0/node_modules.zip -OutFile node_modules.zip
 
       - name: Unzip depends
         run: |
-          mkdir deps
-          mkdir deps/node_modules
-          unzip -a -q bin-windows.zip -d deps/
-          unzip -a -q node_modules.zip -d deps/node_modules/
+          New-Item -ItemType Directory -Path "deps"
+          New-Item -ItemType Directory -Path "deps/node_modules"
+          Expand-Archive -Path "bin-windows.zip" -DestinationPath "deps" -Force
+          Expand-Archive -Path "node_modules.zip" -DestinationPath "deps/node_modules" -Force
 
       - name: Pack
         run: |
-          mkdir full
-          mkdir full/plugins
+          New-Item -ItemType Directory -Path "full"
+          New-Item -ItemType Directory -Path "full/plugins"
 
-          Copy-Item -Recurse -Force bin/* full/plugins/
-          Copy-Item -Recurse -Force -Container deps/node_modules/. full/plugins/Komomo/node_modules/
-          cp deps/libnode.dll full/
+          Copy-Item -Recurse -Force bin\* full\plugins\
+          Copy-Item -Recurse -Force -Container deps\node_modules\.\* full\plugins\Komomo\node_modules\
+          Copy-Item -Force deps\libnode.dll full\
 
       - uses: actions/upload-artifact@v4
         with:
