@@ -59,8 +59,8 @@ jobs:
             bin/
       - name: Download depends
         run: |
-          Invoke-WebRequest -Uri "https://github.com/IceBlcokMC/node/releases/download/v23.5.0/bin-windows.zip" -OutFile "bin-windows.zip" -UseBasicParsing
-          Invoke-WebRequest -Uri "https://github.com/IceBlcokMC/node/releases/download/v23.5.0/node_modules.zip" -OutFile "node_modules.zip" -UseBasicParsing
+          Invoke-WebRequest -Uri "https://github.com/IceBlcokMC/node/releases/download/v22.12.0/bin-windows.zip" -OutFile "bin-windows.zip" -UseBasicParsing
+          Invoke-WebRequest -Uri "https://github.com/IceBlcokMC/node/releases/download/v22.12.0/node_modules.zip" -OutFile "node_modules.zip" -UseBasicParsing
 
       - name: Unzip depends
         run: |
