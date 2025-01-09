@@ -20,8 +20,8 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: windows-2022
-    runs-on: self-hosted
+    matrix:
+      os: ["windows-latest","self-hosted"]
     steps:
       - uses: actions/checkout@v4
         with:
