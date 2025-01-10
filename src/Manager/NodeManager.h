@@ -25,8 +25,7 @@ public:
     EngineWrapper(EngineID id, ScriptEngine* engine, std::unique_ptr<node::CommonEnvironmentSetup> envs)
     : mID(id),
       mEngine(engine),
-      mEnvSetup(std::move(envs)),
-      mIsRunning(true) {}
+      mEnvSetup(std::move(envs)) {}
 
     operator ScriptEngine*() const { return mEngine; }
 };
