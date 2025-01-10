@@ -40,8 +40,7 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
         fs::path package = path.parent_path() / "package.json";
 
         // 安装依赖
-        if (NodeManager::packageHasDependency(package)
-            && !NodeManager::packageHasDependency(path.parent_path() / "node_modules")) {
+        if (NodeManager::packageHasDependency(package) && !fs::exists(path.parent_path() / "node_modules")) {
             Entry::getInstance().getSelf().getLogger().info("Installing dependencies for mod: {}", path.filename());
             manager.NpmInstall(path.parent_path().string());
         }
