@@ -143,19 +143,19 @@ public: /* Method */
     // Local<Value> getSpawnDimension(const Arguments& args);
     // Local<Value> getSpawnPosition(const Arguments& args);
     // Local<Value> getSupplies(const Arguments& args); // two overloads
-    // Local<Value> getTrackedBosses(const Arguments& args);
+    Local<Value> getTrackedBosses(const Arguments& args);
     Local<Value> getXpNeededForLevelRange(const Arguments& args);
     // Local<Value> hasOpenContainerOfContainerType(const Arguments& args);
     // Local<Value> hasResource(const Arguments& args);
-    // Local<Value> interact(const Arguments& args);
-    // Local<Value> inventoryChanged(const Arguments& args);
+    Local<Value> interact(const Arguments& args);
+    Local<Value> inventoryChanged(const Arguments& args);
     // Local<Value> is2DPositionRelevant(const Arguments& args);
     // Local<Value> isHiddenFrom(const Arguments& args);
     // Local<Value> isItemOnCooldown(const Arguments& args);
     Local<Value> passengerCheckMovementStats(const Arguments& args);
     // Local<Value> playPredictiveSynchronizedSound(const Arguments& args); // two overloads
     Local<Value> recheckSpawnPosition();
-    // Local<Value> registerTrackedBoss(const Arguments& args);
+    Local<Value> registerTrackedBoss(const Arguments& args);
     Local<Value> releaseUsingItem();
     Local<Value> resendAllChunks();
     Local<Value> resetPlayerLevel();
@@ -165,7 +165,7 @@ public: /* Method */
     // Local<Value> sendEventPacket(const Arguments& args);
     Local<Value> sendPlayerTeleported();
     // Local<Value> sendSpawnExperienceOrbPacketToServer(const Arguments& args);
-    // Local<Value> setAgent(const Arguments& args);
+    Local<Value> setAgent(const Arguments& args);
     // Local<Value> setBedRespawnPosition(const Arguments& args);
     Local<Value> setBlockRespawnUntilClientMessage(const Arguments& args);
     Local<Value> setChunkRadius(const Arguments& args);
@@ -187,7 +187,7 @@ public: /* Method */
     // Local<Value> setPlayerUIItem(const Arguments& args);
     // Local<Value> setRespawnPosition(const Arguments& args);
     Local<Value> setRespawnPositionCandidate();
-    // Local<Value> setRespawnReady(const Arguments& args);
+    Local<Value> setRespawnReady(const Arguments& args);
     Local<Value> setSelectedItem(const Arguments& args);
     // Local<Value> setSelectedSlot(const Arguments& args);
     // Local<Value> setSpawnBlockRespawnPosition(const Arguments& args);

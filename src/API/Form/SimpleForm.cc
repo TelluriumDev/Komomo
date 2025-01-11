@@ -114,7 +114,7 @@ Local<Value> SimpleFormClass::sendTo(const Arguments& args) {
             auto engine      = EngineScope::currentEngine();
             auto playerClass = engine->getNativeInstance<PlayerClass>(args[0]);
             form->sendTo(
-                *playerClass->mPlayer,
+                *playerClass->get(),
                 [&engine,
                  callback{script::Global(args[1].asFunction())
                  }](Player& player, int id, ll::form::FormCancelReason reason) {
@@ -139,7 +139,7 @@ Local<Value> SimpleFormClass::sendTo(const Arguments& args) {
         } else {
             auto engine      = EngineScope::currentEngine();
             auto playerClass = engine->getNativeInstance<PlayerClass>(args[0]);
-            form->sendTo(*playerClass->mPlayer);
+            form->sendTo(*playerClass->get());
             return Boolean::newBoolean(true);
         }
     }

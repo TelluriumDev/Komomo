@@ -235,7 +235,7 @@ Local<Value> CustomFormClass::sendTo(const Arguments& args) {
             auto engine      = EngineScope::currentEngine();
             auto playerClass = engine->getNativeInstance<PlayerClass>(args[0]);
             form->sendTo(
-                *playerClass->mPlayer,
+                *playerClass->get(),
                 [_engine{EngineScope::currentEngine()}, callback{script::Global(args[1].asFunction())}](
                     Player&                           player,
                     ll::form::CustomFormResult const& customFormResult,
@@ -260,7 +260,7 @@ Local<Value> CustomFormClass::sendTo(const Arguments& args) {
         } else {
             auto engine      = EngineScope::currentEngine();
             auto playerClass = engine->getNativeInstance<PlayerClass>(args[0]);
-            form->sendTo(*playerClass->mPlayer);
+            form->sendTo(*playerClass->get());
             return Boolean::newBoolean(true);
         }
     }

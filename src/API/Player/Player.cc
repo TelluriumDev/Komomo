@@ -1,5 +1,6 @@
 #include "API/Player/Player.h"
 #include "API/APIHelper.h"
+#include "API/Actor/Actor.h"
 #include "API/Actor/ActorUniqueID.h"
 #include "API/Actor/Agent.h"
 #include "API/Block/BlockSource.h"
@@ -11,6 +12,7 @@
 #include "API/Player/LayeredAbilities.h"
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
+#include "mc/world/item/ItemStack.h"
 
 
 #include <ll/api/service/PlayerInfo.h>
@@ -134,8 +136,8 @@ ClassDefine<PlayerClass> playerClassBuilder =
         .InstanceFunction(getInventory, PlayerClass)
         .InstanceFunction(getItemCooldownLeft, PlayerClass)
         .InstanceFunction(getItemInUse, PlayerClass)
-        // .InstanceFunctionTemplate(getPlatform, PlayerClass)
-        // .InstanceFunctionTemplate(getItemStackNetManager, PlayerClass)
+        // .InstanceFunction(getPlatform, PlayerClass)
+        // .InstanceFunction(getItemStackNetManager, PlayerClass)
         // .InstanceFunction(getPlayerGameType, PlayerClass)
         // .InstanceFunction(getPlayerPermissionLevel, PlayerClass)
         // .InstanceFunction(getPlayerUIItem, PlayerClass)
@@ -145,19 +147,19 @@ ClassDefine<PlayerClass> playerClassBuilder =
         // .InstanceFunction(getSpawnDimension, PlayerClass)
         // .InstanceFunction(getSpawnPosition, PlayerClass)
         // .InstanceFunction(getSupplies, PlayerClass)
-        // .InstanceFunction(getTrackedBosses, PlayerClass)
+        .InstanceFunction(getTrackedBosses, PlayerClass)
         .InstanceFunction(getXpNeededForLevelRange, PlayerClass)
         // .InstanceFunction(hasOpenContainerOfContainerType, PlayerClass)
         // .InstanceFunction(hasResource, PlayerClass)
-        // .InstanceFunction(interact, PlayerClass)
-        // .InstanceFunction(inventoryChanged, PlayerClass)
+        .InstanceFunction(interact, PlayerClass)
+        .InstanceFunction(inventoryChanged, PlayerClass)
         // .InstanceFunction(is2DPositionRelevant, PlayerClass)
         // .InstanceFunction(isHiddenFrom, PlayerClass)
         // .InstanceFunction(isItemOnCooldown, PlayerClass)
         .InstanceFunction(passengerCheckMovementStats, PlayerClass)
         // .InstanceFunction(playPredictiveSynchronizedSound, PlayerClass)
         .InstanceFunction(recheckSpawnPosition, PlayerClass)
-        // .InstanceFunction(registerTrackedBoss, PlayerClass)
+        .InstanceFunction(registerTrackedBoss, PlayerClass)
         .InstanceFunction(releaseUsingItem, PlayerClass)
         .InstanceFunction(resendAllChunks, PlayerClass)
         .InstanceFunction(resetPlayerLevel, PlayerClass)
@@ -167,7 +169,7 @@ ClassDefine<PlayerClass> playerClassBuilder =
         // .InstanceFunction(sendEventPacket, PlayerClass)
         .InstanceFunction(sendPlayerTeleported, PlayerClass)
         // .InstanceFunction(sendSpawnExperienceOrbPacketToServer, PlayerClass)
-        // .InstanceFunction(setAgent, PlayerClass)
+        .InstanceFunction(setAgent, PlayerClass)
         // .InstanceFunction(setBedRespawnPosition, PlayerClass)
         .InstanceFunction(setBlockRespawnUntilClientMessage, PlayerClass)
         .InstanceFunction(setChunkRadius, PlayerClass)
@@ -189,7 +191,7 @@ ClassDefine<PlayerClass> playerClassBuilder =
         // .InstanceFunction(setPlayerUIItem, PlayerClass)
         // .InstanceFunction(setRespawnPosition, PlayerClass)
         .InstanceFunction(setRespawnPositionCandidate, PlayerClass)
-        // .InstanceFunction(setRespawnReady, PlayerClass)
+        .InstanceFunction(setRespawnReady, PlayerClass)
         .InstanceFunction(setSelectedItem, PlayerClass)
         // .InstanceFunction(setSelectedSlot, PlayerClass)
         // .InstanceFunction(setSpawnBlockRespawnPosition, PlayerClass)
@@ -698,14 +700,13 @@ Local<Value> PlayerClass::getItemInteractText(const Arguments& args) {
 // MCAPI ::BlockPos const& getRespawnAnchorPosition() const;
 
 // MCAPI ::ItemStack const& getSelectedItem() const;
-// Local<Value> PlayerClass::getSelectedItem(const Arguments& args) {
-//     try {
-//         if (!mPlayer) return Local<Value>();
-//         return ItemStackClass::newItemStack(mPlayer->getSelectedItem());
-// --------Failed there because const ItemStack cannot be converted to ItemStack*--------
-//     }
-//     Catch;
-// }
+Local<Value> PlayerClass::getSelectedItem(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        return ItemStackClass::newItemStack(const_cast<ItemStack*>(&mPlayer->getSelectedItem()));
+    }
+    Catch;
+}
 
 // MCAPI ::SerializedSkin const& getSkin() const;
 
@@ -719,6 +720,18 @@ Local<Value> PlayerClass::getItemInteractText(const Arguments& args) {
 // MCAPI ::PlayerInventory& getSupplies();
 
 // MCAPI ::std::vector<::ActorUniqueID> const& getTrackedBosses();
+Local<Value> PlayerClass::getTrackedBosses(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto array  = Array::newArray();
+        for (auto& boss : mPlayer->getTrackedBosses()) {
+            array.add(ActorUniqueIDClass::newActorUniqueID((ActorUniqueID*)&boss));
+        }
+        return array;
+    }
+    Catch;
+}
 
 Local<Value> PlayerClass::getXpNeededForLevelRange(const Arguments& args) {
     CheckArgsCount(args, 2);
@@ -738,10 +751,43 @@ Local<Value> PlayerClass::getXpNeededForLevelRange(const Arguments& args) {
 // MCAPI bool hasResource(::ItemDescriptor const& resource);
 
 // MCAPI bool interact(::Actor& actor, ::Vec3 const& location);
+Local<Value> PlayerClass::interact(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kObject);
+    try {
+        if (!mPlayer) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto actor  = engine->getNativeInstance<ActorClass>(args[0]);
+        if (actor->mActor) return Boolean::newBoolean(mPlayer->interact(*actor->mActor, mPlayer->getPosition()));
+        else return Boolean::newBoolean(false);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
 
 // MCAPI void
 // inventoryChanged(::Container&, int slot, ::ItemStack const& oldItem, ::ItemStack const& newItem, bool
 // forceBalanced);
+Local<Value> PlayerClass::inventoryChanged(const Arguments& args) {
+    CheckArgsCount(args, 5);
+    CheckArgType(args[1], ValueKind::kNumber);
+    CheckArgType(args[4], ValueKind::kBoolean);
+    try {
+        if (!mPlayer) return Local<Value>();
+        auto engine    = EngineScope::currentEngine();
+        auto container = engine->getNativeInstance<ContainerClass>(args[0]);
+        if (container->mContainer) {
+            mPlayer->inventoryChanged(
+                *container->mContainer,
+                args[1].asNumber().toInt32(),
+                *engine->getNativeInstance<ItemStackClass>(args[2])->mItemStack,
+                *engine->getNativeInstance<ItemStackClass>(args[3])->mItemStack,
+                args[4].asBoolean().value()
+            );
+        }
+    }
+    Catch;
+    return Local<Value>();
+}
 
 // MCAPI bool is2DPositionRelevant(::DimensionType dimension, ::BlockPos const& position);
 
@@ -776,7 +822,18 @@ Local<Value> PlayerClass::passengerCheckMovementStats(const Arguments& args) {
 // MCAPI void recheckSpawnPosition();
 Local<Value> PlayerClass::recheckSpawnPosition() { CallVoidMethod(recheckSpawnPosition()); }
 
-// MCAPI void registerTrackedBoss(::ActorUniqueID mob);
+// MCAPI void   registerTrackedBoss(::ActorUniqueID mob);
+Local<Value> PlayerClass::registerTrackedBoss(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    try {
+        if (!mPlayer) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto actor  = engine->getNativeInstance<ActorClass>(args[0]);
+        if (actor->mActor) mPlayer->registerTrackedBoss(actor->mActor->getOrCreateUniqueID());
+    }
+    Catch;
+    return Local<Value>();
+}
 
 // MCAPI void releaseUsingItem();
 Local<Value> PlayerClass::releaseUsingItem() { CallVoidMethod(releaseUsingItem()); }
@@ -802,7 +859,19 @@ Local<Value> PlayerClass::sendPlayerTeleported() { CallVoidMethod(sendPlayerTele
 
 // MCAPI void sendSpawnExperienceOrbPacketToServer(::Vec3 const& pos, int count);
 
-// MCAPI void setAgent(::Agent* agent);
+// MCAPI void   setAgent(::Agent* agent);
+Local<Value> PlayerClass::setAgent(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    try {
+        if (!mPlayer) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto agent  = engine->getNativeInstance<AgentClass>(args[0]);
+        if (agent->mAgent) mPlayer->setAgent(agent->mAgent);
+
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
 
 // MCAPI void setBedRespawnPosition(::BlockPos const& bedPosition);
 
@@ -958,6 +1027,21 @@ Local<Value> PlayerClass::setRespawnPositionCandidate(){CallVoidMethod(setRespaw
 
 
 // MCAPI void setRespawnReady(::Vec3 const& respawnPosition);
+Local<Value> PlayerClass::setRespawnReady(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    try {
+        if (!mPlayer) return Local<Value>();
+        if (IsInstanceOf<Vec3Class>(args[0])) {
+            auto engine = EngineScope::currentEngine();
+            auto vec3   = engine->getNativeInstance<Vec3Class>(args[0]);
+
+            mPlayer->setRespawnReady(vec3->mmVec3);
+            return Boolean::newBoolean(true);
+        } else PrintWrongArgType();
+        return Boolean::newBoolean(false);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
 
 // MCAPI void setSelectedItem(::ItemStack const& item);
 Local<Value> PlayerClass::setSelectedItem(const Arguments& args) {
@@ -976,13 +1060,13 @@ Local<Value> PlayerClass::setSelectedItem(const Arguments& args) {
 }
 
 // MCAPI ::ItemStack const& setSelectedSlot(int slot);
-// Local<Value> PlayerClass::setSelectedSlot(const Arguments& args) {
+// Local<Value>             PlayerClass::setSelectedSlot(const Arguments& args) {
 //     CheckArgsCount(args, 1);
-//     CheckArgType(args[0],ValueKind::kNumber);
+//     CheckArgType(args[0], ValueKind::kNumber);
 //     try {
 //         if (!mPlayer) return Local<Value>();
-//         return ItemStackClass::newItemStack(mPlayer->getSelectedItem(args[0].asNumber().toInt32()));
-// --------Failed there because const ItemStack cannot be converted to ItemStack*--------
+//         return ItemStackClass::newItemStack(const_cast<ItemStack*>(mPlayer->getSelectedItemSlot(args[0].asNumber().toInt32()
+//         )));
 //     }
 //     Catch;
 // }
