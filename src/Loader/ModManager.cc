@@ -52,38 +52,15 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
 
         mod->id = data->mID;
 
-
         if (!NodeManager::loadFile(wrapper, file, NodeManager::packageIsEsm(package))) {
             Entry::getInstance().getSelf().getLogger().error("Failed to load mod: {}", file);
             return ll::makeStringError("Failed to load mod");
         }
 
-        mod->onLoad([data](ll::mod::Mod&) {
-            auto        engine = NodeManager::getInstance().getEngine(data->mID);
-            EngineScope scope(engine->mEngine);
-            return true;
-        });
-
-        // auto id = data->mID;
-        mod->onEnable([data](ll::mod::Mod&) {
-            auto        engine = NodeManager::getInstance().getEngine(data->mID);
-            EngineScope scope(engine->mEngine);
-            return true;
-        });
-        mod->onDisable([data](ll::mod::Mod& mod) {
-            auto        engine = NodeManager::getInstance().getEngine(data->mID);
-            EngineScope scope(engine->mEngine);
-            try {
-            }
-            CatchNotReturn;
-            return true;
-        });
-        mod->onUnload([data](ll::mod::Mod& mod) {
-            if (!data) return true;
-            auto engine = NodeManager::getInstance().getEngine(data->mID);
-            NodeManager::getInstance().destroyEngine(data->mID);
-            return true;
-        });
+        mod->onLoad([data](ll::mod::Mod&) { return true; });
+        mod->onEnable([data](ll::mod::Mod&) { return true; });
+        mod->onDisable([data](ll::mod::Mod& mod) { return true; });
+        mod->onUnload([data](ll::mod::Mod& mod) { return true; });
 
         return mod->onLoad().transform([&, this] { addMod(manifest.name, mod); });
 
@@ -115,8 +92,9 @@ ll::Expected<> KomomoModManager::unload(std::string_view name) {
 
         scriptEngine.mEngine->getData().reset();
 
-        NodeManager::getInstance().destroyEngine(scriptEngine.mID);
-        eraseMod(name);
+        if (NodeManager::getInstance().destroyEngine(scriptEngine.mID)) {
+            eraseMod(name);
+        }
 
         return {};
     } catch (const std::exception& e) {

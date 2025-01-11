@@ -84,3 +84,6 @@ void PrintException(script::Exception const& e, string const& func, string const
     }
 
 } // namespace Komomo
+
+
+#define InstanceFunction(FuncName, ClassName) instanceFunction(#FuncName, &ClassName::FuncName)

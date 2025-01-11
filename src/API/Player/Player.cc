@@ -1,6 +1,14 @@
 #include "API/Player/Player.h"
 #include "API/APIHelper.h"
-#include "API/ItemStack/ItemStack.h"
+#include "API/Actor/ActorUniqueID.h"
+#include "API/Actor/Agent.h"
+#include "API/Block/BlockSource.h"
+#include "API/Container/Container.h"
+#include "API/Item/Item.h"
+#include "API/Item/ItemStack.h"
+#include "API/Math/Vec3.h"
+#include "API/Player/Gamemode.h"
+#include "API/Player/LayeredAbilities.h"
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
 
@@ -92,6 +100,132 @@ ClassDefine<PlayerClass> playerClassBuilder =
         .instanceProperty("hasOwnedChunkSource", &PlayerClass::hasOwnedChunkSource)
         .instanceProperty("hasRespawnAnchorPosition", &PlayerClass::hasRespawnAnchorPosition)
         .instanceProperty("hasRespawnPosition", &PlayerClass::hasRespawnPosition)
+
+        .instanceFunction("disconnect", &PlayerClass::disconnect)
+        .InstanceFunction(sendMessage, PlayerClass)
+        .InstanceFunction(setAbility, PlayerClass)
+        .InstanceFunction(addAndRefresh, PlayerClass)
+        .InstanceFunction(broadcastPlayerSpawnedMobEvent, PlayerClass)
+        .InstanceFunction(canUseAbility, PlayerClass)
+        .InstanceFunction(causeFoodExhaustion, PlayerClass)
+        .InstanceFunction(checkBed, PlayerClass)
+        .InstanceFunction(checkNeedAutoJump, PlayerClass)
+        .InstanceFunction(checkSpawnBlock, PlayerClass)
+        .InstanceFunction(clearRespawnPosition, PlayerClass)
+        .InstanceFunction(completeUsingItem, PlayerClass)
+        .InstanceFunction(eat, PlayerClass)
+        .InstanceFunction(equippedArmorItemCanBeMoved, PlayerClass)
+        // .InstanceFunction(fireDimensionChangedEvent, PlayerClass)
+        .InstanceFunction(forceAllowEating, PlayerClass)
+        .InstanceFunction(getAbilities, PlayerClass)
+        .InstanceFunction(getAgent, PlayerClass)
+        // .InstanceFunction(getAgentID, PlayerClass)
+        .InstanceFunction(getAgentIfAllowed, PlayerClass)
+        // .InstanceFunction(getBedPosition, PlayerClass)
+        .InstanceFunction(getCapePos, PlayerClass)
+        // .InstanceFunction(getContainerManager, PlayerClass)
+        // .InstanceFunction(getContainerRegistryAccess, PlayerClass)
+        // .InstanceFunction(getContainerRegistryTracker, PlayerClass)
+        .InstanceFunction(getCurrentActiveShield, PlayerClass)
+        // .InstanceFunction(getDestroyProgress, PlayerClass)
+        // .InstanceFunction(getDynamicContainerSerialization, PlayerClass)
+        // .InstanceFunction(getExpectedSpawnDimensionId, PlayerClass)
+        .InstanceFunction(getGameMode, PlayerClass)
+        .InstanceFunction(getInventory, PlayerClass)
+        .InstanceFunction(getItemCooldownLeft, PlayerClass)
+        .InstanceFunction(getItemInUse, PlayerClass)
+        // .InstanceFunctionTemplate(getPlatform, PlayerClass)
+        // .InstanceFunctionTemplate(getItemStackNetManager, PlayerClass)
+        // .InstanceFunction(getPlayerGameType, PlayerClass)
+        // .InstanceFunction(getPlayerPermissionLevel, PlayerClass)
+        // .InstanceFunction(getPlayerUIItem, PlayerClass)
+        // .InstanceFunction(getRespawnAnchorPosition, PlayerClass)
+        .InstanceFunction(getSelectedItem, PlayerClass)
+        // .InstanceFunction(getSkin, PlayerClass)
+        // .InstanceFunction(getSpawnDimension, PlayerClass)
+        // .InstanceFunction(getSpawnPosition, PlayerClass)
+        // .InstanceFunction(getSupplies, PlayerClass)
+        // .InstanceFunction(getTrackedBosses, PlayerClass)
+        .InstanceFunction(getXpNeededForLevelRange, PlayerClass)
+        // .InstanceFunction(hasOpenContainerOfContainerType, PlayerClass)
+        // .InstanceFunction(hasResource, PlayerClass)
+        // .InstanceFunction(interact, PlayerClass)
+        // .InstanceFunction(inventoryChanged, PlayerClass)
+        // .InstanceFunction(is2DPositionRelevant, PlayerClass)
+        // .InstanceFunction(isHiddenFrom, PlayerClass)
+        // .InstanceFunction(isItemOnCooldown, PlayerClass)
+        .InstanceFunction(passengerCheckMovementStats, PlayerClass)
+        // .InstanceFunction(playPredictiveSynchronizedSound, PlayerClass)
+        .InstanceFunction(recheckSpawnPosition, PlayerClass)
+        // .InstanceFunction(registerTrackedBoss, PlayerClass)
+        .InstanceFunction(releaseUsingItem, PlayerClass)
+        .InstanceFunction(resendAllChunks, PlayerClass)
+        .InstanceFunction(resetPlayerLevel, PlayerClass)
+        .InstanceFunction(resetPublisherInitialSpawn, PlayerClass)
+        .InstanceFunction(resetToDefaultGameMode, PlayerClass)
+        // .InstanceFunction(saveLastDeathLocation, PlayerClass)
+        // .InstanceFunction(sendEventPacket, PlayerClass)
+        .InstanceFunction(sendPlayerTeleported, PlayerClass)
+        // .InstanceFunction(sendSpawnExperienceOrbPacketToServer, PlayerClass)
+        // .InstanceFunction(setAgent, PlayerClass)
+        // .InstanceFunction(setBedRespawnPosition, PlayerClass)
+        .InstanceFunction(setBlockRespawnUntilClientMessage, PlayerClass)
+        .InstanceFunction(setChunkRadius, PlayerClass)
+        // .InstanceFunction(setContainerManagerModel, PlayerClass)
+        .InstanceFunction(setCursorSelectedItem, PlayerClass)
+        // .InstanceFunction(setCursorSelectedItemGroup, PlayerClass)
+        .InstanceFunction(setEmotingStatus, PlayerClass)
+        .InstanceFunction(setEnchantmentSeed, PlayerClass)
+        .InstanceFunction(setHasDied, PlayerClass)
+        .InstanceFunction(setHasSeenCredits, PlayerClass)
+        // .InstanceFunction(setInventoryOptions, PlayerClass)
+        // .InstanceFunction(setLastDeathDimension, PlayerClass)
+        // .InstanceFunction(setLastDeathPos, PlayerClass)
+        .InstanceFunction(setMapIndex, PlayerClass)
+        .InstanceFunction(setName, PlayerClass)
+        // .InstanceFunction(setPermissions, PlayerClass)
+        .InstanceFunction(setPlatformOnlineId, PlayerClass)
+        .InstanceFunction(setPlayerIndex, PlayerClass)
+        // .InstanceFunction(setPlayerUIItem, PlayerClass)
+        // .InstanceFunction(setRespawnPosition, PlayerClass)
+        .InstanceFunction(setRespawnPositionCandidate, PlayerClass)
+        // .InstanceFunction(setRespawnReady, PlayerClass)
+        .InstanceFunction(setSelectedItem, PlayerClass)
+        // .InstanceFunction(setSelectedSlot, PlayerClass)
+        // .InstanceFunction(setSpawnBlockRespawnPosition, PlayerClass)
+        .InstanceFunction(setUsedPotion, PlayerClass)
+        .InstanceFunction(shouldShowCredits, PlayerClass)
+        // .InstanceFunction(startCooldownOverload1, PlayerClass)
+        // .InstanceFunction(startCooldownOverload2, PlayerClass)
+        .InstanceFunction(startDestroying, PlayerClass)
+        // .InstanceFunction(startItemUseOn, PlayerClass)
+        .InstanceFunction(startUsingItem, PlayerClass)
+        .InstanceFunction(stopDestroying, PlayerClass)
+        .InstanceFunction(stopGliding, PlayerClass)
+        // .InstanceFunction(stopItemUseOn, PlayerClass)
+        .InstanceFunction(stopUsingItem, PlayerClass)
+        // .InstanceFunction(take, PlayerClass)
+        .InstanceFunction(tickArmor, PlayerClass)
+        .InstanceFunction(tryDisableShield, PlayerClass)
+        .InstanceFunction(tryStartGliding, PlayerClass)
+        // .InstanceFunction(unRegisterTrackedBoss, PlayerClass)
+        .InstanceFunction(updateBlockSourceTick, PlayerClass)
+        .InstanceFunction(updateInventoryTransactions, PlayerClass)
+        // .InstanceFunction(updateSkin, PlayerClass)
+        .InstanceFunction(updateTouch, PlayerClass)
+        .InstanceFunction(updateTrackedBosses, PlayerClass)
+        // .InstanceFunction(useSelectedItem, PlayerClass)
+
+        // static
+        // .function(checkAndFixSpawnPosition_DEPRECATED, PlayerClass)
+        // .function(checkNeedAutoJump, PlayerClass)
+        // .function(getCustomHurtSound, PlayerClass)
+        // .function(isDangerousVolumeForSpawn, PlayerClass)
+        // .function(tryGetFromComponentOverload1, PlayerClass)
+        // .function(tryGetFromComponentOverload2, PlayerClass)
+        // .function(tryGetFromEntity, PlayerClass)
+        // .function(updatePlayerGameTypeEntityData, PlayerClass)
+
         .build();
 
 
@@ -256,6 +390,7 @@ Local<Value> PlayerClass::addAndRefresh(const Arguments& args) {
         if (IsInstanceOf<ItemStackClass>(args[0])) {
             auto engine         = EngineScope::currentEngine();
             auto itemStackClass = engine->getNativeInstance<ItemStackClass>(args[0]);
+            if (!itemStackClass->mItemStack) return Local<Value>();
             return Boolean::newBoolean(mPlayer->addAndRefresh(*itemStackClass->mItemStack));
         } else PrintWrongArgType();
         return Boolean::newBoolean(false);
@@ -263,6 +398,20 @@ Local<Value> PlayerClass::addAndRefresh(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 // MCAPI void broadcastPlayerSpawnedMobEvent(::ActorType spawnedType, ::MobSpawnMethod spawnMethod);
+Local<Value> PlayerClass::broadcastPlayerSpawnedMobEvent(const Arguments& args) {
+    CheckArgsCount(args, 2);
+    CheckArgType(args[0], ValueKind::kNumber);
+    CheckArgType(args[1], ValueKind::kNumber);
+    try {
+        if (!mPlayer) return Local<Value>();
+        mPlayer->broadcastPlayerSpawnedMobEvent(
+            ConvertFromScriptX<ActorType>(args[0]),
+            ConvertFromScriptX<MobSpawnMethod>(args[1])
+        );
+    }
+    Catch;
+    return Local<Value>();
+}
 
 Local<Value> PlayerClass::canUseAbility(const Arguments& args) {
     CheckArgsCount(args, 1);
@@ -286,6 +435,23 @@ Local<Value> PlayerClass::causeFoodExhaustion(const Arguments& args) {
 }
 
 //  MCAPI bool checkBed(::BlockSource* spawnBlockSource, ::Vec3 const* const positionToCheck);
+Local<Value> PlayerClass::checkBed(const Arguments& args) {
+    CheckArgsCount(args, 2);
+
+    try {
+        if (!mPlayer) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        if (IsInstanceOf<BlockSourceClass>(args[0]) && IsInstanceOf<Vec3Class>(args[1])) {
+            auto blockSourceClass = engine->getNativeInstance<BlockSourceClass>(args[0]);
+            auto vec3Class        = engine->getNativeInstance<Vec3Class>(args[1]);
+            if (blockSourceClass->mBlockSource && vec3Class->mVec3)
+                return Boolean::newBoolean(mPlayer->checkBed(blockSourceClass->mBlockSource, vec3Class->mVec3));
+            else return Boolean::newBoolean(false);
+        }
+    }
+    Catch;
+    return Boolean::newBoolean(false);
+}
 
 Local<Value> PlayerClass::checkNeedAutoJump(const Arguments& args) {
     CheckArgsCount(args, 2);
@@ -301,6 +467,21 @@ Local<Value> PlayerClass::checkNeedAutoJump(const Arguments& args) {
 }
 
 // MCAPI bool checkSpawnBlock(::BlockSource const& region) const;
+Local<Value> PlayerClass::checkSpawnBlock(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    try {
+        if (!mPlayer) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        if (IsInstanceOf<BlockSourceClass>(args[0])) {
+            auto blockSourceClass = engine->getNativeInstance<BlockSourceClass>(args[0]);
+            if (blockSourceClass->mBlockSource)
+                return Boolean::newBoolean(mPlayer->checkSpawnBlock(*blockSourceClass->mBlockSource));
+            else return Boolean::newBoolean(false);
+        }
+    }
+    Catch;
+    return Boolean::newBoolean(false);
+}
 
 Local<Value> PlayerClass::clearRespawnPosition(const Arguments& args) {
     try {
@@ -333,6 +514,7 @@ Local<Value> PlayerClass::eat(const Arguments& args) {
             } else PrintWrongArgType();
             return Boolean::newBoolean(false);
         } else {
+            CheckArgType(args[1], ValueKind::kNumber);
             mPlayer->eat(args[0].asNumber().toInt32(), args[1].asNumber().toFloat());
             return Boolean::newBoolean(true);
         }
@@ -354,22 +536,69 @@ Local<Value> PlayerClass::equippedArmorItemCanBeMoved(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-// MCAPI void fireDimensionChangedEvent(::DimensionType fromDimension, ::DimensionType toDimension);
+// MCAPI void fireDimensionChangedEvent(::DimensionType fromDimension, ::DimensionType toDimension); // TODO
 
 Local<Value> PlayerClass::forceAllowEating(const Arguments& args) { CallVoidMethod(forceAllowEating()); }
 
 // MCAPI ::LayeredAbilities const& getAbilities() const;
-// MCAPI ::LayeredAbilities& getAbilities();
+Local<Value> PlayerClass::getAbilities() {
+    try {
+        if (!mPlayer) return Local<Value>();
+        return LayeredAbilitiesClass::newLayeredAbilities(&mPlayer->getAbilities());
+    }
+    Catch;
+}
+
+// MCAPI ::LayeredAbilities& getAbilities(); // TODO : can throw
 
 // MCAPI ::Agent* getAgent() const;
+Local<Value> PlayerClass::getAgent(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        return AgentClass::newAgent(mPlayer->getAgent());
+    }
+    Catch;
+}
+
 
 // MCAPI ::ActorUniqueID getAgentID() const;
+// Local<Value> PlayerClass::getAgentID(const Arguments& args) {
+//     try {
+//         if (!mPlayer) return Local<Value>();
+//         return ActorUniqueIDClass::newActorUniqueID(&mPlayer->getAgentID());
+//     }
+//     Catch;
+// }
+// TODO
 
 // MCAPI ::Agent* getAgentIfAllowed(bool callerCanAccessOtherAgents, ::ActorUniqueID callerAgentID) const;
+Local<Value> PlayerClass::getAgentIfAllowed(const Arguments& args) {
+    CheckArgsCount(args, 2);
+    CheckArgType(args[0], ValueKind::kBoolean);
+    try {
+        if (!mPlayer) return Local<Value>();
+        if (IsInstanceOf<ActorUniqueIDClass>(args[1])) {
+            auto engine             = EngineScope::currentEngine();
+            auto actorUniqueIDClass = engine->getNativeInstance<ActorUniqueIDClass>(args[1]);
+            return AgentClass::newAgent(mPlayer->getAgentIfAllowed(true, *actorUniqueIDClass->mActorUniqueID));
+        } else PrintWrongArgType();
+        return Local<Value>();
+    }
+    Catch;
+}
 
 // MCAPI ::BlockPos const& getBedPosition() const;
 
 // MCAPI ::Vec3 getCapePos(float a);
+Local<Value> PlayerClass::getCapePos(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kNumber);
+    try {
+        if (!mPlayer) return Local<Value>();
+        return Vec3Class::newVec3(mPlayer->getCapePos(args[0].asNumber().toFloat()));
+    }
+    Catch;
+}
 
 // MCAPI ::std::weak_ptr<::IContainerManager> getContainerManager() const;
 
@@ -378,26 +607,40 @@ Local<Value> PlayerClass::forceAllowEating(const Arguments& args) { CallVoidMeth
 // MCAPI ::gsl::not_null<::StackRefResult<::IContainerRegistryTracker>> getContainerRegistryTracker() const;
 
 // MCAPI ::ItemStack const& getCurrentActiveShield() const;
-// Local<Value> PlayerClass::getCurrentActiveShield(const Arguments& args) {
-//     try {
-//         if (!mPlayer) return Local<Value>();
-//         return ItemStackClass::newItemStack(mPlayer->getCurrentActiveShield());
-// --------Failed there because const ItemStack cannot be converted to ItemStack*--------
-//     }
-//     Catch;
-// }
+Local<Value> PlayerClass::getCurrentActiveShield(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        return ItemStackClass::newItemStack(const_cast<ItemStack*>(&mPlayer->getCurrentActiveShield()));
+    }
+    Catch;
+}
 
 // MCAPI float getDestroyProgress(::Block const& block);
 
-// MCAPI ::gsl::not_null<::StackRefResult<::IDynamicContainerSerialization>> getDynamicContainerSerialization() const;
+// MCAPI ::gsl::not_null<::StackRefResult<::IDynamicContainerSerialization>> getDynamicContainerSerialization()
+// const;
 
 // MCAPI ::DimensionType getExpectedSpawnDimensionId() const;
 
 // MCAPI ::BlockPos const& getExpectedSpawnPosition() const;
 
 // MCAPI ::GameMode& getGameMode() const;
+Local<Value> PlayerClass::getGameMode(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        return GameModeClass::newGameMode(&mPlayer->getGameMode());
+    }
+    Catch;
+}
 
 // MCAPI ::Container& getInventory();
+Local<Value> PlayerClass::getInventory(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        return ContainerClass::newContainer(&mPlayer->getInventory());
+    }
+    Catch;
+}
 
 // Cannot use getItemCooldownLeft(HashedString) because HashedString not implemented
 Local<Value> PlayerClass::getItemCooldownLeft(const Arguments& args) {
@@ -416,8 +659,28 @@ Local<Value> PlayerClass::getItemCooldownLeft(const Arguments& args) {
 }
 
 // MCAPI ::ItemStack const& getItemInUse() const;
+Local<Value> PlayerClass::getItemInUse(const Arguments& args) {
+    try {
+        if (!mPlayer) return Local<Value>();
+        return ItemStackClass::newItemStack(const_cast<ItemStack*>(&mPlayer->getItemInUse()));
+    }
+    Catch;
+}
 
 // MCAPI ::std::string getItemInteractText(::Item const& item) const;
+Local<Value> PlayerClass::getItemInteractText(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    try {
+        if (!mPlayer) return Local<Value>();
+        if (IsInstanceOf<ItemClass>(args[0])) {
+            auto engine    = EngineScope::currentEngine();
+            auto itemClass = engine->getNativeInstance<ItemClass>(args[0]);
+            return String::newString(mPlayer->getItemInteractText(*itemClass->mItem));
+        } else PrintWrongArgType();
+        return Local<Value>();
+    }
+    Catch;
+}
 
 // MCAPI ::ItemStackNetManagerBase const* getItemStackNetManager() const;
 // MCAPI ::ItemStackNetManagerBase* getItemStackNetManager();
@@ -477,7 +740,8 @@ Local<Value> PlayerClass::getXpNeededForLevelRange(const Arguments& args) {
 // MCAPI bool interact(::Actor& actor, ::Vec3 const& location);
 
 // MCAPI void
-// inventoryChanged(::Container&, int slot, ::ItemStack const& oldItem, ::ItemStack const& newItem, bool forceBalanced);
+// inventoryChanged(::Container&, int slot, ::ItemStack const& oldItem, ::ItemStack const& newItem, bool
+// forceBalanced);
 
 // MCAPI bool is2DPositionRelevant(::DimensionType dimension, ::BlockPos const& position);
 

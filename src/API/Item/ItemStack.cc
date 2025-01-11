@@ -1,4 +1,4 @@
-#include "API/ItemStack/ItemStack.h"
+#include "API/Item/ItemStack.h"
 
 ClassDefine<ItemStackClass> itemStackClassBuilder =
     defineClass<ItemStackClass>("ItemStack").constructor(nullptr).build();

@@ -2,17 +2,27 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-#include <ll/api/io/Logger.h>
 #include <ll/api/io/LogLevel.h>
+#include <ll/api/io/Logger.h>
 #include <ll/api/io/LoggerRegistry.h>
+
 
 class LoggerClass : public ScriptClass {
 
-public:
-    std::shared_ptr<ll::io::Logger> logger;
+private:
+    std::string title;
+
+    std::shared_ptr<ll::io::Logger> getLogger() {
+        auto logger = ll::io::LoggerRegistry::getInstance().tryGet(title);
+        if (!logger) {
+            logger = ll::io::LoggerRegistry::getInstance().getOrCreate(title);
+        }
+        return logger;
+    };
 
 public:
-    LoggerClass(std::shared_ptr<ll::io::Logger> logger);
+    LoggerClass(std::string title);
+    // ~LoggerClass();
 
 public:
     static LoggerClass* newLogger(const Arguments& args);

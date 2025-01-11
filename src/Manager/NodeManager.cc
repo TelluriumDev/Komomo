@@ -184,7 +184,8 @@ bool NodeManager::destroyEngine(EngineID id) {
     auto& wrapper = mEngines[id];
 
     wrapper.mIsRunning = false;
-    wrapper.mEngine->destroy(); // 销毁引擎
+    wrapper.mEngine->gc();
+    // wrapper.mEngine->destroy(); // 销毁引擎
     uv_stop(wrapper.mEnvSetup->event_loop());
     node::Stop(wrapper.mEnvSetup->env());
 

@@ -2,7 +2,7 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-#include <mc/world/item/Item.h>
+#include <mc/world/item/ItemStack.h>
 
 class ItemStackClass : public ScriptClass {
 public:

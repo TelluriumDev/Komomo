@@ -15,6 +15,8 @@ public:
     static Local<Object> newActor(Actor* actor);
 
 public: /* Member */
+    Local<Value> isSleeping();
+
 public: /* Method */
 };
 
