@@ -58,6 +58,7 @@ jobs:
           name: ${{ github.event.repository.name }}-${{ matrix.os }}-x64-${{ github.sha }}
           path: |
             bin/
+
       - name: Download depends
         run: |
           Invoke-WebRequest -Uri "https://github.com/IceBlcokMC/node/releases/download/v22.12.0/bin-windows.zip" -OutFile "bin-windows.zip" -UseBasicParsing
@@ -78,6 +79,7 @@ jobs:
           Copy-Item -Recurse -Force bin\* full\plugins\
           Copy-Item -Recurse -Force -Container deps\node_modules\.\* full\plugins\Komomo\node_modules\
           Copy-Item -Force deps\libnode.dll full\
+          Copy-Item -Force deps\node.exe full\
 
       - uses: actions/upload-artifact@v4
         with:
