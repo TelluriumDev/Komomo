@@ -32,7 +32,7 @@ CustomFormClass::CustomFormClass(std::string const& title) : ScriptClass(Constru
     this->form = new ll::form::CustomForm(title);
 }
 
-CustomFormClass::~CustomFormClass() { delete form; }
+// CustomFormClass::~CustomFormClass() { delete form; }
 
 CustomFormClass* CustomFormClass::newForm(const Arguments& args) {
     CheckArgsCountReturn(args, 1, nullptr);

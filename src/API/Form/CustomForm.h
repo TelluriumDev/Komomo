@@ -19,7 +19,7 @@ public:
 
     CustomFormClass(std::string const& title);
 
-    ~CustomFormClass();
+    // ~CustomFormClass();
 
     static CustomFormClass* newForm(const Arguments& args);
     // LLAPI CustomForm& setTitle(std::string const& title);

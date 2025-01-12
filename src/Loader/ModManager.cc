@@ -3,6 +3,7 @@
 #include "API/Event/Event.h"
 #include "Entry.h"
 #include "Loader/Mod.h"
+#include "Manager/BindAPI.h"
 #include "Manager/EngineData.h"
 #include "Manager/NodeManager.h"
 #include "Utils/Using.h"
@@ -57,7 +58,11 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             return ll::makeStringError("Failed to load mod");
         }
 
-        mod->onLoad([data](ll::mod::Mod&) { return true; });
+        mod->onLoad([data](ll::mod::Mod&) {
+            // auto* engine = NodeManager::getInstance().getEngine(data->mID);
+            // EngineScope scope(*engine);
+            return true;
+        });
         mod->onEnable([data](ll::mod::Mod&) { return true; });
         mod->onDisable([data](ll::mod::Mod& mod) { return true; });
         mod->onUnload([data](ll::mod::Mod& mod) { return true; });

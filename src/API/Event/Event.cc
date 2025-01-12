@@ -13,7 +13,6 @@
 using namespace Komomo;
 
 ClassDefine<EventBusClass> eventBusClassBuilder = defineClass<EventBusClass>("EventBus")
-                                                      .nameSpace("ll.event")
                                                       .constructor(nullptr)
 
                                                       .function("emplaceListener", &EventBusClass::emplaceListener)
