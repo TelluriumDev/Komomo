@@ -51,6 +51,48 @@
 #include <mc/world/actor/player/SkinAdjustments.h>
 #include <mc/world/actor/player/TrustedSkinFlag.h>
 
+#include <mc\world\item\ArmorSlot.h>
+#include <mc\world\item\BannerPatternItem.h>
+#include <mc\world\item\BucketFillType.h>
+#include <mc\world\item\CameraItemComponentLegacy.h>
+#include <mc\world\item\CoalItem.h>
+#include <mc\world\item\CompoundContainerType.h>
+#include <mc\world\item\CompoundType.h>
+#include <mc\world\item\CreativeItemCategory.h>
+#include <mc\world\item\FertilizerType.h>
+#include <mc\world\item\FireworkChargeItem.h>
+#include <mc\world\item\FoodItemComponentLegacy.h>
+#include <mc\world\item\HandSlot.h>
+#include <mc\world\item\HorseArmorItem.h>
+#include <mc\world\item\HumanoidArmorItem.h>
+#include <mc\world\item\InHandUpdateType.h>
+#include <mc\world\item\ItemAcquisitionMethod.h>
+#include <mc\world\item\ItemColor.h>
+#include <mc\world\item\ItemCommandVisibility.h>
+#include <mc\world\item\ItemContextType.h>
+#include <mc\world\item\ItemDescriptor.h>
+#include <mc\world\item\ItemIconInfoType.h>
+#include <mc\world\item\ItemLockMode.h>
+#include <mc\world\item\ItemUseMethod.h>
+#include <mc\world\item\MapType.h>
+#include <mc\world\item\MedicineType.h>
+#include <mc\world\item\NotifyItemUsedOnEvent.h>
+#include <mc\world\item\PageContent.h>
+#include <mc\world\item\Rarity.h>
+#include <mc\world\item\SaveContext.h>
+#include <mc\world\item\SlotWithDropChance.h>
+#include <mc\world\item\SmithingTemplateItem.h>
+#include <mc\world\item\SuspiciousStewItem.h>
+#include <mc\world\item\alchemy\Potion.h>
+#include <mc\world\item\components\OnUseOrder.h>
+#include <mc\world\item\components\RenderOffsetsItemComponent.h>
+#include <mc\world\item\components\UseTimeDepletedOrder.h>
+#include <mc\world\item\crafting\RecipeUnlockingRequirement.h>
+#include <mc\world\item\enchanting\Enchant.h>
+#include <mc\world\item\enchanting\EnchantResultType.h>
+#include <mc\world\item\enchanting\EquipmentFilter.h>
+#include <mc\world\item\registry\ItemVersion.h>
+
 #include <mc/network/packet/ModalFormCancelReason.h>
 
 #include <string>
@@ -117,6 +159,59 @@ void RegisterEnum(ScriptEngine* engine) {
     REGISTER_ENUM_MACRO(PlayerEnum, SkinAdjustments::AnimBits, "AnimBits");
     REGISTER_ENUM_MACRO(PlayerEnum, TrustedSkinFlag, "TrustedSkinFlagS");
     engine->set("PlayerEnum", ConvertToScriptX(PlayerEnum));
+
+    // auto generated ItemEnum
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> ItemEnum;
+    REGISTER_ENUM_MACRO(ItemEnum, ArmorSlot, "ArmorSlot");
+    REGISTER_ENUM_MACRO(ItemEnum, BannerPatternItem::Type, "Type");
+    REGISTER_ENUM_MACRO(ItemEnum, BucketFillType, "BucketFillType");
+    REGISTER_ENUM_MACRO(ItemEnum, CameraItemComponentLegacy::UseAction, "UseAction");
+    REGISTER_ENUM_MACRO(ItemEnum, CoalItem::Type, "Type");
+    REGISTER_ENUM_MACRO(ItemEnum, CompoundContainerType, "CompoundContainerType");
+    REGISTER_ENUM_MACRO(ItemEnum, CompoundType, "CompoundType");
+    REGISTER_ENUM_MACRO(ItemEnum, CreativeItemCategory, "CreativeItemCategory");
+    REGISTER_ENUM_MACRO(ItemEnum, FertilizerType, "FertilizerType");
+    REGISTER_ENUM_MACRO(ItemEnum, FireworkChargeItem::Shape, "Shape");
+    REGISTER_ENUM_MACRO(ItemEnum, FoodItemComponentLegacy::OnUseAction, "OnUseAction");
+    REGISTER_ENUM_MACRO(ItemEnum, HandSlot, "HandSlot");
+    REGISTER_ENUM_MACRO(ItemEnum, HorseArmorItem::Tier, "Tier");
+    REGISTER_ENUM_MACRO(ItemEnum, HumanoidArmorItem::Tier, "Tier");
+    REGISTER_ENUM_MACRO(ItemEnum, InHandUpdateType, "InHandUpdateType");
+    REGISTER_ENUM_MACRO(ItemEnum, ItemAcquisitionMethod, "ItemAcquisitionMethod");
+    REGISTER_ENUM_MACRO(ItemEnum, ItemColor, "ItemColor");
+    REGISTER_ENUM_MACRO(ItemEnum, ItemCommandVisibility, "ItemCommandVisibility");
+    REGISTER_ENUM_MACRO(ItemEnum, ItemContextType, "ItemContextType");
+    REGISTER_ENUM_MACRO(ItemEnum, ItemDescriptor::InternalType, "InternalType");
+    REGISTER_ENUM_MACRO(ItemEnum, ItemIconInfoType, "ItemIconInfoType");
+    REGISTER_ENUM_MACRO(ItemEnum, ItemLockMode, "ItemLockMode");
+    REGISTER_ENUM_MACRO(ItemEnum, ItemUseMethod, "ItemUseMethod");
+    REGISTER_ENUM_MACRO(ItemEnum, MapType, "MapType");
+    REGISTER_ENUM_MACRO(ItemEnum, MedicineType, "MedicineType");
+    REGISTER_ENUM_MACRO(ItemEnum, NotifyItemUsedOnEvent, "NotifyItemUsedOnEvent");
+    REGISTER_ENUM_MACRO(ItemEnum, PageContent::PageType, "PageType");
+    REGISTER_ENUM_MACRO(ItemEnum, Rarity, "Rarity");
+    REGISTER_ENUM_MACRO(ItemEnum, SaveContext::SaveUseCase, "SaveUseCase");
+    REGISTER_ENUM_MACRO(ItemEnum, SaveContext::SaveOperation, "SaveOperation");
+    REGISTER_ENUM_MACRO(ItemEnum, SlotWithDropChance, "SlotWithDropChance");
+    REGISTER_ENUM_MACRO(ItemEnum, SmithingTemplateItem::UpgradeType, "UpgradeType");
+    REGISTER_ENUM_MACRO(ItemEnum, SuspiciousStewItem::SuspiciousStewType, "SuspiciousStewType");
+    REGISTER_ENUM_MACRO(ItemEnum, Potion::PotionType, "PotionType");
+    REGISTER_ENUM_MACRO(ItemEnum, Potion::PotionVariant, "PotionVariant");
+    REGISTER_ENUM_MACRO(ItemEnum, OnUseOrder, "OnUseOrder");
+    REGISTER_ENUM_MACRO(ItemEnum, RenderOffsetsItemComponent::Hand, "Hand");
+    REGISTER_ENUM_MACRO(ItemEnum, RenderOffsetsItemComponent::Perspective, "Perspective");
+    REGISTER_ENUM_MACRO(ItemEnum, UseTimeDepletedOrder, "UseTimeDepletedOrder");
+    REGISTER_ENUM_MACRO(ItemEnum, RecipeUnlockingRequirement::UnlockingContext, "UnlockingContext");
+    REGISTER_ENUM_MACRO(ItemEnum, Enchant::Type, "Type");
+    REGISTER_ENUM_MACRO(ItemEnum, Enchant::Frequency, "Frequency");
+    REGISTER_ENUM_MACRO(ItemEnum, Enchant::Slot, "Slot");
+    REGISTER_ENUM_MACRO(ItemEnum, Enchant::Activation, "Activation");
+    REGISTER_ENUM_MACRO(ItemEnum, Enchant::CompatibilityID, "CompatibilityID");
+    REGISTER_ENUM_MACRO(ItemEnum, Enchant::VillagerTrading, "VillagerTrading");
+    REGISTER_ENUM_MACRO(ItemEnum, EnchantResultType, "EnchantResultType");
+    REGISTER_ENUM_MACRO(ItemEnum, EquipmentFilter, "EquipmentFilter");
+    REGISTER_ENUM_MACRO(ItemEnum, ItemVersion, "ItemVersion");
+    engine->set("ItemEnum", ConvertToScriptX(ItemEnum));
 
     // Form
     static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> FormEnum;
