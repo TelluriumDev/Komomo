@@ -165,6 +165,8 @@ EngineWrapper* NodeManager::newScriptEngine() {
         engine
     );
 
+    destroyEngine(id);
+
     return &mEngines[id];
 }
 
@@ -184,8 +186,14 @@ bool NodeManager::destroyEngine(EngineID id) {
     auto& wrapper = mEngines[id];
 
     wrapper.mIsRunning = false;
+
+    v8::Isolate*       isolate = wrapper.mEnvSetup->isolate();
+    v8::Locker         locker(isolate);
+    v8::Isolate::Scope isolate_scope(isolate);
+    v8::HandleScope    handle_scope(isolate);
+    isolate->Exit();
     // wrapper.mEngine->gc();
-    //   wrapper.mEngine->destroy(); // 销毁引擎
+      wrapper.mEngine->destroy(); // 销毁引擎
     uv_stop(wrapper.mEnvSetup->event_loop());
     node::Stop(wrapper.mEnvSetup->env());
 
@@ -338,7 +346,8 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
             );
         }
 
-        node::SetProcessExitHandler(env, [id{wrapper->mID}](node::Environment* env_, int exit_code) {
+        node::SetProcessExitHandler(env, [id{wrapper->mID}, &isolate](node::Environment* env_, int exit_code) {
+            isolate->Exit();
             Entry::getInstance().getSelf().getLogger().debug(
                 "Node.js process exit with code: {}, id: {}",
                 exit_code,
