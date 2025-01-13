@@ -159,13 +159,13 @@ EngineWrapper* NodeManager::newScriptEngine() {
     node::AddEnvironmentCleanupHook(
         isolate,
         [](void* arg) {
-            static_cast<ScriptEngine*>(arg)->destroy();
+            // static_cast<ScriptEngine*>(arg)->destroy();
             Entry::getInstance().getSelf().getLogger().debug("Destroyed engine: {}", arg);
         },
         engine
     );
 
-    destroyEngine(id);
+    // destroyEngine(id);
 
     return &mEngines[id];
 }
@@ -187,11 +187,11 @@ bool NodeManager::destroyEngine(EngineID id) {
 
     wrapper.mIsRunning = false;
 
-    v8::Isolate*       isolate = wrapper.mEnvSetup->isolate();
-    v8::Locker         locker(isolate);
-    v8::Isolate::Scope isolate_scope(isolate);
-    v8::HandleScope    handle_scope(isolate);
-    isolate->Exit();
+    // v8::Isolate*       isolate = wrapper.mEnvSetup->isolate();
+    // v8::Locker         locker(isolate);
+    // v8::Isolate::Scope isolate_scope(isolate);
+    // v8::HandleScope    handle_scope(isolate);
+    // isolate->Exit();
     // wrapper.mEngine->gc();
       wrapper.mEngine->destroy(); // 销毁引擎
     uv_stop(wrapper.mEnvSetup->event_loop());

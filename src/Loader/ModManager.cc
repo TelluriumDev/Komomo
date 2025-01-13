@@ -97,9 +97,9 @@ ll::Expected<> KomomoModManager::unload(std::string_view name) {
 
         scriptEngine.mEngine->getData().reset();
 
-        if (NodeManager::getInstance().destroyEngine(scriptEngine.mID)) {
-            eraseMod(name);
-        }
+        NodeManager::getInstance().destroyEngine(mod->id);
+
+        eraseMod(name);
 
         return {};
     } catch (const std::exception& e) {
