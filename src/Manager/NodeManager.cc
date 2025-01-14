@@ -1,26 +1,24 @@
+#include "v8-exception.h"
 #pragma warning(disable : 4996)
-#include "NodeManager.h"
 #include "API/APIHelper.h"
-#include "BindAPI.h"
-#include "EngineData.h"
 #include "Entry.h"
+#include "Manager/BindAPI.h"
+#include "Manager/EngineData.h"
+#include "Manager/NodeManager.h"
 #include "Utils/Using.h"
 #include "Utils/Util.h"
-#include "fmt/core.h"
-#include "nlohmann/json.hpp"
-#include "node.h"
-#include "uv.h"
-#include "v8-cppgc.h"
-#include "v8.h"
 #include <filesystem>
+#include <fmt/core.h>
 #include <memory>
+#include <nlohmann/json.hpp>
+#include <node.h>
 #include <thread>
-#include <unordered_map>
-#include <utility>
+#include <uv.h>
+
 
 #ifdef _WIN32
-#include "Windows.h"
-#include "shellapi.h"
+#include <Windows.h>
+#include <shellapi.h>
 #else
 #include <cstdio>
 #endif
@@ -86,10 +84,8 @@ void NodeManager::initNodeJs() {
     // cppgc::InitializeProcess();
     auto result = node::InitializeOncePerProcess(
         args,
-        node::ProcessInitializationFlags::Flags(
-            node::ProcessInitializationFlags::kNoInitializeV8
-            | node::ProcessInitializationFlags::kNoInitializeNodeV8Platform
-        )
+        {node::ProcessInitializationFlags::kNoInitializeV8,
+         node::ProcessInitializationFlags::kNoInitializeNodeV8Platform}
     );
     mExecArgs = result->exec_args();
     if (result->exit_code() != 0) {
@@ -112,6 +108,7 @@ void NodeManager::shutdownNodeJs() {
 
     v8::V8::Dispose();
     v8::V8::DisposePlatform();
+    node::TearDownOncePerProcess();
 }
 
 
@@ -125,14 +122,17 @@ EngineWrapper* NodeManager::newScriptEngine() {
     }
     EngineID id = NextEngineID++;
 
-    std::vector<string>           errors;
-    node::EnvironmentFlags::Flags flags = static_cast<node::EnvironmentFlags::Flags>(
-        node::EnvironmentFlags::kNoRegisterESMLoader | node::EnvironmentFlags::kNoCreateInspector
-        | node::EnvironmentFlags::kOwnsProcessState
+    std::vector<string>                           errors;
+    std::unique_ptr<node::CommonEnvironmentSetup> envSetup = node::CommonEnvironmentSetup::Create(
+        mPlatform.get(),
+        &errors,
+        mArgs,
+        mExecArgs,
+        node::EnvironmentFlags::Flags(
+            node::EnvironmentFlags::kNoRegisterESMLoader | node::EnvironmentFlags::kNoCreateInspector
+            | node::EnvironmentFlags::kOwnsProcessState
+        )
     );
-
-    std::unique_ptr<node::CommonEnvironmentSetup> envSetup =
-        node::CommonEnvironmentSetup::Create(mPlatform.get(), &errors, mArgs, mExecArgs, flags);
     if (!envSetup) {
         for (auto const& err : errors)
             Entry::getInstance().getSelf().getLogger().error("Faild to create environment setup: {}", err);
@@ -148,57 +148,58 @@ EngineWrapper* NodeManager::newScriptEngine() {
     v8::Context::Scope contextScope(envSetup->context());
 
     ScriptEngine* engine = new ScriptEngineImpl({}, isolate, envSetup->context(), false);
+    EngineScope   scope(engine);
+
     engine->setData(std::make_shared<EngineData>(id)); // 设置引擎数据
+    BindAPI(engine);                                   // 绑定API
 
-    EngineScope scope(engine);
-    BindAPI(engine); // 绑定API
-
-    // EngineWrapper warpper;
-    mEngines.emplace(id, EngineWrapper{id, engine, std::move(envSetup)});
+    EngineWrapperPtr ptr = std::make_unique<EngineWrapper>(id, engine, std::move(envSetup));
+    mEngines.emplace(id, std::move(ptr));
 
     node::AddEnvironmentCleanupHook(
         isolate,
         [](void* arg) {
-            // static_cast<ScriptEngine*>(arg)->destroy();
-            Entry::getInstance().getSelf().getLogger().debug("Destroyed engine: {}", arg);
+            static_cast<ScriptEngine*>(arg)->destroy();
+            Entry::getInstance().getSelf().getLogger().debug("[EnvironmentCleanupHook] Destroyed engine: {}", arg);
         },
         engine
     );
 
-    // destroyEngine(id);
-
-    return &mEngines[id];
+    return mEngines[id].get();
 }
 
 EngineWrapper* NodeManager::getEngine(EngineID id) {
     if (mEngines.contains(id)) {
-        return &mEngines[id];
+        return mEngines[id].get();
     }
     return nullptr;
 }
 
 
 bool NodeManager::destroyEngine(EngineID id) {
-    if (!hasEngine(id)) {
+    try {
+        if (!hasEngine(id)) {
+            return false;
+        }
+
+        auto& wrapper = mEngines[id];
+
+        wrapper->mIsRunning    = false;
+        wrapper->mIsDestroying = true;
+
+        // uv_stop(wrapper.mEnvSetup->event_loop()); (事件循环会自动停止)
+
+        node::Stop(wrapper->mEnvSetup->env(), node::StopFlags::kDoNotTerminateIsolate);
+
+        // wrapper.mEngine->destroy(); // 销毁引擎 (EnvironmentCleanupHook 会自动销毁)
+
+        mEngines.erase(id); // 删除引擎
+
+        return true;
+    } catch (...) {
+        Entry ::getInstance().getSelf().getLogger().error("Failed to destroy engine: {}", id);
         return false;
     }
-
-    auto& wrapper = mEngines[id];
-
-    wrapper.mIsRunning = false;
-
-    // v8::Isolate*       isolate = wrapper.mEnvSetup->isolate();
-    // v8::Locker         locker(isolate);
-    // v8::Isolate::Scope isolate_scope(isolate);
-    // v8::HandleScope    handle_scope(isolate);
-    // isolate->Exit();
-    // wrapper.mEngine->gc();
-      wrapper.mEngine->destroy(); // 销毁引擎
-    uv_stop(wrapper.mEnvSetup->event_loop());
-    node::Stop(wrapper.mEnvSetup->env());
-
-    mEngines.erase(id); // 删除引擎
-    return true;
 }
 
 
@@ -277,9 +278,6 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
         return false;
     }
 
-    auto* env     = wrapper->mEnvSetup->env();
-    auto* isolate = wrapper->mEnvSetup->isolate();
-
     auto js_code = readFileContent(path);
     if (!js_code) {
         return false;
@@ -296,8 +294,6 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
     Entry::getInstance().getSelf().getLogger().debug("filename: {}", filename);
 
     try {
-        EngineScope enter(wrapper->mEngine);
-
         string compiler;
         if (esm) {
             compiler = fmt::format(
@@ -346,20 +342,34 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
             );
         }
 
-        node::SetProcessExitHandler(env, [id{wrapper->mID}, &isolate](node::Environment* env_, int exit_code) {
-            isolate->Exit();
-            Entry::getInstance().getSelf().getLogger().debug(
-                "Node.js process exit with code: {}, id: {}",
-                exit_code,
-                id
-            );
-            NodeManager::getInstance().destroyEngine(id);
-        });
+        auto* env     = wrapper->mEnvSetup->env();
+        auto* isolate = wrapper->mEnvSetup->isolate();
 
-        v8::MaybeLocal<v8::Value> loadValue = node::LoadEnvironment(env, compiler.c_str());
-        if (loadValue.IsEmpty()) {
-            NodeManager::getInstance().destroyEngine(wrapper->mID);
-            return false;
+        {
+            EngineScope enter(wrapper->mEngine);
+            node::SetProcessExitHandler(env, [id{wrapper->mID}, isolate](node::Environment*, int exit_code) {
+                isolate->Exit();
+                Entry::getInstance().getSelf().getLogger().debug(
+                    "Node.js process exit with code: {}, id: {}",
+                    exit_code,
+                    id
+                );
+                if (exit_code == 0) NodeManager::getInstance().destroyEngine(id);
+            });
+        }
+
+        {
+            EngineScope               enter(wrapper->mEngine);
+            v8::TryCatch              vtry(isolate);
+            v8::MaybeLocal<v8::Value> loadValue = node::LoadEnvironment(env, compiler.c_str());
+            if (loadValue.IsEmpty() || vtry.HasCaught()) {
+                v8::String::Utf8Value error(isolate, vtry.Exception());
+                v8::String::Utf8Value stack(isolate, vtry.StackTrace(wrapper->mEnvSetup->context()).ToLocalChecked());
+                Entry::getInstance().getSelf().getLogger().error("{}\n{}", *error, *stack);
+                // ExitEngineScope exit;
+                // isolate->Exit();
+                return false;
+            }
         }
 
         wrapper->mIsRunning = true; // Js 代码已加载，引擎可以运行
@@ -369,8 +379,8 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
                 co_await ll::chrono::ticks(2);
 
                 auto status = ll::getGamingStatus();
-                if (status == ll::GamingStatus::Stopping || !wrapper->mIsRunning) {
-                    co_return; // 服务器关闭 或 引擎关闭
+                if (status == ll::GamingStatus::Stopping || !wrapper->mIsRunning || wrapper->mIsDestroying) {
+                    co_return; // 服务器关闭 或 引擎关闭 或 引擎正在销毁
                 }
 
                 if (status != ll::GamingStatus::Running) {
