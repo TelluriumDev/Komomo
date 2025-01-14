@@ -1,9 +1,7 @@
 #include "Loader/ModManager.h"
-#include "API/APIHelper.h"
 #include "API/Event/Event.h"
 #include "Entry.h"
 #include "Loader/Mod.h"
-#include "Manager/BindAPI.h"
 #include "Manager/EngineData.h"
 #include "Manager/NodeManager.h"
 #include "Utils/Using.h"
@@ -49,11 +47,6 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             manager.NpmInstall(file.parent_path().string());
         }
 
-        if (!NodeManager::loadFile(wrapper, file, NodeManager::packageIsEsm(package))) {
-            Entry::getInstance().getSelf().getLogger().error("Failed to load mod: {}", file);
-            manager.destroyEngine(wrapper->mID);
-            return ll::makeStringError("Failed to load mod");
-        }
 
         auto mod = std::make_shared<KomomoMod>(manifest);
         {
@@ -61,6 +54,12 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             auto        data = ENGINE_DATA();
             data->mMod       = mod;
             mod->id          = data->mID;
+        }
+
+        if (!NodeManager::loadFile(wrapper, file, NodeManager::packageIsEsm(package))) {
+            Entry::getInstance().getSelf().getLogger().error("Failed to load mod: {}", file);
+            manager.destroyEngine(wrapper->mID);
+            return ll::makeStringError("Failed to load mod");
         }
 
         mod->onLoad([](ll::mod::Mod& mod) { return true; });
