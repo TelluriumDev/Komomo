@@ -93,6 +93,34 @@
 #include <mc\world\item\enchanting\EquipmentFilter.h>
 #include <mc\world\item\registry\ItemVersion.h>
 
+#include <mc\world\inventory\ActorContainerType.h>
+#include <mc\world\inventory\InventoryLayout.h>
+#include <mc\world\inventory\InventoryLeftTabIndex.h>
+#include <mc\world\inventory\InventoryRightTabIndex.h>
+#include <mc\world\inventory\network\ItemStackNetManagerServer.h>
+#include <mc\world\inventory\network\ItemStackNetResult.h>
+#include <mc\world\inventory\network\ItemStackRequestActionHandler.h>
+#include <mc\world\inventory\network\ItemStackRequestActionMineBlock.h>
+#include <mc\world\inventory\network\ItemStackRequestActionType.h>
+#include <mc\world\inventory\network\ItemStackRequestScreen.h>
+#include <mc\world\inventory\network\SparseContainerClient.h>
+#include <mc\world\inventory\simulation\ContainerScreenActionResultData.h>
+#include <mc\world\inventory\simulation\ContainerScreenAutoplaceBehaviour.h>
+#include <mc\world\inventory\simulation\ContainerScreenRequestActionType.h>
+#include <mc\world\inventory\simulation\ContainerScreenTransferBehaviour.h>
+#include <mc\world\inventory\simulation\ContainerValidationCaller.h>
+#include <mc\world\inventory\simulation\ContainerValidationCommitObject.h>
+#include <mc\world\inventory\simulation\ContainerValidationOperationType.h>
+#include <mc\world\inventory\simulation\ContainerValidationOutcome.h>
+#include <mc\world\inventory\simulation\SparseContainerBackingSetType.h>
+#include <mc\world\inventory\transaction\ComplexInventoryTransaction.h>
+#include <mc\world\inventory\transaction\InventorySource.h>
+#include <mc\world\inventory\transaction\InventorySourceType.h>
+#include <mc\world\inventory\transaction\InventoryTransactionError.h>
+#include <mc\world\inventory\transaction\ItemReleaseInventoryTransaction.h>
+#include <mc\world\inventory\transaction\ItemUseInventoryTransaction.h>
+#include <mc\world\inventory\transaction\ItemUseOnActorInventoryTransaction.h>
+
 #include <mc/network/packet/ModalFormCancelReason.h>
 
 #include <string>
@@ -212,6 +240,39 @@ void RegisterEnum(ScriptEngine* engine) {
     REGISTER_ENUM_MACRO(ItemEnum, EquipmentFilter, "EquipmentFilter");
     REGISTER_ENUM_MACRO(ItemEnum, ItemVersion, "ItemVersion");
     engine->set("ItemEnum", ConvertToScriptX(ItemEnum));
+    
+    // auto generated InventoryEnum
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> InventoryEnum;
+    REGISTER_ENUM_MACRO(InventoryEnum, ActorContainerType, "ActorContainerType");
+    REGISTER_ENUM_MACRO(InventoryEnum, InventoryLayout, "InventoryLayout");
+    REGISTER_ENUM_MACRO(InventoryEnum, InventoryLeftTabIndex, "InventoryLeftTabIndex");
+    REGISTER_ENUM_MACRO(InventoryEnum, InventoryRightTabIndex, "InventoryRightTabIndex");
+    REGISTER_ENUM_MACRO(InventoryEnum, ItemStackNetManagerServer::TextFilterState, "TextFilterState");
+    REGISTER_ENUM_MACRO(InventoryEnum, ItemStackNetResult, "ItemStackNetResult");
+    REGISTER_ENUM_MACRO(InventoryEnum, ItemStackRequestActionHandler::RemoveType, "RemoveType");
+    REGISTER_ENUM_MACRO(InventoryEnum, ItemStackRequestActionMineBlock::PreValidationStatus, "PreValidationStatus");
+    REGISTER_ENUM_MACRO(InventoryEnum, ItemStackRequestActionType, "ItemStackRequestActionType");
+    REGISTER_ENUM_MACRO(InventoryEnum, ItemStackRequestScreen, "ItemStackRequestScreen");
+    REGISTER_ENUM_MACRO(InventoryEnum, SparseContainerClient::PushSlotPredictionResult, "PushSlotPredictionResult");
+    REGISTER_ENUM_MACRO(InventoryEnum, ContainerScreenActionResultData::Type, "Type");
+    REGISTER_ENUM_MACRO(InventoryEnum, ContainerScreenAutoplaceBehaviour, "ContainerScreenAutoplaceBehaviour");
+    REGISTER_ENUM_MACRO(InventoryEnum, ContainerScreenRequestActionType, "ContainerScreenRequestActionType");
+    REGISTER_ENUM_MACRO(InventoryEnum, ContainerScreenTransferBehaviour, "ContainerScreenTransferBehaviour");
+    REGISTER_ENUM_MACRO(InventoryEnum, ContainerValidationCaller, "ContainerValidationCaller");
+    REGISTER_ENUM_MACRO(InventoryEnum, ContainerValidationCommitObject::Type, "Type");
+    REGISTER_ENUM_MACRO(InventoryEnum, ContainerValidationOperationType, "ContainerValidationOperationType");
+    REGISTER_ENUM_MACRO(InventoryEnum, ContainerValidationOutcome, "ContainerValidationOutcome");
+    REGISTER_ENUM_MACRO(InventoryEnum, SparseContainerBackingSetType, "SparseContainerBackingSetType");
+    REGISTER_ENUM_MACRO(InventoryEnum, ComplexInventoryTransaction::Type, "Type");
+    REGISTER_ENUM_MACRO(InventoryEnum, InventorySource::InventorySourceFlags, "InventorySourceFlags");
+    REGISTER_ENUM_MACRO(InventoryEnum, InventorySourceType, "InventorySourceType");
+    REGISTER_ENUM_MACRO(InventoryEnum, InventoryTransactionError, "InventoryTransactionError");
+    REGISTER_ENUM_MACRO(InventoryEnum, ItemReleaseInventoryTransaction::ActionType, "ActionType");
+    REGISTER_ENUM_MACRO(InventoryEnum, ItemUseInventoryTransaction::ActionType, "ActionType");
+    REGISTER_ENUM_MACRO(InventoryEnum, ItemUseInventoryTransaction::TriggerType, "TriggerType");
+    REGISTER_ENUM_MACRO(InventoryEnum, ItemUseInventoryTransaction::PredictedResult, "PredictedResult");
+    REGISTER_ENUM_MACRO(InventoryEnum, ItemUseOnActorInventoryTransaction::ActionType, "ActionType");
+    engine->set("InventoryEnum", ConvertToScriptX(InventoryEnum));
 
     // Form
     static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> FormEnum;
