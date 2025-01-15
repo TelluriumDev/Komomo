@@ -384,7 +384,6 @@ Local<Value> PlayerClass::setAbility(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-// LLAPI bool addAndRefresh(class ItemStack& item);
 Local<Value> PlayerClass::addAndRefresh(const Arguments& args) {
     CheckArgsCount(args, 1);
     try {
@@ -400,7 +399,6 @@ Local<Value> PlayerClass::addAndRefresh(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-// MCAPI void broadcastPlayerSpawnedMobEvent(::ActorType spawnedType, ::MobSpawnMethod spawnMethod);
 Local<Value> PlayerClass::broadcastPlayerSpawnedMobEvent(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
@@ -437,7 +435,6 @@ Local<Value> PlayerClass::causeFoodExhaustion(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-//  MCAPI bool checkBed(::BlockSource* spawnBlockSource, ::Vec3 const* const positionToCheck);
 Local<Value> PlayerClass::checkBed(const Arguments& args) {
     CheckArgsCount(args, 2);
 
@@ -469,7 +466,6 @@ Local<Value> PlayerClass::checkNeedAutoJump(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-// MCAPI bool checkSpawnBlock(::BlockSource const& region) const;
 Local<Value> PlayerClass::checkSpawnBlock(const Arguments& args) {
     CheckArgsCount(args, 1);
     try {
@@ -649,6 +645,7 @@ Local<Value> PlayerClass::getInventory(const Arguments& args) {
 Local<Value> PlayerClass::getItemCooldownLeft(const Arguments& args) {
     CheckArgsCount(args, 1);
     try {
+        if (!mPlayer) return Local<Value>();
         // if (IsInstanceOf<HashedString>(args[0])) {
         //     auto engine            = EngineScope::currentEngine();
         //     auto hashedStringClass = engine->getNativeInstance<HashedStringClass>(args[0]);
