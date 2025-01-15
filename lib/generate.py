@@ -19,7 +19,7 @@ def generate_dts_content(class_name, methods):
     # 添加类声明
     dts_content += f"declare class {class_name} {{\n"
     for method in methods:
-        dts_content += f"    {method}: () => any;\n"
+        dts_content += f"    {method}(): any;\n"
     dts_content += "}\n"
 
     return dts_content
