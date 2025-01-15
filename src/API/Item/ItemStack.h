@@ -9,10 +9,10 @@ public:
     ItemStack* mItemStack;
 
 public:
-    ItemStackClass(ItemStack* itemstack);
+    ItemStackClass(ItemStack* itemStack);
 
 public:
-    static Local<Object> newItemStack(ItemStack* itemstack);
+    static Local<Object> newItemStack(ItemStack* itemStack);
 
 public: /* Member */
 public: /* Method */

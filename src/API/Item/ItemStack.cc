@@ -7,6 +7,6 @@ ItemStackClass::ItemStackClass(ItemStack* itemStack) : ScriptClass(ConstructFrom
     this->mItemStack = itemStack;
 }
 
-Local<Object> ItemStackClass::newItemStack(ItemStack* itemstack) {
-    return (new ItemStackClass(itemstack))->getScriptObject();
+Local<Object> ItemStackClass::newItemStack(ItemStack* itemStack) {
+    return (new ItemStackClass(itemStack))->getScriptObject();
 }
