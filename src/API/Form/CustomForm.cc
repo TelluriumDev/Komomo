@@ -44,9 +44,8 @@ Local<Value> CustomFormClass::setTitle(const Arguments& args) {
 };
 
 Local<Value> CustomFormClass::appendLabel(const Arguments& args) {
-    CheckArgsCount(args, 2);
+    CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
-    CheckArgType(args[1], ValueKind::kString);
 
     try {
         form->appendLabel(args[0].asString().toString());
@@ -82,7 +81,6 @@ Local<Value> CustomFormClass::appendInput(const Arguments& args) {
         } else {
             form->appendInput(args[0].asString().toString(), args[1].asString().toString());
         }
-        elements.push_back(args[0].asString().toString());
         return this->getScriptObject();
     }
     Catch;
@@ -106,7 +104,6 @@ Local<Value> CustomFormClass::appendToggle(const Arguments& args) {
 
             form->appendToggle(args[0].asString().toString(), args[1].asString().toString());
         }
-        elements.push_back(args[0].asString().toString());
         return this->getScriptObject();
     }
     Catch;
@@ -136,7 +133,6 @@ Local<Value> CustomFormClass::appendDropdown(const Arguments& args) {
         } else {
             form->appendDropdown(args[0].asString().toString(), args[1].asString().toString(), options);
         }
-        elements.push_back(args[0].asString().toString());
         return this->getScriptObject();
     }
     Catch;
@@ -178,7 +174,6 @@ Local<Value> CustomFormClass::appendSlider(const Arguments& args) {
                 args[3].asNumber().toInt64()
             );
         }
-        elements.push_back(args[0].asString().toString());
         return this->getScriptObject();
     }
     Catch;
@@ -208,7 +203,6 @@ Local<Value> CustomFormClass::appendStepSlider(const Arguments& args) {
         } else {
             form->appendStepSlider(args[0].asString().toString(), args[1].asString().toString(), options);
         }
-        elements.push_back(args[0].asString().toString());
         return this->getScriptObject();
     }
     Catch;

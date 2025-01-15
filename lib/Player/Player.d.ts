@@ -1,4 +1,4 @@
-/// <reference path="../../src/API/Player/Player.h" />
+/// <reference path="../Player/Gamemode.d.ts" />
 
 /// <reference path="../Math/Vec3.d.ts" />
 
@@ -16,7 +16,7 @@
 /// <reference path="../Block/BlockSource.d.ts" />
 /// <reference path="../Block/BlockPos.d.ts" />
 
-declare class PlayerClass {
+declare class Player {
     xuid: string | undefined;
     uuid: string | undefined;
     realName: string | undefined;

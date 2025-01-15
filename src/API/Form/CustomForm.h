@@ -6,13 +6,10 @@
 #include <ll/api/form/FormBase.h>
 
 #include <string>
-#include <vector>
 
 class CustomFormClass : public ScriptClass {
 private:
     ll::form::CustomForm* form;
-
-    std::vector<std::string> elements;
 
 public:
     CustomFormClass(std::string const& title);
