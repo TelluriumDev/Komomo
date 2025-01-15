@@ -399,6 +399,7 @@ Local<Value> PlayerClass::addAndRefresh(const Arguments& args) {
     }
     CatchReturn(Boolean::newBoolean(false));
 }
+
 // MCAPI void broadcastPlayerSpawnedMobEvent(::ActorType spawnedType, ::MobSpawnMethod spawnMethod);
 Local<Value> PlayerClass::broadcastPlayerSpawnedMobEvent(const Arguments& args) {
     CheckArgsCount(args, 2);

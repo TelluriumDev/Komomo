@@ -1,14 +1,12 @@
 #include "API/Logger/Logger.h"
 #include "Utils/Convert.h"
-#include "ll/api/io/Logger.h"
-#include "ll/api/io/LoggerRegistry.h"
-#include <memory>
 
 using namespace Komomo;
 
 ClassDefine<LoggerClass> loggerClassBuilder = defineClass<LoggerClass>("Logger")
-                                                  .constructor(&LoggerClass::newLogger)
+                                                  .constructor(nullptr)
 
+                                                  .function("getLogger", &LoggerClass::newLogger)
                                                   .instanceFunction("log", &LoggerClass::log)
                                                   .instanceFunction("error", &LoggerClass::error)
                                                   .instanceFunction("warn", &LoggerClass::warn)
@@ -22,14 +20,17 @@ ClassDefine<LoggerClass> loggerClassBuilder = defineClass<LoggerClass>("Logger")
 
 LoggerClass::LoggerClass(std::string title) : ScriptClass(ConstructFromCpp<LoggerClass>{}) { this->title = title; }
 
-LoggerClass* LoggerClass::newLogger(const Arguments& args) {
-    CheckArgsCountReturn(args, 1, nullptr);
-    CheckArgTypeReturn(args[0], ValueKind::kString, nullptr);
+Local<Object> LoggerClass::newLogger(const Arguments& args) {
     try {
-        return new LoggerClass(args[0].asString().toString());
+        if (args.size() == 1 && args[0].isString()) {
+            return newLoggerClass(args[0].asString().toString());
+        }
     }
-    CatchReturn(nullptr);
+    CatchNotReturn;
+    return newLoggerClass(ENGINE_DATA()->mMod->getName());
 }
+
+Local<Object> LoggerClass::newLoggerClass(std::string title) { return (new LoggerClass(title))->getScriptObject(); }
 
 Local<Value> LoggerClass::log(const Arguments& args) {
     CheckArgsCount(args, 2);

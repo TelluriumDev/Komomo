@@ -19,8 +19,8 @@ inline bool IsInstanceOf(Local<Value> const& value) {
     return EngineScope::currentEngine()->isInstanceOf<T>(value);
 }
 
-void PrintException(string const& msg, string const& func, string const& plugin, string const& api);
-void PrintException(script::Exception const& e, string const& func, string const& plugin, string const& api);
+void PrintException(string const& msg, string const& func, string const& mod, string const& api);
+void PrintException(script::Exception const& e, string const& func, string const& mod, string const& api);
 
 #define PrintScriptError(msg_or_exception)                                                                             \
     PrintException(msg_or_exception, __func__, ENGINE_DATA()->mFileName, __FUNCTION__);

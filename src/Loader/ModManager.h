@@ -15,10 +15,6 @@ public:
     KomomoModManager();
     ~KomomoModManager() override;
 
-    [[nodiscard]] std::vector<std::string> getPluginFileFilters() const;
-
-
-    static std::vector<std::string> filterMods(const std::filesystem::path& directory); // 过滤指定目录下的所有JS插件
 
 private:
     ll::Expected<> load(ll::mod::Manifest manifest) override;

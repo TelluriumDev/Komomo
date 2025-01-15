@@ -11,13 +11,11 @@ private:
     ll::form::SimpleForm* form;
 
 public:
-    SimpleFormClass(ll::form::SimpleForm* form);
-
-    SimpleFormClass(std::string const& title, std::string const& content = {});
+    SimpleFormClass(std::string title, std::string content = {});
 
     ~SimpleFormClass();
 
-    static SimpleFormClass* newForm(const Arguments& args);
+    static Local<Object> newSimpleForm(std::string title, std::string content = {});
     // LLAPI SimpleForm& setTitle(std::string const& title);
     Local<Value> setTitle(const Arguments& args);
 

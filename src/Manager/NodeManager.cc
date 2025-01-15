@@ -246,7 +246,7 @@ bool NodeManager::NpmInstall(string npmExecuteDir) {
             }
 
             const execute_dir = path.join(")"+npmExecuteDir+R"(");
-            const npm_cli = path.join(cwd, "plugins/Komomo/node_modules/npm/bin/npm-cli.js");
+            const npm_cli = path.join(cwd, "mods/Komomo/node_modules/npm/bin/npm-cli.js");
             require("child_process").execFileSync(node, [npm_cli, "install"], { cwd: execute_dir });
 
             console.log("npm install success");
@@ -316,10 +316,10 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
             compiler = fmt::format(
                 R"(
                     const __Path = require("path");
-                    const __PluginPath = __Path.join("{0}");
-                    const __PluginNodeModulesPath = __Path.join(__PluginPath, "node_modules");
+                    const __ModPath = __Path.join("{0}");
+                    const __ModNodeModulesPath = __Path.join(__ModPath, "node_modules");
 
-                    __dirname = __PluginPath;
+                    __dirname = __ModPath;
                     __filename = "{1}";
                     (function ReplaeRequire() {{
                         const PublicModule = require('module').Module;
@@ -327,12 +327,12 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
                         PublicModule._resolveLookupPaths = function (request, parent) {{
                             let result = OriginalResolveLookupPaths.call(this, request, parent);
                             if (Array.isArray(result)) {{
-                                result.push(__PluginNodeModulesPath);
-                                result.push(__PluginPath);
+                                result.push(__ModNodeModulesPath);
+                                result.push(__ModPath);
                             }}
                             return result;
                         }};
-                        require = PublicModule.createRequire(__PluginPath);
+                        require = PublicModule.createRequire(__ModPath);
                     }})();
                     {2}
                 )",

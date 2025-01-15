@@ -28,6 +28,6 @@ public:
 
 #undef TRY_PARSE_MACRO
 
-#undef CALL_PLUGIN_MACRO
+#undef CALL_MOD_MACRO
 
 } // namespace Komomo

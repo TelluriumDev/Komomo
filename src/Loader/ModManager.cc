@@ -20,8 +20,6 @@ namespace Komomo {
 
 KomomoModManager::KomomoModManager() : ll::mod::ModManager(ModManagerName) {}
 KomomoModManager::~KomomoModManager() = default;
-std::vector<std::string> KomomoModManager::getPluginFileFilters() const { return {".js"}; }
-
 
 ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
     auto& manager = NodeManager::getInstance();
@@ -69,14 +67,14 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
 
         return mod->onLoad().transform([&, this] { addMod(manifest.name, mod); });
     } catch (script::Exception& e) {
-        Entry::getInstance().getSelf().getLogger().error("Failed to load plugin: {}", file);
+        Entry::getInstance().getSelf().getLogger().error("Failed to load mod: {}", file);
         // Entry::getInstance().getSelf().getLogger().error("JavaScript error: {}", e.what());
         // Entry::getInstance().getSelf().getLogger().error("Stack trace: {}", e.stacktrace());
     } catch (std::exception& e) {
-        Entry::getInstance().getSelf().getLogger().error("Failed to load plugin: {}", file);
+        Entry::getInstance().getSelf().getLogger().error("Failed to load mod: {}", file);
         Entry::getInstance().getSelf().getLogger().error("Unknown error: {}", e.what());
     } catch (...) {
-        Entry::getInstance().getSelf().getLogger().error("Failed to load plugin: {}", file);
+        Entry::getInstance().getSelf().getLogger().error("Failed to load mod: {}", file);
         Entry::getInstance().getSelf().getLogger().error("Unknown error");
     }
 
@@ -102,34 +100,7 @@ ll::Expected<> KomomoModManager::unload(std::string_view name) {
 
         return {};
     } catch (const std::exception& e) {
-        return ll::makeStringError("Failed to unload plugin {0}: {1}");
+        return ll::makeStringError("Failed to unload mod {0}: {1}");
     }
-}
-
-std::vector<std::string> KomomoModManager::filterMods(const fs::path& directory) {
-    std::vector<std::string> mods;
-    if (!fs::exists(directory)) {
-        return mods;
-    }
-
-    for (const auto& entry : fs::directory_iterator(directory)) {
-        if (!entry.is_directory()) {
-            continue;
-        }
-
-        fs::path package = entry.path() / "package.json";
-        if (!fs::exists(package)) {
-            continue;
-        }
-
-        auto main = NodeManager::findMainScript(package);
-        if (!main) {
-            continue;
-        }
-
-        mods.push_back((entry.path() / *main).string());
-    }
-
-    return mods;
 }
 } // namespace Komomo

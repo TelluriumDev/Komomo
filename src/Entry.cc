@@ -15,11 +15,11 @@
 #endif
 
 
-void registerPluginManager(const std::shared_ptr<Komomo::KomomoModManager>& pm) {
-    auto& pluginManagerRegistry = ll::mod::ModManagerRegistry::getInstance();
+void registerModManager(const std::shared_ptr<Komomo::KomomoModManager>& pm) {
+    auto& modManagerRegistry = ll::mod::ModManagerRegistry::getInstance();
 
-    if (!pluginManagerRegistry.addManager(pm)) {
-        throw std::runtime_error("Failed to register plugin manager");
+    if (!modManagerRegistry.addManager(pm)) {
+        throw std::runtime_error("Failed to register mod manager");
     }
 }
 
@@ -45,21 +45,20 @@ bool Entry::load() {
     // }
 #endif
     NodeManager::getInstance().initNodeJs();
-    Entry::getInstance().getSelf().getLogger().info("Load javascript plugin...");
-    // auto& server        = getServer();
-    // auto& pluginManager = server.getPluginManager();
-    // pluginManager.registerLoader(std::make_unique<jse::JavaScriptPluginLoader>(server));
-    // pluginManager.loadPlugins(std::move(jse::JavaScriptPluginLoader::filterPlugins(fs::current_path() /
+    Entry::getInstance().getSelf().getLogger().info("Load javascript mod...");
 
     komomoModManager = std::make_shared<KomomoModManager>();
     selfModInstance  = std::make_unique<std::reference_wrapper<ll::mod::NativeMod>>(getSelf());
-    registerPluginManager(komomoModManager);
+    registerModManager(komomoModManager);
     return true;
 }
 
 bool Entry::enable() { return true; }
 bool Entry::disable() { return true; }
-bool Entry::unload() { return true; }
+// bool Entry::unload() {
+//     // NodeManager::getInstance().shutdownNodeJs();
+//     return true;
+// }
 
 
 auto getKomomoModManager() -> KomomoModManager& {
@@ -72,7 +71,7 @@ auto getKomomoModManager() -> KomomoModManager& {
 
 auto getSelfModInstance() -> ll::mod::NativeMod& {
     if (!selfModInstance) {
-        throw std::runtime_error("selfPluginInstance is null");
+        throw std::runtime_error("selfModInstance is null");
     }
 
     return *selfModInstance;

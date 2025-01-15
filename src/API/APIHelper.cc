@@ -132,27 +132,21 @@ void ToString(Local<Object> const& value, std::ostringstream& oss) {
 }
 
 
-void PrintException(string const& msg, string const& func, string const& plugin, string const& api) {
-    return PrintException(script::Exception(msg), func, plugin, api);
+void PrintException(string const& msg, string const& func, string const& mod, string const& api) {
+    return PrintException(script::Exception(msg), func, mod, api);
 }
-void PrintException(script::Exception const& e, string const& func, string const& plugin, string const& api) {
+void PrintException(script::Exception const& e, string const& func, string const& mod, string const& api) {
     string fail_msg  = fmt::format("Fail in {}", func);
-    string in_plugin = fmt::format("In Plugin: {}", plugin);
+    string in_mod = fmt::format("In Mod: {}", mod);
     string in_api    = fmt::format("In API: {}", api);
     string stack     = fmt::format("scriptx::Exception: {}\n{}", e.what(), e.stacktrace());
 
     auto& ptr = Entry::getInstance();
     // if (ptr.getSelf().isEnabled()) {
     ptr.getSelf().getLogger().error(fail_msg);
-    ptr.getSelf().getLogger().error(in_plugin);
+    ptr.getSelf().getLogger().error(in_mod);
     ptr.getSelf().getLogger().error(in_api);
     ptr.getSelf().getLogger().error(stack);
-    // } else {
-    //     std::cout << "\x1b[91m" << fail_msg << "\x1b[0m" << std::endl;
-    //     std::cout << "\x1b[91m" << in_plugin << "\x1b[0m" << std::endl;
-    //     std::cout << "\x1b[91m" << in_api << "\x1b[0m" << std::endl;
-    //     std::cout << "\x1b[91m" << stack << "\x1b[0m" << std::endl;
-    // }
 }
 
 } // namespace Komomo

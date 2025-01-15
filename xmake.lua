@@ -4,7 +4,7 @@ add_repositories("liteldev-repo https://github.com/LiteLDev/xmake-repo.git")
 add_repositories("iceblcokmc https://github.com/IceBlcokMC/xmake-repo.git")
 
 add_requires("nodejs 22.12.0") -- iceblockmc
-add_requires("levilamina 1.0.0-rc.2", {configs = {target_type = "server"}})
+add_requires("levilamina 1.0.0-rc.3", {configs = {target_type = "server"}})
 add_requires("levibuildscript 0.2.0")
 add_requires(
     "microsoft-gsl 4.0.0",

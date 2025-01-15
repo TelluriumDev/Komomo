@@ -6,6 +6,7 @@
 #include "API/Event/Event.h"
 #include "API/Event/Listener.h"
 #include "API/Form/CustomForm.h"
+#include "API/Form/Form.h"
 #include "API/Form/SimpleForm.h"
 #include "API/Item/ItemStack.h"
 #include "API/Logger/Logger.h"
@@ -24,6 +25,7 @@ inline void BindAPI(ScriptEngine* engine) {
     engine->registerNativeClass<ListenerClass>(listenerClassBuilder);
     engine->registerNativeClass<SimpleFormClass>(simpleFormClassBuilder);
     engine->registerNativeClass<CustomFormClass>(customFormClassBuilder);
+    engine->registerNativeClass<FormClass>(formClassBuilder);
     engine->registerNativeClass<ContainerClass>(containerClassBuilder);
     engine->registerNativeClass<ItemStackClass>(itemStackClassBuilder);
     engine->registerNativeClass<ActorClass>(actorClassBuilder);

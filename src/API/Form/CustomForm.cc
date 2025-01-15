@@ -9,8 +9,7 @@ using namespace Komomo;
 
 ClassDefine<CustomFormClass> customFormClassBuilder =
     defineClass<CustomFormClass>("CustomForm")
-        .constructor(&CustomFormClass::newForm)
-
+        .constructor(nullptr)
 
         .instanceFunction("setTitle", &CustomFormClass::setTitle)
         .instanceFunction("appendLabel", &CustomFormClass::appendLabel)
@@ -21,12 +20,7 @@ ClassDefine<CustomFormClass> customFormClassBuilder =
         .instanceFunction("appendStepSlider", &CustomFormClass::appendStepSlider)
         .instanceFunction("sendTo", &CustomFormClass::sendTo)
 
-
         .build();
-
-CustomFormClass::CustomFormClass(ll::form::CustomForm* form) : ScriptClass(ConstructFromCpp<CustomFormClass>{}) {
-    this->form = form;
-}
 
 CustomFormClass::CustomFormClass(std::string const& title) : ScriptClass(ConstructFromCpp<CustomFormClass>{}) {
     this->form = new ll::form::CustomForm(title);
@@ -34,14 +28,8 @@ CustomFormClass::CustomFormClass(std::string const& title) : ScriptClass(Constru
 
 // CustomFormClass::~CustomFormClass() { delete form; }
 
-CustomFormClass* CustomFormClass::newForm(const Arguments& args) {
-    CheckArgsCountReturn(args, 1, nullptr);
-    CheckArgTypeReturn(args[0], ValueKind::kString, nullptr);
-
-    try {
-        return new CustomFormClass(args[0].asString().toString());
-    }
-    CatchReturn(nullptr);
+Local<Object> CustomFormClass::newCustomForm(std::string title) {
+    return (new CustomFormClass(title))->getScriptObject();
 }
 
 Local<Value> CustomFormClass::setTitle(const Arguments& args) {

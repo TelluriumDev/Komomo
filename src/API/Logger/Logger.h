@@ -5,6 +5,7 @@
 #include <ll/api/io/LogLevel.h>
 #include <ll/api/io/Logger.h>
 #include <ll/api/io/LoggerRegistry.h>
+#include <string>
 
 
 class LoggerClass : public ScriptClass {
@@ -22,10 +23,13 @@ private:
 
 public:
     LoggerClass(std::string title);
-    // ~LoggerClass();
 
 public:
-    static LoggerClass* newLogger(const Arguments& args);
+    static Local<Object> newLoggerClass(std::string title);
+
+    static Local<Object> newLogger(const Arguments& args);
+
+    Local<Value> init(const Arguments& args);
 
     Local<Value> log(const Arguments& args);
 

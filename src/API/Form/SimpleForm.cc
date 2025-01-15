@@ -8,7 +8,7 @@ using namespace Komomo;
 
 ClassDefine<SimpleFormClass> simpleFormClassBuilder =
     defineClass<SimpleFormClass>("SimpleForm")
-        .constructor(&SimpleFormClass::newForm)
+        .constructor(nullptr)
 
         .instanceFunction("setTitle", &SimpleFormClass::setTitle)
         .instanceFunction("setContent", &SimpleFormClass::setContent)
@@ -17,26 +17,16 @@ ClassDefine<SimpleFormClass> simpleFormClassBuilder =
 
         .build();
 
-SimpleFormClass::SimpleFormClass(ll::form::SimpleForm* form) : ScriptClass(ConstructFromCpp<SimpleFormClass>{}) {
-    this->form = form;
-}
 
-SimpleFormClass::SimpleFormClass(std::string const& title, std::string const& content)
+SimpleFormClass::SimpleFormClass(std::string title, std::string content)
 : ScriptClass(ConstructFromCpp<SimpleFormClass>{}) {
     this->form = new ll::form::SimpleForm(title, content);
 }
 
 SimpleFormClass::~SimpleFormClass() { delete form; }
 
-SimpleFormClass* SimpleFormClass::newForm(const Arguments& args) {
-    CheckArgsCountReturn(args, 2, nullptr);
-    CheckArgTypeReturn(args[0], ValueKind::kString, nullptr);
-    CheckArgTypeReturn(args[1], ValueKind::kString, nullptr);
-
-    try {
-        return new SimpleFormClass(args[0].asString().toString(), args[1].asString().toString());
-    }
-    CatchReturn(nullptr);
+Local<Object> SimpleFormClass::newSimpleForm(std::string title, std::string content) {
+    return (new SimpleFormClass(title, content))->getScriptObject();
 }
 
 Local<Value> SimpleFormClass::setTitle(const Arguments& args) {

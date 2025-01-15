@@ -15,13 +15,11 @@ private:
     std::vector<std::string> elements;
 
 public:
-    CustomFormClass(ll::form::CustomForm* form);
-
     CustomFormClass(std::string const& title);
 
     // ~CustomFormClass();
 
-    static CustomFormClass* newForm(const Arguments& args);
+    static Local<Object> newCustomForm(std::string title);
     // LLAPI CustomForm& setTitle(std::string const& title);
     Local<Value> setTitle(const Arguments& args);
 
