@@ -1,7 +1,6 @@
 #pragma once
 
 #include "API/APIHelper.h" // IWYU pragma: keep
-#include "mc/world/level/BlockSource.h"
 
 // #include <mc/world/level/Block.h>
 
