@@ -741,7 +741,7 @@ Local<Value> PlayerClass::getXpNeededForLevelRange(const Arguments& args) {
             mPlayer->getXpNeededForLevelRange(args[0].asNumber().toInt32(), args[1].asNumber().toInt32())
         );
     }
-    CatchReturn(Boolean::newBoolean(false));
+    Catch;
 }
 
 // MCAPI bool hasOpenContainerOfContainerType(::ContainerType containerType) const;
