@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Manager/EngineData.h"
+#include "Utils/Macro.h" // IWYU pragma: keep
 #include "Utils/Using.h"
+
 
 
 namespace Komomo {

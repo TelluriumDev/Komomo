@@ -34,7 +34,7 @@ public:
 
     static void removeAllListeners();
 
-    static bool addCallback(
+    KMMAPI inline static void addCallback(
         std::string                                                                                      event,
         std::function<ll::event::ListenerPtr(const Arguments&, ScriptEngine*, ll::event::EventPriority)> callBack
     );

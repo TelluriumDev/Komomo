@@ -1041,39 +1041,32 @@ void EventBusClass::removeAllListeners() {
     listeners.clear();
 }
 
-bool EventBusClass::addCallback(
+KMMAPI inline void EventBusClass::addCallback(
     std::string                                                                                      event,
     std::function<ll::event::ListenerPtr(const Arguments&, ScriptEngine*, ll::event::EventPriority)> callBack
 ) {
-    try {
-        callBackMap.emplace(event, callBack);
-        return true;
-    } catch (...) {
-        return false;
-    }
+    callBackMap.emplace(event, callBack);
 }
-
-// template bool
-// EventBusClass::addCallback<ll::event::Event>(std::string event, std::function<void(ll::event::Event)> callBack);
-
 
 void EventBusClass::registerCallback() {
     using ll::event::EventBus;
-    addCallback(
-        "ServerStartedEvent",
-        [](const Arguments& args, ScriptEngine* engine, ll::event::EventPriority priority) {
-            return EventBus::getInstance().emplaceListener<ll::event::ServerStartedEvent>(
-                [&args,
-                 engine{EngineScope::currentEngine()},
-                 func{Global<Function>(args[1].asFunction())}](ll::event::ServerStartedEvent& event) {
-                    EngineScope scope(engine);
-                    try {
-                        func.get().call({});
-                    }
-                    CatchNotReturn;
-                },
-                priority
-            );
-        }
-    );
+    try {
+        addCallback(
+            "ServerStartedEvent",
+            [](const Arguments& args, ScriptEngine* engine, ll::event::EventPriority priority) {
+                return EventBus::getInstance().emplaceListener<ll::event::ServerStartedEvent>(
+                    [&args,
+                     engine{EngineScope::currentEngine()},
+                     func{Global<Function>(args[1].asFunction())}](ll::event::ServerStartedEvent& event) {
+                        EngineScope scope(engine);
+                        try {
+                            func.get().call({});
+                        }
+                        CatchNotReturn;
+                    },
+                    priority
+                );
+            }
+        );
+    } catch (...) {}
 }
