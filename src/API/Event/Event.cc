@@ -57,6 +57,9 @@
 #include <ll/api/event/service/ServiceEvents.h>
 
 #include <ll/api/utils/HashUtils.h>
+
+#include <ila/include_all.h>
+
 #include <string>
 
 using namespace Komomo;

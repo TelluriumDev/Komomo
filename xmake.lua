@@ -2,13 +2,15 @@ add_rules("mode.debug", "mode.release")
 
 add_repositories("liteldev-repo https://github.com/LiteLDev/xmake-repo.git")
 add_repositories("iceblcokmc https://github.com/IceBlcokMC/xmake-repo.git")
+add_repositories("miracleforest https://github.com/MiracleForest/xmake-repo")
 
 add_requires("nodejs 22.12.0") -- iceblockmc
 add_requires("levilamina 1.0.0-rc.3", {configs = {target_type = "server"}})
 add_requires("levibuildscript 0.3.0")
 add_requires(
     "microsoft-gsl 4.0.0",
-    "boost 1.85.0"
+    "boost 1.85.0",
+    "ilistenattentively 0.2.2"
 )
 
 if not has_config("vs_runtime") then
@@ -34,7 +36,8 @@ target("Komomo")
         "boost",
         "glm",
         "concurrentqueue",
-        "magic_enum"
+        "magic_enum",
+        "ilistenattentively"
     )
     set_kind("shared")
     set_languages("cxx20")

@@ -1,5 +1,6 @@
 #include "API/Logger/Logger.h"
 #include "Utils/Convert.h"
+#include "ll/api/io/LogLevel.h"
 
 using namespace Komomo;
 
@@ -35,10 +36,9 @@ Local<Object> LoggerClass::newLoggerClass(std::string title) { return (new Logge
 Local<Value> LoggerClass::log(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
-    CheckArgType(args[1], ValueKind::kString);
 
     try {
-        getLogger()->log(ConvertFromScriptX<ll::io::LogLevel>(args[0]), args[1].asString().toString());
+        getLogger()->log(ll::io::LogLevel(args[0].asNumber().toInt32()), LogDataHelper(args));
         return Local<Value>();
     }
     CatchNotReturn;
@@ -47,11 +47,10 @@ Local<Value> LoggerClass::log(const Arguments& args) {
 
 Local<Value> LoggerClass::error(const Arguments& args) {
     CheckArgsCount(args, 1);
-    CheckArgType(args[0], ValueKind::kString);
 
     try {
         // if (args.size() >= 2) {} // TODO: format
-        getLogger()->error(args[0].asString().toString());
+        getLogger()->error(LogDataHelper(args));
         return Local<Value>();
     }
     CatchNotReturn;
@@ -60,11 +59,10 @@ Local<Value> LoggerClass::error(const Arguments& args) {
 
 Local<Value> LoggerClass::warn(const Arguments& args) {
     CheckArgsCount(args, 1);
-    CheckArgType(args[0], ValueKind::kString);
 
     try {
         // if (args.size() >= 2) {} // TODO: format
-        getLogger()->warn(args[0].asString().toString());
+        getLogger()->warn(LogDataHelper(args));
     }
     CatchNotReturn;
     return Local<Value>();
@@ -72,11 +70,10 @@ Local<Value> LoggerClass::warn(const Arguments& args) {
 
 Local<Value> LoggerClass::info(const Arguments& args) {
     CheckArgsCount(args, 1);
-    CheckArgType(args[0], ValueKind::kString);
 
     try {
         // if (args.size() >= 2) {} // TODO: format
-        getLogger()->info(args[0].asString().toString());
+        getLogger()->info(LogDataHelper(args));
     }
     CatchNotReturn;
     return Local<Value>();
@@ -88,7 +85,7 @@ Local<Value> LoggerClass::debug(const Arguments& args) {
 
     try {
         // if (args.size() >= 2) {} // TODO: format
-        getLogger()->debug(args[0].asString().toString());
+        getLogger()->debug(LogDataHelper(args));
     }
     CatchNotReturn;
     return Local<Value>();
@@ -96,11 +93,10 @@ Local<Value> LoggerClass::debug(const Arguments& args) {
 
 Local<Value> LoggerClass::trace(const Arguments& args) {
     CheckArgsCount(args, 1);
-    CheckArgType(args[0], ValueKind::kString);
 
     try {
         // if (args.size() >= 2) {} // TODO: format
-        getLogger()->trace(args[0].asString().toString());
+        getLogger()->trace(LogDataHelper(args));
     }
     CatchNotReturn;
     return Local<Value>();
@@ -108,11 +104,10 @@ Local<Value> LoggerClass::trace(const Arguments& args) {
 
 Local<Value> LoggerClass::fatal(const Arguments& args) {
     CheckArgsCount(args, 1);
-    CheckArgType(args[0], ValueKind::kString);
 
     try {
         // if (args.size() >= 2) {} // TODO: format
-        getLogger()->fatal(args[0].asString().toString());
+        getLogger()->fatal(LogDataHelper(args));
     }
     CatchNotReturn;
     return Local<Value>();
@@ -123,7 +118,7 @@ Local<Value> LoggerClass::setLevel(const Arguments& args) {
     CheckArgType(args[0], ValueKind::kNumber);
 
     try {
-        getLogger()->setLevel(ConvertFromScriptX<ll::io::LogLevel>(args[0]));
+        getLogger()->setLevel(ll::io::LogLevel(args[0].asNumber().toInt32()));
     }
     CatchNotReturn;
     return Local<Value>();

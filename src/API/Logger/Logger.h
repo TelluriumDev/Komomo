@@ -1,6 +1,7 @@
 #pragma once
 
 #include "API/APIHelper.h" // IWYU pragma: keep
+#include "Utils/Using.h"
 
 #include <ll/api/io/LogLevel.h>
 #include <ll/api/io/Logger.h>
@@ -20,6 +21,12 @@ private:
         }
         return logger;
     };
+
+    static std::string LogDataHelper(const Arguments& args) {
+        std::string res;
+        for (int i = 0; i < args.size(); ++i) res += Komomo::ToString(args[i]);
+        return res;
+    }
 
 public:
     LoggerClass(std::string title);
