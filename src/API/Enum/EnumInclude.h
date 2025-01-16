@@ -48,6 +48,18 @@
 #include <mc/world/actor/player/SkinAdjustments.h>
 #include <mc/world/actor/player/TrustedSkinFlag.h>
 
+#include <mc\common\CompactionStatus.h>
+#include <mc\common\FacingID.h>
+#include <mc\common\GameUserType.h>
+#include <mc\common\GameVersion.h>
+#include <mc\common\SubClientId.h>
+#include <mc\common\XforgeGameVersion.h>
+#include <mc\common\editor\WorldType.h>
+#include <mc\common\facing\Axis.h>
+#include <mc\common\facing\Name.h>
+#include <mc\common\facing\Rotation.h>
+#include <mc\common\title_info\TitleId.h>
+
 #include <mc\world\item\ArmorSlot.h>
 #include <mc\world\item\BannerPatternItem.h>
 #include <mc\world\item\BucketFillType.h>

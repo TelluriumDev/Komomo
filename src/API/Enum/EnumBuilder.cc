@@ -54,6 +54,20 @@ void RegisterEnum(ScriptEngine* engine) {
     REGISTER_ENUM_MACRO(ActorEnum, TypeExecutingEvent, "TypeExecutingEvent");
     engine->set("ActorEnum", ConvertToScriptX(ActorEnum));
 
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> CommonEnum;
+    REGISTER_ENUM_MACRO(CommonEnum, CompactionStatus, "CompactionStatus");
+    REGISTER_ENUM_MACRO(CommonEnum, FacingID, "FacingID");
+    REGISTER_ENUM_MACRO(CommonEnum, GameUserType, "GameUserType");
+    REGISTER_ENUM_MACRO(CommonEnum, GameVersion::Octet, "Octet");
+    REGISTER_ENUM_MACRO(CommonEnum, SubClientId, "SubClientId");
+    REGISTER_ENUM_MACRO(CommonEnum, XforgeGameVersion::Octet, "Octet");
+    REGISTER_ENUM_MACRO(CommonEnum, Editor::WorldType, "WorldType");
+    REGISTER_ENUM_MACRO(CommonEnum, Facing::Axis, "Axis");
+    REGISTER_ENUM_MACRO(CommonEnum, Facing::Name, "Name");
+    REGISTER_ENUM_MACRO(CommonEnum, Facing::Rotation, "Rotation");
+    REGISTER_ENUM_MACRO(CommonEnum, TitleInfo::TitleId, "TitleId");
+    engine->set("CommonEnum", ConvertToScriptX(CommonEnum));
+
     // Player
     static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> PlayerEnum;
     REGISTER_ENUM_MACRO(PlayerEnum, AbilitiesIndex, "AbilitiesIndex");
