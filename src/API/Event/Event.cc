@@ -10,6 +10,7 @@
 #include "API/Block/BlockPos.h"
 #include "API/Block/BlockSource.h"
 #include "API/Command/CommandContext.h"
+#include "API/Command/MCRESULT.h"
 #include "API/Item/ItemActor.h"
 #include "API/Item/ItemStack.h"
 #include "API/Level/Level.h"
@@ -885,13 +886,42 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
                         try {
                             auto result = func.get().call(
                                 {},
-                                CommandContextClass::newCommandContext(&event.commandContext()),
                                 MinecraftCommandsClass::newMinecraftCommands(&event.minecraftCommands()),
+                                CommandContextClass::newCommandContext(
+                                    const_cast<CommandContext*>(&event.commandContext())
+                                ),
                                 Boolean::newBoolean(event.suppressOutput())
                             );
                             if (result.isBoolean()) {
                                 if (result.asBoolean().value() == false) event.cancel();
                             }
+                        }
+                        CatchNotReturn;
+                    },
+                    priority
+                );
+                listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
+                return ListenerClass::newListenPtr(&listener);
+            }
+            CatchNotReturn;
+        }
+        case doHash("ExecutedCommandEvent"): {
+            try {
+                listener = EventBus::getInstance().emplaceListener<ll::event::ExecutedCommandEvent>(
+                    [&args,
+                     engine{EngineScope::currentEngine()},
+                     func{Global<Function>(args[1].asFunction())}](ll::event::ExecutedCommandEvent& event) {
+                        EngineScope scope(engine);
+                        try {
+                            func.get().call(
+                                {},
+                                MCRESULTClass::newMCRESULT(&event.result()),
+                                MinecraftCommandsClass::newMinecraftCommands(&event.minecraftCommands()),
+                                CommandContextClass::newCommandContext(
+                                    const_cast<CommandContext*>(&event.commandContext())
+                                ),
+                                Boolean::newBoolean(event.suppressOutput())
+                            );
                         }
                         CatchNotReturn;
                     },
@@ -908,6 +938,25 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
                     [&args,
                      engine{EngineScope::currentEngine()},
                      func{Global<Function>(args[1].asFunction())}](ll::event::ServiceRegisterEvent& event) {
+                        EngineScope scope(engine);
+                        try {
+                            func.get().call({}, ServiceClass::newService(event.service().get()));
+                        }
+                        CatchNotReturn;
+                    },
+                    priority
+                );
+                listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
+                return ListenerClass::newListenPtr(&listener);
+            }
+            CatchNotReturn;
+        }
+        case doHash("ServiceUnregisterEvent"): {
+            try {
+                listener = EventBus::getInstance().emplaceListener<ll::event::ServiceUnregisterEvent>(
+                    [&args,
+                     engine{EngineScope::currentEngine()},
+                     func{Global<Function>(args[1].asFunction())}](ll::event::ServiceUnregisterEvent& event) {
                         EngineScope scope(engine);
                         try {
                             func.get().call({}, ServiceClass::newService(event.service().get()));
