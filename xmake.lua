@@ -21,7 +21,8 @@ target("Komomo")
     add_defines(
         "NOMINMAX",
         "UNICODE",
-        "_AMD64_"
+        "_AMD64_",
+        "KMM_EXPORT"
     )
     add_files("src/**.cc")
     add_includedirs("src")

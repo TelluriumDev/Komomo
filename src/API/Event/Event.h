@@ -2,11 +2,10 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-#include <functional>
 #include <ll/api/event/EventBus.h>
 #include <ll/api/event/ListenerBase.h>
 
-
+#include <functional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -34,7 +33,7 @@ public:
 
     static void removeAllListeners();
 
-    KMMAPI inline static void addCallback(
+    KMMAPI static void addCallback(
         std::string                                                                                      event,
         std::function<ll::event::ListenerPtr(const Arguments&, ScriptEngine*, ll::event::EventPriority)> callBack
     );

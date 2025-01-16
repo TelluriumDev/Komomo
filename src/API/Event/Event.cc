@@ -2,7 +2,6 @@
 #include "API/APIHelper.h"
 #include "API/Command/MinecraftCommands.h"
 #include "API/Event/Listener.h"
-#include "Entry.h"
 
 #include "API/Actor/Actor.h"
 #include "API/Actor/ActorDamageSource.h"
@@ -1041,7 +1040,7 @@ void EventBusClass::removeAllListeners() {
     listeners.clear();
 }
 
-KMMAPI inline void EventBusClass::addCallback(
+KMMAPI void EventBusClass::addCallback(
     std::string                                                                                      event,
     std::function<ll::event::ListenerPtr(const Arguments&, ScriptEngine*, ll::event::EventPriority)> callBack
 ) {
