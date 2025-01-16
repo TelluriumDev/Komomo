@@ -1,15 +1,15 @@
 #include "API/Block/BlockPos.h"
 
 
-ClassDefine<BlockPosClass> blockposClassBuilder = defineClass<BlockPosClass>("BlockPos")
+ClassDefine<BlockPosClass> blockPosClassBuilder = defineClass<BlockPosClass>("BlockPos")
                                                       .constructor(nullptr)
 
                                                       .build();
 
-BlockPosClass::BlockPosClass(BlockPos* blockpos) : ScriptClass(ConstructFromCpp<BlockPosClass>{}) {
-    this->mBlockPos = blockpos;
+BlockPosClass::BlockPosClass(BlockPos* blockPos) : ScriptClass(ConstructFromCpp<BlockPosClass>{}) {
+    this->mBlockPos = blockPos;
 }
 
-Local<Object> BlockPosClass::newBlockPos(BlockPos* blockpos) {
-    return (new BlockPosClass(blockpos))->getScriptObject();
+Local<Object> BlockPosClass::newBlockPos(BlockPos* blockPos) {
+    return (new BlockPosClass(blockPos))->getScriptObject();
 }

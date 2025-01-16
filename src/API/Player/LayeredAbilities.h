@@ -9,13 +9,13 @@ public:
     LayeredAbilities* mLayeredAbilities;
 
 public:
-    LayeredAbilitiesClass(LayeredAbilities* layeredabilities);
+    LayeredAbilitiesClass(LayeredAbilities* layeredAbilities);
 
 public:
-    static Local<Object> newLayeredAbilities(LayeredAbilities* layeredabilities);
+    static Local<Object> newLayeredAbilities(LayeredAbilities* layeredAbilities);
 
 public: /* Member */
 public: /* Method */
 };
 
-extern ClassDefine<LayeredAbilitiesClass> layeredabilitiesClassBuilder;
+extern ClassDefine<LayeredAbilitiesClass> layeredAbilitiesClassBuilder;

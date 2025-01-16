@@ -2,6 +2,7 @@
 #include "Utils/Using.h"
 #include "boost/pfr.hpp"
 #include "fmt/format.h"
+#include "ll/api/base/StdInt.h"
 #include "magic_enum/magic_enum.hpp"
 #include <cstddef>
 #include <type_traits>
@@ -48,6 +49,11 @@ struct ToScriptType<char[N]> {
 
 template <>
 struct ToScriptType<int> {
+    using Type = Number;
+};
+
+template <>
+struct ToScriptType<uint64> {
     using Type = Number;
 };
 

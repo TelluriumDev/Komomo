@@ -11,14 +11,14 @@ public:
     BlockPos* mBlockPos;
 
 public:
-    BlockPosClass(BlockPos* blockpos);
+    BlockPosClass(BlockPos* blockPos);
 
 public:
     // static BlockPosClass* create(const Arguments& args); // TODO
-    static Local<Object> newBlockPos(BlockPos* blockpos);
+    static Local<Object> newBlockPos(BlockPos* blockPos);
 
 public: /* Member */
 public: /* Method */
 };
 
-extern ClassDefine<BlockPosClass> blockposClassBuilder;
+extern ClassDefine<BlockPosClass> blockPosClassBuilder;

@@ -9,16 +9,14 @@ public:
     BlockSource* mBlockSource;
 
 public:
-    BlockSourceClass(BlockSource* blocksource);
+    BlockSourceClass(BlockSource* blockSource);
 
 public:
     // static BlockSourceClass* create(const Arguments& args); // TODO
-    static Local<Object> newBlockSource(BlockSource* blocksource);
+    static Local<Object> newBlockSource(BlockSource* blockSource);
 
 public: /* Member */
 public: /* Method */
 };
 
-extern ClassDefine<BlockSourceClass> blocksourceClassBuilder;
-
-
+extern ClassDefine<BlockSourceClass> blockSourceClassBuilder;

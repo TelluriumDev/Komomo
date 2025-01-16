@@ -29,8 +29,6 @@ public:
 
     static Local<Object> newLogger(const Arguments& args);
 
-    Local<Value> init(const Arguments& args);
-
     Local<Value> log(const Arguments& args);
 
     Local<Value> fatal(const Arguments& args);

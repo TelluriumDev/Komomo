@@ -1,127 +1,8 @@
 #include "API/Enum/EnumBuilder.h"
+#include "API/Enum/EnumInclude.h"
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
 
-#include <ll/api/event/ListenerBase.h>
-#include <ll/api/io/LogLevel.h>
-
-
-#include <mc/world/actor/ActionEvent.h>
-#include <mc/world/actor/ActorCategory.h>
-#include <mc/world/actor/ActorDamageCause.h>
-#include <mc/world/actor/ActorDataIDs.h>
-#include <mc/world/actor/ActorDefinitionEventType.h>
-#include <mc/world/actor/ActorDefinitionGroup.h>
-#include <mc/world/actor/ActorDefinitionParseStatus.h>
-#include <mc/world/actor/ActorEvent.h>
-#include <mc/world/actor/ActorFilterGroup.h>
-#include <mc/world/actor/ActorFlags.h>
-#include <mc/world/actor/ActorInitializationMethod.h>
-#include <mc/world/actor/ActorLinkType.h>
-#include <mc/world/actor/ActorLocation.h>
-#include <mc/world/actor/ActorTargetFilter.h>
-#include <mc/world/actor/ActorTerrainInterlockData.h>
-#include <mc/world/actor/ActorType.h>
-#include <mc/world/actor/ActorTypeNamespaceRules.h>
-#include <mc/world/actor/ArmorMaterialType.h>
-#include <mc/world/actor/ArmorTextureType.h>
-#include <mc/world/actor/DataItemType.h>
-#include <mc/world/actor/DefinitionEventType.h>
-#include <mc/world/actor/HorseInventoryEnum.h>
-#include <mc/world/actor/KeyOrNameResult.h>
-#include <mc/world/actor/MobSpawnMethod.h>
-#include <mc/world/actor/PaletteColor.h>
-#include <mc/world/actor/ParticleType.h>
-#include <mc/world/actor/RenderContextType.h>
-#include <mc/world/actor/RenderParam.h>
-#include <mc/world/actor/SerializedAbilitiesData.h>
-#include <mc/world/actor/SkeletalHierarchyIndex.h>
-#include <mc/world/actor/SpawnRuleEnum.h>
-#include <mc/world/actor/TravelType.h>
-#include <mc/world/actor/TypeExecutingEvent.h>
-
-#include <mc/world/actor/player/AbilitiesIndex.h>
-#include <mc/world/actor/player/AbilitiesLayer.h>
-#include <mc/world/actor/player/Ability.h>
-#include <mc/world/actor/player/BedSleepingResult.h>
-#include <mc/world/actor/player/LoadingState.h>
-#include <mc/world/actor/player/Player.h>
-#include <mc/world/actor/player/PlayerSpawnFallbackType.h>
-#include <mc/world/actor/player/PlayerUISlot.h>
-#include <mc/world/actor/player/SkinAdjustments.h>
-#include <mc/world/actor/player/TrustedSkinFlag.h>
-
-#include <mc\world\item\ArmorSlot.h>
-#include <mc\world\item\BannerPatternItem.h>
-#include <mc\world\item\BucketFillType.h>
-#include <mc\world\item\CameraItemComponentLegacy.h>
-#include <mc\world\item\CoalItem.h>
-#include <mc\world\item\CompoundContainerType.h>
-#include <mc\world\item\CompoundType.h>
-#include <mc\world\item\CreativeItemCategory.h>
-#include <mc\world\item\FertilizerType.h>
-#include <mc\world\item\FireworkChargeItem.h>
-#include <mc\world\item\FoodItemComponentLegacy.h>
-#include <mc\world\item\HandSlot.h>
-#include <mc\world\item\HorseArmorItem.h>
-#include <mc\world\item\HumanoidArmorItem.h>
-#include <mc\world\item\InHandUpdateType.h>
-#include <mc\world\item\ItemAcquisitionMethod.h>
-#include <mc\world\item\ItemColor.h>
-#include <mc\world\item\ItemCommandVisibility.h>
-#include <mc\world\item\ItemContextType.h>
-#include <mc\world\item\ItemDescriptor.h>
-#include <mc\world\item\ItemIconInfoType.h>
-#include <mc\world\item\ItemLockMode.h>
-#include <mc\world\item\ItemUseMethod.h>
-#include <mc\world\item\MapType.h>
-#include <mc\world\item\MedicineType.h>
-#include <mc\world\item\NotifyItemUsedOnEvent.h>
-#include <mc\world\item\PageContent.h>
-#include <mc\world\item\Rarity.h>
-#include <mc\world\item\SaveContext.h>
-#include <mc\world\item\SlotWithDropChance.h>
-#include <mc\world\item\SmithingTemplateItem.h>
-#include <mc\world\item\SuspiciousStewItem.h>
-#include <mc\world\item\alchemy\Potion.h>
-#include <mc\world\item\components\OnUseOrder.h>
-#include <mc\world\item\components\RenderOffsetsItemComponent.h>
-#include <mc\world\item\components\UseTimeDepletedOrder.h>
-#include <mc\world\item\crafting\RecipeUnlockingRequirement.h>
-#include <mc\world\item\enchanting\Enchant.h>
-#include <mc\world\item\enchanting\EnchantResultType.h>
-#include <mc\world\item\enchanting\EquipmentFilter.h>
-#include <mc\world\item\registry\ItemVersion.h>
-
-#include <mc\world\inventory\ActorContainerType.h>
-#include <mc\world\inventory\InventoryLayout.h>
-#include <mc\world\inventory\InventoryLeftTabIndex.h>
-#include <mc\world\inventory\InventoryRightTabIndex.h>
-#include <mc\world\inventory\network\ItemStackNetManagerServer.h>
-#include <mc\world\inventory\network\ItemStackNetResult.h>
-#include <mc\world\inventory\network\ItemStackRequestActionHandler.h>
-#include <mc\world\inventory\network\ItemStackRequestActionMineBlock.h>
-#include <mc\world\inventory\network\ItemStackRequestActionType.h>
-#include <mc\world\inventory\network\ItemStackRequestScreen.h>
-#include <mc\world\inventory\network\SparseContainerClient.h>
-#include <mc\world\inventory\simulation\ContainerScreenActionResultData.h>
-#include <mc\world\inventory\simulation\ContainerScreenAutoplaceBehaviour.h>
-#include <mc\world\inventory\simulation\ContainerScreenRequestActionType.h>
-#include <mc\world\inventory\simulation\ContainerScreenTransferBehaviour.h>
-#include <mc\world\inventory\simulation\ContainerValidationCaller.h>
-#include <mc\world\inventory\simulation\ContainerValidationCommitObject.h>
-#include <mc\world\inventory\simulation\ContainerValidationOperationType.h>
-#include <mc\world\inventory\simulation\ContainerValidationOutcome.h>
-#include <mc\world\inventory\simulation\SparseContainerBackingSetType.h>
-#include <mc\world\inventory\transaction\ComplexInventoryTransaction.h>
-#include <mc\world\inventory\transaction\InventorySource.h>
-#include <mc\world\inventory\transaction\InventorySourceType.h>
-#include <mc\world\inventory\transaction\InventoryTransactionError.h>
-#include <mc\world\inventory\transaction\ItemReleaseInventoryTransaction.h>
-#include <mc\world\inventory\transaction\ItemUseInventoryTransaction.h>
-#include <mc\world\inventory\transaction\ItemUseOnActorInventoryTransaction.h>
-
-#include <mc/network/packet/ModalFormCancelReason.h>
 
 #include <string>
 #include <unordered_map>
@@ -240,7 +121,7 @@ void RegisterEnum(ScriptEngine* engine) {
     REGISTER_ENUM_MACRO(ItemEnum, EquipmentFilter, "EquipmentFilter");
     REGISTER_ENUM_MACRO(ItemEnum, ItemVersion, "ItemVersion");
     engine->set("ItemEnum", ConvertToScriptX(ItemEnum));
-    
+
     // auto generated InventoryEnum
     static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> InventoryEnum;
     REGISTER_ENUM_MACRO(InventoryEnum, ActorContainerType, "ActorContainerType");
@@ -279,8 +160,17 @@ void RegisterEnum(ScriptEngine* engine) {
     REGISTER_ENUM_MACRO(FormEnum, ModalFormCancelReason, "ModalFormCancelResult");
     engine->set("FormEnum", ConvertToScriptX(FormEnum));
 
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> EventEnum;
-    REGISTER_ENUM_MACRO(EventEnum, ll::event::EventPriority, "EventPriority");
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> EventEnum = []() {
+        std::unordered_map<std::string, std::unordered_map<std::string_view, int>> map;
+        REGISTER_ENUM_MACRO(EventEnum, ll::event::EventPriority, "EventPriority");
+        map["EventPriority"]["Highest"] = 0;
+        map["EventPriority"]["High"]    = 100;
+        map["EventPriority"]["Normal"]  = 200;
+        map["EventPriority"]["Low"]     = 300;
+        map["EventPriority"]["Lowest"]  = 400;
+        return map;
+    }();
+
     engine->set("EventEnum", ConvertToScriptX(EventEnum));
 
     static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> LoggerEnum;

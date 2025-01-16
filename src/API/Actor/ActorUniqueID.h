@@ -9,13 +9,13 @@ public:
     ActorUniqueID* mActorUniqueID;
 
 public:
-    ActorUniqueIDClass(ActorUniqueID* actoruniqueid);
+    ActorUniqueIDClass(ActorUniqueID* actorUniqueID);
 
 public:
-    static Local<Object> newActorUniqueID(ActorUniqueID* actoruniqueid);
+    static Local<Object> newActorUniqueID(ActorUniqueID* actorUniqueID);
 
 public: /* Member */
 public: /* Method */
 };
 
-extern ClassDefine<ActorUniqueIDClass> actoruniqueidClassBuilder;
+extern ClassDefine<ActorUniqueIDClass> actorUniqueIDClassBuilder;

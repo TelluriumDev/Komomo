@@ -1,15 +1,15 @@
 #include "API/Player/GameMode.h"
 
 
-ClassDefine<GameModeClass> gamemodeClassBuilder = defineClass<GameModeClass>("GameMode")
+ClassDefine<GameModeClass> gameModeClassBuilder = defineClass<GameModeClass>("GameMode")
                                                         .constructor(nullptr)
 
                                                         .build();
 
-GameModeClass::GameModeClass(GameMode* gamemode) : ScriptClass(ConstructFromCpp<GameModeClass>{}) {
-    this->mGameMode = gamemode;
+GameModeClass::GameModeClass(GameMode* gameMode) : ScriptClass(ConstructFromCpp<GameModeClass>{}) {
+    this->mGameMode = gameMode;
 }
 
-Local<Object> GameModeClass::newGameMode(GameMode* gamemode) {
-    return (new GameModeClass(gamemode))->getScriptObject();
+Local<Object> GameModeClass::newGameMode(GameMode* gameMode) {
+    return (new GameModeClass(gameMode))->getScriptObject();
 }

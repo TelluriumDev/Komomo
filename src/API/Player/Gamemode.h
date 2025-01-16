@@ -9,13 +9,13 @@ public:
     GameMode* mGameMode;
 
 public:
-    GameModeClass(GameMode* gamemode);
+    GameModeClass(GameMode* gameMode);
 
 public:
-    static Local<Object> newGameMode(GameMode* gamemode);
+    static Local<Object> newGameMode(GameMode* gameMode);
 
 public: /* Member */
 public: /* Method */
 };
 
-extern ClassDefine<GameModeClass> gamemodeClassBuilder;
+extern ClassDefine<GameModeClass> gameModeClassBuilder;

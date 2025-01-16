@@ -23,7 +23,7 @@ void PrintException(string const& msg, string const& func, string const& mod, st
 void PrintException(script::Exception const& e, string const& func, string const& mod, string const& api);
 
 #define PrintScriptError(msg_or_exception)                                                                             \
-    PrintException(msg_or_exception, __func__, ENGINE_DATA()->mFileName, __FUNCTION__);
+    PrintException(msg_or_exception, __func__, ENGINE_DATA()->mMod->getName(), __FUNCTION__);
 
 // 参数异常
 #define PrintWrongArgType()   PrintScriptError("Wrong argument type")

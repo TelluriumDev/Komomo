@@ -1,16 +1,16 @@
 #include "API/Actor/ActorUniqueID.h"
 
 
-ClassDefine<ActorUniqueIDClass> actoruniqueidClassBuilder = defineClass<ActorUniqueIDClass>("ActorUniqueID")
+ClassDefine<ActorUniqueIDClass> actorUniqueIDClassBuilder = defineClass<ActorUniqueIDClass>("ActorUniqueID")
                                                                 .constructor(nullptr)
 
                                                                 .build();
 
-ActorUniqueIDClass::ActorUniqueIDClass(ActorUniqueID* actoruniqueid)
+ActorUniqueIDClass::ActorUniqueIDClass(ActorUniqueID* actorUniqueID)
 : ScriptClass(ConstructFromCpp<ActorUniqueIDClass>{}) {
-    this->mActorUniqueID = actoruniqueid;
+    this->mActorUniqueID = actorUniqueID;
 }
 
-Local<Object> ActorUniqueIDClass::newActorUniqueID(ActorUniqueID* actoruniqueid) {
-    return (new ActorUniqueIDClass(actoruniqueid))->getScriptObject();
+Local<Object> ActorUniqueIDClass::newActorUniqueID(ActorUniqueID* actorUniqueID) {
+    return (new ActorUniqueIDClass(actorUniqueID))->getScriptObject();
 }

@@ -1,7 +1,7 @@
 #include "API/Actor/ActorDamageSource.h"
 
 
-ClassDefine<ActorDamageSourceClass> actordamagesourceClassBuilder =
+ClassDefine<ActorDamageSourceClass> actorDamageSourceClassBuilder =
     defineClass<ActorDamageSourceClass>("ActorDamageSource")
         .constructor(nullptr)
 

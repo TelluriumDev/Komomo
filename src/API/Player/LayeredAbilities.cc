@@ -1,16 +1,16 @@
 #include "API/Player/LayeredAbilities.h"
 
 
-ClassDefine<LayeredAbilitiesClass> layeredabilitiesClassBuilder = defineClass<LayeredAbilitiesClass>("LayeredAbilities")
+ClassDefine<LayeredAbilitiesClass> layeredAbilitiesClassBuilder = defineClass<LayeredAbilitiesClass>("LayeredAbilities")
                                                                       .constructor(nullptr)
 
                                                                       .build();
 
-LayeredAbilitiesClass::LayeredAbilitiesClass(LayeredAbilities* layeredabilities)
+LayeredAbilitiesClass::LayeredAbilitiesClass(LayeredAbilities* layeredAbilities)
 : ScriptClass(ConstructFromCpp<LayeredAbilitiesClass>{}) {
-    this->mLayeredAbilities = layeredabilities;
+    this->mLayeredAbilities = layeredAbilities;
 }
 
-Local<Object> LayeredAbilitiesClass::newLayeredAbilities(LayeredAbilities* layeredabilities) {
-    return (new LayeredAbilitiesClass(layeredabilities))->getScriptObject();
+Local<Object> LayeredAbilitiesClass::newLayeredAbilities(LayeredAbilities* layeredAbilities) {
+    return (new LayeredAbilitiesClass(layeredAbilities))->getScriptObject();
 }

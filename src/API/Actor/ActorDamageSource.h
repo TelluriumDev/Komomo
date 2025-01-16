@@ -20,4 +20,4 @@ public: /* Member */
 public: /* Method */
 };
 
-extern ClassDefine<ActorDamageSourceClass> actordamagesourceClassBuilder;
+extern ClassDefine<ActorDamageSourceClass> actorDamageSourceClassBuilder;

@@ -1,6 +1,6 @@
 #include "API/Event/Event.h"
 #include "API/APIHelper.h"
-#include "API/Enum/EnumBuilder.h"
+#include "API/Command/MinecraftCommands.h"
 #include "API/Event/Listener.h"
 
 #include "API/Actor/Actor.h"
@@ -9,14 +9,17 @@
 #include "API/Block/Block.h"
 #include "API/Block/BlockPos.h"
 #include "API/Block/BlockSource.h"
+#include "API/Command/CommandContext.h"
 #include "API/Item/ItemActor.h"
 #include "API/Item/ItemStack.h"
 #include "API/Level/Level.h"
 #include "API/Math/Vec3.h"
 #include "API/Mob/Mob.h"
 #include "API/Player/Player.h"
-
+#include "API/Service/Service.h"
 #include "Utils/Convert.h"
+
+
 #include <ll/api/event/ListenerBase.h>
 
 #include <ll/api/event/server/ServerStartedEvent.h>
@@ -54,6 +57,7 @@
 #include <ll/api/event/service/ServiceEvents.h>
 
 #include <ll/api/utils/HashUtils.h>
+#include <string>
 
 using namespace Komomo;
 
@@ -84,7 +88,7 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
         ll::event::ListenerPtr listener  = nullptr;
         if (args.size() >= 3) {
             CheckArgTypeReturn(args[2], ValueKind::kNumber, Boolean::newBoolean(false));
-            priority = ConvertFromScriptX<ll::event::EventPriority>(args[2]);
+            priority = ll::event::EventPriority(args[2].asNumber().toInt32());
         }
         switch (doHash(eventName)) {
         /* Server Events:
@@ -868,55 +872,55 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
             }
             CatchNotReturn;
         }
-            // case doHash("ExecutingCommandEvent"): {
-            //     try {
-            //         listener = EventBus::getInstance().emplaceListener<ll::event::ExecutingCommandEvent>(
-            //             [&args,
-            //              engine{EngineScope::currentEngine()},
-            //              func{Global<Function>(args[1].asFunction())}](ll::event::ExecutingCommandEvent& event) {
-            //                 EngineScope scope(engine);
-            //                 try {
-            //                     auto result = func.get().call(
-            //                         {},
-            //                         ConvertToScriptX(event.command()),
-            //                         ConvertToScriptX(event.origin())
-            //                     );
-            //                     if (result.isBoolean()) {
-            //                         if (result.asBoolean().value() == false) event.cancel();
-            //                     }
-            //                 }
-            //                 CatchNotReturn;
-            //             },
-            //             priority
-            //         );
-            //         listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
-            //         return ListenerClass::newListenPtr(&listener);
-            //     }
-            //     CatchNotReturn;
-            // }
-            // case doHash("ServiceRegisterEvent"): {
-            //     try {
-            //         listener = EventBus::getInstance().emplaceListener<ll::event::ServiceRegisterEvent>(
-            //             [&args,
-            //              engine{EngineScope::currentEngine()},
-            //              func{Global<Function>(args[1].asFunction())}](ll::event::ServiceRegisterEvent& event) {
-            //                 EngineScope scope(engine);
-            //                 try {
-            //                     func.get().call(
-            //                         {},
-            //                         ConvertToScriptX(event.service()->getName()),
-            //                         ConvertToScriptX(event.service())
-            //                     );
-            //                 }
-            //                 CatchNotReturn;
-            //             },
-            //             priority
-            //         );
-            //         listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
-            //         return ListenerClass::newListenPtr(&listener);
-            //     }
-            //     CatchNotReturn;
-            // }
+        case doHash("ExecutingCommandEvent"): {
+            try {
+                listener = EventBus::getInstance().emplaceListener<ll::event::ExecutingCommandEvent>(
+                    [&args,
+                     engine{EngineScope::currentEngine()},
+                     func{Global<Function>(args[1].asFunction())}](ll::event::ExecutingCommandEvent& event) {
+                        EngineScope scope(engine);
+                        try {
+                            auto result = func.get().call(
+                                {},
+                                CommandContextClass::newCommandContext(&event.commandContext()),
+                                MinecraftCommandsClass::newMinecraftCommands(&event.minecraftCommands()),
+                                Boolean::newBoolean(event.suppressOutput())
+                            );
+                            if (result.isBoolean()) {
+                                if (result.asBoolean().value() == false) event.cancel();
+                            }
+                        }
+                        CatchNotReturn;
+                    },
+                    priority
+                );
+                listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
+                return ListenerClass::newListenPtr(&listener);
+            }
+            CatchNotReturn;
+        }
+        case doHash("ServiceRegisterEvent"): {
+            try {
+                listener = EventBus::getInstance().emplaceListener<ll::event::ServiceRegisterEvent>(
+                    [&args,
+                     engine{EngineScope::currentEngine()},
+                     func{Global<Function>(args[1].asFunction())}](ll::event::ServiceRegisterEvent& event) {
+                        EngineScope scope(engine);
+                        try {
+                            func.get().call({}, ServiceClass::newService(event.service().get()));
+                        }
+                        CatchNotReturn;
+                    },
+                    priority
+                );
+                listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
+                return ListenerClass::newListenPtr(&listener);
+            }
+            CatchNotReturn;
+        }
+        default: {
+            return Local<Value>();
+        }
         }
         return Local<Value>();
     }

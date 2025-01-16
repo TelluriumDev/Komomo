@@ -1,15 +1,15 @@
 #include "API/Block/BlockSource.h"
 
 
-ClassDefine<BlockSourceClass> blocksourceClassBuilder = defineClass<BlockSourceClass>("BlockSource")
-                                                            .constructor(nullptr)
+ClassDefine<BlockSourceClass> blockSourceClassBuilder = defineClass<BlockSourceClass>("BlockSource")
+                                                                  .constructor(nullptr)
 
-                                                            .build();
+                                                                  .build();
 
-BlockSourceClass::BlockSourceClass(BlockSource* blocksource) : ScriptClass(ConstructFromCpp<BlockSourceClass>{}) {
-    this->mBlockSource = blocksource;
+BlockSourceClass::BlockSourceClass(BlockSource* blockSource) : ScriptClass(ConstructFromCpp<BlockSourceClass>{}) {
+    this->mBlockSource = blockSource;
 }
 
-Local<Object> BlockSourceClass::newBlockSource(BlockSource* blocksource) {
-    return (new BlockSourceClass(blocksource))->getScriptObject();
+Local<Object> BlockSourceClass::newBlockSource(BlockSource* blockSource) {
+    return (new BlockSourceClass(blockSource))->getScriptObject();
 }
