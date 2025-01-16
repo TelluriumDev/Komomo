@@ -138,7 +138,7 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
                         try {
                             func.get().call({});
                         }
-                        CatchNotReturn
+                        CatchNotReturn;
                     },
                     priority
                 );
@@ -285,10 +285,8 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
                      func{Global<Function>(args[1].asFunction())}](ll::event::PlayerConnectEvent& event) {
                         EngineScope scope(engine);
                         try {
-                            auto result = func.get().call(
-                                {},
-                                ConvertToScriptX(event.networkIdentifier()),
-                                ConvertToScriptX(event.connectionRequest())
+                            auto result = func.get().call({} // ConvertToScriptX(event.networkIdentifier()),
+                                                             // ConvertToScriptX(event.connectionRequest()) //!!!
                             );
                             if (result.isBoolean()) {
                                 if (result.asBoolean().value() == false) event.cancel();
@@ -359,7 +357,7 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
             CatchNotReturn;
             break;
         }
-        case doHash("onPlayerDisconnect"): {
+        case doHash("PlayerDisconnectEvent"): {
             try {
                 listener = EventBus::getInstance().emplaceListener<ll::event::PlayerDisconnectEvent>(
                     [&args,
@@ -367,7 +365,7 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
                      func{Global<Function>(args[1].asFunction())}](ll::event::PlayerDisconnectEvent& event) {
                         EngineScope scope(engine);
                         try {
-                            func.get().call({});
+                            func.get().call({}, PlayerClass::newPlayer(&event.self()));
                         }
                         CatchNotReturn;
                     },
@@ -463,6 +461,7 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
                         try {
                             auto result = func.get().call(
                                 {},
+                                PlayerClass::newPlayer(&event.self()),
                                 ItemActorClass::newItemActor(&event.itemActor()),
                                 Number::newNumber(event.orgCount()),
                                 Number::newNumber(event.favoredSlot())
@@ -494,7 +493,7 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
                                 {},
                                 PlayerClass::newPlayer(&event.self()),
                                 BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.pos())),
-                                Number::newNumber(event.face())
+                                ConvertToScriptX(event.face())
                             );
                             if (result.isBoolean()) {
                                 if (result.asBoolean().value() == false) event.cancel();
@@ -869,55 +868,55 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
             }
             CatchNotReturn;
         }
-        // case doHash("ExecutingCommandEvent"): {
-        //     try {
-        //         listener = EventBus::getInstance().emplaceListener<ll::event::ExecutingCommandEvent>(
-        //             [&args,
-        //              engine{EngineScope::currentEngine()},
-        //              func{Global<Function>(args[1].asFunction())}](ll::event::ExecutingCommandEvent& event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     auto result = func.get().call(
-        //                         {},
-        //                         ConvertToScriptX(event.command()),
-        //                         ConvertToScriptX(event.origin())
-        //                     );
-        //                     if (result.isBoolean()) {
-        //                         if (result.asBoolean().value() == false) event.cancel();
-        //                     }
-        //                 }
-        //                 CatchNotReturn;
-        //             },
-        //             priority
-        //         );
-        //         listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
-        //         return ListenerClass::newListenPtr(&listener);
-        //     }
-        //     CatchNotReturn;
-        // }
-        // case doHash("ServiceRegisterEvent"): {
-        //     try {
-        //         listener = EventBus::getInstance().emplaceListener<ll::event::ServiceRegisterEvent>(
-        //             [&args,
-        //              engine{EngineScope::currentEngine()},
-        //              func{Global<Function>(args[1].asFunction())}](ll::event::ServiceRegisterEvent& event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     func.get().call(
-        //                         {},
-        //                         ConvertToScriptX(event.service()->getName()),
-        //                         ConvertToScriptX(event.service())
-        //                     );
-        //                 }
-        //                 CatchNotReturn;
-        //             },
-        //             priority
-        //         );
-        //         listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
-        //         return ListenerClass::newListenPtr(&listener);
-        //     }
-        //     CatchNotReturn;
-        // }
+            // case doHash("ExecutingCommandEvent"): {
+            //     try {
+            //         listener = EventBus::getInstance().emplaceListener<ll::event::ExecutingCommandEvent>(
+            //             [&args,
+            //              engine{EngineScope::currentEngine()},
+            //              func{Global<Function>(args[1].asFunction())}](ll::event::ExecutingCommandEvent& event) {
+            //                 EngineScope scope(engine);
+            //                 try {
+            //                     auto result = func.get().call(
+            //                         {},
+            //                         ConvertToScriptX(event.command()),
+            //                         ConvertToScriptX(event.origin())
+            //                     );
+            //                     if (result.isBoolean()) {
+            //                         if (result.asBoolean().value() == false) event.cancel();
+            //                     }
+            //                 }
+            //                 CatchNotReturn;
+            //             },
+            //             priority
+            //         );
+            //         listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
+            //         return ListenerClass::newListenPtr(&listener);
+            //     }
+            //     CatchNotReturn;
+            // }
+            // case doHash("ServiceRegisterEvent"): {
+            //     try {
+            //         listener = EventBus::getInstance().emplaceListener<ll::event::ServiceRegisterEvent>(
+            //             [&args,
+            //              engine{EngineScope::currentEngine()},
+            //              func{Global<Function>(args[1].asFunction())}](ll::event::ServiceRegisterEvent& event) {
+            //                 EngineScope scope(engine);
+            //                 try {
+            //                     func.get().call(
+            //                         {},
+            //                         ConvertToScriptX(event.service()->getName()),
+            //                         ConvertToScriptX(event.service())
+            //                     );
+            //                 }
+            //                 CatchNotReturn;
+            //             },
+            //             priority
+            //         );
+            //         listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
+            //         return ListenerClass::newListenPtr(&listener);
+            //     }
+            //     CatchNotReturn;
+            // }
         }
         return Local<Value>();
     }
@@ -933,6 +932,9 @@ Local<Value> EventBusClass::removeListener(const Arguments& args) {
             if (listenerClass) {
                 return Boolean::newBoolean(EventBus::getInstance().removeListener(*listenerClass->listener));
             }
+            return Boolean::newBoolean(false);
+        } else {
+            return Boolean::newBoolean(false);
         }
     }
 

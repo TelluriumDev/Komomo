@@ -2,8 +2,10 @@
 /// <reference path="../Form/SimpleForm.d.ts" />
 /// <reference path="../Form/ModalForm.d.ts" />
 
-declare class Form {
-    static newCustomForm(title: string): CustomForm;
-    static newSimpleForm(): SimpleForm;
-    static newModalForm(): ModalForm;
+
+
+declare namespace Form {
+    function newCustomForm(title: string): CustomForm;
+    function newSimpleForm(title: string, content: string): SimpleForm;
+    function newModalForm(title: string, content: string, upperButton: string, lowerButton: string): ModalForm;
 }

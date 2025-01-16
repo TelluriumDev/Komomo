@@ -1,5 +1,5 @@
 /// <reference path="../Player/Player.d.ts" />
-/// <reference path="../Enum/FormEnum.d.ts" />
+/// <reference path="./FormEnum.d.ts" />
 
 declare class CustomForm {
 
@@ -17,7 +17,7 @@ declare class CustomForm {
 
     appendStepSlider(name: string, text: string, steps: Array<string>, defaultVal?: string): this;
 
-    sendTo(player: Player, callback?: (olayer: Player, result: Record<string, any> | ModalFormCancelReason) => void): void;
+    sendTo(player: Player, callback?: (olayer: Player, result: Record<string, any> | FormEnum.ModalFormCancelReason) => void): void;
 
 }
 

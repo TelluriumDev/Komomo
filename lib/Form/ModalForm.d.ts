@@ -10,5 +10,5 @@ declare class ModalForm {
 
     setLowerButton(text: string): this;
 
-    sendTo(player: Player, reasen?: (payer: Player,reason:Record<string,any>) => {}): this;
+    sendTo(player: Player, reasen?: (payer: Player, reason: Record<string, any> | FormEnum.ModalFormCancelReason) => {}): this;
 }

@@ -1,4 +1,5 @@
 /// <reference path="../Player/Gamemode.d.ts" />
+/// <reference path="../Player/PlayerEnum.d.ts" />
 
 /// <reference path="../Math/Vec3.d.ts" />
 

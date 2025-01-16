@@ -1,10 +1,3 @@
+/// <reference path="./Form/Form.d.ts" />
+/// <reference path="./Player/Player.d.ts" />
 
-
-declare class Listener { }
-
-declare namespace Komomo {
-    class EventBusClass {
-        emplaceListener(event: string, callback: Function, priority?: number): void;
-        removeListener(listener: Listener): void;
-    }
-}

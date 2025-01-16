@@ -1,4 +1,4 @@
-/// <reference path="../Enum/FormEnum.d.ts" />
+/// <reference path="./FormEnum.d.ts" />
 
 declare class SimpleForm {
 
@@ -8,6 +8,6 @@ declare class SimpleForm {
 
     appendButton(button: string): this;
 
-    sendTo(player: Player, callback?: (player: Player, id?: number, reason?: ModalFormCancelReason) => void): this;
+    sendTo(player: Player, callback?: (player: Player, id?: number, reason?: FormEnum.ModalFormCancelReason) => void): this;
 
 }
