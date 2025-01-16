@@ -246,7 +246,7 @@ bool NodeManager::NpmInstall(string npmExecuteDir) {
             }
 
             const execute_dir = path.join(")"+npmExecuteDir+R"(");
-            const npm_cli = path.join(cwd, "mods/Komomo/node_modules/npm/bin/npm-cli.js");
+            const npm_cli = path.join(cwd, "plugins/Komomo/node_modules/bin/npm-cli.js");
             require("child_process").execFileSync(node, [npm_cli, "install"], { cwd: execute_dir });
 
             console.log("npm install success");
