@@ -1,7 +1,6 @@
 #pragma once
 
 #include "API/APIHelper.h" // IWYU pragma: keep
-#include "mc/world/item/Item.h"
 
 #include <mc/deps/core/math/Vec3.h>
 
