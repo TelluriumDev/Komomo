@@ -11,13 +11,13 @@ public:
     DimensionType* mDimensionType;
 
 public:
-    DimensionTypeClass(DimensionType* dimensiontype);
+    DimensionTypeClass(DimensionType* dimensionType);
 
 public:
-    static Local<Object> newDimensionType(DimensionType* dimensiontype);
+    static Local<Object> newDimensionType(DimensionType* dimensionType);
 
 public: /* Member */
 public: /* Method */
 };
 
-extern ClassDefine<DimensionTypeClass> dimensiontypeClassBuilder;
+extern ClassDefine<DimensionTypeClass> dimensionTypeClassBuilder;

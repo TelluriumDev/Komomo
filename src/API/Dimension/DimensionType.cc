@@ -1,16 +1,16 @@
 #include "API/Dimension/DimensionType.h"
 
 
-ClassDefine<DimensionTypeClass> dimensiontypeClassBuilder = defineClass<DimensionTypeClass>("DimensionType")
+ClassDefine<DimensionTypeClass> dimensionTypeClassBuilder = defineClass<DimensionTypeClass>("DimensionType")
                                                                 .constructor(nullptr)
 
                                                                 .build();
 
-DimensionTypeClass::DimensionTypeClass(DimensionType* dimensiontype)
+DimensionTypeClass::DimensionTypeClass(DimensionType* dimensionType)
 : ScriptClass(ConstructFromCpp<DimensionTypeClass>{}) {
-    this->mDimensionType = dimensiontype;
+    this->mDimensionType = dimensionType;
 }
 
-Local<Object> DimensionTypeClass::newDimensionType(DimensionType* dimensiontype) {
-    return (new DimensionTypeClass(dimensiontype))->getScriptObject();
+Local<Object> DimensionTypeClass::newDimensionType(DimensionType* dimensionType) {
+    return (new DimensionTypeClass(dimensionType))->getScriptObject();
 }
