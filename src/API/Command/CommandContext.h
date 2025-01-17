@@ -6,7 +6,7 @@
 class CommandContext;
 
 class CommandContextClass : public ScriptClass {
-public:
+private:
     CommandContext* mCommandContext;
 
 public:
