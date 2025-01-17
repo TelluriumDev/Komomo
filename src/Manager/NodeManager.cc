@@ -1,41 +1,39 @@
-#include "v8-exception.h"
-#pragma warning(disable : 4996)
+#include "Manager/NodeManager.h"
 #include "API/APIHelper.h"
 #include "Entry.h"
 #include "Manager/BindAPI.h"
 #include "Manager/EngineData.h"
-#include "Manager/NodeManager.h"
 #include "Utils/Using.h"
 #include "Utils/Util.h"
-#include <filesystem>
+
 #include <fmt/core.h>
-#include <memory>
 #include <nlohmann/json.hpp>
 #include <node.h>
-#include <thread>
 #include <uv.h>
+#include <v8-exception.h>
 
-
-#ifdef _WIN32
 #include <Windows.h>
+#include <filesystem>
+#include <memory>
 #include <shellapi.h>
-#else
-#include <cstdio>
-#endif
+#include <thread>
 
 #include "ll/api/chrono/GameChrono.h"
 #include "ll/api/coro/CoroTask.h"
 #include "ll/api/service/GamingStatus.h"
 #include "ll/api/thread/ServerThreadExecutor.h"
-namespace Komomo {
 
-#ifdef _WIN32
+#pragma warning(disable : 4996)
 #pragma comment(lib, "Shell32.lib")
+
+namespace Komomo {
 std::string wstr2str(const std::wstring& ws) {
-    auto        len = WideCharToMultiByte(CP_ACP, 0, ws.c_str(), ws.size(), nullptr, 0, nullptr, nullptr);
-    std::string res(len + 1, 0);
-    WideCharToMultiByte(CP_ACP, 0, ws.c_str(), ws.size(), res.data(), len, nullptr, nullptr);
-    return res;
+    int len = WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    if (len <= 0) return "";
+    std::vector<char> buffer(len);
+    int               ret = WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), -1, buffer.data(), len, nullptr, nullptr);
+    if (ret != len) return "";
+    return std::string(buffer.begin(), buffer.end() - 1);
 }
 std::vector<std::string> GetArgs() {
     int                      argc = 0;
@@ -47,25 +45,6 @@ std::vector<std::string> GetArgs() {
     LocalFree(argv);
     return res;
 }
-#else
-std::vector<std::string> GetArgs() {
-    FILE*                    cmdline = fopen("/proc/self/cmdline", "rb");
-    std::vector<std::string> res;
-    std::string              t;
-    int                      c = fgetc(cmdline);
-    while (c != EOF) {
-        if (c == 0) {
-            if (!t.empty()) res.push_back(t);
-            t.clear();
-        } else {
-            t += c;
-        }
-        c = fgetc(cmdline);
-    }
-    fclose(cmdline);
-    return res;
-}
-#endif
 
 NodeManager& NodeManager::getInstance() {
     static NodeManager instance;
@@ -81,7 +60,6 @@ void NodeManager::initNodeJs() {
 
     char* cWorkingDir = args[0].data();
     uv_setup_args(1, &cWorkingDir);
-    // cppgc::InitializeProcess();
     auto result = node::InitializeOncePerProcess(
         args,
         {node::ProcessInitializationFlags::kNoInitializeV8,
@@ -150,8 +128,8 @@ EngineWrapper* NodeManager::newScriptEngine() {
     ScriptEngine* engine = new ScriptEngineImpl({}, isolate, envSetup->context(), false);
     EngineScope   scope(engine);
 
-    engine->setData(std::make_shared<EngineData>(id)); // 设置引擎数据
-    BindAPI(engine);                                   // 绑定API
+    engine->setData(std::make_shared<EngineData>(id));
+    BindAPI(engine);
 
     EngineWrapperPtr ptr = std::make_unique<EngineWrapper>(id, engine, std::move(envSetup));
     mEngines.emplace(id, std::move(ptr));
@@ -187,13 +165,15 @@ bool NodeManager::destroyEngine(EngineID id) {
         wrapper->mIsRunning    = false;
         wrapper->mIsDestroying = true;
 
-        // uv_stop(wrapper.mEnvSetup->event_loop()); (事件循环会自动停止)
+        // Event Loop will stop automatically.
+        // uv_stop(wrapper.mEnvSetup->event_loop());
 
         node::Stop(wrapper->mEnvSetup->env(), node::StopFlags::kDoNotTerminateIsolate);
 
-        // wrapper.mEngine->destroy(); // 销毁引擎 (EnvironmentCleanupHook 会自动销毁)
+        // EnvironmentCleanupHook will destroy engine automatically.
+        // wrapper.mEngine->destroy();
 
-        mEngines.erase(id); // 删除引擎
+        mEngines.erase(id);
 
         return true;
     } catch (...) {
@@ -238,12 +218,7 @@ bool NodeManager::NpmInstall(string npmExecuteDir) {
             const path = require("path");
             const cwd = path.join(process.cwd());
 
-            let node;
-            if (process.platform === "win32") {
-                node = path.join(cwd, "node.exe");
-            } else {
-                node = path.join(cwd, "node");
-            }
+            let node = path.join(cwd, "node.exe");
 
             const execute_dir = path.join(")"+npmExecuteDir+R"(");
             const npm_cli = path.join(cwd, "plugins/Komomo/node_modules/bin/npm-cli.js");
@@ -283,13 +258,8 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
         return false;
     }
 
-#if defined(WIN32) || defined(_WIN32)
     string dirname  = ReplaceStr(path.parent_path().string(), "\\", "\\\\");
     string filename = ReplaceStr(path.string(), "\\", "\\\\");
-#elif defined(__linux__)
-    string dirname  = path.parent_path().string();
-    string filename = path.string();
-#endif
     Entry::getInstance().getSelf().getLogger().debug("dirname: {}", dirname);
     Entry::getInstance().getSelf().getLogger().debug("filename: {}", filename);
 
@@ -372,7 +342,7 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
             }
         }
 
-        wrapper->mIsRunning = true; // Js 代码已加载，引擎可以运行
+        wrapper->mIsRunning = true;
 
         ll::coro::keepThis([wrapper]() -> ll::coro::CoroTask<> {
             while (true) {
@@ -380,7 +350,7 @@ bool NodeManager::loadFile(EngineWrapper* wrapper, fs::path const& path, bool es
 
                 auto status = ll::getGamingStatus();
                 if (status == ll::GamingStatus::Stopping || !wrapper->mIsRunning || wrapper->mIsDestroying) {
-                    co_return; // 服务器关闭 或 引擎关闭 或 引擎正在销毁
+                    co_return;
                 }
 
                 if (status != ll::GamingStatus::Running) {
