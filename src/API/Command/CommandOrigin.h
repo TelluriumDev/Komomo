@@ -5,9 +5,6 @@
 
 #include <mc/server/commands/CommandOrigin.h>
 
-
-class CommandOrigin;
-
 class CommandOriginClass : public ScriptClass {
 private:
     CommandOrigin* mCommandOrigin;
@@ -87,7 +84,7 @@ public:
 
     // Local<Value> _setUUID(const Arguments& args); // TODO
 
-    Local<Value> sUnknownSource(); 
+    Local<Value> sUnknownSource();
 };
 
 extern ClassDefine<CommandOriginClass> commandOriginClassBuilder;

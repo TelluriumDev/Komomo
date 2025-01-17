@@ -49,7 +49,7 @@ struct CommandData {
     std::string            name;
     std::string            description;
     CommandPermissionLevel permissionLevel = CommandPermissionLevel::Admin;
-    CommandFlag            flags           = CommandFlagValue::None;
+    CommandFlag            flag           = CommandFlagValue::None;
     ScriptEngine*          engine          = nullptr;
     std::vector<Parameter> parameters      = {};
     Global<Function>       callback;

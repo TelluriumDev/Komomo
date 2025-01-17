@@ -29,7 +29,7 @@ CommandClass::CommandClass(std::shared_ptr<CommandData> data) : ScriptClass(Cons
 
 ll::command::CommandHandle& CommandClass::getCommandHandle() {
     return ll::command::CommandRegistrar::getInstance()
-        .getOrCreateCommand(data->name, data->description, data->permissionLevel, data->flags);
+        .getOrCreateCommand(data->name, data->description, data->permissionLevel, data->flag);
 }
 Local<Object> CommandClass::newCommandClass(std::shared_ptr<CommandData> data) {
     commands[data->name] = data;
@@ -53,7 +53,7 @@ Local<Object> CommandClass::newCommand(const Arguments& args) {
             data->name            = args[0].asString().toString();
             data->description     = args[1].asString().toString();
             data->permissionLevel = CommandPermissionLevel(args[2].asNumber().toInt32());
-            data->flags           = CommandFlagValue(args[3].asNumber().toInt32());
+            data->flag            = CommandFlagValue(args[3].asNumber().toInt32());
             return newCommandClass(data);
         }
     }
@@ -195,7 +195,7 @@ Local<Value> CommandClass::overload(const Arguments& args) {
     } catch (std::runtime_error& e) {
         throw e;
     }
-    return this->getScriptObject();
+    return Local<Value>();
 };
 
 Local<Value> CommandClass::text(const Arguments& args) {
