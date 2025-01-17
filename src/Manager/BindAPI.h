@@ -73,6 +73,7 @@ inline void BindAPI(ScriptEngine* engine) {
     engine->registerNativeClass<CommandOriginClass>(commandOriginClassBuilder);
     engine->registerNativeClass<CommandOutputClass>(commandOutputClassBuilder);
     engine->registerNativeClass<CommandContextClass>(commandContextClassBuilder);
+    // engine->registerNativeClass<RuntimeOverloadClass>(runtimeOverloadClassBuilder);
     engine->registerNativeClass<MinecraftCommandsClass>(minecraftCommandsClassBuilder);
 
     engine->registerNativeClass<LevelClass>(levelClassBuilder);
