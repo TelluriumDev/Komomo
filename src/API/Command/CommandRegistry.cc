@@ -1,6 +1,5 @@
 #include "API/Command/CommandRegistry.h"
 
-
 ClassDefine<CommandRegistryClass> commandRegistryClassBuilder =
     defineClass<CommandRegistryClass>("CommandRegistry")
         .constructor(nullptr)
