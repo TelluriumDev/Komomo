@@ -1,10 +1,7 @@
 #include "API/Command/Command.h"
-#include "Command.h"
-#include "Entry.h"
-#include "Loader/ModManager.h"
-#include "Manager/EngineData.h"
-#include "ll/api/command/CommandRegistrar.h"
+#include "API/APIHelper.h"
 
+#include <functional>
 #include <memory>
 
 using namespace Komomo;
@@ -13,6 +10,9 @@ ClassDefine<CommandClass> commandClassBuilder = defineClass<CommandClass>("Comma
                                                     .constructor(nullptr)
 
                                                     .function("newCommand", &CommandClass::newCommand)
+                                                    .instanceFunction("optional", &CommandClass::optional)
+                                                    .instanceFunction("required", &CommandClass::required)
+                                                    .instanceFunction("execute", &CommandClass::execute)
 
                                                     .build();
 
@@ -69,77 +69,140 @@ Local<Value> CommandClass::setAlias(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-
-Local<Value> CommandClass::addParameter(const Arguments& args) {
-    CheckArgsCount(args, 2);
+// Command.optional(name,type,option,enumName)
+Local<Value> CommandClass::optional(const Arguments& args) {
+    CheckArgsCount(args, 3);
     CheckArgType(args[0], ValueKind::kString);
-
-    Parameter p = {};
+    CheckArgType(args[1], ValueKind::kNumber);
+    CheckArgType(args[2], ValueKind::kNumber);
     try {
-        if (args.size() == 2 && args[1].isNumber()) {
-            p.name = args[0].asString().toString();
-            p.type = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
-            data->parameters.push_back(p);
-        } else if (args.size() == 3 && args[1].isNumber() && args[2].isBoolean()) {
-            p.name     = args[0].asString().toString();
-            p.type     = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
-            p.optional = args[2].asBoolean().value();
-            data->parameters.push_back(p);
-        } else if (args.size() == 4 && args[1].isNumber() && args[2].isBoolean() && args[3].isString()) {
-            p.name     = args[0].asString().toString();
-            p.type     = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
-            p.optional = args[2].asBoolean().value();
-            p.enumName = args[3].asString().toString();
-            data->parameters.push_back(p);
-        } else if (args.size() == 5 && args[1].isNumber() && args[2].isBoolean() && args[3].isString()
-                   && args[4].isNumber()) {
-            p.name     = args[0].asString().toString();
-            p.type     = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
-            p.optional = args[2].asBoolean().value();
-            p.enumName = args[3].asString().toString();
-            p.option   = CommandParameterOption(args[4].asNumber().toInt32());
-            data->parameters.push_back(p);
-        } else if (args.size() == 6 && args[1].isNumber() && args[2].isBoolean() && args[3].isString()
-                   && args[4].isNumber() && args[5].isString()) {
-            p.name       = args[0].asString().toString();
-            p.type       = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
-            p.optional   = args[2].asBoolean().value();
-            p.enumName   = args[3].asString().toString();
-            p.option     = CommandParameterOption(args[4].asNumber().toInt32());
-            p.identifier = args[5].asString().toString();
-            data->parameters.push_back(p);
-            return Boolean::newBoolean(true);
+        auto cmd = getCommandHandle().runtimeOverload(ENGINE_DATA()->mMod);
+        if (args.size() == 3) {
+            auto& option = cmd.optional(args[0].asString().toString(), ll::command::ParamKind::Kind::String)
+                               .option(CommandParameterOption(args[2].asNumber().toInt32()));
+        } else if (args.size() == 4 && args[0].isString() && args[1].isNumber() && args[2].isNumber()
+                   && args[3].isString()) {
+            auto& option = cmd.optional(
+                                  args[0].asString().toString(),
+                                  ll::command::ParamKind::Kind::String,
+                                  args[3].asString().toString()
+            )
+                               .option(CommandParameterOption(args[2].asNumber().toInt32()));
         }
+        // if (args.size() == 2 && args[1].isNumber()) {
+        //     p.name = args[0].asString().toString();
+        //     p.type = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
+        //     data->parameters.push_back(p);
+        // } else if (args.size() == 3 && args[1].isNumber() && args[2].isBoolean()) {
+        //     p.name     = args[0].asString().toString();
+        //     p.type     = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
+        //     p.optional = args[2].asBoolean().value();
+        //     data->parameters.push_back(p);
+        // } else if (args.size() == 4 && args[1].isNumber() && args[2].isBoolean() && args[3].isString()) {
+        //     p.name     = args[0].asString().toString();
+        //     p.type     = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
+        //     p.optional = args[2].asBoolean().value();
+        //     p.enumName = args[3].asString().toString();
+        //     data->parameters.push_back(p);
+        // } else if (args.size() == 5 && args[1].isNumber() && args[2].isBoolean() && args[3].isString()
+        //            && args[4].isNumber()) {
+        //     p.name     = args[0].asString().toString();
+        //     p.type     = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
+        //     p.optional = args[2].asBoolean().value();
+        //     p.enumName = args[3].asString().toString();
+        //     p.option   = CommandParameterOption(args[4].asNumber().toInt32());
+        //     data->parameters.push_back(p);
+        // } else if (args.size() == 6 && args[1].isNumber() && args[2].isBoolean() && args[3].isString()
+        //            && args[4].isNumber() && args[5].isString()) {
+        //     p.name       = args[0].asString().toString();
+        //     p.type       = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
+        //     p.optional   = args[2].asBoolean().value();
+        //     p.enumName   = args[3].asString().toString();
+        //     p.option     = CommandParameterOption(args[4].asNumber().toInt32());
+        //     p.identifier = args[5].asString().toString();
+        //     data->parameters.push_back(p);
+        //     return Boolean::newBoolean(true);
+        // }
     }
     CatchReturn(Boolean::newBoolean(false));
+
     return Boolean::newBoolean(true);
 }
 
 
-Local<Value> CommandClass::setCallBack(const Arguments& args) {
+Local<Value> CommandClass::required(const Arguments& args) {
+    CheckArgsCount(args, 3);
+    CheckArgType(args[0], ValueKind::kString);
+    CheckArgType(args[1], ValueKind::kNumber);
+    CheckArgType(args[2], ValueKind::kNumber);
+
+    try {
+        auto cmd = getCommandHandle().runtimeOverload(ENGINE_DATA().get()->mMod);
+        if (args.size() == 3) {
+            auto& option =
+                cmd.required(args[0].asString().toString(), ll::command::ParamKind::Kind(args[1].asNumber().toInt32()))
+                    .option(CommandParameterOption(args[2].asNumber().toInt32()));
+        } else if (args.size() == 4 && args[0].isString() && args[1].isNumber() && args[2].isNumber()
+                   && args[3].isString()) {
+            auto& option = cmd.required(
+                                  args[0].asString().toString(),
+                                  ll::command::ParamKind::Kind(args[1].asNumber().toInt32()),
+                                  args[3].asString().toString()
+            )
+                               .option(CommandParameterOption(args[2].asNumber().toInt32()));
+        }
+        // if (args.size() == 2 && args[1].isNumber()) {
+        //     p.name = args[0].asString().toString();
+        //     p.type = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
+        //     data->parameters.push_back(p);
+        // } else if (args.size() == 3 && args[1].isNumber() && args[2].isBoolean()) {
+        //     p.name     = args[0].asString().toString();
+        //     p.type     = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
+        //     p.optional = args[2].asBoolean().value();
+        //     data->parameters.push_back(p);
+        // } else if (args.size() == 4 && args[1].isNumber() && args[2].isBoolean() && args[3].isString()) {
+        //     p.name     = args[0].asString().toString();
+        //     p.type     = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
+        //     p.optional = args[2].asBoolean().value();
+        //     p.enumName = args[3].asString().toString();
+        //     data->parameters.push_back(p);
+        // } else if (args.size() == 5 && args[1].isNumber() && args[2].isBoolean() && args[3].isString()
+        //            && args[4].isNumber()) {
+        //     p.name     = args[0].asString().toString();
+        //     p.type     = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
+        //     p.optional = args[2].asBoolean().value();
+        //     p.enumName = args[3].asString().toString();
+        //     p.option   = CommandParameterOption(args[4].asNumber().toInt32());
+        //     data->parameters.push_back(p);
+        // } else if (args.size() == 6 && args[1].isNumber() && args[2].isBoolean() && args[3].isString()
+        //            && args[4].isNumber() && args[5].isString()) {
+        //     p.name       = args[0].asString().toString();
+        //     p.type       = ll::command::ParamKind::Kind(args[1].asNumber().toInt32());
+        //     p.optional   = args[2].asBoolean().value();
+        //     p.enumName   = args[3].asString().toString();
+        //     p.option     = CommandParameterOption(args[4].asNumber().toInt32());
+        //     p.identifier = args[5].asString().toString();
+        //     data->parameters.push_back(p);
+        //     return Boolean::newBoolean(true);
+        // }
+    }
+    CatchReturn(Boolean::newBoolean(false));
+
+    return Boolean::newBoolean(true);
+}
+
+
+Local<Value> CommandClass::execute(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kFunction);
 
     try {
-        this->data->callBack = Global<Function>(args[0].asFunction());
+        auto cmd = getCommandHandle().runtimeOverload(ENGINE_DATA()->mMod);
+        this->onExecute =
+            [engine{EngineScope::currentEngine()},
+             func{Global<Function>(args[0].asFunction())
+             }](CommandOrigin const& origin, CommandOutput& output, ll::command::RuntimeCommand const& runtime) {};
     }
     CatchNotReturn;
     return Local<Value>();
-}
-
-void CommandClass::onExecute(
-    CommandOrigin const&               origin,
-    CommandOutput&                     output,
-    ll::command::RuntimeCommand const& runtime
-) {
-    const auto name = runtime.getCommandName();
-    if (commands.empty()) {
-        return;
-    }
-
-    auto command = ll::command::CommandRegistrar::getInstance().getOrCreateCommand(name).runtimeOverload(
-        GET_ENGINE_DATA(commands[name]->engine)->mMod
-    );
-
-    
 }

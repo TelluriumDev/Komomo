@@ -8,7 +8,10 @@
 #include "API/Block/Block.h"
 #include "API/Block/BlockPos.h"
 #include "API/Block/BlockSource.h"
+#include "API/Command/Command.h"
 #include "API/Command/CommandContext.h"
+#include "API/Command/CommandOrigin.h"
+#include "API/Command/CommandOutput.h"
 #include "API/Command/MinecraftCommands.h"
 #include "API/Container/Container.h"
 #include "API/Enum/EnumBuilder.h"
@@ -28,8 +31,6 @@
 #include "API/Player/Gamemode.h"
 #include "API/Player/LayeredAbilities.h"
 #include "API/Player/Player.h"
-// #include "API/Nbt/NbtCompound.h"
-// #include "API/ScoreBoard/
 #include "API/Service/Service.h"
 #include "Utils/Using.h"
 
@@ -68,6 +69,9 @@ inline void BindAPI(ScriptEngine* engine) {
     engine->registerNativeClass<BlockPosClass>(blockPosClassBuilder);
     engine->registerNativeClass<BlockSourceClass>(blockSourceClassBuilder);
 
+    engine->registerNativeClass<CommandClass>(commandClassBuilder);
+    engine->registerNativeClass<CommandOriginClass>(commandOriginClassBuilder);
+    engine->registerNativeClass<CommandOutputClass>(commandOutputClassBuilder);
     engine->registerNativeClass<CommandContextClass>(commandContextClassBuilder);
     engine->registerNativeClass<MinecraftCommandsClass>(minecraftCommandsClassBuilder);
 

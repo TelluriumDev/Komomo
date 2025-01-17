@@ -1,22 +1,16 @@
-#pragma once
-
-#include "API/APIHelper.h" // IWYU pragma: keep
+#include "API/Command/CommandOrigin.h"
 
 
-class CommandOrigin;
+ClassDefine<CommandOriginClass> commandOriginClassBuilder = defineClass<CommandOriginClass>("CommandOrigin")
+                                                                .constructor(nullptr)
 
-class CommandOriginClass : public ScriptClass {
-public:
-    CommandOrigin* mCommandOrigin;
+                                                                .build();
 
-public:
-    CommandOriginClass(CommandOrigin* commandOrigin);
+CommandOriginClass::CommandOriginClass(CommandOrigin* commandOrigin)
+: ScriptClass(ConstructFromCpp<CommandOriginClass>{}) {
+    this->mCommandOrigin = commandOrigin;
+}
 
-public:
-    static Local<Object> newCommandOrigin(CommandOrigin* commandOrigin);
-
-public: /* Member */
-public: /* Method */
-};
-
-extern ClassDefine<CommandOriginClass> commandOriginClassBuilder;
+Local<Object> CommandOriginClass::newCommandOrigin(CommandOrigin* commandOrigin) {
+    return (new CommandOriginClass(commandOrigin))->getScriptObject();
+}

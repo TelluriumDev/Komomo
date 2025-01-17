@@ -2,8 +2,10 @@
 
 #include "API/APIHelper.h"             // IWYU pragma: keep
 #include "API/Command/CommandOrigin.h" // IWYU pragma: keep
+#include "API/Command/CommandOutput.h"
 
 
+#include <functional>
 #include <ll/api/command/Command.h>
 #include <ll/api/command/CommandHandle.h>
 #include <ll/api/command/CommandRegistrar.h>
@@ -41,7 +43,9 @@ struct CommandData {
     CommandFlag            flags           = CommandFlagValue::None;
     ScriptEngine*          engine          = nullptr;
     std::vector<Parameter> parameters      = {};
-    Global<Function>       callBack;
+    Global<Function>       callback;
+    CommandOutput*         output = nullptr;
+    CommandOrigin*         origin = nullptr;
 };
 
 
@@ -57,21 +61,23 @@ private:
 
     ll::command::CommandHandle& getCommandHandle();
 
-public:
-    static Local<Object> newCommandClass(std::shared_ptr<CommandData> data);
+std::function<void(CommandOrigin const& origin, CommandOutput& output, ll::command::RuntimeCommand const& runtime)> onExecute;
+
+    public : static Local<Object> newCommandClass(std::shared_ptr<CommandData> data);
 
     static Local<Object> newCommand(const Arguments& args);
 
     Local<Value> setAlias(const Arguments& args);
 
-    Local<Value> addParameter(const Arguments& args);
+    Local<Value> optional(const Arguments& args);
 
-    Local<Value> addOverLoad(const Arguments& args);
+    Local<Value> required(const Arguments& args);
 
-    Local<Value> setCallBack(const Arguments& args);
+    Local<Value> overload(const Arguments& args);
 
-    static void
-    onExecute(CommandOrigin const& origin, CommandOutput& output, ll::command::RuntimeCommand const& runtime);
+    Local<Value> execute(const Arguments& args);
+
+    
 };
 
 extern ClassDefine<CommandClass> commandClassBuilder;
