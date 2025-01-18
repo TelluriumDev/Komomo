@@ -28,6 +28,7 @@
 #include "API/Logger/Logger.h"
 #include "API/Math/Vec3.h"
 #include "API/Mob/Mob.h"
+#include "API/Mod/Mod.h"
 #include "API/Player/Gamemode.h"
 #include "API/Player/LayeredAbilities.h"
 #include "API/Player/Player.h"
@@ -35,11 +36,14 @@
 #include "Utils/Using.h"
 
 
+
 namespace Komomo {
 
 inline void BindAPI(ScriptEngine* engine) {
 
     EnumAPI::RegisterEnum(engine);
+
+    engine->registerNativeClass<ModClass>(modClassBuilder);
 
     engine->registerNativeClass<PlayerClass>(playerClassBuilder);
     engine->registerNativeClass<GameModeClass>(gameModeClassBuilder);
