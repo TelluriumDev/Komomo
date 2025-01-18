@@ -7,13 +7,13 @@
 
 class CommandOriginClass : public ScriptClass {
 private:
-    CommandOrigin* mCommandOrigin;
+    CommandOrigin const* mCommandOrigin;
 
 public:
-    CommandOriginClass(CommandOrigin* commandOrigin);
+    CommandOriginClass(CommandOrigin const* commandOrigin);
 
 public:
-    static Local<Object> newCommandOrigin(CommandOrigin* commandOrigin);
+    static Local<Object> newCommandOrigin(CommandOrigin const* commandOrigin);
 
 public:
     Local<Value> getRequestId();
@@ -74,7 +74,7 @@ public:
 
     Local<Value> handleCommandOutputCallback(const Arguments& args);
 
-    Local<Value> updateValues();
+    // Local<Value> updateValues();
 
     // Local<Value> getExecutePosition(const Arguments& args);
 

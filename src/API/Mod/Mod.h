@@ -34,6 +34,10 @@ public: /* Method */
 
     // LLNDAPI ll::io::Logger& getLogger() const;
     static Local<Value> getLogger();
+
+    static Local<Value> getRootDir();
+
+    static Local<Value> getModRootDir();
 };
 
 extern ClassDefine<ModClass> modClassBuilder;

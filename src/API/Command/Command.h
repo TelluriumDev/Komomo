@@ -47,9 +47,9 @@ struct Parameter {
 
 struct CommandData {
     std::string            name;
-    std::string            description;
+    std::string            description     = "";
     CommandPermissionLevel permissionLevel = CommandPermissionLevel::Admin;
-    CommandFlag            flag           = CommandFlagValue::None;
+    CommandFlag            flag            = CommandFlagValue::None;
     ScriptEngine*          engine          = nullptr;
     std::vector<Parameter> parameters      = {};
     Global<Function>       callback;
@@ -95,11 +95,10 @@ public:
 
     Local<Value> removeSoftEnum(const Arguments& args);
 
-        static void onExecute(
-            CommandOrigin const&               origin,
-            CommandOutput&                     output,
-            ll::command::RuntimeCommand const& runtime
-        );
+    static Local<Value> run(const Arguments& args);
+
+    static void
+    onExecute(CommandOrigin const& origin, CommandOutput& output, ll::command::RuntimeCommand const& runtime);
 
     static Local<Value>
     convertResult(ll::command::ParamStorageType const& result, CommandOrigin const& origin, CommandOutput& output) {

@@ -28,6 +28,7 @@ Local<Object> CommandOutputClass::newCommandOutput(CommandOutput* commandOutput)
 }
 
 Local<Value> CommandOutputClass::success(const Arguments& args) {
+    if (!mCommandOutput) return Local<Value>();
     if (args.size() == 0) {
         mCommandOutput->success();
     } else if (args.size() == 1) {
@@ -46,7 +47,7 @@ Local<Value> CommandOutputClass::success(const Arguments& args) {
 }
 
 Local<Value> CommandOutputClass::error(const Arguments& args) {
-
+    if (!mCommandOutput) return Local<Value>();
     if (args.size() == 1) {
         CheckArgType(args[0], ValueKind::kString);
         mCommandOutput->success(args[0].asString().toString());
@@ -73,6 +74,7 @@ Local<Value> CommandOutputClass::addToResultList(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kString);
     try {
+        if (!mCommandOutput) return Local<Value>();
         if (IsInstanceOf<ActorClass>(args[1])) {
             auto engine = EngineScope::currentEngine();
             auto actor  = engine->getNativeInstance<ActorClass>(args[1]);
@@ -86,7 +88,10 @@ Local<Value> CommandOutputClass::addToResultList(const Arguments& args) {
     return Local<Value>();
 };
 
-Local<Value> CommandOutputClass::empty() { return Boolean::newBoolean(mCommandOutput->empty()); };
+Local<Value> CommandOutputClass::empty() {
+    if (!mCommandOutput) return Local<Value>();
+    return Boolean::newBoolean(mCommandOutput->empty());
+};
 
 // Local<Value> forceOutput(const Arguments& args); // TODO: Class
 
@@ -105,8 +110,12 @@ Local<Value> CommandOutputClass::empty() { return Boolean::newBoolean(mCommandOu
 // Local<Value> load(const Arguments& args);
 
 Local<Value> CommandOutputClass::setHasPlayerText(const Arguments& args) {
+    if (!mCommandOutput) return Local<Value>();
     mCommandOutput->setHasPlayerText();
     return Local<Value>();
 };
 
-Local<Value> CommandOutputClass::wantsData() { return Boolean::newBoolean(mCommandOutput->wantsData()); };
+Local<Value> CommandOutputClass::wantsData() {
+    if (!mCommandOutput) return Local<Value>();
+    return Boolean::newBoolean(mCommandOutput->wantsData());
+};

@@ -1,6 +1,14 @@
 #include "API/Command/Command.h"
-#include "API/APIHelper.h"
-#include "ll/api/command/CommandHandle.h"
+
+#include <ll/api/service/Bedrock.h>
+#include <mc/deps/core/utility/MCRESULT.h>
+#include <mc/server/commands/CommandContext.h>
+#include <mc/server/commands/MinecraftCommands.h>
+#include <mc/server/commands/ServerCommandOrigin.h>
+#include <mc/world/Minecraft.h>
+#include <mc/world/level/Level.h>
+
+
 
 using namespace Komomo;
 
@@ -8,6 +16,7 @@ ClassDefine<CommandClass> commandClassBuilder = defineClass<CommandClass>("Comma
                                                     .constructor(nullptr)
 
                                                     .function("newCommand", &CommandClass::newCommand)
+                                                    .function("run", &CommandClass::run)
                                                     .instanceFunction("setCallback", &CommandClass::setCallback)
                                                     .instanceFunction("optional", &CommandClass::optional)
                                                     .instanceFunction("required", &CommandClass::required)
@@ -28,8 +37,7 @@ CommandClass::CommandClass(std::shared_ptr<CommandData> data) : ScriptClass(Cons
 
 
 ll::command::CommandHandle& CommandClass::getCommandHandle() {
-    return ll::command::CommandRegistrar::getInstance()
-        .getOrCreateCommand(data->name, data->description, data->permissionLevel, data->flag);
+    return ll::command::CommandRegistrar::getInstance().getOrCreateCommand(data->name);
 }
 Local<Object> CommandClass::newCommandClass(std::shared_ptr<CommandData> data) {
     commands[data->name] = data;
@@ -43,10 +51,14 @@ Local<Object> CommandClass::newCommand(const Arguments& args) {
         if (args.size() == 2 && args[0].isString() && args[1].isString()) {
             data->name        = args[0].asString().toString();
             data->description = args[1].asString().toString();
+            auto& cmd = ll::command::CommandRegistrar::getInstance().getOrCreateCommand(data->name, data->description);
+            return newCommandClass(data);
         } else if (args.size() == 3 && args[0].isString() && args[1].isString() && args[2].isNumber()) {
             data->name            = args[0].asString().toString();
             data->description     = args[1].asString().toString();
             data->permissionLevel = CommandPermissionLevel(args[2].asNumber().toInt32());
+            auto& cmd             = ll::command::CommandRegistrar::getInstance()
+                            .getOrCreateCommand(data->name, data->description, data->permissionLevel);
             return newCommandClass(data);
         } else if (args.size() == 4 && args[0].isString() && args[1].isString() && args[2].isNumber()
                    && args[3].isNumber()) {
@@ -54,6 +66,8 @@ Local<Object> CommandClass::newCommand(const Arguments& args) {
             data->description     = args[1].asString().toString();
             data->permissionLevel = CommandPermissionLevel(args[2].asNumber().toInt32());
             data->flag            = CommandFlagValue(args[3].asNumber().toInt32());
+            auto& cmd             = ll::command::CommandRegistrar::getInstance()
+                            .getOrCreateCommand(data->name, data->description, data->permissionLevel, data->flag);
             return newCommandClass(data);
         }
     }
@@ -117,8 +131,8 @@ void CommandClass::onExecute(
         func.get().call(
             {},
             CommandClass::newCommandClass(data),
-            CommandOriginClass::newCommandOrigin(const_cast<CommandOrigin*>(&origin)),
-            CommandOutputClass::newCommandOutput(const_cast<CommandOutput*>(&output)),
+            CommandOriginClass::newCommandOrigin(&origin),
+            CommandOutputClass::newCommandOutput(&output),
             args
         );
     }
@@ -172,11 +186,12 @@ Local<Value> CommandClass::overload(const Arguments& args) {
     try {
         auto cmd = getCommandHandle().runtimeOverload(ENGINE_DATA()->mMod);
         for (auto& param : data->parameters) {
+            if (!param.text.empty()) {
+                auto& a = cmd.text(param.text);
+                continue;
+            }
+            if (param.name.empty()) continue;
             if (param.optional) {
-                if (!param.text.empty()) {
-                    auto& a = cmd.text(param.text);
-                    continue;
-                }
                 if (param.type == ParamKind::Kind::Enum || param.type == ParamKind::Kind::SoftEnum) {
                     auto& a = cmd.optional(param.name, param.type, param.enumName).option(param.option);
                 } else {
@@ -301,4 +316,24 @@ Local<Value> CommandClass::removeSoftEnum(const Arguments& args) {
         throw e;
     }
     return Local<Value>();
+}
+
+Local<Value> CommandClass::run(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kString);
+    CommandContext context = CommandContext(
+        args[0].asString().toString(),
+        std::make_unique<ServerCommandOrigin>(
+            "Server",
+            ll::service::getLevel()->asServer(),
+            CommandPermissionLevel::Owner,
+            0
+        ),
+        CommandVersion::CurrentVersion()
+    );
+    try {
+        return Boolean::newBoolean(ll::service::getMinecraft()->getCommands().executeCommand(context, false).mSuccess);
+    }
+    CatchNotReturn;
+    return Boolean::newBoolean(false);
 }

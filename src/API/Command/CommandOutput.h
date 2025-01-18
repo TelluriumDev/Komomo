@@ -54,7 +54,6 @@ public: /* Method */
     Local<Value> setHasPlayerText(const Arguments& args);
 
     Local<Value> wantsData();
-
 };
 
 

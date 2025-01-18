@@ -30,18 +30,18 @@ ClassDefine<CommandOriginClass> commandOriginClassBuilder =
         .instanceFunction("canUseCommandsWithoutCheatsEnabled", &CommandOriginClass::canUseCommandsWithoutCheatsEnabled)
         .instanceFunction("isSelectorExpansionAllowed", &CommandOriginClass::isSelectorExpansionAllowed)
         .instanceFunction("handleCommandOutputCallback", &CommandOriginClass::handleCommandOutputCallback)
-        .instanceFunction("updateValues", &CommandOriginClass::updateValues)
+        // .instanceFunction("updateValues", &CommandOriginClass::updateValues)
         .instanceFunction("isValid", &CommandOriginClass::isValid)
         .instanceFunction("sUnknownSource", &CommandOriginClass::sUnknownSource)
 
         .build();
 
-CommandOriginClass::CommandOriginClass(CommandOrigin* commandOrigin)
+CommandOriginClass::CommandOriginClass(CommandOrigin const* commandOrigin)
 : ScriptClass(ConstructFromCpp<CommandOriginClass>{}) {
     this->mCommandOrigin = commandOrigin;
 }
 
-Local<Object> CommandOriginClass::newCommandOrigin(CommandOrigin* commandOrigin) {
+Local<Object> CommandOriginClass::newCommandOrigin(CommandOrigin const* commandOrigin) {
     return (new CommandOriginClass(commandOrigin))->getScriptObject();
 }
 
@@ -134,10 +134,10 @@ Local<Value> CommandOriginClass::handleCommandOutputCallback(const Arguments& ar
     return Local<Value>();
 };
 
-Local<Value> CommandOriginClass::updateValues() {
-    mCommandOrigin->updateValues();
-    return Local<Value>();
-};
+// Local<Value> CommandOriginClass::updateValues() {
+//     mCommandOrigin->();
+//     return Local<Value>();
+// };
 
 // Local<Value> CommandOriginClass::getExecutePosition(const Arguments& args) {
 //     CheckArgsCount(args, 2);

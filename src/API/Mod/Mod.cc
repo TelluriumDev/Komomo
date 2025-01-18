@@ -1,5 +1,7 @@
 #include "API/Mod/Mod.h"
 #include "API/Logger/Logger.h"
+#include "ll/api/mod/Mod.h"
+#include <filesystem>
 
 using namespace Komomo;
 
@@ -13,6 +15,8 @@ ClassDefine<ModClass> modClassBuilder = defineClass<ModClass>("Mod")
                                             .function("getConfigDir", &ModClass::getConfigDir)
                                             .function("getLangDir", &ModClass::getLangDir)
                                             .function("getLogger", &ModClass::getLogger)
+                                            .function("getRootDir", &ModClass::getRootDir)
+                                            .function("getModRootDir", &ModClass::getModRootDir)
 
                                             .build();
 
@@ -41,3 +45,7 @@ Local<Value> ModClass::getLangDir() { return String::newString(ENGINE_DATA()->mM
 
 // LLNDAPI ll::io::Logger& getLogger() const;
 Local<Value> ModClass::getLogger() { return LoggerClass::newLoggerClass(ENGINE_DATA()->mMod->getLogger().getTitle()); };
+
+Local<Value> ModClass::getRootDir() { return String::newString(fs::current_path().string()); }
+
+Local<Value> ModClass::getModRootDir() { return String::newString(ll::mod::getModsRoot().string()); }
