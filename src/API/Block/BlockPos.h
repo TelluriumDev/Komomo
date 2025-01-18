@@ -2,7 +2,7 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-// #include <mc/world/level/BlockPos.h>
+#include "mc/world/level/BlockPos.h"
 
 class BlockPos;
 

@@ -1,8 +1,4 @@
-#include "API/Event/Event.h"
 #include "API/APIHelper.h"
-#include "API/Command/MinecraftCommands.h"
-#include "API/Event/Listener.h"
-
 #include "API/Actor/Actor.h"
 #include "API/Actor/ActorDamageSource.h"
 #include "API/Actor/ActorDefinitionIdentifier.h"
@@ -12,12 +8,16 @@
 #include "API/Block/BlockSource.h"
 #include "API/Command/CommandContext.h"
 #include "API/Command/CommandFlag.h"
+#include "API/Command/MCRESULT.h"
+#include "API/Command/MinecraftCommands.h"
+
 // TODO: ila not implemented
 // #include "API/Command/CommandRegistry.h"
-#include "API/Command/MCRESULT.h"
 #include "API/Dimension/ChangeDimensionRequest.h"
 #include "API/Dimension/Dimension.h"
 #include "API/Dimension/DimensionType.h"
+#include "API/Event/Event.h"
+#include "API/Event/Listener.h"
 #include "API/Item/ItemActor.h"
 #include "API/Item/ItemStack.h"
 #include "API/Item/ItemStackRequestActionTransferBase.h"
@@ -35,11 +35,9 @@
 #include "API/Network/ServerNetworkHandler.h"
 #include "API/Player/Player.h"
 #include "API/Service/Service.h"
+
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
-#include "ila/event/minecraft/actor/ActorChangeDimensionEvent.h"
-#include "mc/_HeaderOutputPredefine.h"
-#include "mc/deps/core/math/Vec3.h"
 
 #include <ll/api/event/ListenerBase.h>
 
@@ -81,7 +79,6 @@
 
 // LegacyMoney is deprecated, so we don't include it
 // #include "ila/event/legacyMoney/MoneyChangeEvent.h"
-
 #include "ila/event/minecraft/actor/ActorChangeDimensionEvent.h"
 #include "ila/event/minecraft/actor/ActorGetEffectEvent.h"
 #include "ila/event/minecraft/actor/ActorPickupItemEvent.h"
@@ -99,18 +96,14 @@
 #include "ila/event/minecraft/level/WeatherUpdateEvent.h"
 
 #include "ila/event/minecraft/player/PlayerAttackBlockEvent.h"
-
 // Warning: maybe typo? (PlayerChangGameTypeEvent -> PlayerChangeGameTypeEvent)
 //                      (PlayerChangPermissionsEvent -> PlayerChangePermissionsEvent)
 #include "ila/event/minecraft/player/PlayerChangGameTypeEvent.h"
 #include "ila/event/minecraft/player/PlayerChangPermissionsEvent.h"
-
 #include "ila/event/minecraft/player/PlayerChangeDimensionEvent.h"
 #include "ila/event/minecraft/player/PlayerDropItemEvent.h"
-
 // Seems have problems, so we don't include it
 // #include "ila/event/minecraft/player/PlayerEditSignEvent.h"
-
 #include "ila/event/minecraft/player/PlayerInteractEntityEvent.h"
 #include "ila/event/minecraft/player/PlayerOpenContainerEvent.h"
 #include "ila/event/minecraft/player/PlayerOperatedItemFrameEvent.h"
@@ -134,11 +127,6 @@
 #include "ila/event/minecraft/world/SpawnItemActorEvent.h"
 #include "ila/event/minecraft/world/SpawnWanderingTraderEvent.h"
 #include "ila/event/minecraft/world/WitherDestroyEvent.h"
-#include "mc/platform/UUID.h"
-#include "mc/world/item/ItemStack.h"
-#include "mc/world/level/BlockPos.h"
-#include "mc/world/level/ChangeDimensionRequest.h"
-
 
 #include <string>
 

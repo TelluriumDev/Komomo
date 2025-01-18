@@ -2,6 +2,8 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
+#include "mc/world/level/ChangeDimensionRequest.h"
+
 
 class ChangeDimensionRequest;
 
