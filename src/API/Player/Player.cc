@@ -444,8 +444,8 @@ Local<Value> PlayerClass::checkBed(const Arguments& args) {
         if (IsInstanceOf<BlockSourceClass>(args[0]) && IsInstanceOf<Vec3Class>(args[1])) {
             auto blockSourceClass = engine->getNativeInstance<BlockSourceClass>(args[0]);
             auto vec3Class        = engine->getNativeInstance<Vec3Class>(args[1]);
-            if (blockSourceClass->mBlockSource && vec3Class->mVec3)
-                return Boolean::newBoolean(mPlayer->checkBed(blockSourceClass->mBlockSource, vec3Class->mVec3));
+            if (blockSourceClass->mBlockSource)
+                return Boolean::newBoolean(mPlayer->checkBed(blockSourceClass->mBlockSource, &vec3Class->mVec3));
             else return Boolean::newBoolean(false);
         }
     }
@@ -594,7 +594,11 @@ Local<Value> PlayerClass::getCapePos(const Arguments& args) {
     CheckArgType(args[0], ValueKind::kNumber);
     try {
         if (!mPlayer) return Local<Value>();
-        return Vec3Class::newVec3(mPlayer->getCapePos(args[0].asNumber().toFloat()));
+        return Vec3Class::newVec3(
+            mPlayer->getCapePos(args[0].asNumber().toFloat()).x,
+            mPlayer->getCapePos(args[0].asNumber().toFloat()).y,
+            mPlayer->getCapePos(args[0].asNumber().toFloat()).z
+        );
     }
     Catch;
 }
@@ -1033,7 +1037,7 @@ Local<Value> PlayerClass::setRespawnReady(const Arguments& args) {
             auto engine = EngineScope::currentEngine();
             auto vec3   = engine->getNativeInstance<Vec3Class>(args[0]);
 
-            mPlayer->setRespawnReady(vec3->mmVec3);
+            mPlayer->setRespawnReady(vec3->mVec3);
             return Boolean::newBoolean(true);
         } else PrintWrongArgType();
         return Boolean::newBoolean(false);
@@ -1063,7 +1067,8 @@ Local<Value> PlayerClass::setSelectedItem(const Arguments& args) {
 //     CheckArgType(args[0], ValueKind::kNumber);
 //     try {
 //         if (!mPlayer) return Local<Value>();
-//         return ItemStackClass::newItemStack(const_cast<ItemStack*>(mPlayer->getSelectedItemSlot(args[0].asNumber().toInt32()
+//         return
+//         ItemStackClass::newItemStack(const_cast<ItemStack*>(mPlayer->getSelectedItemSlot(args[0].asNumber().toInt32()
 //         )));
 //     }
 //     Catch;

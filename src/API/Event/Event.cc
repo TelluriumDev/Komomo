@@ -467,7 +467,7 @@ void EventBusClass::registerCallback() {
                                 ItemStackClass::newItemStack(&event.item()),
                                 BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.blockPos())),
                                 ConvertToScriptX(event.face()),
-                                Vec3Class::newVec3(const_cast<Vec3*>(&event.clickPos())),
+                                Vec3Class::newVec3(event.clickPos().x, event.clickPos().y, event.clickPos().z),
                                 BlockClass::newBlock(const_cast<Block*>(&event.block().get()))
                             );
                             if (result.isBoolean()) {
@@ -797,7 +797,7 @@ void EventBusClass::registerCallback() {
                                     const_cast<ActorDefinitionIdentifier*>(&event.identifier())
                                 ),
                                 ActorClass::newActor(&event.spawner().value()),
-                                Vec3Class::newVec3(const_cast<Vec3*>(&event.pos())),
+                                Vec3Class::newVec3(event.pos().x, event.pos().y, event.pos().z),
                                 Boolean::newBoolean(event.naturalSpawn()),
                                 Boolean::newBoolean(event.surface()),
                                 Boolean::newBoolean(event.fromSpawner())
@@ -829,7 +829,7 @@ void EventBusClass::registerCallback() {
                                     const_cast<ActorDefinitionIdentifier*>(&event.identifier())
                                 ),
                                 ActorClass::newActor(&event.spawner().value()),
-                                Vec3Class::newVec3(const_cast<Vec3*>(&event.pos())),
+                                Vec3Class::newVec3(event.pos().x, event.pos().y, event.pos().z),
                                 Boolean::newBoolean(event.naturalSpawn()),
                                 Boolean::newBoolean(event.surface()),
                                 Boolean::newBoolean(event.fromSpawner())
@@ -1025,7 +1025,7 @@ void EventBusClass::registerCallback() {
                                 DimensionTypeClass::newDimensionType(
                                     const_cast<DimensionType*>(&event.getFromDimensionId())
                                 ),
-                                Vec3Class::newVec3(const_cast<Vec3*>(&event.getFromPos())),
+                                Vec3Class::newVec3(event.getFromPos().x, event.getFromPos().y, event.getFromPos().z),
                                 DimensionTypeClass::newDimensionType(const_cast<DimensionType*>(&event.getToDimensionId(
                                 )))
                             );
@@ -1947,7 +1947,7 @@ void EventBusClass::registerCallback() {
                                 {},
                                 PlayerClass::newPlayer(&event.self()),
                                 ActorClass::newActor(&event.getTarget()),
-                                Vec3Class::newVec3(const_cast<Vec3*>(&event.getPos()))
+                                Vec3Class::newVec3(event.getPos().x, event.getPos().y, event.getPos().z)
                             );
                             if (result.isBoolean()) {
                                 if (result.asBoolean().value() == false) event.cancel();
@@ -1972,7 +1972,7 @@ void EventBusClass::registerCallback() {
                                 {},
                                 PlayerClass::newPlayer(&event.self()),
                                 ActorClass::newActor(const_cast<Actor*>(&event.getTarget())),
-                                Vec3Class::newVec3(const_cast<Vec3*>(&event.getPos()))
+                                Vec3Class::newVec3(event.getPos().x, event.getPos().y, event.getPos().z)
                             );
                         }
                         CatchNotReturn;
@@ -2867,7 +2867,7 @@ void EventBusClass::registerCallback() {
                             auto result = func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                Vec3Class::newVec3(&event.getPos()),
+                                Vec3Class::newVec3(event.getPos().x, event.getPos().y, event.getPos().z),
                                 ItemStackClass::newItemStack(&event.getItem()),
                                 ActorClass::newActor(*&event.getSpawner()),
                                 Number::newNumber(event.getThrowTime())
@@ -2893,7 +2893,7 @@ void EventBusClass::registerCallback() {
                             func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                Vec3Class::newVec3(const_cast<Vec3*>(&event.getPos())),
+                                Vec3Class::newVec3(event.getPos().x, event.getPos().y, event.getPos().z),
                                 ItemStackClass::newItemStack(const_cast<ItemStack*>(&event.getItem())),
                                 ActorClass::newActor(*&event.getSpawner()),
                                 Number::newNumber(event.getThrowTime()),

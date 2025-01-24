@@ -1,9 +1,11 @@
 #include "API/Command/CommandOrigin.h"
+#include "API/Block/BlockPos.h"
 #include "API/Dimension/Dimension.h"
 #include "API/Level/Level.h"
 #include "API/Math/Vec3.h"
 #include "API/Network/NetworkIdentifier.h"
 #include "mc/world/actor/player/AbilitiesIndex.h"
+
 
 
 #include <mc/world/level/BlockPos.h>
@@ -46,16 +48,32 @@ Local<Object> CommandOriginClass::newCommandOrigin(CommandOrigin const* commandO
 }
 
 
-Local<Value> CommandOriginClass::getRequestId() { return String::newString(mCommandOrigin->getRequestId()); };
+Local<Value> CommandOriginClass::getRequestId() {
+    if (!mCommandOrigin) return Local<Value>();
+    return String::newString(mCommandOrigin->getRequestId());
+};
 
-Local<Value> CommandOriginClass::getName() { return String::newString(mCommandOrigin->getName()); };
+Local<Value> CommandOriginClass::getName() {
+    if (!mCommandOrigin) return Local<Value>();
+    return String::newString(mCommandOrigin->getName());
+};
 
 Local<Value> CommandOriginClass::getBlockPosition() {
-    // return BlockPosClass::newBlockPos(mCommandOrigin->getBlockPosition());
+    if (!mCommandOrigin) return Local<Value>();
+    // return BlockPosClass::newBlockPos(&mCommandOrigin->getBlockPosition()); // TODO
+
+
     return Local<Value>();
 };
 
-Local<Value> CommandOriginClass::getWorldPosition() { return Vec3Class::newVec3(mCommandOrigin->getWorldPosition()); };
+Local<Value> CommandOriginClass::getWorldPosition() {
+    if (!mCommandOrigin) return Local<Value>();
+    return Vec3Class::newVec3(
+        mCommandOrigin->getWorldPosition().x,
+        mCommandOrigin->getWorldPosition().y,
+        mCommandOrigin->getWorldPosition().z
+    );
+};
 
 // Local<Value> CommandOriginClass::getRotation();
 

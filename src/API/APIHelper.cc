@@ -150,3 +150,5 @@ void PrintException(script::Exception const& e, string const& func, string const
 }
 
 } // namespace Komomo
+
+

@@ -15,6 +15,7 @@ public:
 
 public:
     // static BlockPosClass* create(const Arguments& args); // TODO
+    
     static Local<Object> newBlockPos(BlockPos* blockPos);
 
 public: /* Member */
