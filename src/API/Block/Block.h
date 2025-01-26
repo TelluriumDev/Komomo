@@ -61,16 +61,12 @@ public: /* Member */
     Local<Value> isThinFenceBlock();
     Local<Value> isUnbreakable();
     Local<Value> isWallBlock();
-    Local<Value> isWaterBlocking();
 
     Local<Value> canBeBrokenFromFalling();
     Local<Value> canBeOriginalSurface();
-    Local<Value> canDamperVibrations();
-    Local<Value> canDropWithAnyTool();
     Local<Value> canHaveExtraData();
     Local<Value> canHurtAndBreakItem();
     Local<Value> canInstatick();
-    Local<Value> canOccludeVibrations();
     Local<Value> canReactToNeighborsDuringInstatick();
 
     Local<Value> hasBlockEntity();
@@ -106,12 +102,10 @@ public: /* Method */
     // Local<Value> executeEvent(const Arguments& args);
     // Local<Value> executeItemEvent(const Arguments& args);
     // Local<Value> executeTrigger(const Arguments& args);
-    Local<Value> finalizeBlockComponentStorage();
     // Local<Value> forEachState(const Arguments& args);
     // Local<Value> getClientPredictionOverride(const Arguments& args);
     // Local<Value> getCollisionShape(const Arguments& args);
     // Local<Value> getCollisionShapeForCamera(const Arguments& args);
-    Local<Value> getColor(const Arguments& args);
     Local<Value> getComparatorSignal(const Arguments& args);
     // Local<Value> getConnectedDirections(const Arguments& args);
     Local<Value> getDebugText(const Arguments& args);

@@ -1,10 +1,12 @@
 #include "API/Block/Block.h"
+
 #include "API/Actor/Actor.h"
 #include "API/Block/BlockPos.h"
 #include "API/Block/BlockSource.h"
 #include "API/Math/AABB.h"
 #include "API/Player/Player.h"
 
+using namespace Komomo;
 
 ClassDefine<BlockClass> blockClassBuilder =
     defineClass<BlockClass>("Block")
@@ -55,16 +57,12 @@ ClassDefine<BlockClass> blockClassBuilder =
         .instanceProperty("isThinFenceBlock", &BlockClass::isThinFenceBlock)
         .instanceProperty("isUnbreakable", &BlockClass::isUnbreakable)
         .instanceProperty("isWallBlock", &BlockClass::isWallBlock)
-        .instanceProperty("isWaterBlocking", &BlockClass::isWaterBlocking)
 
         .instanceProperty("canBeBrokenFromFalling", &BlockClass::canBeBrokenFromFalling)
         .instanceProperty("canBeOriginalSurface", &BlockClass::canBeOriginalSurface)
-        .instanceProperty("canDamperVibrations", &BlockClass::canDamperVibrations)
-        .instanceProperty("canDropWithAnyTool", &BlockClass::canDropWithAnyTool)
         .instanceProperty("canHaveExtraData", &BlockClass::canHaveExtraData)
         .instanceProperty("canHurtAndBreakItem", &BlockClass::canHurtAndBreakItem)
         .instanceProperty("canInstatick", &BlockClass::canInstatick)
-        .instanceProperty("canOccludeVibrations", &BlockClass::canOccludeVibrations)
         .instanceProperty("canReactToNeighborsDuringInstatick", &BlockClass::canReactToNeighborsDuringInstatick)
 
         .instanceProperty("hasBlockEntity", &BlockClass::hasBlockEntity)
@@ -99,12 +97,10 @@ ClassDefine<BlockClass> blockClassBuilder =
         // .InstanceFunction(executeEvent, BlockClass)
         // .InstanceFunction(executeItemEvent, BlockClass)
         // .InstanceFunction(executeTrigger, BlockClass)
-        .InstanceFunction(finalizeBlockComponentStorage, BlockClass)
         // .InstanceFunction(forEachState, BlockClass)
         // .InstanceFunction(getClientPredictionOverride, BlockClass)
         // .InstanceFunction(getCollisionShape, BlockClass)
         // .InstanceFunction(getCollisionShapeForCamera, BlockClass)
-        .InstanceFunction(getColor, BlockClass)
         .InstanceFunction(getComparatorSignal, BlockClass)
         // .InstanceFunction(getConnectedDirections, BlockClass)
         .InstanceFunction(getDebugText, BlockClass)
@@ -265,16 +261,12 @@ Local<Value> BlockClass::isStemBlock() { CallFunction(Boolean, isStemBlock()); }
 Local<Value> BlockClass::isThinFenceBlock() { CallFunction(Boolean, isThinFenceBlock()); }
 Local<Value> BlockClass::isUnbreakable() { CallFunction(Boolean, isUnbreakable()); }
 Local<Value> BlockClass::isWallBlock() { CallFunction(Boolean, isWallBlock()); }
-Local<Value> BlockClass::isWaterBlocking() { CallFunction(Boolean, isWaterBlocking()); }
 
 Local<Value> BlockClass::canBeBrokenFromFalling() { CallFunction(Boolean, canBeBrokenFromFalling()); }
 Local<Value> BlockClass::canBeOriginalSurface() { CallFunction(Boolean, canBeOriginalSurface()); }
-Local<Value> BlockClass::canDamperVibrations() { CallFunction(Boolean, canDamperVibrations()); }
-Local<Value> BlockClass::canDropWithAnyTool() { CallFunction(Boolean, canDropWithAnyTool()); }
 Local<Value> BlockClass::canHaveExtraData() { CallFunction(Boolean, canHaveExtraData()); }
 Local<Value> BlockClass::canHurtAndBreakItem() { CallFunction(Boolean, canHurtAndBreakItem()); }
 Local<Value> BlockClass::canInstatick() { CallFunction(Boolean, canInstatick()); }
-Local<Value> BlockClass::canOccludeVibrations() { CallFunction(Boolean, canOccludeVibrations()); }
 Local<Value> BlockClass::canReactToNeighborsDuringInstatick() {
     CallFunction(Boolean, canReactToNeighborsDuringInstatick());
 }
@@ -300,12 +292,13 @@ Local<Value> BlockClass::addAABBs(const Arguments& args) {
         auto engine           = EngineScope::currentEngine();
         auto region           = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos              = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        auto intersectTestBox = engine->getNativeInstance<AABBClass>(args[2]);
+        auto intersectTestBox = engine->getNativeInstance<AABBClass>(args[2])->mAABB;
         auto inoutBoxes       = args[3].asArray();
         auto inoutBoxesVector = std::vector<AABB>(inoutBoxes.size());
         for (decltype(inoutBoxes.size()) i = 0; i < inoutBoxes.size(); i++) {
-            CheckInstanceType(array[i], AABBClass);
-            auto inputAABB      = engine->getNativeInstance<AABBClass>(inoutBoxes.get(i));
+            auto value = inoutBoxes.get(i);
+            CheckInstanceType(value, AABBClass);
+            auto inputAABB      = engine->getNativeInstance<AABBClass>(value);
             inoutBoxesVector[i] = *(inputAABB->mAABB);
         }
         mBlock->addAABBs(*region, *pos, intersectTestBox, inoutBoxesVector);
@@ -350,7 +343,7 @@ Local<Value> BlockClass::attack(const Arguments& args) {
 
     try {
         auto engine = EngineScope::currentEngine();
-        auto player = engine->getNativeInstance<PlayerClass>(args[0])->mPlayer;
+        auto player = engine->getNativeInstance<PlayerClass>(args[0])->get();
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         return Boolean::newBoolean(mBlock->attack(player, *pos));
     }
@@ -364,7 +357,6 @@ Local<Value> BlockClass::buildDescriptionId() { CallFunction(String, buildDescri
 Local<Value> BlockClass::buildDescriptionName() { CallFunction(String, buildDescriptionName()); }
 Local<Value> BlockClass::buildSerializationIdString() { CallFunction(String, buildSerializationIdString()); }
 Local<Value> BlockClass::cacheComponentData() { CallVoidMethod(cacheComponentData()); }
-Local<Value> BlockClass::canBeBrokenFromFalling() { CallFunction(Boolean, canBeBrokenFromFalling()); }
 
 // MCAPI bool canBeBuiltOver(class BlockSource& region, class BlockPos const& pos) const;
 
@@ -405,7 +397,7 @@ Local<Value> BlockClass::canConnect(const Arguments& args) {
     try {
         if (!mBlock) return Local<Value>();
         auto  engine     = EngineScope::currentEngine();
-        auto  otherBlock = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto  otherBlock = engine->getNativeInstance<BlockClass>(args[0])->mBlock;
         uchar toOther    = args[1].asNumber().toInt32();
         auto  thisBlock  = engine->getNativeInstance<BlockClass>(args[2])->mBlock;
         return Boolean::newBoolean(mBlock->canConnect(*otherBlock, toOther, *thisBlock));
@@ -475,7 +467,7 @@ Local<Value> BlockClass::checkIsPathable(const Arguments& args) {
         auto entity      = engine->getNativeInstance<ActorClass>(args[0])->mActor;
         auto lastPathPos = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto pathPos     = engine->getNativeInstance<BlockPosClass>(args[2])->mBlockPos;
-        return Boolean::newBoolean(mBlock->checkIsPathable(*entity, *start, *end));
+        return Boolean::newBoolean(mBlock->checkIsPathable(*entity, *lastPathPos, *pathPos));
     }
     Catch;
 }
@@ -539,8 +531,6 @@ Local<Value> BlockClass::destroy(const Arguments& args) {
 //     ) const;
 // Local<Value> BlockClass::executeItemEvent(const Arguments& args) {}
 
-Local<Value> BlockClass::finalizeBlockComponentStorage() { CallVoidMethod(finalizeBlockComponentStorage()); }
-
 // BlockState not implemented
 // MCAPI void forEachState(std::function<bool(class BlockState const&, int)> callback) const;
 // Local<Value> BlockClass::forEachState(const Arguments& args) {}
@@ -558,26 +548,6 @@ Local<Value> BlockClass::finalizeBlockComponentStorage() { CallVoidMethod(finali
 
 // MCAPI bool getCollisionShapeForCamera(class AABB&, class IConstBlockSource const&, class BlockPos const&) const;
 // Local<Value> BlockClass::getCollisionShapeForCamera(const Arguments& args) {}
-
-Local<Value> BlockClass::getColor(const Arguments& args) {
-    if (!mBlock) {
-        return Local<Value>();
-    }
-    auto argsCount = args.size();
-    switch (argsCount) {
-    case size_t(0):
-        return Number::newNumber(mBlock->getColor());
-    case size_t(2):
-        CheckInstanceType(args[0], BlockSourceClass);
-        CheckInstanceType(args[1], BlockPosClass);
-        auto engine = EngineScope::currentEngine();
-        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
-        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        return Number::newNumber(mBlock->getColor(*region, *pos));
-    default:
-        PrintWrongArgsCount() return Local<Value>();
-    }
-}
 
 Local<Value> BlockClass::getComparatorSignal(const Arguments& args) {
     CheckArgsCount(args, 3);
@@ -606,8 +576,9 @@ Local<Value> BlockClass::getDebugText(const Arguments& args) {
         auto outputInfo       = args[0].asArray();
         auto outputInfoVector = std::vector<std::string>(outputInfo.size());
         for (decltype(outputInfo.size()) i = 0; i < outputInfo.size(); i++) {
-            CheckArgType(array[i], ValueKind::kString);
-            outputInfoVector[i] = args[0].asArray().get(i).asString().toString();
+            auto value = outputInfo.get(i);
+            CheckArgType(value, ValueKind::kString);
+            outputInfoVector[i] = value.asString().toString();
         }
         auto pos = EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         mBlock->getDebugText(outputInfoVector, *pos);
