@@ -103,7 +103,7 @@ ClassDefine<PlayerClass> playerClassBuilder =
         .instanceProperty("hasRespawnAnchorPosition", &PlayerClass::hasRespawnAnchorPosition)
         .instanceProperty("hasRespawnPosition", &PlayerClass::hasRespawnPosition)
 
-        .instanceFunction("disconnect", &PlayerClass::disconnect)
+        .InstanceFunction(disconnect, PlayerClass)
         .InstanceFunction(sendMessage, PlayerClass)
         .InstanceFunction(setAbility, PlayerClass)
         .InstanceFunction(addAndRefresh, PlayerClass)
