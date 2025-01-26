@@ -1,3 +1,9 @@
+#include "mc/deps/core/string/HashedString.h"
+#include "mc/nbt/CompoundTag.h"
+#include "mc/world/level/block/components/BlockComponentDirectData.h"
+#include "mc/world/level/block/components/BlockComponentStorage.h"
+#include "mc/world/level/block/CachedComponentData.h"
+
 #include "API/Block/Block.h"
 
 #include "API/Actor/Actor.h"
@@ -141,10 +147,9 @@ ClassDefine<BlockClass> blockClassBuilder =
         .InstanceFunction(onHitByActivatingAttack, BlockClass)
         .InstanceFunction(onLightningHit, BlockClass)
         .InstanceFunction(onPlace, BlockClass)
-        .InstanceFunction(onPlayerPlacing, BlockClass)
         .InstanceFunction(onProjectileHit, BlockClass)
         .InstanceFunction(onRemove, BlockClass)
-        .InstanceFunction(onStandOn, BlockClass)
+        // .InstanceFunction(onStandOn, BlockClass)
         .InstanceFunction(onStepOff, BlockClass)
         .InstanceFunction(onStepOn, BlockClass)
         .InstanceFunction(onStructureBlockPlace, BlockClass)
@@ -774,6 +779,20 @@ Local<Value> BlockClass::isPreservingMediumWhenPlaced(const Arguments& args) {
     Catch;
 }
 
+Local<Value> BlockClass::isTopPartialBlock(const Arguments& args) {
+    CheckArgsCount(args, 2);
+    CheckInstanceType(args[0], BlockSourceClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        return Boolean::newBoolean(mBlock->isTopPartialBlock(*region, *pos));
+    }
+    Catch;
+}
+
 // BlockState not implemented
 // MCAPI ::Block const& keepStates(::std::vector<::BlockState const*> const& statesToKeep) const;
 // Local<Value> BlockClass::keepStates(const Arguments& args) { }
@@ -899,6 +918,24 @@ Local<Value> BlockClass::onExploded(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
+Local<Value> BlockClass::onFallOn(const Arguments& args) {
+    CheckArgsCountReturn(args, 4, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[2], ActorClass, Boolean::newBoolean(false));
+    CheckArgTypeReturn(args[3], ValueKind::kBoolean, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine     = EngineScope::currentEngine();
+        auto region     = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos        = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto entity    = engine->getNativeInstance<ActorClass>(args[2])->mActor;
+        auto fallDistance = args[3].asNumber().toFloat();
+        mBlock->onFallOn(*region, *pos, *entity, fallDistance);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
 
 // FertilizerType not implemented
 // MCAPI bool

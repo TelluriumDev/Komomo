@@ -2,6 +2,8 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
+
+
 #include <mc/world/level/block/Block.h>
 
 class BlockClass : public ScriptClass {
@@ -143,10 +145,9 @@ public: /* Method */
     Local<Value> onHitByActivatingAttack(const Arguments& args);
     Local<Value> onLightningHit(const Arguments& args);
     Local<Value> onPlace(const Arguments& args);
-    Local<Value> onPlayerPlacing(const Arguments& args);
     Local<Value> onProjectileHit(const Arguments& args);
     Local<Value> onRemove(const Arguments& args);
-    Local<Value> onStandOn(const Arguments& args);
+    // Local<Value> onStandOn(const Arguments& args);
     Local<Value> onStepOff(const Arguments& args);
     Local<Value> onStepOn(const Arguments& args);
     Local<Value> onStructureBlockPlace(const Arguments& args);
