@@ -209,13 +209,6 @@ Local<Object> BlockClass::newBlock(Block* block) { return (new BlockClass(block)
 Local<Value> BlockClass::getAllowsRunes() { CallFunction(Boolean, getAllowsRunes()); }
 // Local<Value> BlockClass::getBlockEntityType() {}
 Local<Value> BlockClass::getBurnOdds() { CallFunction(Number, getBurnOdds()); }
-// Local<Value> BlockClass::getDefaultState() {
-//     try {
-//         if (!mBlock) return Local<Value>();
-//         return (new BlockClass(mBlock->getDefaultState()))->getScriptObject();
-//     }
-//     Catch;
-// }
 Local<Value> BlockClass::getDescriptionId() { CallFunction(String, getDescriptionId()); }
 Local<Value> BlockClass::getDestroySpeed() { CallFunction(Number, getDestroySpeed()); }
 Local<Value> BlockClass::getExplosionResistance() { CallFunction(Number, getExplosionResistance()); }
@@ -658,8 +651,8 @@ Local<Value> BlockClass::getPlacementBlock(const Arguments& args) {
         auto face      = static_cast<uchar>(args[2].asNumber().toInt32());
         auto clickPos  = engine->getNativeInstance<Vec3Class>(args[3])->mVec3;
         auto itemValue = args[4].asNumber().toInt32();
-        auto result    = mBlock->getPlacementBlock(*by, *pos, face, clickPos, itemValue);
-        return (new BlockClass(&result))->getScriptObject();
+        auto &result    = const_cast<Block&>(mBlock->getPlacementBlock(*by, *pos, face, clickPos, itemValue));
+        return BlockClass::newBlock(&result);
     }
     Catch;
 }
@@ -1111,8 +1104,8 @@ Local<Value> BlockClass::playerWillDestroy(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto player = engine->getNativeInstance<PlayerClass>(args[0])->get();
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        auto result = mBlock->playerWillDestroy(*player, *pos);
-        return (new BlockClass(const_cast<Block*>(result)))->getScriptObject();
+        auto result = const_cast<Block*>(mBlock->playerWillDestroy(*player, *pos));
+        return BlockClass::newBlock(result);
     }
     Catch;
 }
@@ -1246,8 +1239,8 @@ Local<Value> BlockClass::triggerEvent(const Arguments& args) {
 Local<Value> BlockClass::tryGetInfested() {
     try {
         if (!mBlock) return Local<Value>();
-        auto result = mBlock->tryGetInfested();
-        return (new BlockClass(const_cast<Block*>(result)))->getScriptObject();
+        auto result = const_cast<Block*>(mBlock->tryGetInfested());
+        return BlockClass::newBlock(result);
     }
     Catch;
 }
@@ -1255,8 +1248,8 @@ Local<Value> BlockClass::tryGetInfested() {
 Local<Value> BlockClass::tryGetUninfested() {
     try {
         if (!mBlock) return Local<Value>();
-        auto result = mBlock->tryGetUninfested();
-        return (new BlockClass(const_cast<Block*>(result)))->getScriptObject();
+        auto result = const_cast<Block*>(mBlock->tryGetUninfested());
+        return BlockClass::newBlock(result);
     }
     Catch;
 }
