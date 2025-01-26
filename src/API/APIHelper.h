@@ -58,6 +58,18 @@ void PrintException(script::Exception const& e, string const& func, string const
         return Return;                                                                                                 \
     }
 
+#define CheckInstanceType(arg, type)                                                                                   \
+    if (!IsInstanceOf<type>(arg)) {                                                                                    \
+        PrintWrongArgType();                                                                                           \
+        return Local<Value>();                                                                                         \
+    }
+
+#define CheckInstanceTypeReturn(arg, type, Return)                                                                     \
+    if (!IsInstanceOf<type>(arg)) {                                                                                    \
+        PrintWrongArgType();                                                                                           \
+        return Return;                                                                                                 \
+    }  
+
 // 异常捕获
 #define Catch                                                                                                          \
     catch (script::Exception const& e) {                                                                               \
