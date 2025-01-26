@@ -1,7 +1,10 @@
 #include "API/Player/SimulatedPlayer.h"
+#include "API/APIHelper.h"
 #include "API/Dimension/DimensionType.h"
+#include "API/Item/ItemStack.h"
 #include "API/Math/Vec2.h"
 #include "API/Math/Vec3.h"
+#include "Utils/Using.h"
 
 
 using namespace Komomo;
@@ -103,3 +106,97 @@ Local<Object> SimulatedPlayerClass::newSimulatedPlayer(const Arguments& args) {
     } else PrintArgsTooFew();
     return Object::newObject();
 }
+
+Local<Value> SimulatedPlayerClass::isSimulated() {
+    try {
+        if (!mSimulatedPlayer) return Boolean::newBoolean(false);
+        return Boolean::newBoolean(mSimulatedPlayer->isSimulated());
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> SimulatedPlayerClass::getXuid() {
+    try {
+        if (!mSimulatedPlayer) return String::newString("");
+        return String::newString(mSimulatedPlayer->getXuid());
+    }
+    CatchReturn(String::newString(""));
+}
+
+Local<Value> SimulatedPlayerClass::_getSpawnChunkLimit() {
+    try {
+        if (!mSimulatedPlayer) return Number::newNumber(0);
+        return Number::newNumber(mSimulatedPlayer->_getSpawnChunkLimit());
+    }
+    CatchReturn(Number::newNumber(0););
+}
+
+Local<Value> SimulatedPlayerClass::simulateSneaking(const Arguments& args) {
+    try {
+        if (!mSimulatedPlayer) return Boolean::newBoolean(false);
+        return Boolean::newBoolean(mSimulatedPlayer->simulateSneaking());
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> SimulatedPlayerClass::simulateStopSneaking(const Arguments& args) {
+    try {
+        if (!mSimulatedPlayer) return Boolean::newBoolean(false);
+        return Boolean::newBoolean(mSimulatedPlayer->simulateStopSneaking());
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> SimulatedPlayerClass::simulateUseItem(const Arguments& args) {
+    try {
+        if (!mSimulatedPlayer) return Boolean::newBoolean(false);
+        if (args.size() == 0) {
+            return Boolean::newBoolean(mSimulatedPlayer->simulateUseItem());
+        } else if (args.size() == 1 && IsInstanceOf<ItemStackClass>(args[0])) {
+
+            return Boolean::newBoolean(mSimulatedPlayer->simulateUseItem(
+                *EngineScope::currentEngine()->getNativeInstance<ItemStackClass>(args[0])->mItemStack
+            ));
+        } else PrintWrongArgType();
+        return Boolean::newBoolean(false);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> SimulatedPlayerClass::simulateDestroyLookAt(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kBoolean);
+    try {
+        if (!mSimulatedPlayer) return Boolean::newBoolean(false);
+        return Boolean::newBoolean(mSimulatedPlayer->simulateDestroyLookAt(args[0].asNumber().toFloat()));
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+// Local<Value> SimulatedPlayerClass::initializeComponents(const Arguments& args); // TODO
+
+Local<Value> SimulatedPlayerClass::aiStep(const Arguments& args) {
+    try {
+        if (!mSimulatedPlayer) return Local<Value>();
+        mSimulatedPlayer->aiStep();
+    }
+    Catch;
+    return Local<Value>();
+}
+
+// Local<Value> SimulatedPlayerClass::getMovementSettings(); // TODO
+
+// Local<Value> SimulatedPlayerClass::teleportTo(const Arguments& args) {
+//     CheckArgsCount(args, 1);
+//     try {
+//         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
+//         auto engine = EngineScope::currentEngine();
+//         if (!IsInstanceOf<Vec3Class>(args[0])) {
+//             PrintWrongArgType();
+//             return Boolean::newBoolean(false);
+//         }
+//         auto vec3 = engine->getNativeInstance<Vec3Class>(args[0]);
+//         return Boolean::newBoolean(mSimulatedPlayer->teleportTo(vec3->mVec3));
+//     }
+//     CatchReturn(Boolean::newBoolean(false));
+// }

@@ -92,4 +92,4 @@ void PrintException(script::Exception const& e, string const& func, string const
 
 #define Method(FuncName) Local<Value> FuncName(const Arguments& args);
 
-#define Member(FuncName, Return) Local<Value> FuncName()
+#define Member(FuncName) Local<Value> FuncName()
