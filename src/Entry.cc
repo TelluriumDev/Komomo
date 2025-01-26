@@ -37,7 +37,9 @@ Entry& Entry::getInstance() {
 }
 
 bool Entry::load() {
+#ifdef DEBUG
     getSelf().getLogger().setLevel(ll::io::LogLevel::Debug);
+#endif
 #if (defined(WIN32) || defined(_WIN32)) && defined(DEBUG)
     getSelf().getLogger().info("Waiting for VC debugger attach...");
     // while (!IsDebuggerPresent()) {
