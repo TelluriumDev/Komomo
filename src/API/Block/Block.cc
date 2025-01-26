@@ -1,10 +1,19 @@
+#include "mc/deps/core/string/HashedString.h"
+#include "mc/nbt/CompoundTag.h"
+#include "mc/world/level/block/components/BlockComponentDirectData.h"
+#include "mc/world/level/block/components/BlockComponentStorage.h"
+#include "mc/world/level/block/CachedComponentData.h"
+
 #include "API/Block/Block.h"
 
 #include "API/Actor/Actor.h"
 #include "API/Block/BlockPos.h"
 #include "API/Block/BlockSource.h"
+#include "API/Item/ItemStack.h"
 #include "API/Math/AABB.h"
+#include "API/Math/Vec3.h"
 #include "API/Player/Player.h"
+#include "optional"
 
 using namespace Komomo;
 
@@ -94,6 +103,7 @@ ClassDefine<BlockClass> blockClassBuilder =
         // .InstanceFunction(copyState, BlockClass)
         .InstanceFunction(dealsContactDamage, BlockClass)
         .InstanceFunction(destroy, BlockClass)
+        // .InstanceFunction(entityInside, BlockClass)
         // .InstanceFunction(executeEvent, BlockClass)
         // .InstanceFunction(executeItemEvent, BlockClass)
         // .InstanceFunction(executeTrigger, BlockClass)
@@ -110,74 +120,71 @@ ClassDefine<BlockClass> blockClassBuilder =
         // .InstanceFunction(getMapColor, BlockClass)
         // .InstanceFunction(getMobToSpawn, BlockClass)
         // .InstanceFunction(getOutline, BlockClass)
-        // .InstanceFunction(getPlacementBlock, BlockClass)
-        // .InstanceFunction(getSecondPart, BlockClass)
-        // .InstanceFunction(getVisualShape, BlockClass)
+        .InstanceFunction(getPlacementBlock, BlockClass)
+        .InstanceFunction(getSecondPart, BlockClass)
+        .InstanceFunction(getVisualShape, BlockClass)
         // .InstanceFunction(getVisualShapeInWorld, BlockClass)
         // .InstanceFunction(hasProperty, BlockClass)
         // .InstanceFunction(hasState, BlockClass)
-        // .InstanceFunction(hasTag, BlockClass)
-        // .InstanceFunction(ignoreEntitiesOnPistonMove, BlockClass)
-        // .InstanceFunction(isAttachedTo, BlockClass)
+        .InstanceFunction(hasTag, BlockClass)
+        .InstanceFunction(ignoreEntitiesOnPistonMove, BlockClass)
+        .InstanceFunction(isAttachedTo, BlockClass)
         // .InstanceFunction(isFilteredOut, BlockClass)
-        // .InstanceFunction(isObstructingChests, BlockClass)
-        // .InstanceFunction(isPartialBlock, BlockClass)
-        // .InstanceFunction(isPreservingMediumWhenPlaced, BlockClass)
-        // .InstanceFunction(isTopPartialBlock, BlockClass)
-        // .InstanceFunction(keepState, BlockClass)
+        .InstanceFunction(isObstructingChests, BlockClass)
+        .InstanceFunction(isPartialBlock, BlockClass)
+        .InstanceFunction(isPreservingMediumWhenPlaced, BlockClass)
+        .InstanceFunction(isTopPartialBlock, BlockClass)
         // .InstanceFunction(keepStates, BlockClass)
-        // .InstanceFunction(mayConsumeFertilizer, BlockClass)
-        // .InstanceFunction(mayPick, BlockClass)
-        // .InstanceFunction(mayPickWithArgs, BlockClass)
-        // .InstanceFunction(mayPlace, BlockClass)
-        // .InstanceFunction(mayPlaceOn, BlockClass)
-        // .InstanceFunction(movedByPiston, BlockClass)
-        // .InstanceFunction(neighborChanged, BlockClass)
-        // .InstanceFunction(onExploded, BlockClass)
-        // .InstanceFunction(onFallOn, BlockClass)
+        .InstanceFunction(mayConsumeFertilizer, BlockClass)
+        .InstanceFunction(mayPick, BlockClass)
+        .InstanceFunction(mayPlace, BlockClass)
+        .InstanceFunction(mayPlaceOn, BlockClass)
+        .InstanceFunction(movedByPiston, BlockClass)
+        .InstanceFunction(neighborChanged, BlockClass)
+        .InstanceFunction(onExploded, BlockClass)
+        .InstanceFunction(onFallOn, BlockClass)
         // .InstanceFunction(onFertilized, BlockClass)
-        // .InstanceFunction(onHitByActivatingAttack, BlockClass)
-        // .InstanceFunction(onLightningHit, BlockClass)
-        // .InstanceFunction(onPlace, BlockClass)
-        // .InstanceFunction(onPlayerPlacing, BlockClass)
-        // .InstanceFunction(onProjectileHit, BlockClass)
-        // .InstanceFunction(onRemove, BlockClass)
+        .InstanceFunction(onHitByActivatingAttack, BlockClass)
+        .InstanceFunction(onLightningHit, BlockClass)
+        .InstanceFunction(onPlace, BlockClass)
+        .InstanceFunction(onProjectileHit, BlockClass)
+        .InstanceFunction(onRemove, BlockClass)
         // .InstanceFunction(onStandOn, BlockClass)
-        // .InstanceFunction(onStepOff, BlockClass)
-        // .InstanceFunction(onStepOn, BlockClass)
-        // .InstanceFunction(onStructureBlockPlace, BlockClass)
-        // .InstanceFunction(onStructureNeighborBlockPlace, BlockClass)
-        // .InstanceFunction(playerDestroy, BlockClass)
-        // .InstanceFunction(playerWillDestroy, BlockClass)
+        .InstanceFunction(onStepOff, BlockClass)
+        .InstanceFunction(onStepOn, BlockClass)
+        .InstanceFunction(onStructureBlockPlace, BlockClass)
+        .InstanceFunction(onStructureNeighborBlockPlace, BlockClass)
+        .InstanceFunction(playerDestroy, BlockClass)
+        .InstanceFunction(playerWillDestroy, BlockClass)
         // .InstanceFunction(popResource, BlockClass)
-        // .InstanceFunction(pushesOutItems, BlockClass)
-        // .InstanceFunction(pushesUpFallingBlocks, BlockClass)
+        .InstanceFunction(pushesOutItems, BlockClass)
+        .InstanceFunction(pushesUpFallingBlocks, BlockClass)
         // .InstanceFunction(queuedTick, BlockClass)
         // .InstanceFunction(randomTick, BlockClass)
-        // .InstanceFunction(randomlyModifyPosition, BlockClass)
-        // .InstanceFunction(shouldRandomTick, BlockClass)
-        // .InstanceFunction(shouldRandomTickExtraLayer, BlockClass)
-        // .InstanceFunction(shouldStopFalling, BlockClass)
-        // .InstanceFunction(shouldTickOnSetBlock, BlockClass)
+        .InstanceFunction(randomlyModifyPosition, BlockClass)
+        .InstanceFunction(requiresCorrectToolForDrops, BlockClass)
+        .InstanceFunction(setRuntimeId, BlockClass)
+        .InstanceFunction(shouldRandomTick, BlockClass)
+        .InstanceFunction(shouldRandomTickExtraLayer, BlockClass)
+        .InstanceFunction(shouldStopFalling, BlockClass)
+        .InstanceFunction(shouldTickOnSetBlock, BlockClass)
         // .InstanceFunction(spawnResources, BlockClass)
-        // .InstanceFunction(telemetryVariant, BlockClass)
-        // .InstanceFunction(toDebugString, BlockClass)
-        // .InstanceFunction(transformOnFall, BlockClass)
-        // .InstanceFunction(triggerEvent, BlockClass)
+        .InstanceFunction(telemetryVariant, BlockClass)
+        .InstanceFunction(toDebugString, BlockClass)
+        .InstanceFunction(transformOnFall, BlockClass)
+        .InstanceFunction(triggerEvent, BlockClass)
         // .InstanceFunction(tryGetCopperBehavior, BlockClass)
-        // .InstanceFunction(tryGetInfested, BlockClass)
-        // .InstanceFunction(tryGetUninfested, BlockClass)
+        .InstanceFunction(tryGetInfested, BlockClass)
+        .InstanceFunction(tryGetUninfested, BlockClass)
         // .InstanceFunction(tryToPlace, BlockClass)
-        // .InstanceFunction(tryToTill, BlockClass)
+        .InstanceFunction(tryToTill, BlockClass)
         // .InstanceFunction(updateEntityAfterFallOn, BlockClass)
         // .InstanceFunction(updateTallestCollisionShape, BlockClass)
-        // .InstanceFunction(use, BlockClass)
-        // .InstanceFunction(waterSpreadCausesSpawn, BlockClass)
-        // .InstanceFunction(buildSerializationId, BlockClass)
-        // .InstanceFunction(setRuntimeId, BlockClass)
-        // .InstanceFunction(_queueForTickBasedOnComponentConfiguration, BlockClass)
-        // .InstanceFunction(_removeFromTickingQueues, BlockClass)
-        // .InstanceFunction(entityInside, BlockClass)
+        .InstanceFunction(use, BlockClass)
+
+        // static
+        //  .function(BLOCK_DESCRIPTION_PREFIX, BlockClass)
+        //  .function(SIZE_OFFSET, BlockClass)
         .build();
 
 BlockClass::BlockClass(Block* block) : ScriptClass(ConstructFromCpp<BlockClass>{}) { this->mBlock = block; }
@@ -202,13 +209,6 @@ Local<Object> BlockClass::newBlock(Block* block) { return (new BlockClass(block)
 Local<Value> BlockClass::getAllowsRunes() { CallFunction(Boolean, getAllowsRunes()); }
 // Local<Value> BlockClass::getBlockEntityType() {}
 Local<Value> BlockClass::getBurnOdds() { CallFunction(Number, getBurnOdds()); }
-// Local<Value> BlockClass::getDefaultState() {
-//     try {
-//         if (!mBlock) return Local<Value>();
-//         return (new BlockClass(mBlock->getDefaultState()))->getScriptObject();
-//     }
-//     Catch;
-// }
 Local<Value> BlockClass::getDescriptionId() { CallFunction(String, getDescriptionId()); }
 Local<Value> BlockClass::getDestroySpeed() { CallFunction(Number, getDestroySpeed()); }
 Local<Value> BlockClass::getExplosionResistance() { CallFunction(Number, getExplosionResistance()); }
@@ -434,6 +434,7 @@ Local<Value> BlockClass::canSlide(const Arguments& args) {
     CheckInstanceType(args[0], BlockSourceClass);
     CheckInstanceType(args[1], BlockPosClass);
     try {
+        if (!mBlock) return Local<Value>();
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
@@ -447,6 +448,7 @@ Local<Value> BlockClass::canSurvive(const Arguments& args) {
     CheckInstanceType(args[0], BlockSourceClass);
     CheckInstanceType(args[1], BlockPosClass);
     try {
+        if (!mBlock) return Local<Value>();
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
@@ -463,6 +465,7 @@ Local<Value> BlockClass::checkIsPathable(const Arguments& args) {
     CheckInstanceType(args[1], BlockPosClass);
     CheckInstanceType(args[2], BlockPosClass);
     try {
+        if (!mBlock) return Local<Value>();
         auto engine      = EngineScope::currentEngine();
         auto entity      = engine->getNativeInstance<ActorClass>(args[0])->mActor;
         auto lastPathPos = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
@@ -494,6 +497,7 @@ Local<Value> BlockClass::dealsContactDamage(const Arguments& args) {
     CheckInstanceType(args[0], ActorClass);
     CheckArgType(args[1], ValueKind::kBoolean);
     try {
+        if (!mBlock) return Local<Value>();
         auto engine        = EngineScope::currentEngine();
         auto actor         = engine->getNativeInstance<ActorClass>(args[0])->mActor;
         auto isPathFinding = args[1].asBoolean().value();
@@ -508,6 +512,7 @@ Local<Value> BlockClass::destroy(const Arguments& args) {
     CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
     CheckInstanceTypeReturn(args[2], ActorClass, Boolean::newBoolean(false));
     try {
+        if (!mBlock) return Local<Value>();
         auto engine       = EngineScope::currentEngine();
         auto region       = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos          = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
@@ -555,6 +560,7 @@ Local<Value> BlockClass::getComparatorSignal(const Arguments& args) {
     CheckInstanceType(args[1], BlockPosClass);
     CheckArgType(args[2], ValueKind::kNumber);
     try {
+        if (!mBlock) return Local<Value>();
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
@@ -573,6 +579,7 @@ Local<Value> BlockClass::getDebugText(const Arguments& args) {
     CheckArgTypeReturn(args[0], ValueKind::kArray, Boolean::newBoolean(false));
     CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
     try {
+        if (!mBlock) return Local<Value>();
         auto outputInfo       = args[0].asArray();
         auto outputInfoVector = std::vector<std::string>(outputInfo.size());
         for (decltype(outputInfo.size()) i = 0; i < outputInfo.size(); i++) {
@@ -593,6 +600,7 @@ Local<Value> BlockClass::getDirectSignal(const Arguments& args) {
     CheckInstanceType(args[1], BlockPosClass);
     CheckArgType(args[2], ValueKind::kNumber);
     try {
+        if (!mBlock) return Local<Value>();
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
@@ -610,10 +618,696 @@ Local<Value> BlockClass::getIgnoresDestroyPermissions(const Arguments& args) {
     CheckInstanceType(args[0], ActorClass);
     CheckInstanceType(args[1], BlockPosClass);
     try {
+        if (!mBlock) return Local<Value>();
         auto engine = EngineScope::currentEngine();
-        auto entity  = engine->getNativeInstance<ActorClass>(args[0])->mActor;
+        auto entity = engine->getNativeInstance<ActorClass>(args[0])->mActor;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         return Boolean::newBoolean(mBlock->getIgnoresDestroyPermissions(*entity, *pos));
+    }
+    Catch;
+}
+
+// MCAPI ::mce::Color getMapColor(::BlockSource& region, ::BlockPos const& pos) const;
+// Local<Value> BlockClass::getMapColor(const Arguments& args) {}
+
+// MCAPI ::MobSpawnerData const* getMobToSpawn(::SpawnConditions const& conditions, ::BlockSource& region) const;
+// Local<Value> BlockClass::getMobToSpawn(const Arguments& args) {}
+
+// MCAPI ::AABB const& getOutline(::IConstBlockSource const& region, ::BlockPos const& pos, ::AABB& bufferValue) const;
+// Local<Value> BlockClass::getOutline(const Arguments& args) {}
+
+Local<Value> BlockClass::getPlacementBlock(const Arguments& args) {
+    CheckArgsCount(args, 5);
+    CheckInstanceType(args[0], ActorClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    CheckArgType(args[2], ValueKind::kNumber);
+    CheckInstanceType(args[3], Vec3Class);
+    CheckArgType(args[4], ValueKind::kNumber);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine    = EngineScope::currentEngine();
+        auto by        = engine->getNativeInstance<ActorClass>(args[0])->mActor;
+        auto pos       = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto face      = static_cast<uchar>(args[2].asNumber().toInt32());
+        auto clickPos  = engine->getNativeInstance<Vec3Class>(args[3])->mVec3;
+        auto itemValue = args[4].asNumber().toInt32();
+        auto &result    = const_cast<Block&>(mBlock->getPlacementBlock(*by, *pos, face, clickPos, itemValue));
+        return BlockClass::newBlock(&result);
+    }
+    Catch;
+}
+
+Local<Value> BlockClass::getSecondPart(const Arguments& args) {
+    CheckArgsCount(args, 3);
+    CheckInstanceType(args[0], BlockSourceClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    CheckInstanceType(args[2], BlockPosClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto out    = engine->getNativeInstance<BlockPosClass>(args[2])->mBlockPos;
+        return Boolean::newBoolean(mBlock->getSecondPart(*region, *pos, *out));
+    }
+    Catch;
+}
+
+Local<Value> BlockClass::getVisualShape(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckInstanceType(args[0], AABBClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto bufferAABB = EngineScope::currentEngine()->getNativeInstance<AABBClass>(args[0])->mAABB;
+        auto shape      = mBlock->getVisualShape(*bufferAABB);
+        return (new AABBClass(&shape))->getScriptObject();
+    }
+    Catch;
+}
+
+// MCAPI ::AABB const&
+//     getVisualShapeInWorld(::IConstBlockSource const& region, ::BlockPos const& pos, ::AABB& bufferAABB) const;
+// Local<Value> BlockClass::getVisualShapeInWorld(const Arguments& args) {}
+
+// BlockProperty not implemented
+// MCAPI bool hasProperty(::BlockProperty type) const;
+// Local<Value> BlockClass::hasProperty(const Arguments& args) {}
+
+// BlockState not implemented
+// MCAPI bool hasState(::BlockState const& stateType) const;
+// Local<Value> BlockClass::hasState(const Arguments& args) {}
+
+// another overload: HashedString not implemented
+// MCAPI bool hasTag(::HashedString const& tagName) const;
+Local<Value> BlockClass::hasTag(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kNumber);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto hash = static_cast<uint64>(args[0].asNumber().toInt64());
+        return Boolean::newBoolean(mBlock->hasTag(hash));
+    }
+    Catch;
+}
+
+Local<Value> BlockClass::ignoreEntitiesOnPistonMove() { CallVoidMethod(ignoreEntitiesOnPistonMove()); }
+
+Local<Value> BlockClass::isAttachedTo(const Arguments& args) {
+    CheckArgsCount(args, 3);
+    CheckInstanceType(args[0], BlockSourceClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    CheckInstanceType(args[2], BlockPosClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine        = EngineScope::currentEngine();
+        auto region        = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos           = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto outAttachedTo = engine->getNativeInstance<BlockPosClass>(args[2])->mBlockPos;
+        return Boolean::newBoolean(mBlock->isAttachedTo(*region, *pos, *outAttachedTo));
+    }
+    Catch;
+}
+
+// BlockRenderLayer not implemented
+// MCAPI bool isFilteredOut(::BlockRenderLayer heldItemRenderLayer) const;
+// Local<Value> BlockClass::isFaceSturdy(const Arguments& args) {}
+
+Local<Value> BlockClass::isObstructingChests(const Arguments& args) {
+    CheckArgsCount(args, 2);
+    CheckInstanceType(args[0], BlockSourceClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        return Boolean::newBoolean(mBlock->isObstructingChests(*region, *pos));
+    }
+    Catch;
+}
+
+Local<Value> BlockClass::isPartialBlock(const Arguments& args) {
+    CheckArgsCount(args, 2);
+    CheckInstanceType(args[0], BlockSourceClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        return Boolean::newBoolean(mBlock->isPartialBlock(*region, *pos));
+    }
+    Catch;
+}
+
+Local<Value> BlockClass::isPreservingMediumWhenPlaced(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckInstanceType(args[0], BlockClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto medium = engine->getNativeInstance<BlockClass>(args[0])->mBlock;
+        return Boolean::newBoolean(mBlock->isPreservingMediumWhenPlaced(*medium));
+    }
+    Catch;
+}
+
+Local<Value> BlockClass::isTopPartialBlock(const Arguments& args) {
+    CheckArgsCount(args, 2);
+    CheckInstanceType(args[0], BlockSourceClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        return Boolean::newBoolean(mBlock->isTopPartialBlock(*region, *pos));
+    }
+    Catch;
+}
+
+// BlockState not implemented
+// MCAPI ::Block const& keepStates(::std::vector<::BlockState const*> const& statesToKeep) const;
+// Local<Value> BlockClass::keepStates(const Arguments& args) { }
+
+Local<Value> BlockClass::mayConsumeFertilizer(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckInstanceType(args[0], BlockSourceClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        return Boolean::newBoolean(mBlock->mayConsumeFertilizer(*region));
+    }
+    Catch;
+}
+
+Local<Value> BlockClass::mayPick(const Arguments& args) {
+    if (!mBlock) return Local<Value>();
+    switch (args.size()) {
+    case size_t(0):
+        return Boolean::newBoolean(mBlock->mayPick());
+    case size_t(2): {
+        CheckInstanceType(args[0], BlockSourceClass);
+        CheckArgType(args[1], ValueKind::kBoolean);
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto liquid = args[1].asBoolean().value();
+        return Boolean::newBoolean(mBlock->mayPick(*region, liquid));
+    }
+    default:
+        PrintWrongArgsCount();
+        return Local<Value>();
+    }
+}
+
+Local<Value> BlockClass::mayPlace(const Arguments& args) {
+    if (!mBlock) return Local<Value>();
+    switch (args.size()) {
+    case size_t(2): {
+        CheckInstanceType(args[0], BlockSourceClass);
+        CheckInstanceType(args[1], BlockPosClass);
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        return Boolean::newBoolean(mBlock->mayPlace(*region, *pos));
+    }
+    case size_t(3): {
+        CheckInstanceType(args[0], BlockSourceClass);
+        CheckInstanceType(args[1], BlockPosClass);
+        CheckArgType(args[2], ValueKind::kNumber);
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto face   = static_cast<uchar>(args[2].asNumber().toInt32());
+        return Boolean::newBoolean(mBlock->mayPlace(*region, *pos, face));
+    }
+    default:
+        PrintWrongArgsCount();
+        return Local<Value>();
+    }
+}
+
+Local<Value> BlockClass::mayPlaceOn(const Arguments& args) {
+    CheckArgsCount(args, 2);
+    CheckInstanceType(args[0], BlockSourceClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        return Boolean::newBoolean(mBlock->mayPlaceOn(*region, *pos));
+    }
+    Catch;
+}
+
+Local<Value> BlockClass::movedByPiston(const Arguments& args) {
+    CheckArgsCountReturn(args, 2, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        mBlock->movedByPiston(*region, *pos);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::neighborChanged(const Arguments& args) {
+    CheckArgsCountReturn(args, 3, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[2], BlockPosClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine      = EngineScope::currentEngine();
+        auto region      = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos         = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto neighborPos = engine->getNativeInstance<BlockPosClass>(args[2])->mBlockPos;
+        mBlock->neighborChanged(*region, *pos, *neighborPos);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::onExploded(const Arguments& args) {
+    CheckArgsCountReturn(args, 3, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[2], ActorClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine       = EngineScope::currentEngine();
+        auto region       = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos          = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto entitySource = engine->getNativeInstance<ActorClass>(args[2])->mActor;
+        mBlock->onExploded(*region, *pos, entitySource);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::onFallOn(const Arguments& args) {
+    CheckArgsCountReturn(args, 4, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[2], ActorClass, Boolean::newBoolean(false));
+    CheckArgTypeReturn(args[3], ValueKind::kBoolean, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine     = EngineScope::currentEngine();
+        auto region     = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos        = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto entity    = engine->getNativeInstance<ActorClass>(args[2])->mActor;
+        auto fallDistance = args[3].asNumber().toFloat();
+        mBlock->onFallOn(*region, *pos, *entity, fallDistance);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+// FertilizerType not implemented
+// MCAPI bool
+// onFertilized(::BlockSource& region, ::BlockPos const& pos, ::Actor* entity, ::FertilizerType fType) const;
+// Local<Value> BlockClass::onFertilized(const Arguments& args) {}
+
+Local<Value> BlockClass::onHitByActivatingAttack(const Arguments& args) {
+    CheckArgsCountReturn(args, 3, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[2], ActorClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine      = EngineScope::currentEngine();
+        auto region      = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos         = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto sourceActor = engine->getNativeInstance<ActorClass>(args[2])->mActor;
+        mBlock->onHitByActivatingAttack(*region, *pos, sourceActor);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::onLightningHit(const Arguments& args) {
+    CheckArgsCountReturn(args, 2, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        mBlock->onLightningHit(*region, *pos);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::onPlace(const Arguments& args) {
+    CheckArgsCountReturn(args, 3, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[2], BlockClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine        = EngineScope::currentEngine();
+        auto region        = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos           = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto previousBlock = engine->getNativeInstance<BlockClass>(args[2])->mBlock;
+        mBlock->onPlace(*region, *pos, *previousBlock);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::onProjectileHit(const Arguments& args) {
+    CheckArgsCountReturn(args, 3, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[2], ActorClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine     = EngineScope::currentEngine();
+        auto region     = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos        = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto projectile = engine->getNativeInstance<ActorClass>(args[2])->mActor;
+        mBlock->onProjectileHit(*region, *pos, *projectile);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::onRemove(const Arguments& args) {
+    CheckArgsCountReturn(args, 2, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        mBlock->onRemove(*region, *pos);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+// EntityContext not implemented
+// MCAPI void onStandOn(::EntityContext& entity, ::BlockPos const& pos) const;
+// Local<Value> BlockClass::onStandOn(const Arguments& args) {}
+
+Local<Value> BlockClass::onStepOff(const Arguments& args) {
+    CheckArgsCountReturn(args, 2, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], ActorClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto entity = engine->getNativeInstance<ActorClass>(args[0])->mActor;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        mBlock->onStepOff(*entity, *pos);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::onStepOn(const Arguments& args) {
+    CheckArgsCountReturn(args, 2, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], ActorClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto entity = engine->getNativeInstance<ActorClass>(args[0])->mActor;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        mBlock->onStepOn(*entity, *pos);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::onStructureBlockPlace(const Arguments& args) {
+    CheckArgsCountReturn(args, 2, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        mBlock->onStructureBlockPlace(*region, *pos);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::onStructureNeighborBlockPlace(const Arguments& args) {
+    CheckArgsCountReturn(args, 2, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        mBlock->onStructureNeighborBlockPlace(*region, *pos);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::playerDestroy(const Arguments& args) {
+    CheckArgsCountReturn(args, 2, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], PlayerClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto player = engine->getNativeInstance<PlayerClass>(args[0])->get();
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        mBlock->playerDestroy(*player, *pos);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::playerWillDestroy(const Arguments& args) {
+    CheckArgsCount(args, 2);
+    CheckInstanceType(args[0], PlayerClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto player = engine->getNativeInstance<PlayerClass>(args[0])->get();
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto result = const_cast<Block*>(mBlock->playerWillDestroy(*player, *pos));
+        return BlockClass::newBlock(result);
+    }
+    Catch;
+}
+
+// ItemInstance, ItemActor not implemented
+// MCAPI ::ItemActor*
+//     popResource(::BlockSource& region, ::BlockPos const& pos, ::ItemInstance const& itemInstance) const;
+// Local<Value> BlockClass::popResource(const Arguments& args) { }
+
+Local<Value> BlockClass::pushesOutItems() { CallFunction(Boolean, pushesOutItems()); }
+
+Local<Value> BlockClass::pushesUpFallingBlocks() { CallFunction(Boolean, pushesUpFallingBlocks()); }
+
+// Random not implemented
+// MCAPI void queuedTick(::BlockSource& region, ::BlockPos const& pos, ::Random& random) const;
+// Local<Value> BlockClass::queuedTick(const Arguments& args) { }
+
+// Random not implemented
+// MCAPI void randomTick(::BlockSource& region, ::BlockPos const& pos, ::Random& random) const;
+// Local<Value> BlockClass::randomTick(const Arguments& args) { }
+
+Local<Value> BlockClass::randomlyModifyPosition(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckInstanceType(args[0], BlockPosClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto pos    = EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[0])->mBlockPos;
+        auto result = mBlock->randomlyModifyPosition(*pos);
+        return (new Vec3Class(result))->getScriptObject();
+    }
+    Catch;
+}
+
+Local<Value> BlockClass::requiresCorrectToolForDrops() { CallFunction(Boolean, requiresCorrectToolForDrops()); }
+
+Local<Value> BlockClass::setRuntimeId(const Arguments& args) {
+    CheckArgsCountReturn(args, 1, Boolean::newBoolean(false));
+    CheckArgTypeReturn(args[0], ValueKind::kNumber, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto runtimeId = static_cast<uint>(args[0].asNumber().toInt64());
+        mBlock->setRuntimeId(runtimeId);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::shouldRandomTick() { CallFunction(Boolean, shouldRandomTick()); }
+
+Local<Value> BlockClass::shouldRandomTickExtraLayer() { CallFunction(Boolean, shouldRandomTickExtraLayer()); }
+
+Local<Value> BlockClass::shouldStopFalling(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckInstanceType(args[0], ActorClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto entity = EngineScope::currentEngine()->getNativeInstance<ActorClass>(args[0])->mActor;
+        return Boolean::newBoolean(mBlock->shouldStopFalling(*entity));
+    }
+    Catch;
+}
+
+Local<Value> BlockClass::shouldTickOnSetBlock() { CallFunction(Boolean, shouldTickOnSetBlock()); }
+
+
+// MCAPI void spawnResources(
+//         ::BlockSource&                region,
+//         ::BlockPos const&             pos,
+//         ::Randomize&                  randomize,
+//         ::ResourceDropsContext const& resourceDropsContext
+//     ) const;
+// Local<Value> BlockClass::spawnResources(const Arguments& args) { }
+
+Local<Value> BlockClass::telemetryVariant(const Arguments& args) {
+    CheckArgsCount(args, 2);
+    CheckInstanceType(args[0], BlockSourceClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        return Number::newNumber(mBlock->telemetryVariant(*region, *pos));
+    }
+    Catch;
+}
+
+Local<Value> BlockClass::toDebugString() { CallFunction(String, toDebugString()); }
+
+Local<Value> BlockClass::transformOnFall(const Arguments& args) {
+    CheckArgsCountReturn(args, 4, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[2], ActorClass, Boolean::newBoolean(false));
+    CheckArgTypeReturn(args[3], ValueKind::kNumber, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine       = EngineScope::currentEngine();
+        auto region       = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos          = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto entity       = engine->getNativeInstance<ActorClass>(args[2])->mActor;
+        auto fallDistance = args[3].asNumber().toInt32();
+        mBlock->transformOnFall(*region, *pos, entity, fallDistance);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+Local<Value> BlockClass::triggerEvent(const Arguments& args) {
+    CheckArgsCountReturn(args, 4, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], BlockSourceClass, Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
+    CheckArgTypeReturn(args[2], ValueKind::kNumber, Boolean::newBoolean(false));
+    CheckArgTypeReturn(args[3], ValueKind::kNumber, Boolean::newBoolean(false));
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto b0     = args[2].asNumber().toInt32();
+        auto b1     = args[3].asNumber().toInt32();
+        mBlock->triggerEvent(*region, *pos, b0, b1);
+        return Boolean::newBoolean(true);
+    }
+    CatchReturn(Boolean::newBoolean(false));
+}
+
+// MCAPI ::CopperBehavior const* tryGetCopperBehavior() const;
+// Local<Value> BlockClass::tryGetCopperBehavior() { }
+
+Local<Value> BlockClass::tryGetInfested() {
+    try {
+        if (!mBlock) return Local<Value>();
+        auto result = const_cast<Block*>(mBlock->tryGetInfested());
+        return BlockClass::newBlock(result);
+    }
+    Catch;
+}
+
+Local<Value> BlockClass::tryGetUninfested() {
+    try {
+        if (!mBlock) return Local<Value>();
+        auto result = const_cast<Block*>(mBlock->tryGetUninfested());
+        return BlockClass::newBlock(result);
+    }
+    Catch;
+}
+
+// MCAPI bool tryToPlace(::BlockSource& region, ::BlockPos const& pos, ::ActorBlockSyncMessage const* syncMsg) const;
+// Local<Value> BlockClass::tryToPlace(const Arguments& args) { }
+
+Local<Value> BlockClass::tryToTill(const Arguments& args) {
+    CheckArgsCount(args, 4);
+    CheckInstanceType(args[0], BlockSourceClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    CheckInstanceType(args[2], ActorClass);
+    CheckInstanceType(args[3], ItemStackClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine = EngineScope::currentEngine();
+        auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto entity = engine->getNativeInstance<ActorClass>(args[2])->mActor;
+        auto item   = engine->getNativeInstance<ItemStackClass>(args[2])->mItemStack;
+        return Boolean::newBoolean(mBlock->tryToTill(*region, *pos, *entity, *item));
+    }
+    Catch;
+}
+
+// MCAPI void updateEntityAfterFallOn(::BlockPos const& pos, ::UpdateEntityAfterFallOnInterface& entity) const;
+//  Local<Value> BlockClass::updateEntityAfterFallOn(const Arguments& args) { }
+
+// MCAPI bool updateTallestCollisionShape(
+//         ::BlockSource const&                               region,
+//         ::BlockPos const&                                  pos,
+//         ::AABB const&                                      intersectTestBox,
+//         ::optional_ref<::GetCollisionShapeInterface const> entity,
+//         ::AABB&                                            result,
+//         ::Vec3 const&                                      posToMinimizeDistanceToIfMatchingHeight,
+//         float&                                             currentDistanceSqr
+//     ) const;
+// Local<Value> BlockClass::updateTallestCollisionShape(const Arguments& args) { }
+
+Local<Value> BlockClass::use(const Arguments& args) {
+    CheckArgsCount(args, 3) // check if < 3
+    CheckInstanceType(args[0], PlayerClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    CheckArgType(args[2], ValueKind::kNumber);
+    if (args.size() >= 4) {
+        CheckInstanceType(args[3], Vec3Class);
+    }
+    try {
+        if (!mBlock) return Local<Value>();
+        auto                engine = EngineScope::currentEngine();
+        auto                player = engine->getNativeInstance<PlayerClass>(args[0])->get();
+        auto                pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto                face   = static_cast<uchar>(args[2].asNumber().toInt32());
+        std::optional<Vec3> hit;
+        if (args.size() >= 4) {
+            hit.emplace(static_cast<Vec3>(engine->getNativeInstance<Vec3Class>(args[3])->mVec3));
+        }
+        return Boolean::newBoolean(mBlock->use(*player, *pos, face, hit));
     }
     Catch;
 }
