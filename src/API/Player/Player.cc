@@ -12,12 +12,8 @@
 #include "API/Player/LayeredAbilities.h"
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
-#include "mc/world/item/ItemStack.h"
-
 
 #include <ll/api/service/PlayerInfo.h>
-
-#include <mc/world/actor/player/AbilitiesIndex.h>
 
 
 using namespace Komomo;
