@@ -59,8 +59,8 @@ public: /* Method */
     Method(simulateLocalMove);
     Method(simulateLookAt); // three overloads
     Method(simulateMoveToLocation);
-    Method(simulateNavigateToEntity);
-    Method(simulateNavigateToLocation);
+    // Method(simulateNavigateToEntity);
+    // Method(simulateNavigateToLocation);
     Method(simulateNavigateToLocations);
     Method(simulateRespawn);
     Method(simulateSetBodyRotation);

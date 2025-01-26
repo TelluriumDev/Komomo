@@ -32,9 +32,9 @@
 #include "API/Player/Gamemode.h"
 #include "API/Player/LayeredAbilities.h"
 #include "API/Player/Player.h"
+#include "API/Player/SimulatedPlayer.h"
 #include "API/Service/Service.h"
 #include "Utils/Using.h"
-
 
 
 namespace Komomo {
@@ -48,6 +48,7 @@ inline void BindAPI(ScriptEngine* engine) {
     engine->registerNativeClass<PlayerClass>(playerClassBuilder);
     engine->registerNativeClass<GameModeClass>(gameModeClassBuilder);
     engine->registerNativeClass<LayeredAbilitiesClass>(layeredAbilitiesClassBuilder);
+    engine->registerNativeClass<SimulatedPlayerClass>(simulatedPlayerClassBuilder);
 
     engine->registerNativeClass<EventBusClass>(eventBusClassBuilder);
     engine->registerNativeClass<ListenerClass>(listenerClassBuilder);
