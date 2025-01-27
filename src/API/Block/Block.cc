@@ -1,9 +1,3 @@
-#include "mc/deps/core/string/HashedString.h"
-#include "mc/nbt/CompoundTag.h"
-#include "mc/world/level/block/CachedComponentData.h"
-#include "mc/world/level/block/components/BlockComponentDirectData.h"
-#include "mc/world/level/block/components/BlockComponentStorage.h"
-
 #include "API/Block/Block.h"
 
 #include "API/Actor/Actor.h"
@@ -13,6 +7,13 @@
 #include "API/Math/AABB.h"
 #include "API/Math/Vec3.h"
 #include "API/Player/Player.h"
+
+#include "mc/deps/core/string/HashedString.h"
+#include "mc/nbt/CompoundTag.h"
+#include "mc/world/level/block/CachedComponentData.h"
+#include "mc/world/level/block/components/BlockComponentDirectData.h"
+#include "mc/world/level/block/components/BlockComponentStorage.h"
+
 #include "optional"
 
 using namespace Komomo;
