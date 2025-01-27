@@ -1,8 +1,8 @@
 #include "mc/deps/core/string/HashedString.h"
 #include "mc/nbt/CompoundTag.h"
+#include "mc/world/level/block/CachedComponentData.h"
 #include "mc/world/level/block/components/BlockComponentDirectData.h"
 #include "mc/world/level/block/components/BlockComponentStorage.h"
-#include "mc/world/level/block/CachedComponentData.h"
 
 #include "API/Block/Block.h"
 
@@ -23,21 +23,23 @@ ClassDefine<BlockClass> blockClassBuilder =
 
         .instanceProperty("allowsRunes", &BlockClass::getAllowsRunes)
         //.instanceProperty("blockEntityType", &BlockClass::getBlockEntityType)
+        // .instanceProperty("blockTintType", &BlockClass::getBlockTintType)
+        .instanceProperty("blockItemId", &BlockClass::getBlockItemId)
         .instanceProperty("burnOdds", &BlockClass::getBurnOdds)
+        .instanceProperty("data", &BlockClass::getData)
         // .instanceProperty("defaultState", &BlockClass::getDefaultState)
         .instanceProperty("descriptionId", &BlockClass::getDescriptionId)
-        .instanceProperty("destroySpeed", &BlockClass::getDestroySpeed)
         .instanceProperty("flameOdds", &BlockClass::getFlameOdds)
         .instanceProperty("hardness", &BlockClass::getFriction)
         .instanceProperty("explosionResistance", &BlockClass::getExplosionResistance)
         //.instanceProperty("light", &BlockClass::getLight)
         //.instanceProperty("lightEmission", &BlockClass::getLightEmission)
         //.instanceProperty("material", &BlockClass::getMaterial)
-        //.instanceProperty("name", &BlockClass::getName)
         .instanceProperty("runtimeId", &BlockClass::getRuntimeId)
         //.instanceProperty("serializationId", &BlockClass::getSerializationId)
         .instanceProperty("thickness", &BlockClass::getThickness)
         .instanceProperty("translucency", &BlockClass::getTranslucency)
+        .instanceProperty("typeName", &BlockClass::getTypeName)
         .instanceProperty("variant", &BlockClass::getVariant)
 
         .instanceProperty("isAir", &BlockClass::isAir)
@@ -114,6 +116,7 @@ ClassDefine<BlockClass> blockClassBuilder =
         .InstanceFunction(getComparatorSignal, BlockClass)
         // .InstanceFunction(getConnectedDirections, BlockClass)
         .InstanceFunction(getDebugText, BlockClass)
+        .InstanceFunction(getDestroySpeed, BlockClass)
         .InstanceFunction(getDirectSignal, BlockClass)
         // .InstanceFunction(getExperienceDrop, BlockClass)
         .InstanceFunction(getIgnoresDestroyPermissions, BlockClass)
@@ -208,9 +211,14 @@ Local<Object> BlockClass::newBlock(Block* block) { return (new BlockClass(block)
 
 Local<Value> BlockClass::getAllowsRunes() { CallFunction(Boolean, getAllowsRunes()); }
 // Local<Value> BlockClass::getBlockEntityType() {}
+
+// MCAPI ::BlockTintType getBlockTintType() const;
+//  Local<Value> BlockClass::getBlockTintType() { CallFunction(Number, getBlockTintType()); }
+Local<Value> BlockClass::getBlockItemId() { CallFunction(Number, getBlockItemId()); }
 Local<Value> BlockClass::getBurnOdds() { CallFunction(Number, getBurnOdds()); }
+Local<Value> BlockClass::getData() { CallFunction(Number, getData()); }
 Local<Value> BlockClass::getDescriptionId() { CallFunction(String, getDescriptionId()); }
-Local<Value> BlockClass::getDestroySpeed() { CallFunction(Number, getDestroySpeed()); }
+
 Local<Value> BlockClass::getExplosionResistance() { CallFunction(Number, getExplosionResistance()); }
 Local<Value> BlockClass::getFlameOdds() { CallFunction(Number, getFlameOdds()); }
 Local<Value> BlockClass::getFriction() { CallFunction(Number, getFriction()); }
@@ -221,9 +229,6 @@ Local<Value> BlockClass::getFriction() { CallFunction(Number, getFriction()); }
 // Local<Value> BlockClass::getLightEmission() { CallFunction(Number, getLightEmission()); }
 // Local<Value> BlockClass::getMaterial() { CallFunction(String, getMaterial()); }
 
-// symbol: ?getName@Block@@QEBAAEBVHashedString@@XZ
-// Local<Value> BlockClass::getName() { CallFunction(String, getName()); }
-
 Local<Value> BlockClass::getRuntimeId() { CallFunction(Number, getRuntimeId()); }
 
 // symbol: ?getSerializationId@Block@@QEBAAEBVCompoundTag@@XZ
@@ -231,6 +236,7 @@ Local<Value> BlockClass::getRuntimeId() { CallFunction(Number, getRuntimeId()); 
 
 Local<Value> BlockClass::getThickness() { CallFunction(Number, getThickness()); }
 Local<Value> BlockClass::getTranslucency() { CallFunction(Number, getTranslucency()); }
+Local<Value> BlockClass::getTypeName() { CallFunction(String, getTypeName()); };
 Local<Value> BlockClass::getVariant() { CallFunction(Number, getVariant()); }
 
 Local<Value> BlockClass::isAir() { CallFunction(Boolean, isAir()); }
@@ -540,6 +546,9 @@ Local<Value> BlockClass::destroy(const Arguments& args) {
 // MCAPI void forEachState(std::function<bool(class BlockState const&, int)> callback) const;
 // Local<Value> BlockClass::forEachState(const Arguments& args) {}
 
+// MCAPI ::BlockState const* getBlockState(::HashedString const& name) const;
+// Local<Value> getBlockState(const Arguments& args) {}
+
 // MCAPI bool getClientPredictionOverride(::BlockClientPredictionOverrides) const;
 // Local<Value> getClientPredictionOverride(const Arguments& args) {}
 
@@ -594,6 +603,10 @@ Local<Value> BlockClass::getDebugText(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
+// MCAPI float getDestroySpeed() const;
+// MCAPI float getDestroySpeed(::ItemStackBase const& item) const; //not implemented
+Local<Value> BlockClass::getDestroySpeed(const Arguments& args) { CallFunction(Number, getDestroySpeed()); }
+
 Local<Value> BlockClass::getDirectSignal(const Arguments& args) {
     CheckArgsCount(args, 3);
     CheckInstanceType(args[0], BlockSourceClass);
@@ -645,13 +658,13 @@ Local<Value> BlockClass::getPlacementBlock(const Arguments& args) {
     CheckArgType(args[4], ValueKind::kNumber);
     try {
         if (!mBlock) return Local<Value>();
-        auto engine    = EngineScope::currentEngine();
-        auto by        = engine->getNativeInstance<ActorClass>(args[0])->mActor;
-        auto pos       = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        auto face      = static_cast<uchar>(args[2].asNumber().toInt32());
-        auto clickPos  = engine->getNativeInstance<Vec3Class>(args[3])->mVec3;
-        auto itemValue = args[4].asNumber().toInt32();
-        auto &result    = const_cast<Block&>(mBlock->getPlacementBlock(*by, *pos, face, clickPos, itemValue));
+        auto  engine    = EngineScope::currentEngine();
+        auto  by        = engine->getNativeInstance<ActorClass>(args[0])->mActor;
+        auto  pos       = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto  face      = static_cast<uchar>(args[2].asNumber().toInt32());
+        auto  clickPos  = engine->getNativeInstance<Vec3Class>(args[3])->mVec3;
+        auto  itemValue = args[4].asNumber().toInt32();
+        auto& result    = const_cast<Block&>(mBlock->getPlacementBlock(*by, *pos, face, clickPos, itemValue));
         return BlockClass::newBlock(&result);
     }
     Catch;
@@ -919,10 +932,10 @@ Local<Value> BlockClass::onFallOn(const Arguments& args) {
     CheckArgTypeReturn(args[3], ValueKind::kBoolean, Boolean::newBoolean(false));
     try {
         if (!mBlock) return Local<Value>();
-        auto engine     = EngineScope::currentEngine();
-        auto region     = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
-        auto pos        = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        auto entity    = engine->getNativeInstance<ActorClass>(args[2])->mActor;
+        auto engine       = EngineScope::currentEngine();
+        auto region       = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos          = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto entity       = engine->getNativeInstance<ActorClass>(args[2])->mActor;
         auto fallDistance = args[3].asNumber().toFloat();
         mBlock->onFallOn(*region, *pos, *entity, fallDistance);
         return Boolean::newBoolean(true);
@@ -1291,7 +1304,7 @@ Local<Value> BlockClass::tryToTill(const Arguments& args) {
 
 Local<Value> BlockClass::use(const Arguments& args) {
     CheckArgsCount(args, 3) // check if < 3
-    CheckInstanceType(args[0], PlayerClass);
+        CheckInstanceType(args[0], PlayerClass);
     CheckInstanceType(args[1], BlockPosClass);
     CheckArgType(args[2], ValueKind::kNumber);
     if (args.size() >= 4) {

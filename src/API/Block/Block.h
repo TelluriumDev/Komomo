@@ -20,21 +20,22 @@ public:
 public: /* Member */
     Local<Value> getAllowsRunes();
     //Local<Value> getBlockEntityType();
+    //Local<Value> getBlockTintType();
+    Local<Value> getBlockItemId();
     Local<Value> getBurnOdds();
-    // Local<Value> getDefaultState();
+    Local<Value> getData();
     Local<Value> getDescriptionId();
-    Local<Value> getDestroySpeed();
     Local<Value> getFlameOdds();
     Local<Value> getFriction();
     Local<Value> getExplosionResistance();
     //Local<Value> getLight();
     //Local<Value> getLightEmission();
     //Local<Value> getMaterial();
-    //Local<Value> getName();
     Local<Value> getRuntimeId();
     //Local<Value> getSerializationId();
     Local<Value> getThickness();
     Local<Value> getTranslucency();
+    Local<Value> getTypeName();
     Local<Value> getVariant();
 
     Local<Value> isAir();
@@ -106,12 +107,14 @@ public: /* Method */
     // Local<Value> executeItemEvent(const Arguments& args);
     // Local<Value> executeTrigger(const Arguments& args);
     // Local<Value> forEachState(const Arguments& args);
+    // Local<Value> getBlockState(const Arguments& args);
     // Local<Value> getClientPredictionOverride(const Arguments& args);
     // Local<Value> getCollisionShape(const Arguments& args);
     // Local<Value> getCollisionShapeForCamera(const Arguments& args);
     Local<Value> getComparatorSignal(const Arguments& args);
     // Local<Value> getConnectedDirections(const Arguments& args);
     Local<Value> getDebugText(const Arguments& args);
+    Local<Value> getDestroySpeed(const Arguments& args);
     Local<Value> getDirectSignal(const Arguments& args);
     // Local<Value> getExperienceDrop(const Arguments& args);
     Local<Value> getIgnoresDestroyPermissions(const Arguments& args);
