@@ -3,6 +3,7 @@
     "entry": "${modFile}",
     "version": "${modVersion}",
     "type": "native",
+    "sentry-dsn": "https://b552bc369046e559d862c7b12b7469a4@o4508715047583744.ingest.us.sentry.io/4508715095359488",
     "dependencies": [
         {
             "name": "iListenAttentively"
