@@ -1,15 +1,22 @@
 #pragma once
 
 #include "API/APIHelper.h" // IWYU pragma: keep
+#include "API/Actor/Actor.h"
 
-class Mob;
 
-class MobClass : public ScriptClass {
+#include <mc/world/actor/Mob.h>
+
+class MobClass : public ActorClass {
 public:
     Mob* mMob;
 
 public:
-    MobClass(Mob* mob);
+    template <typename T>
+    explicit MobClass(Mob* mob, ScriptClass::ConstructFromCpp<T> tag) : ActorClass(mob, tag) {
+        this->mMob = mob;
+    };
+
+    explicit MobClass(Mob* mob) : ActorClass(mob, ConstructFromCpp<MobClass>{}) { this->mMob = mob; };
 
 public:
     static Local<Object> newMob(Mob* mob);

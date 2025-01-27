@@ -1,22 +1,26 @@
 #pragma once
 
 #include "API/APIHelper.h" // IWYU pragma: keep
+#include "API/Player/ServerPlayer.h"
 
 // #include <mc/world/simulatedplayer/SimulatedPlayer.h>
 
 #include <mc/server/SimulatedPlayer.h>
 
-class SimulatedPlayerClass : public ScriptClass {
+class SimulatedPlayerClass : public ServerPlayerClass {
 public:
     optional_ref<SimulatedPlayer> mSimulatedPlayer;
 
 public:
-    SimulatedPlayerClass(
-        std::string const&         name,
-        std::optional<Vec3> const& pos      = std::nullopt,
-        DimensionType              dimId    = 0,
-        Vec2 const&                rotation = {0, 0}
-    );
+    template <typename T>
+    explicit SimulatedPlayerClass(SimulatedPlayer* simulatedPlayer, ConstructFromCpp<T> tag)
+    : ServerPlayerClass(simulatedPlayer, tag),
+      mSimulatedPlayer(simulatedPlayer){};
+
+    explicit SimulatedPlayerClass(SimulatedPlayer* simulatedPlayer)
+    : ServerPlayerClass(simulatedPlayer, ConstructFromCpp<SimulatedPlayerClass>()) {
+        mSimulatedPlayer = simulatedPlayer;
+    };
 
 public: /* Member */
     Member(isSimulated);

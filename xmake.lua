@@ -44,7 +44,7 @@ target("Komomo")
     set_languages("cxx20")
     set_symbols("debug")
     -- set_exceptions("none")
-    add_cxflags(
+    add_cxxflags(
             "/EHs",
             "/utf-8",
             "/WX",

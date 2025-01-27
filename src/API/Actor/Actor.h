@@ -9,7 +9,12 @@ public:
     Actor* mActor;
 
 public:
-    ActorClass(Actor* actor);
+    template <typename T>
+    explicit ActorClass(Actor* actor, ScriptClass::ConstructFromCpp<T> tag) : ScriptClass(tag) {
+        this->mActor = actor;
+    };
+
+    explicit ActorClass(Actor* actor) : ScriptClass(ConstructFromCpp<ActorClass>{}) { this->mActor = actor; };
 
 public:
     static Local<Object> newActor(Actor* actor);

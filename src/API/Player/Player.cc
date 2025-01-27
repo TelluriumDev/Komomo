@@ -1,6 +1,7 @@
 #include "API/Player/Player.h"
 #include "API/APIHelper.h"
 #include "API/Actor/Actor.h"
+#include "API/Mob/Mob.h"
 #include "API/Actor/ActorUniqueID.h"
 #include "API/Actor/Agent.h"
 #include "API/Block/BlockSource.h"
@@ -226,8 +227,6 @@ ClassDefine<PlayerClass> playerClassBuilder =
 
         .build();
 
-
-PlayerClass::PlayerClass(Player* player) : ScriptClass(ConstructFromCpp<PlayerClass>{}) { this->mPlayer = player; };
 
 Local<Object> PlayerClass::newPlayer(Player* player) { return (new PlayerClass(player))->getScriptObject(); }
 

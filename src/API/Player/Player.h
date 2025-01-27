@@ -1,17 +1,25 @@
 #pragma once
 
 #include "API/APIHelper.h" // IWYU pragma: keep
+#include "API/Mob/Mob.h"
 
 
 #include <mc/world/actor/player/Player.h>
 
-class PlayerClass : public ScriptClass {
+class PlayerClass : public MobClass {
 private:
     Player* mPlayer;
 
 public:
-    PlayerClass();
-    PlayerClass(Player* player);
+    template <class T>
+    explicit PlayerClass(Player* player, ConstructFromCpp<T> tag) : MobClass(player, tag) {
+        this->mPlayer = player;
+    };
+    ;
+    explicit PlayerClass(Player* player) : MobClass(player, ConstructFromCpp<PlayerClass>{}) {
+        this->mPlayer = player;
+    };
+    ;
 
 public:
     static Local<Object> newPlayer(Player* player);
@@ -123,7 +131,7 @@ public: /* Method */
     // Local<Value> getContainerManager(const Arguments& args);
     // Local<Value> getContainerRegistryAccess(const Arguments& args);
     // Local<Value> getContainerRegistryTracker(const Arguments& args);
-    Local<Value> getCurrentActiveShield(const Arguments& args); 
+    Local<Value> getCurrentActiveShield(const Arguments& args);
     // Local<Value> getDestroyProgress(const Arguments& args);
     // Local<Value> getDynamicContainerSerialization(const Arguments& args);
     // Local<Value> getExpectedSpawnDimensionId(const Arguments& args);

@@ -5,6 +5,7 @@
 #include "Utils/Macro.h"   // IWYU pragma: keep
 #include "Utils/Using.h"
 
+using namespace Komomo;
 
 namespace Komomo {
 
@@ -68,7 +69,7 @@ void PrintException(script::Exception const& e, string const& func, string const
     if (!IsInstanceOf<type>(arg)) {                                                                                    \
         PrintWrongArgType();                                                                                           \
         return Return;                                                                                                 \
-    }  
+    }
 
 // 异常捕获
 #define Catch                                                                                                          \
@@ -104,4 +105,4 @@ void PrintException(script::Exception const& e, string const& func, string const
 
 #define Method(FuncName) Local<Value> FuncName(const Arguments& args);
 
-#define Member(FuncName) Local<Value> FuncName()
+#define Member(FuncName) Local<Value> FuncName();
