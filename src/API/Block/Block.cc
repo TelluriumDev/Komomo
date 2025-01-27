@@ -308,7 +308,7 @@ Local<Value> BlockClass::addAABBs(const Arguments& args) {
             auto inputAABB      = engine->getNativeInstance<AABBClass>(value);
             inoutBoxesVector[i] = *(inputAABB->mAABB);
         }
-        mBlock->addAABBs(*region, *pos, intersectTestBox, inoutBoxesVector);
+        mBlock->addAABBs(*region, pos, intersectTestBox, inoutBoxesVector);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -352,7 +352,7 @@ Local<Value> BlockClass::attack(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto player = engine->getNativeInstance<PlayerClass>(args[0])->get();
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        return Boolean::newBoolean(mBlock->attack(player, *pos));
+        return Boolean::newBoolean(mBlock->attack(player, pos));
     }
     Catch;
 }
@@ -378,7 +378,7 @@ Local<Value> BlockClass::canBeBuiltOver(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        return Boolean::newBoolean(mBlock->canBeBuiltOver(*region, *pos));
+        return Boolean::newBoolean(mBlock->canBeBuiltOver(*region, pos));
     }
     Catch;
 }
@@ -392,7 +392,7 @@ Local<Value> BlockClass::canBeFertilized(const Arguments& args) {
         auto region     = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos        = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto aboveBlock = engine->getNativeInstance<BlockClass>(args[2])->mBlock;
-        return Boolean::newBoolean(mBlock->canBeFertilized(*region, *pos, *aboveBlock));
+        return Boolean::newBoolean(mBlock->canBeFertilized(*region, pos, *aboveBlock));
     }
     Catch;
 }
@@ -445,7 +445,7 @@ Local<Value> BlockClass::canSlide(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        return Boolean::newBoolean(mBlock->canSlide(*region, *pos));
+        return Boolean::newBoolean(mBlock->canSlide(*region, pos));
     }
     Catch;
 }
@@ -459,7 +459,7 @@ Local<Value> BlockClass::canSurvive(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        return Boolean::newBoolean(mBlock->canSurvive(*region, *pos));
+        return Boolean::newBoolean(mBlock->canSurvive(*region, pos));
     }
     Catch;
 }
@@ -477,7 +477,7 @@ Local<Value> BlockClass::checkIsPathable(const Arguments& args) {
         auto entity      = engine->getNativeInstance<ActorClass>(args[0])->mActor;
         auto lastPathPos = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto pathPos     = engine->getNativeInstance<BlockPosClass>(args[2])->mBlockPos;
-        return Boolean::newBoolean(mBlock->checkIsPathable(*entity, *lastPathPos, *pathPos));
+        return Boolean::newBoolean(mBlock->checkIsPathable(*entity, lastPathPos, pathPos));
     }
     Catch;
 }
@@ -524,7 +524,7 @@ Local<Value> BlockClass::destroy(const Arguments& args) {
         auto region       = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos          = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto entitySource = engine->getNativeInstance<ActorClass>(args[2])->mActor;
-        mBlock->destroy(*region, *pos, entitySource);
+        mBlock->destroy(*region, pos, entitySource);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -575,7 +575,7 @@ Local<Value> BlockClass::getComparatorSignal(const Arguments& args) {
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto dir    = static_cast<uchar>(args[2].asNumber().toInt32());
-        return Number::newNumber(mBlock->getComparatorSignal(*region, *pos, dir));
+        return Number::newNumber(mBlock->getComparatorSignal(*region, pos, dir));
     }
     Catch;
 }
@@ -598,7 +598,7 @@ Local<Value> BlockClass::getDebugText(const Arguments& args) {
             outputInfoVector[i] = value.asString().toString();
         }
         auto pos = EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        mBlock->getDebugText(outputInfoVector, *pos);
+        mBlock->getDebugText(outputInfoVector, pos);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -619,7 +619,7 @@ Local<Value> BlockClass::getDirectSignal(const Arguments& args) {
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto dir    = args[2].asNumber().toInt32();
-        return Number::newNumber(mBlock->getDirectSignal(*region, *pos, dir));
+        return Number::newNumber(mBlock->getDirectSignal(*region, pos, dir));
     }
     Catch;
 }
@@ -636,7 +636,7 @@ Local<Value> BlockClass::getIgnoresDestroyPermissions(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto entity = engine->getNativeInstance<ActorClass>(args[0])->mActor;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        return Boolean::newBoolean(mBlock->getIgnoresDestroyPermissions(*entity, *pos));
+        return Boolean::newBoolean(mBlock->getIgnoresDestroyPermissions(*entity, pos));
     }
     Catch;
 }
@@ -665,7 +665,7 @@ Local<Value> BlockClass::getPlacementBlock(const Arguments& args) {
         auto  face      = static_cast<uchar>(args[2].asNumber().toInt32());
         auto  clickPos  = engine->getNativeInstance<Vec3Class>(args[3])->mVec3;
         auto  itemValue = args[4].asNumber().toInt32();
-        auto& result    = const_cast<Block&>(mBlock->getPlacementBlock(*by, *pos, face, clickPos, itemValue));
+        auto& result    = const_cast<Block&>(mBlock->getPlacementBlock(*by, pos, face, clickPos, itemValue));
         return BlockClass::newBlock(&result);
     }
     Catch;
@@ -682,7 +682,7 @@ Local<Value> BlockClass::getSecondPart(const Arguments& args) {
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto out    = engine->getNativeInstance<BlockPosClass>(args[2])->mBlockPos;
-        return Boolean::newBoolean(mBlock->getSecondPart(*region, *pos, *out));
+        return Boolean::newBoolean(mBlock->getSecondPart(*region, pos, out));
     }
     Catch;
 }
@@ -737,7 +737,7 @@ Local<Value> BlockClass::isAttachedTo(const Arguments& args) {
         auto region        = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos           = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto outAttachedTo = engine->getNativeInstance<BlockPosClass>(args[2])->mBlockPos;
-        return Boolean::newBoolean(mBlock->isAttachedTo(*region, *pos, *outAttachedTo));
+        return Boolean::newBoolean(mBlock->isAttachedTo(*region, pos, outAttachedTo));
     }
     Catch;
 }
@@ -755,7 +755,7 @@ Local<Value> BlockClass::isObstructingChests(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        return Boolean::newBoolean(mBlock->isObstructingChests(*region, *pos));
+        return Boolean::newBoolean(mBlock->isObstructingChests(*region, pos));
     }
     Catch;
 }
@@ -769,7 +769,7 @@ Local<Value> BlockClass::isPartialBlock(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        return Boolean::newBoolean(mBlock->isPartialBlock(*region, *pos));
+        return Boolean::newBoolean(mBlock->isPartialBlock(*region, pos));
     }
     Catch;
 }
@@ -795,7 +795,7 @@ Local<Value> BlockClass::isTopPartialBlock(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        return Boolean::newBoolean(mBlock->isTopPartialBlock(*region, *pos));
+        return Boolean::newBoolean(mBlock->isTopPartialBlock(*region, pos));
     }
     Catch;
 }
@@ -844,7 +844,7 @@ Local<Value> BlockClass::mayPlace(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        return Boolean::newBoolean(mBlock->mayPlace(*region, *pos));
+        return Boolean::newBoolean(mBlock->mayPlace(*region, pos));
     }
     case size_t(3): {
         CheckInstanceType(args[0], BlockSourceClass);
@@ -854,7 +854,7 @@ Local<Value> BlockClass::mayPlace(const Arguments& args) {
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto face   = static_cast<uchar>(args[2].asNumber().toInt32());
-        return Boolean::newBoolean(mBlock->mayPlace(*region, *pos, face));
+        return Boolean::newBoolean(mBlock->mayPlace(*region, pos, face));
     }
     default:
         PrintWrongArgsCount();
@@ -871,7 +871,7 @@ Local<Value> BlockClass::mayPlaceOn(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        return Boolean::newBoolean(mBlock->mayPlaceOn(*region, *pos));
+        return Boolean::newBoolean(mBlock->mayPlaceOn(*region, pos));
     }
     Catch;
 }
@@ -885,7 +885,7 @@ Local<Value> BlockClass::movedByPiston(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        mBlock->movedByPiston(*region, *pos);
+        mBlock->movedByPiston(*region, pos);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -902,7 +902,7 @@ Local<Value> BlockClass::neighborChanged(const Arguments& args) {
         auto region      = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos         = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto neighborPos = engine->getNativeInstance<BlockPosClass>(args[2])->mBlockPos;
-        mBlock->neighborChanged(*region, *pos, *neighborPos);
+        mBlock->neighborChanged(*region, pos, neighborPos);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -919,7 +919,7 @@ Local<Value> BlockClass::onExploded(const Arguments& args) {
         auto region       = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos          = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto entitySource = engine->getNativeInstance<ActorClass>(args[2])->mActor;
-        mBlock->onExploded(*region, *pos, entitySource);
+        mBlock->onExploded(*region, pos, entitySource);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -938,7 +938,7 @@ Local<Value> BlockClass::onFallOn(const Arguments& args) {
         auto pos          = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto entity       = engine->getNativeInstance<ActorClass>(args[2])->mActor;
         auto fallDistance = args[3].asNumber().toFloat();
-        mBlock->onFallOn(*region, *pos, *entity, fallDistance);
+        mBlock->onFallOn(*region, pos, *entity, fallDistance);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -960,7 +960,7 @@ Local<Value> BlockClass::onHitByActivatingAttack(const Arguments& args) {
         auto region      = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos         = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto sourceActor = engine->getNativeInstance<ActorClass>(args[2])->mActor;
-        mBlock->onHitByActivatingAttack(*region, *pos, sourceActor);
+        mBlock->onHitByActivatingAttack(*region, pos, sourceActor);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -975,7 +975,7 @@ Local<Value> BlockClass::onLightningHit(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        mBlock->onLightningHit(*region, *pos);
+        mBlock->onLightningHit(*region, pos);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -992,7 +992,7 @@ Local<Value> BlockClass::onPlace(const Arguments& args) {
         auto region        = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos           = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto previousBlock = engine->getNativeInstance<BlockClass>(args[2])->mBlock;
-        mBlock->onPlace(*region, *pos, *previousBlock);
+        mBlock->onPlace(*region, pos, *previousBlock);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1009,7 +1009,7 @@ Local<Value> BlockClass::onProjectileHit(const Arguments& args) {
         auto region     = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos        = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto projectile = engine->getNativeInstance<ActorClass>(args[2])->mActor;
-        mBlock->onProjectileHit(*region, *pos, *projectile);
+        mBlock->onProjectileHit(*region, pos, *projectile);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1024,7 +1024,7 @@ Local<Value> BlockClass::onRemove(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        mBlock->onRemove(*region, *pos);
+        mBlock->onRemove(*region, pos);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1043,7 +1043,7 @@ Local<Value> BlockClass::onStepOff(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto entity = engine->getNativeInstance<ActorClass>(args[0])->mActor;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        mBlock->onStepOff(*entity, *pos);
+        mBlock->onStepOff(*entity, pos);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1058,7 +1058,7 @@ Local<Value> BlockClass::onStepOn(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto entity = engine->getNativeInstance<ActorClass>(args[0])->mActor;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        mBlock->onStepOn(*entity, *pos);
+        mBlock->onStepOn(*entity, pos);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1073,7 +1073,7 @@ Local<Value> BlockClass::onStructureBlockPlace(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        mBlock->onStructureBlockPlace(*region, *pos);
+        mBlock->onStructureBlockPlace(*region, pos);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1088,7 +1088,7 @@ Local<Value> BlockClass::onStructureNeighborBlockPlace(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        mBlock->onStructureNeighborBlockPlace(*region, *pos);
+        mBlock->onStructureNeighborBlockPlace(*region, pos);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1103,7 +1103,7 @@ Local<Value> BlockClass::playerDestroy(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto player = engine->getNativeInstance<PlayerClass>(args[0])->get();
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        mBlock->playerDestroy(*player, *pos);
+        mBlock->playerDestroy(*player, pos);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1118,7 +1118,7 @@ Local<Value> BlockClass::playerWillDestroy(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto player = engine->getNativeInstance<PlayerClass>(args[0])->get();
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        auto result = const_cast<Block*>(mBlock->playerWillDestroy(*player, *pos));
+        auto result = const_cast<Block*>(mBlock->playerWillDestroy(*player, pos));
         return BlockClass::newBlock(result);
     }
     Catch;
@@ -1147,7 +1147,7 @@ Local<Value> BlockClass::randomlyModifyPosition(const Arguments& args) {
     try {
         if (!mBlock) return Local<Value>();
         auto pos    = EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[0])->mBlockPos;
-        auto result = mBlock->randomlyModifyPosition(*pos);
+        auto result = mBlock->randomlyModifyPosition(pos);
         return (new Vec3Class(result))->getScriptObject();
     }
     Catch;
@@ -1202,7 +1202,7 @@ Local<Value> BlockClass::telemetryVariant(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         auto region = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
-        return Number::newNumber(mBlock->telemetryVariant(*region, *pos));
+        return Number::newNumber(mBlock->telemetryVariant(*region, pos));
     }
     Catch;
 }
@@ -1222,7 +1222,7 @@ Local<Value> BlockClass::transformOnFall(const Arguments& args) {
         auto pos          = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto entity       = engine->getNativeInstance<ActorClass>(args[2])->mActor;
         auto fallDistance = args[3].asNumber().toInt32();
-        mBlock->transformOnFall(*region, *pos, entity, fallDistance);
+        mBlock->transformOnFall(*region, pos, entity, fallDistance);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1241,7 +1241,7 @@ Local<Value> BlockClass::triggerEvent(const Arguments& args) {
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto b0     = args[2].asNumber().toInt32();
         auto b1     = args[3].asNumber().toInt32();
-        mBlock->triggerEvent(*region, *pos, b0, b1);
+        mBlock->triggerEvent(*region, pos, b0, b1);
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1284,7 +1284,7 @@ Local<Value> BlockClass::tryToTill(const Arguments& args) {
         auto pos    = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
         auto entity = engine->getNativeInstance<ActorClass>(args[2])->mActor;
         auto item   = engine->getNativeInstance<ItemStackClass>(args[2])->mItemStack;
-        return Boolean::newBoolean(mBlock->tryToTill(*region, *pos, *entity, *item));
+        return Boolean::newBoolean(mBlock->tryToTill(*region, pos, *entity, *item));
     }
     Catch;
 }
@@ -1321,7 +1321,7 @@ Local<Value> BlockClass::use(const Arguments& args) {
         if (args.size() >= 4) {
             hit.emplace(static_cast<Vec3>(engine->getNativeInstance<Vec3Class>(args[3])->mVec3));
         }
-        return Boolean::newBoolean(mBlock->use(*player, *pos, face, hit));
+        return Boolean::newBoolean(mBlock->use(*player, pos, face, hit));
     }
     Catch;
 }

@@ -337,7 +337,7 @@ Local<Value> SimulatedPlayerClass::simulateDestroyBlock(const Arguments& args) {
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
         return Boolean::newBoolean(mSimulatedPlayer->simulateDestroyBlock(
-            *EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[0])->mBlockPos,
+            EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[0])->mBlockPos,
             ScriptModuleMinecraft::ScriptFacing(args[1].asNumber().toInt32())
         ));
     }
@@ -395,7 +395,7 @@ Local<Value> SimulatedPlayerClass::simulateInteract(const Arguments& args) {
             ));
         } else if (args.size() == 2 && IsInstanceOf<BlockPosClass>(args[0]) && IsInstanceOf<Vec3Class>(args[1])) {
             return Boolean::newBoolean(mSimulatedPlayer->simulateInteract(
-                *EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[0])->mBlockPos,
+                EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[0])->mBlockPos,
                 ScriptModuleMinecraft::ScriptFacing(args[1].asNumber().toInt32())
             ));
         } else PrintWrongArgType();
@@ -439,7 +439,7 @@ Local<Value> SimulatedPlayerClass::simulateLookAt(const Arguments& args) {
             );
         else if (IsInstanceOf<BlockPosClass>(args[0]))
             mSimulatedPlayer->simulateLookAt(
-                *EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[0])->mBlockPos,
+                EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[0])->mBlockPos,
                 sim::LookDuration(args[1].asNumber().toInt32())
             );
         else if (IsInstanceOf<Vec3Class>(args[0]))
@@ -620,7 +620,7 @@ Local<Value> SimulatedPlayerClass::simulateUseItemInSlotOnBlock(const Arguments&
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
         return Boolean::newBoolean(mSimulatedPlayer->simulateUseItemInSlotOnBlock(
             args[0].asNumber().toInt32(),
-            *EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[1])->mBlockPos,
+            EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[1])->mBlockPos,
             ScriptModuleMinecraft::ScriptFacing(args[2].asNumber().toInt32()),
             EngineScope::currentEngine()->getNativeInstance<Vec3Class>(args[3])->mVec3
         ));
@@ -638,7 +638,7 @@ Local<Value> SimulatedPlayerClass::simulateUseItemOnBlock(const Arguments& args)
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
         return Boolean::newBoolean(mSimulatedPlayer->simulateUseItemOnBlock(
             *EngineScope::currentEngine()->getNativeInstance<ItemStackClass>(args[0])->mItemStack,
-            *EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[1])->mBlockPos,
+            EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[1])->mBlockPos,
             ScriptModuleMinecraft::ScriptFacing(args[2].asNumber().toInt32()),
             args[3].asNumber().toFloat()
         ));

@@ -2,12 +2,12 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 #include "API/Block/Block.h"
+#include "API/Block/BlockPos.h"
 #include "API/Command/CommandOrigin.h" // IWYU pragma: keep
 #include "API/Command/CommandOutput.h"
 #include "API/Item/ItemStack.h"
+#include "API/Math/Vec3.h"
 #include "API/Player/Player.h"
-#include "Utils/Using.h"
-#include "mc/world/level/block/Block.h"
 
 
 #include <ll/api/command/Command.h>
@@ -17,7 +17,6 @@
 #include <ll/api/command/runtime/ParamKind.h>
 #include <ll/api/command/runtime/RuntimeCommand.h>
 #include <ll/api/command/runtime/RuntimeOverload.h>
-
 #include <ll/api/service/Bedrock.h>
 #include <ll/api/service/Service.h>
 
@@ -27,6 +26,7 @@
 #include <mc/server/commands/CommandMessage.h>
 #include <mc/server/commands/CommandPermissionLevel.h>
 #include <mc/server/commands/GenerateMessageResult.h>
+#include <mc/util/JsonHelpers.h>
 #include <mc/world/item/ItemInstance.h>
 #include <mc/world/item/ItemStack.h>
 
@@ -115,14 +115,13 @@ public:
         } else if (result.hold(ParamKind::Kind::Item)) {
             return ItemStackClass::newItemStack(new ItemStack(std::get<CommandItem>(result.value())
                                                                   .createInstance(1, 1, output, true)
-                                                                  .value_or(ItemInstance::EMPTY_ITEM()))
-            ); // Not managed by BDS, pointer will be saved as unique_ptr
+                                                                  .value_or(ItemInstance::EMPTY_ITEM())));
         } else if (result.hold(ParamKind::Kind::Actor)) {
-            // auto arr = Array::newArray();
-            // for (auto i : std::get<CommandSelector<Actor>>(result.value()).results(origin)) {
-            //     arr.add(EntityClass::newEntity(i));
-            // }
-            // return arr;
+            auto arr = Array::newArray();
+            for (auto i : std::get<CommandSelector<Actor>>(result.value()).results(origin)) {
+                arr.add(ActorClass::newActor(i));
+            }
+            return arr;
         } else if (result.hold(ParamKind::Kind::Player)) {
             auto arr = Array::newArray();
             for (auto i : std::get<CommandSelector<Player>>(result.value()).results(origin)) {
@@ -130,19 +129,14 @@ public:
             }
             return arr;
         } else if (result.hold(ParamKind::Kind::BlockPos)) {
-            auto dim = origin.getDimension();
-            // return IntPos::newPos(
-            //     std::get<CommandPosition>(result.value())
-            //         .getBlockPos(CommandVersion::CurrentVersion(), origin, Vec3::ZERO()),
-            //     dim ? dim->getDimensionId().id : -1
-            // );
+            auto pos = std::get<CommandPosition>(result.value())
+                           .getBlockPos(CommandVersion::CurrentVersion(), origin, Vec3::ZERO());
+            return BlockPosClass::newBlockPos(pos.x, pos.y, pos.z);
         } else if (result.hold(ParamKind::Kind::Vec3)) {
-            auto dim = origin.getDimension();
-            // return FloatPos::newPos(
-            //     std::get<CommandPosition>(result.value())
-            //         .getPosition(CommandVersion::CurrentVersion(), origin, Vec3::ZERO()),
-            //     dim ? dim->getDimensionId().id : -1
-            // );
+            auto dim  = origin.getDimension();
+            auto vec3 = std::get<CommandPosition>(result.value())
+                            .getPosition(CommandVersion::CurrentVersion(), origin, Vec3::ZERO());
+            return Vec3Class::newVec3(vec3.x, vec3.y, vec3.z);
         } else if (result.hold(ParamKind::Kind::Message)) {
             return String::newString(std::get<CommandMessage>(result.value())
                                          .generateMessage(origin, CommandVersion::CurrentVersion())
@@ -150,7 +144,7 @@ public:
         } else if (result.hold(ParamKind::Kind::RawText)) {
             return String::newString(std::get<CommandRawText>(result.value()).getText());
         } else if (result.hold(ParamKind::Kind::JsonValue)) {
-            // return String::newString(JsonHelpers::serialize(std::get<Json::Value>(result.value())));
+            return String::newString(JsonHelpers::serialize(std::get<Json::Value>(result.value())));
         } else if (result.hold(ParamKind::Kind::Effect)) {
             return String::newString(std::get<MobEffect const*>(result.value())->getResourceName());
         } else if (result.hold(ParamKind::Kind::Command)) {

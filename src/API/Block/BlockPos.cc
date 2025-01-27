@@ -6,10 +6,14 @@ ClassDefine<BlockPosClass> blockPosClassBuilder = defineClass<BlockPosClass>("Bl
 
                                                       .build();
 
-BlockPosClass::BlockPosClass(BlockPos* blockPos) : ScriptClass(ConstructFromCpp<BlockPosClass>{}) {
-    this->mBlockPos = blockPos;
+BlockPosClass::BlockPosClass(int x, int y, int z) : ScriptClass(ConstructFromCpp<BlockPosClass>{}) {
+    this->x         = x;
+    this->y         = y;
+    this->z         = z;
+    this->mBlockPos = BlockPos(x, y, z);
 }
 
-Local<Object> BlockPosClass::newBlockPos(BlockPos* blockPos) {
-    return (new BlockPosClass(blockPos))->getScriptObject();
+BlockPosClass::BlockPosClass(BlockPos& blockpos) : BlockPosClass(blockpos.x, blockpos.y, blockpos.z) {}
+Local<Object> BlockPosClass::newBlockPos(int x, int y, int z) {
+    return (new BlockPosClass(x, y, z))->getScriptObject();
 }

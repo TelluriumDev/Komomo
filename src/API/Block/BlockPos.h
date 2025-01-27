@@ -2,24 +2,29 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-#include "mc/world/level/BlockPos.h"
-
-class BlockPos;
+#include <mc/world/level/BlockPos.h>
 
 class BlockPosClass : public ScriptClass {
 public:
-    BlockPos* mBlockPos;
+    BlockPos mBlockPos;
+
+    int x = 0;
+    int y = 0;
+    int z = 0;
 
 public:
-    BlockPosClass(BlockPos* blockPos);
+    BlockPosClass(int x, int y, int z);
+    BlockPosClass(BlockPos& blockpos);
+
 
 public:
-    // static BlockPosClass* create(const Arguments& args); // TODO
-    
-    static Local<Object> newBlockPos(BlockPos* blockPos);
+    static Local<Object> newBlockPos(int x, int y, int z);
 
 public: /* Member */
 public: /* Method */
+    Local<Value> setX(int x);
+    Local<Value> setY(int y);
+    Local<Value> setZ(int z);
 };
 
 extern ClassDefine<BlockPosClass> blockPosClassBuilder;

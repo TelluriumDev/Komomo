@@ -397,10 +397,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ll::event::PlayerDestroyBlockEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.pos();
                             auto result = func.get().call(
                                 {},
                                 PlayerClass::newPlayer(&event.self()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.pos()))
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z)
                             );
                             if (result.isBoolean()) {
                                 if (result.asBoolean().value() == false) event.cancel();
@@ -461,11 +462,12 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ll::event::PlayerInteractBlockEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.blockPos();
                             auto result = func.get().call(
                                 {},
                                 PlayerClass::newPlayer(&event.self()),
                                 ItemStackClass::newItemStack(&event.item()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.blockPos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 ConvertToScriptX(event.face()),
                                 Vec3Class::newVec3(event.clickPos().x, event.clickPos().y, event.clickPos().z),
                                 BlockClass::newBlock(const_cast<Block*>(&event.block().get()))
@@ -552,10 +554,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ll::event::PlayerPlacingBlockEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.pos();
                             auto result = func.get().call(
                                 {},
                                 PlayerClass::newPlayer(&event.self()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.pos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 ConvertToScriptX(event.face())
                             );
                             if (result.isBoolean()) {
@@ -577,10 +580,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ll::event::PlayerPlacedBlockEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.pos();
                             func.get().call(
                                 {},
                                 PlayerClass::newPlayer(&event.self()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.pos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 BlockClass::newBlock(const_cast<Block*>(&event.placedBlock()))
                             );
                         }
@@ -725,13 +729,14 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ll::event::BlockChangedEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.pos();
                             func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(const_cast<BlockSource*>(&event.blockSource())),
                                 Number::newNumber(event.layer()),
                                 BlockClass::newBlock(const_cast<Block*>(&event.previousBlock())),
                                 BlockClass::newBlock(const_cast<Block*>(&event.newBlock())),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.pos()))
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z)
                             );
                         }
                         CatchNotReturn;
@@ -749,10 +754,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ll::event::FireSpreadEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.pos();
                             auto result = func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(const_cast<BlockSource*>(&event.blockSource())),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.pos()))
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z)
                             );
                             if (result.isBoolean()) {
                                 if (result.asBoolean().value() == false) event.cancel();
@@ -1238,10 +1244,11 @@ void EventBusClass::registerCallback() {
                     ) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.getPos();
                             auto result = func.get().call(
                                 {},
                                 ActorClass::newActor(&event.self()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPos()))
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z)
                             );
                             if (result.isBoolean()) {
                                 if (result.asBoolean().value() == false) event.cancel();
@@ -1262,10 +1269,11 @@ void EventBusClass::registerCallback() {
                     ) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.getPos();
                             func.get().call(
                                 {},
                                 ActorClass::newActor(&event.self()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPos()))
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z)
                             );
                         }
                         CatchNotReturn;
@@ -1686,10 +1694,12 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::PlayerAttackBlockBeforeEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.getPos();
+
                             auto result = func.get().call(
                                 {},
                                 PlayerClass::newPlayer(&event.self()),
-                                BlockPosClass::newBlockPos(&event.getPos())
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z)
                             );
                             if (result.isBoolean()) {
                                 if (result.asBoolean().value() == false) event.cancel();
@@ -1710,10 +1720,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::PlayerAttackBlockAfterEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.getPos();
                             func.get().call(
                                 {},
                                 PlayerClass::newPlayer(&event.self()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPos()))
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z)
                             );
                         }
                         CatchNotReturn;
@@ -1995,10 +2006,12 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::PlayerOperatedItemFrameBeforeEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.getBlockPos();
+
                             auto result = func.get().call(
                                 {},
                                 PlayerClass::newPlayer(&event.self()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getBlockPos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 ConvertToScriptX(event.getType())
                             );
                             if (result.isBoolean()) {
@@ -2020,10 +2033,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::PlayerOperatedItemFrameAfterEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.getBlockPos();
                             func.get().call(
                                 {},
                                 PlayerClass::newPlayer(&event.self()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getBlockPos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 ConvertToScriptX(event.getType())
                             );
                         }
@@ -2341,10 +2355,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::BlockTickBeforeEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.getPos();
                             auto result = func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(&event.getPos()),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 RandomClass::newRandom(const_cast<Random*>(&event.getRandom()))
                             );
                             if (result.isBoolean()) {
@@ -2365,10 +2380,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::BlockTickAfterEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.getPos();
                             func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 RandomClass::newRandom(const_cast<Random*>(&event.getRandom()))
                             );
                         } catch (...) {}
@@ -2391,12 +2407,14 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::DragonEggBlockTeleportBeforeEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.getPos();
+                            auto pos2   = event.getTargetPos();
                             auto result = func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 RandomClass::newRandom(const_cast<Random*>(&event.getRandom())),
-                                BlockPosClass::newBlockPos(&event.getTargetPos())
+                                BlockPosClass::newBlockPos(pos2.x, pos2.y, pos2.z)
                             );
                             if (result.isBoolean()) {
                                 if (result.asBoolean().value() == false) event.cancel();
@@ -2416,12 +2434,14 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::DragonEggBlockTeleportAfterEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos  = event.getPos();
+                            auto pos2 = event.getTargetPos();
                             func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 RandomClass::newRandom(const_cast<Random*>(&event.getRandom())),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getTargetPos()))
+                                BlockPosClass::newBlockPos(pos2.x, pos2.y, pos2.z)
                             );
                         } catch (...) {}
                     },
@@ -2491,10 +2511,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::FarmDecayBeforeEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.getPos();
                             auto result = func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(&event.getPos()),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 ActorClass::newActor(*&event.getActor()),
                                 Number::newNumber(event.getFallDistance())
                             );
@@ -2516,10 +2537,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::FarmDecayAfterEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.getPos();
                             func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 ActorClass::newActor(*&event.getActor()),
                                 Number::newNumber(event.getFallDistance())
                             );
@@ -2543,11 +2565,13 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::LiquidTryFlowBeforeEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.getPos();
+                            auto pos2   = event.getFlowFromPos();
                             auto result = func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(&event.getPos()),
-                                BlockPosClass::newBlockPos(&event.getFlowFromPos()),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
+                                BlockPosClass::newBlockPos(pos2.x, pos2.y, pos2.z),
                                 Number::newNumber(event.getFlowFromDirection())
                             );
                             if (result.isBoolean()) {
@@ -2568,11 +2592,13 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::LiquidTryFlowAfterEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos  = event.getPos();
+                            auto pos2 = event.getFlowFromPos();
                             func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPos())),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getFlowFromPos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
+                                BlockPosClass::newBlockPos(pos2.x, pos2.y, pos2.z),
                                 Number::newNumber(event.getFlowFromDirection())
                             );
                         } catch (...) {}
@@ -2595,10 +2621,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::MossGrowthBeforeEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.getPos();
                             auto result = func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(&event.getPos()),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 RandomClass::newRandom(const_cast<Random*>(&event.getRandom())),
                                 Number::newNumber(event.getXRadius()),
                                 Number::newNumber(event.getZRadius())
@@ -2621,10 +2648,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::MossGrowthAfterEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.getPos();
                             func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 RandomClass::newRandom(const_cast<Random*>(&event.getRandom())),
                                 Number::newNumber(event.getXRadius()),
                                 Number::newNumber(event.getZRadius()),
@@ -2650,11 +2678,13 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::PistonPushBeforeEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos2   = event.getPushPos();
+                            auto pos    = event.getPistonPos();
                             auto result = func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPistonPos())),
-                                BlockPosClass::newBlockPos(&event.getPushPos()),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
+                                BlockPosClass::newBlockPos(pos2.x, pos2.y, pos2.z),
                                 Number::newNumber(event.getBranchFacing()),
                                 Number::newNumber(event.getPistonMoveFacing())
                             );
@@ -2676,11 +2706,13 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::PistonPushAfterEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos2 = event.getPushPos();
+                            auto pos  = event.getPistonPos();
                             func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPistonPos())),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPushPos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
+                                BlockPosClass::newBlockPos(pos2.x, pos2.y, pos2.z),
                                 Number::newNumber(event.getBranchFacing()),
                                 Number::newNumber(event.getPistonMoveFacing())
                             );
@@ -2704,10 +2736,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::RedstoneUpdateBeforeEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.getPos();
                             auto result = func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(&event.getPos()),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 Number::newNumber(event.getStrength()),
                                 Number::newNumber(event.getIsFirstTime())
                             );
@@ -2729,10 +2762,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::RedstoneUpdateAfterEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.getPos();
                             func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 Number::newNumber(event.getStrength()),
                                 Number::newNumber(event.getIsFirstTime())
                             );
@@ -2756,10 +2790,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::SculkBlockGrowthBeforeEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.getPos();
                             auto result = func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(&event.getPos())
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z)
                             );
                             if (result.isBoolean()) {
                                 if (result.asBoolean().value() == false) event.cancel();
@@ -2779,10 +2814,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::SculkBlockGrowthAfterEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.getPos();
                             func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPos()))
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z)
                             );
                         } catch (...) {}
                     },
@@ -2804,13 +2840,15 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::SculkSpreadBeforeEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.getSelfPos();
+                            auto pos2   = event.getTargetPos();
                             auto result = func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(&event.getSelfPos()),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 BlockClass::newBlock(&event.getSelfBlock()),
                                 Number::newNumber(event.getSelfFace()),
-                                BlockPosClass::newBlockPos(&event.getTargetPos()),
+                                BlockPosClass::newBlockPos(pos2.x, pos2.y, pos2.z),
                                 BlockClass::newBlock(&event.getTargetBlock()),
                                 Number::newNumber(event.getTargetFace()),
                                 Number::newNumber(event.getFacing())
@@ -2833,13 +2871,15 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::SculkSpreadAfterEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos  = event.getSelfPos();
+                            auto pos2 = event.getTargetPos();
                             func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getSelfPos())),
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z),
                                 BlockClass::newBlock(const_cast<Block*>(&event.getSelfBlock())),
                                 Number::newNumber(event.getSelfFace()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getTargetPos())),
+                                BlockPosClass::newBlockPos(pos2.x, pos2.y, pos2.z),
                                 BlockClass::newBlock(const_cast<Block*>(&event.getTargetBlock())),
                                 Number::newNumber(event.getTargetFace()),
                                 Number::newNumber(event.getFacing())
@@ -2919,10 +2959,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::SpawnWanderingTraderBeforeEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos    = event.getPos();
                             auto result = func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(&event.getPos())
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z)
                             );
                             if (result.isBoolean()) {
                                 if (result.asBoolean().value() == false) event.cancel();
@@ -2942,10 +2983,11 @@ void EventBusClass::registerCallback() {
                      func{Global<Function>(args[1].asFunction())}](ila::mc::SpawnWanderingTraderAfterEvent& event) {
                         EngineScope scope(engine);
                         try {
+                            auto pos = event.getPos();
                             func.get().call(
                                 {},
                                 BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPos(const_cast<BlockPos*>(&event.getPos()))
+                                BlockPosClass::newBlockPos(pos.x, pos.y, pos.z)
                             );
                         } catch (...) {}
                     },
