@@ -3,7 +3,6 @@
 #include "Entry.h"
 #include "Manager/BindAPI.h"
 #include "Manager/EngineData.h"
-#include "Utils/Using.h"
 #include "Utils/Util.h"
 
 #include <fmt/core.h>
@@ -13,8 +12,7 @@
 #include <v8-exception.h>
 
 #include <Windows.h>
-#include <filesystem>
-#include <memory>
+
 #include <shellapi.h>
 #include <thread>
 

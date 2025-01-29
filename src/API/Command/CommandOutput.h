@@ -1,10 +1,10 @@
 #pragma once
 
-#include "API/APIHelper.h" // IWYU pragma: keep
+#include "API/APIHelper.h"   // IWYU pragma: keep
+
 #include "Utils/Using.h"
 
 #include <mc/server/commands/CommandOutput.h>
-
 
 class CommandOutput;
 

@@ -3,11 +3,6 @@
 #include "API/Level/Level.h"
 #include "API/Math/Vec3.h"
 #include "API/Network/NetworkIdentifier.h"
-#include "mc/world/actor/player/AbilitiesIndex.h"
-
-
-
-#include <mc/world/level/BlockPos.h>
 
 using namespace Komomo;
 

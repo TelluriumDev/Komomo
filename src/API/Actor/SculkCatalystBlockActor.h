@@ -2,7 +2,7 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-// #include <mc/world/item/SculkCatalystBlockActor.h>
+#include <mc/world/level/block/actor/SculkCatalystBlockActor.h>
 
 struct SculkCatalystBlockActor;
 

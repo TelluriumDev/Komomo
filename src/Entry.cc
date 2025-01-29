@@ -1,19 +1,12 @@
 #include "Entry.h"
 #include "Loader/ModManager.h"
 #include "Manager/NodeManager.h"
-#include "ll/api/io/LogLevel.h"
 
+#include "ll/api/io/LogLevel.h"
 #include <ll/api/mod/ModManager.h>
 #include <ll/api/mod/ModManagerRegistry.h>
 
-
 #include <memory>
-
-
-#if (defined(WIN32) || defined(_WIN32)) && defined(DEBUG)
-#include <debugapi.h>
-#endif
-
 
 void registerModManager(const std::shared_ptr<Komomo::KomomoModManager>& pm) {
     auto& modManagerRegistry = ll::mod::ModManagerRegistry::getInstance();
@@ -37,15 +30,11 @@ Entry& Entry::getInstance() {
 }
 
 bool Entry::load() {
+
 #ifdef DEBUG
     getSelf().getLogger().setLevel(ll::io::LogLevel::Debug);
 #endif
-#if (defined(WIN32) || defined(_WIN32)) && defined(DEBUG)
-    getSelf().getLogger().info("Waiting for VC debugger attach...");
-    // while (!IsDebuggerPresent()) {
-    //     std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    // }
-#endif
+
     NodeManager::getInstance().initNodeJs();
     Entry::getInstance().getSelf().getLogger().info("Load javascript mod...");
 

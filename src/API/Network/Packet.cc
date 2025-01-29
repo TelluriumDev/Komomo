@@ -1,7 +1,5 @@
 #include "API/Network/Packet.h"
 
-#include <mc/network/packet/Packet.h>
-
 ClassDefine<PacketClass> packetClassBuilder =
     defineClass<PacketClass>("Packet")
         .constructor(nullptr)

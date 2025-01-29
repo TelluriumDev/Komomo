@@ -1,7 +1,5 @@
 #include "API/Actor/SculkCatalystBlockActor.h"
 
-#include <mc/world/level/block/actor/SculkCatalystBlockActor.h>
-
 ClassDefine<SculkCatalystBlockActorClass> sculkCatalystBlockActorClassBuilder =
     defineClass<SculkCatalystBlockActorClass>("SculkCatalystBlockActor").constructor(nullptr).build();
 

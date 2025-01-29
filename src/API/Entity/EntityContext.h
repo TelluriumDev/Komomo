@@ -2,7 +2,6 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-
 class EntityContext;
 
 class EntityContextClass : public ScriptClass {

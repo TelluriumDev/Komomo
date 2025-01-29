@@ -3,7 +3,6 @@
 #include "API/APIHelper.h" // IWYU pragma: keep
 #include "API/Block/Block.h"
 #include "API/Block/BlockPos.h"
-#include "API/Command/CommandOrigin.h" // IWYU pragma: keep
 #include "API/Command/CommandOutput.h"
 #include "API/Item/ItemStack.h"
 #include "API/Math/Vec3.h"
@@ -26,9 +25,12 @@
 #include <mc/server/commands/CommandMessage.h>
 #include <mc/server/commands/CommandPermissionLevel.h>
 #include <mc/server/commands/GenerateMessageResult.h>
+#include <mc/server/commands/ServerCommandOrigin.h>
 #include <mc/util/JsonHelpers.h>
+#include <mc/world/Minecraft.h>
 #include <mc/world/item/ItemInstance.h>
 #include <mc/world/item/ItemStack.h>
+
 
 
 #include <string>

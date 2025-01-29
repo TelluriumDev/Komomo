@@ -2,7 +2,7 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-// #include <mc/world/item/MCRESULT.h>
+#include <mc/deps/core/utility/MCRESULT.h>
 
 struct MCRESULT;
 

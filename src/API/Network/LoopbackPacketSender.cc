@@ -1,8 +1,5 @@
 #include "API/Network/LoopbackPacketSender.h"
 
-#include <mc/network/LoopbackPacketSender.h>
-
-
 ClassDefine<LoopbackPacketSenderClass> loopbackPacketSenderClassBuilder =
     defineClass<LoopbackPacketSenderClass>("LoopbackPacketSender")
         .constructor(nullptr)

@@ -1,13 +1,11 @@
 #include "API/Player/SimulatedPlayer.h"
+#include "API/APIHelper.h"
 #include "API/Actor/Actor.h"
 #include "API/Block/BlockPos.h"
 #include "API/Dimension/DimensionType.h"
 #include "API/Item/ItemStack.h"
 #include "API/Math/Vec2.h"
 #include "API/Math/Vec3.h"
-
-#include <mc/scripting/modules/minecraft/ScriptFacing.h>
-#include <mc/server/sim/LookDuration.h>
 
 ClassDefine<SimulatedPlayerClass> simulatedPlayerClassBuilder =
     defineClass<SimulatedPlayerClass>("SimulatedPlayer")
@@ -76,43 +74,34 @@ Local<Object> SimulatedPlayerClass::newSimulatedPlayer(const Arguments& args) {
         PrintArgsTooFew();
         return Object::newObject();
     }
-
     CheckArgTypeReturn(args[0], ValueKind::kString, Object::newObject());
-    std::string name = args[0].asString().toString();
-
+    string name   = args[0].asString().toString();
     auto engine = EngineScope::currentEngine();
-
     if (args.size() == 1) {
         return (new SimulatedPlayerClass(SimulatedPlayer::create(name)))->getScriptObject();
     }
-
     if (!IsInstanceOf<Vec3Class>(args[1])) {
         PrintWrongArgType();
         return Object::newObject();
     }
     auto vec3 = engine->getNativeInstance<Vec3Class>(args[1]);
-
     if (args.size() == 2) {
         return (new SimulatedPlayerClass(SimulatedPlayer::create(name, vec3->mVec3)))->getScriptObject();
     }
-
     if (!IsInstanceOf<DimensionTypeClass>(args[2])) {
         PrintWrongArgType();
         return Object::newObject();
     }
     auto dimension = engine->getNativeInstance<DimensionTypeClass>(args[2]);
-
     if (args.size() == 3) {
         return (new SimulatedPlayerClass(SimulatedPlayer::create(name, vec3->mVec3, *dimension->mDimensionType)))
             ->getScriptObject();
     }
-
     if (!IsInstanceOf<Vec2Class>(args[3])) {
         PrintWrongArgType();
         return Object::newObject();
     }
     auto vec2 = engine->getNativeInstance<Vec2Class>(args[3]);
-
     return (new SimulatedPlayerClass(SimulatedPlayer::create(name, vec3->mVec3, *dimension->mDimensionType, vec2->mVec2)
             ))
         ->getScriptObject();
@@ -206,8 +195,8 @@ Local<Value> SimulatedPlayerClass::teleportTo(const Arguments& args) {
     CheckArgType(args[4], ValueKind::kBoolean);
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        auto engine = EngineScope::currentEngine();
-        auto vec3   = engine->getNativeInstance<Vec3Class>(args[0]);
+        ScriptEngine* engine = EngineScope::currentEngine();
+        Vec3Class*    vec3   = engine->getNativeInstance<Vec3Class>(args[0]);
         mSimulatedPlayer->teleportTo(
             vec3->mVec3,
             args[1].asBoolean().value(),
@@ -227,8 +216,8 @@ Local<Value> SimulatedPlayerClass::_updateChunkPublisherView(const Arguments& ar
     CheckInstanceType(args[0], Vec3Class) CheckArgType(args[1], ValueKind::kNumber);
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        auto engine = EngineScope::currentEngine();
-        auto vec3   = engine->getNativeInstance<Vec3Class>(args[0]);
+        ScriptEngine* engine = EngineScope::currentEngine();
+        Vec3Class*    vec3   = engine->getNativeInstance<Vec3Class>(args[0]);
         mSimulatedPlayer->_updateChunkPublisherView(vec3->mVec3, args[0].asNumber().toFloat());
     }
     Catch;

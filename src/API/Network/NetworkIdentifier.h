@@ -2,7 +2,7 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-
+#include <mc/network/NetworkIdentifier.h>
 class NetworkIdentifier;
 
 class NetworkIdentifierClass : public ScriptClass {

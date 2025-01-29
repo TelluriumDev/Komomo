@@ -1,6 +1,5 @@
 #include "API/Math/Vec.h"
 
-
 ClassDefine<VecClass> vecClassBuilder = defineClass<VecClass>("Vec")
                                             .constructor(nullptr)
 

@@ -1,14 +1,9 @@
 #include "API/Command/Command.h"
-
-#include <ll/api/service/Bedrock.h>
-#include <mc/deps/core/utility/MCRESULT.h>
-#include <mc/server/commands/CommandContext.h>
-#include <mc/server/commands/MinecraftCommands.h>
-#include <mc/server/commands/ServerCommandOrigin.h>
-#include <mc/world/Minecraft.h>
-#include <mc/world/level/Level.h>
-
-
+#include "API/Command/CommandContext.h"
+#include "API/Command/CommandOrigin.h"
+#include "API/Command/MCRESULT.h"
+#include "API/Command/MinecraftCommands.h"
+#include "API/Level/Level.h"
 
 using namespace Komomo;
 

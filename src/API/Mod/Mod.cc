@@ -1,6 +1,6 @@
 #include "API/Mod/Mod.h"
 #include "API/Logger/Logger.h"
-#include "ll/api/mod/Mod.h"
+
 #include <filesystem>
 
 using namespace Komomo;

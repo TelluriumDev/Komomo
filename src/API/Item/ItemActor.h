@@ -2,6 +2,8 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
+#include <mc/world/actor/item/ItemActor.h>
+
 class ItemActor;
 
 class ItemActorClass : public ScriptClass {

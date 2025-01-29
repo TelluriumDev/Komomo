@@ -2,8 +2,10 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-
+#include <mc/world/actor/player/AbilitiesIndex.h>
 #include <mc/server/commands/CommandOrigin.h>
+#include <mc/world/level/BlockPos.h>
+
 
 class CommandOriginClass : public ScriptClass {
 private:

@@ -2,6 +2,8 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
+#include "mc/world/level/Level.h"
+
 class Level;
 
 class LevelClass : public ScriptClass {

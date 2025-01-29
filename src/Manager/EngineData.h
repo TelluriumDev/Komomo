@@ -4,7 +4,6 @@
 
 #include <ll/api/mod/Mod.h>
 
-#include <cstdint>
 #include <memory>
 
 namespace Komomo {

@@ -25,7 +25,7 @@ using script::Value;
 using script::ValueKind;
 
 // stl
-#include <filesystem>
+#include <filesystem> // IWYU pragma: keep
 #include <string>
 
 using string   = std::string;

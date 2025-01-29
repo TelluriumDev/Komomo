@@ -3,8 +3,6 @@
 #include "API/APIHelper.h" // IWYU pragma: keep
 #include "API/Player/ServerPlayer.h"
 
-// #include <mc/world/simulatedplayer/SimulatedPlayer.h>
-
 #include <mc/server/SimulatedPlayer.h>
 
 class SimulatedPlayerClass : public ServerPlayerClass {

@@ -2,6 +2,7 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
+#include <mc/world/level/dimension/Dimension.h>
 
 class Dimension;
 

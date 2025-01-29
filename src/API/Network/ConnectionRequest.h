@@ -2,6 +2,7 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
+#include <mc/network/ConnectionRequest.h>
 
 class ConnectionRequest;
 

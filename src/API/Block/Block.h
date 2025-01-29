@@ -2,8 +2,6 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-
-
 #include <mc/world/level/block/Block.h>
 
 class BlockClass : public ScriptClass {

@@ -3,7 +3,6 @@
 #include "API/APIHelper.h" // IWYU pragma: keep
 #include "API/Mob/Mob.h"
 
-
 #include <mc/world/actor/player/Player.h>
 
 class PlayerClass : public MobClass {

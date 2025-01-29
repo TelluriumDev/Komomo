@@ -1,6 +1,5 @@
 #include "API/Command/CommandContext.h"
 
-
 ClassDefine<CommandContextClass> commandContextClassBuilder = defineClass<CommandContextClass>("CommandContext")
                                                                   .constructor(nullptr)
 
