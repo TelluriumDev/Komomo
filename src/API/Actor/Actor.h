@@ -207,11 +207,11 @@ public:
     Method(evalMolang);
 
     /* Virtual Functions */
-    Method(hasComponent);
+    // Method(hasComponent);
     Method(outOfWorld);
-    Method(reloadHardcoded);
-    Method(reloadHardcodedClient);
-    Method(initializeComponents);
+    // Method(reloadHardcoded);
+    // Method(reloadHardcodedClient);
+    // Method(initializeComponents);
     Method(reloadComponents);
     Method(resetUserPos);
     Method(getOwnerEntityType);
@@ -225,7 +225,7 @@ public:
     Method(blockedByShield);
     Method(teleportTo);
     Method(lerpMotion);
-    Method(tryCreateAddActorPacket);
+    // Method(tryCreateAddActorPacket);
     Method(normalTick);
     Method(baseTick);
     Method(passengerTick);
