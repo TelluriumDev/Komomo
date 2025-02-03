@@ -823,7 +823,7 @@ Local<Value> ActorClass::getFeetPos(const Arguments& args) {
         if (!mActor) {
             return Local<Value>();
         }
-        return Vec3Class::newVec3(mActor->getFeetPos().x, mActor->getFeetPos().y, mActor->getFeetPos().z);
+        return Vec3Class::newVec3Class(mActor->getFeetPos());
     }
     Catch;
     return Local<Value>();
@@ -835,7 +835,7 @@ Local<Value> ActorClass::getHeadPos(const Arguments& args) {
         if (!mActor) {
             return Local<Value>();
         }
-        return Vec3Class::newVec3(mActor->getHeadPos().x, mActor->getHeadPos().y, mActor->getHeadPos().z);
+        return Vec3Class::newVec3Class(mActor->getHeadPos());
     }
     Catch;
     return Local<Value>();
@@ -847,11 +847,7 @@ Local<Value> ActorClass::getFeetBlockPos(const Arguments& args) {
         if (!mActor) {
             return Local<Value>();
         }
-        return BlockPosClass::newBlockPos(
-            mActor->getFeetBlockPos().x,
-            mActor->getFeetBlockPos().y,
-            mActor->getFeetBlockPos().z
-        );
+        return BlockPosClass::newBlockPosClass(mActor->getFeetBlockPos());
     }
     Catch;
     return Local<Value>();
@@ -1198,7 +1194,7 @@ Local<Value> ActorClass::getInterpolatedRidingOffset(const Arguments& args) {
 // virtual void blockedByShield(::ActorDamageSource const& source, ::Actor& blocker);
 Local<Value> ActorClass::blockedByShield(const Arguments& args) {
     CheckArgsCount(args, 2);
-    CheckInstanceType(args[0], ActorDamageSourceClass); 
+    CheckInstanceType(args[0], ActorDamageSourceClass);
     CheckInstanceType(args[1], ActorClass);
     try {
         if (!mActor) {
@@ -1308,8 +1304,8 @@ Local<Value> ActorClass::passengerTick(const Arguments& args) {
 
 // virtual bool startRiding(::Actor& vehicle, bool forceRiding);
 Local<Value> ActorClass::startRiding(const Arguments& args) {
-    CheckInstanceTypeReturn(args[0], ActorClass,Boolean::newBoolean(false));
-    CheckArgTypeReturn(args[1], ValueKind::kBoolean,Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], ActorClass, Boolean::newBoolean(false));
+    CheckArgTypeReturn(args[1], ValueKind::kBoolean, Boolean::newBoolean(false));
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1325,14 +1321,12 @@ Local<Value> ActorClass::startRiding(const Arguments& args) {
 
 // virtual void addPassenger(::Actor& passenger);
 Local<Value> ActorClass::addPassenger(const Arguments& args) {
-    CheckInstanceTypeReturn(args[0], ActorClass,Boolean::newBoolean(false));
+    CheckInstanceTypeReturn(args[0], ActorClass, Boolean::newBoolean(false));
     try {
         if (!mActor) {
             return Local<Value>();
         }
-        mActor->addPassenger(
-            *EngineScope::currentEngine()->getNativeInstance<ActorClass>(args[0])->mActor
-        );
+        mActor->addPassenger(*EngineScope::currentEngine()->getNativeInstance<ActorClass>(args[0])->mActor);
         return Local<Value>();
     }
     Catch;

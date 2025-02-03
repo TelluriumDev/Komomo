@@ -62,10 +62,8 @@ Local<Value> CommandOriginClass::getBlockPosition() {
 
 Local<Value> CommandOriginClass::getWorldPosition() {
     if (!mCommandOrigin) return Local<Value>();
-    return Vec3Class::newVec3(
-        mCommandOrigin->getWorldPosition().x,
-        mCommandOrigin->getWorldPosition().y,
-        mCommandOrigin->getWorldPosition().z
+    return Vec3Class::newVec3Class(
+        mCommandOrigin->getWorldPosition()
     );
 };
 
