@@ -37,6 +37,11 @@
 #include <mc/world/actor/TravelType.h>
 #include <mc/world/actor/TypeExecutingEvent.h>
 
+#include <mc/world/level/block/actor/BlockActorType.h>
+#include <mc/world/level/block/BlockSupportType.h>
+#include <mc/world/level/block/BlockTintType.h>
+#include <mc/world/level/material/MaterialType.h>
+
 #include <mc/world/actor/player/AbilitiesIndex.h>
 #include <mc/world/actor/player/AbilitiesLayer.h>
 #include <mc/world/actor/player/Ability.h>
