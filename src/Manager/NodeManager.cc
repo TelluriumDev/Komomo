@@ -1,25 +1,14 @@
 #include "Manager/NodeManager.h"
-#include "API/APIHelper.h"
-#include "Entry.h"
 #include "Manager/BindAPI.h"
-#include "Manager/EngineData.h"
-#include "Utils/Util.h"
 
-#include <fmt/core.h>
-#include <nlohmann/json.hpp>
-#include <node.h>
+#include <ll/api/chrono/GameChrono.h>
+#include <ll/api/coro/CoroTask.h>
+#include <ll/api/service/GamingStatus.h>
+#include <ll/api/thread/ServerThreadExecutor.h>
+
 #include <uv.h>
-#include <v8-exception.h>
-
-#include <Windows.h>
-
 #include <shellapi.h>
-#include <thread>
 
-#include "ll/api/chrono/GameChrono.h"
-#include "ll/api/coro/CoroTask.h"
-#include "ll/api/service/GamingStatus.h"
-#include "ll/api/thread/ServerThreadExecutor.h"
 
 #pragma warning(disable : 4996)
 #pragma comment(lib, "Shell32.lib")

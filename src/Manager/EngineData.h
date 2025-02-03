@@ -12,7 +12,6 @@ namespace Komomo {
 struct EngineData {
     uint64_t               mID{uint64_t(-1)};
     string                 mFileName;
-    script::Global<Object> mRegisterInfo;
 
     std::shared_ptr<ll::mod::Mod> mMod{nullptr};
 

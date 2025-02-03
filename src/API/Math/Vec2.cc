@@ -8,10 +8,7 @@ ClassDefine<Vec2Class> vec2ClassBuilder = defineClass<Vec2Class>("Vec2")
 
                                               .build();
 
-Vec2Class::Vec2Class(float x, float y) : ScriptClass(ConstructFromCpp<Vec2Class>{}) {
-    this->x     = x;
-    this->y     = y;
-    this->mVec2 = Vec2(x, y);
-}
 
-Local<Object> Vec2Class::newVec2(float x, float y) { return (new Vec2Class(x, y))->getScriptObject(); }
+Vec2Class::Vec2Class(Vec2 vec2) : ScriptClass(ConstructFromCpp<Vec2Class>{}) { this->mVec2 = vec2; }
+
+Local<Object> Vec2Class::newVec2Class(Vec2 vec2) { return (new Vec2Class(vec2))->getScriptObject(); }

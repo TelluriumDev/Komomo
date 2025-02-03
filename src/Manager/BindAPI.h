@@ -34,6 +34,9 @@
 #include "API/Player/Player.h"
 #include "API/Player/SimulatedPlayer.h"
 #include "API/Service/Service.h"
+
+#include "ExtraAPI/Config/Config.h"
+#include "ExtraAPI/KeyValueDb/KeyValueDB.h"
 #include "Utils/Using.h"
 
 
@@ -90,6 +93,9 @@ inline void BindAPI(ScriptEngine* engine) {
     engine->registerNativeClass<ServiceClass>(serviceClassBuilder);
 
     engine->registerNativeClass<LoggerClass>(loggerClassBuilder);
+
+    engine->registerNativeClass<ConfigClass>(configClassBuilder);
+    engine->registerNativeClass<KeyValueDBClass>(keyValueDBClassBuilder);
 }
 
 

@@ -10,7 +10,8 @@ add_requires("levibuildscript 0.3.0")
 add_requires(
     "microsoft-gsl 4.0.0",
     "boost 1.85.0",
-    "ilistenattentively 0.2.2"
+    "ilistenattentively 0.2.2",
+    "uwebsockets"
 )
 
 if not has_config("vs_runtime") then
@@ -38,7 +39,8 @@ target("Komomo")
         "glm",
         "concurrentqueue",
         "magic_enum",
-        "ilistenattentively"
+        "ilistenattentively",
+        "uwebsockets"
     )
     set_kind("shared")
     set_languages("cxx20")

@@ -36,6 +36,7 @@
 #include "API/Player/Player.h"
 #include "API/Service/Service.h"
 
+#include "Manager/EngineData.h"
 #include "Utils/Convert.h"
 #include "Utils/Using.h"
 
@@ -130,16 +131,16 @@
 
 #include <string>
 
-using namespace Komomo;
+ClassDefine<EventBusClass> eventBusClassBuilder =
+    defineClass<EventBusClass>("EventBus")
+        .constructor(nullptr)
 
-ClassDefine<EventBusClass> eventBusClassBuilder = defineClass<EventBusClass>("EventBus")
-                                                      .constructor(nullptr)
-
-                                                      .function("emplaceListener", &EventBusClass::emplaceListener)
-                                                      .function("removeListener", &EventBusClass::removeListener)
+        .function("emplaceListener", &EventBusClass::emplaceListener)
+        .function("removeListener", &EventBusClass::removeListener)
+        .function("removeMyModListener", &EventBusClass::removeMyModListener)
 
 
-                                                      .build();
+        .build();
 
 std::unordered_map<
     std::string,
@@ -174,11 +175,19 @@ Local<Value> EventBusClass::emplaceListener(const Arguments& args) {
             auto listener = it->second(args, EngineScope::currentEngine(), priority);
             listeners[ENGINE_DATA()->mMod->getName()].push_back(listener);
             return ListenerClass::newListenPtr(listener);
+        } else {
+            PrintException(
+                fmt::format("Event :{} not found", eventName),
+                "EventBusClass::emplaceListener",
+                ENGINE_DATA()->mMod->getName(),
+                "emplaceListener"
+            );
+            return Object::newObject();
         }
-        return Local<Value>();
     }
     Catch;
 }
+
 Local<Value> EventBusClass::removeListener(const Arguments& args) {
     CheckArgsCountReturn(args, 1, Boolean::newBoolean(false));
     using ll::event::EventBus;
@@ -194,9 +203,7 @@ Local<Value> EventBusClass::removeListener(const Arguments& args) {
             return Boolean::newBoolean(false);
         }
     }
-
     CatchReturn(Boolean::newBoolean(false));
-    return Boolean::newBoolean(false);
 }
 
 void EventBusClass::removeModAllListeners(std::string modName) {
@@ -207,6 +214,15 @@ void EventBusClass::removeModAllListeners(std::string modName) {
     listeners.erase(modName);
 }
 
+Local<Value> EventBusClass::removeMyModListener() {
+    using ll::event::EventBus;
+    auto modName = ENGINE_DATA()->mMod->getName();
+    for (auto& listener : listeners[modName]) {
+        EventBus::getInstance().removeListener(listener);
+    }
+    listeners.erase(modName);
+    return Local<Value>();
+}
 
 void EventBusClass::removeAllListeners() {
     using ll::event::EventBus;

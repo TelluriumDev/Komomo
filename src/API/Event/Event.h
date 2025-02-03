@@ -31,6 +31,8 @@ public:
 
     static void removeModAllListeners(std::string modName);
 
+    static Local<Value> removeMyModListener();
+
     static void removeAllListeners();
 
     KMMAPI static void addCallback(
