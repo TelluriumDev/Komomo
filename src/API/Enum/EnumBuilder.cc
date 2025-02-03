@@ -194,6 +194,14 @@ void RegisterEnum(ScriptEngine* engine) {
     REGISTER_ENUM_MACRO(CommonEnum, TitleInfo::TitleId, "TitleId");
     engine->set("CommonEnum", ConvertToScriptX(CommonEnum));
 
+    //Block
+    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> BlockEnum;
+    REGISTER_ENUM_MACRO(BlockEnum, BlockActorType, "BlockActorType");
+    REGISTER_ENUM_MACRO(BlockEnum, BlockSupportType, "BlockSupportType");
+    REGISTER_ENUM_MACRO(BlockEnum, BlockTintType, "BlockTintType");
+    REGISTER_ENUM_MACRO(BlockEnum, MaterialType, "MaterialType");
+    engine->set("BlockEnum", ConvertToScriptX(BlockEnum));
+
     // Player
     static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> PlayerEnum;
     REGISTER_ENUM_MACRO(PlayerEnum, AbilitiesIndex, "AbilitiesIndex");

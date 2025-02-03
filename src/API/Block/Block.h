@@ -17,8 +17,8 @@ public:
 
 public: /* Member */
     Local<Value> getAllowsRunes();
-    //Local<Value> getBlockEntityType();
-    //Local<Value> getBlockTintType();
+    Local<Value> getBlockEntityType();
+    Local<Value> getBlockTintType();
     Local<Value> getBlockItemId();
     Local<Value> getBurnOdds();
     Local<Value> getData();
@@ -26,9 +26,9 @@ public: /* Member */
     Local<Value> getFlameOdds();
     Local<Value> getFriction();
     Local<Value> getExplosionResistance();
-    //Local<Value> getLight();
-    //Local<Value> getLightEmission();
-    //Local<Value> getMaterial();
+    Local<Value> getLight();
+    Local<Value> getLightEmission();
+    Local<Value> getMaterial();
     Local<Value> getRuntimeId();
     //Local<Value> getSerializationId();
     Local<Value> getThickness();
@@ -76,7 +76,7 @@ public: /* Member */
 public: /* Method */
     Local<Value> addAABBs(const Arguments& args);
     // Local<Value> addCollisionShapes(const Arguments& args);
-    // Local<Value> addTags(const Arguments& args);
+    // Local<Value> addTag(const Arguments& args);
     Local<Value> allowStateMismatchOnPlacement(const Arguments& args);
     // Local<Value> asItemInstance(const Arguments& args);
     Local<Value> attack(const Arguments& args);
@@ -90,17 +90,17 @@ public: /* Method */
     Local<Value> canConnect(const Arguments& args);
     Local<Value> canProvideFullSupport(const Arguments& args);
     Local<Value> canProvideMultifaceSupport(const Arguments& args);
-    // Local<Value> canProvideSupport(const Arguments& args);
+    Local<Value> canProvideSupport(const Arguments& args);
     Local<Value> canSlide(const Arguments& args);
     Local<Value> canSurvive(const Arguments& args);
     Local<Value> causesFreezeEffect();
     Local<Value> checkIsPathable(const Arguments& args);
-    // Local<Value> clip(const Arguments& args);
+    Local<Value> clip(const Arguments& args);
     Local<Value> computeRawSerializationIdHashForNetwork();
-    // Local<Value> copyState(const Arguments& args);
+    Local<Value> copyState(const Arguments& args);
     Local<Value> dealsContactDamage(const Arguments& args);
     Local<Value> destroy(const Arguments& args);
-    // Local<Value> entityInside(const Arguments& args);
+    Local<Value> entityInside(const Arguments& args);
     // Local<Value> executeEvent(const Arguments& args);
     // Local<Value> executeItemEvent(const Arguments& args);
     // Local<Value> executeTrigger(const Arguments& args);
