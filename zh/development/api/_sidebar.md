@@ -1,8 +1,8 @@
 <!-- Thanks to LiteLoader Script Engine Document -->
 
-<!-- - 游戏内容接口 -->
+- 游戏内容接口
 <!-- - [🎨 基础游戏接口](zh_cn/development/GameAPI/Basic.md) -->
-<!-- - [🎯 命令系统](zh_cn/development/Command/Command.md) -->
+- [🎯 命令系统](/zh/development/api/Command/)
 <!-- - [🏃‍♂️ 玩家对象](zh_cn/development/Player/Player.md) -->
 <!-- - [📦 方块对象](zh_cn/development/Block/Block.md) -->
 <!-- - [🎈 实体对象](zh_cn/development/Actor/Actor.md) -->
