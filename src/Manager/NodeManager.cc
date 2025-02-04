@@ -6,8 +6,9 @@
 #include <ll/api/service/GamingStatus.h>
 #include <ll/api/thread/ServerThreadExecutor.h>
 
-#include <uv.h>
+#include <Windows.h>
 #include <shellapi.h>
+#include <uv.h>
 
 
 #pragma warning(disable : 4996)
@@ -205,15 +206,16 @@ bool NodeManager::NpmInstall(string npmExecuteDir) {
             const path = require("path");
             const cwd = path.join(process.cwd());
 
-            let node = path.join(cwd, "node.exe");
+            global.__dirname = cwd
+            let node = path.join(path.join(cwd,")"+Entry::getInstance().getSelf().getModDir().string()+R"("), "node.exe");
 
             const execute_dir = path.join(")"+npmExecuteDir+R"(");
-            const npm_cli = path.join(cwd, "plugins/Komomo/npm/bin/npm-cli.js");
+            const npm_cli = path.join(cwd, "")"+Entry::getInstance().getSelf().getModDir().string()+R"("/npm/bin/npm-cli.js");
             require("child_process").execFileSync(node, [npm_cli, "install"], { cwd: execute_dir });
 
             console.log("npm install success");
         } catch (e) {
-            console.error(`Failed to run npm install:\n${e.stack}`);
+            console.error(`Failed to run npm install:\n${e}`);
         }
     )";
     // clang-format on
