@@ -5,15 +5,11 @@ on:
     paths:
       - xmake.lua
       - src/**
-      - patch/**
-      - third-party/**
       - .github/workflows/build.yml
   pull_request:
     paths:
       - xmake.lua
       - src/**
-      - patch/**
-      - third-party/**
       - .github/workflows/build.yml
   workflow_dispatch:
 
@@ -39,8 +35,8 @@ jobs:
             xmake-
 
       - uses: xmake-io/github-action-setup-xmake@v1
-        # with:
-        #   xmake-version: branch@master
+        with:
+          xmake-version: v2.9.7
       - run: |
           git submodule update --init --recursive
 
