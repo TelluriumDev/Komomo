@@ -1,3 +1,3 @@
 - 语言/Language
-  - [English](/en/development)
-  - [简体中文](/zh/development)
+  - [English](/en/development/)
+  - [简体中文](/zh/development/)

@@ -1,60 +1,154 @@
-# 使用JavaScript创造你的首个脚本插件
+# 🚪 快速入门
 
-> 本指南旨在展示创建你的第一个插件的非常简单和直接的过程--以及在考虑做什么和如何做时的一些最佳做法。建议有使用JavaScript的经验，但不是必须的。JavaScript是一种对初学者非常友好的语言，所以不要被淹没了!
+## 📋 前言
 
-## 先决条件
+此教程将使用 `Komomo` 提供的插件模板，教您一步步创建一个属于您的简单插件。
 
-在开发你的第一个插件之前，我们需要设置你的开发环境。你用来编程的软件由你自己选择，但建议使用可信和可靠的软件。
+此教程假设您对`TypeScript`有一定的了解，如果您还不了解`TypeScript`，请先学习`TypeScript`。
 
-- [VSCode](https://code.visualstudio.com/) 也是一个广泛使用的编辑器，具有很多强大的功能
+示例插件将会在玩家进入服务器时对该玩家发送欢迎信息。
 
-你还需要建立一个干净的 LeviLamina 安装，关于如何安装 LeviLamina 的细节可以在[这里](/zh_cn/Usage.md)找到。这个服务器将被用来测试你的插件。
+## 📓 准备工作
 
-有了你的开发环境，并完成了服务器的安装，你就可以开始了!
+俗话说，工欲善其事，必先利其器。编写代码需要一个趁手的工具。
 
-## 我现在该做什么？
+此教程推荐使用 `Visual Studio Code` 作为开发工具，您可前往[Visual Studio Code 官网](https://code.visualstudio.com/)下载安装。
 
-开发一个脚本插件，首先要创建你的插件文件。这个文件应该命名为 "mymod.js"，将 "mymod" 替换为你想要的插件名称。它应该被放在你的服务器安装的插件文件夹中。有些开发环境会允许你创建一个新文件并选择一个位置，而其他开发环境则允许你在点击 "另存为" 后才选择。
+当然，其他代码编辑器也可以，不过为了方便，我们还是使用 `VS Code`。
 
-如果您精通 TypeScript 您可以直接使用我们的 TS 插件模板库 [这里](https://github.com/TelluriumDev/Komomo-JavaScript-Template)
+关于运行环境和开发环境的配置教程，请前往[环境配置](/zh/development/environment.md)获取。
 
-另外 JavaScript 分支为开发者提供了 JS 插件模板库
+## ✒️ 编写代码
 
-统一脚本插件 manifest.json type: “KomomoJS“ (不知道怎么用的看 LeviLamina 插件加载机制)
+当做完了准备工作，我们就可以开始编写代码了。
 
-> 请详细了解 LeviLamina 的插件加载机制 以上插件模板可以帮助你大致了解
+首先，使用您的编辑器打开模板文件夹，您会看到这些文件：
 
-现在我们已经创建了我们的.js文件，并注册了插件，我们要做的就是创建一个事件监听器。我们通过使用`EventBus`来实现。
+```tree
+📁 template-root // 模板根目录
+├── 📁 KomomoHelperLib/ // 插件开发辅助库
+├── 📁 scripts/         // 脚本目录
+├── 📁 src/             // 源代码目录
+|    └── 📄 test.ts
+├── 📄 index.ts         // 插件入口文件
+├── 📄 .gitignore
+├── 📄 manifest.json    // 插件清单文件
+└── 📄 package.json     // npm依赖管理文件
+```
 
-```js
-EventBus.emplaceListener("PlayerJoinEvent", (player) => {
-    player.sendMessage("欢迎加入服务器！")
+本教程将专注于`index.ts`和`manifest.json`两个文件。
+
+首先，我们需要更改`manifest.json`:
+
+```json
+{
+  "entry": "index.js", // 插件入口文件
+  "type": "KomomoJS", // 插件类型，不应更改
+  "version": "1.0.0", // 插件版本
+  "name": "JoinWelcome", // 插件名称
+  "dependencies": [
+    {
+      "name": "Komomo" // 插件依赖的库，不应更改
+    }
+  ]
+}
+```
+
+对于本教程，`src/`文件夹对我们没有意义，所以请删掉它。
+
+然后，我们打开`index.ts`，您会看到以下代码：
+
+```typescript
+/// <reference path="./KomomoHelperLib/index.d.ts" />
+
+import("./src/test");
+```
+
+由于我们刚刚删除掉了`src/`文件夹，所以我们删除掉`import("./src/test")`这行代码。
+
+现在，让我们回顾一下我们的需求：当玩家进入服务器时，向玩家发送欢迎信息。
+
+那么，如何获知玩家进入服务器呢？我们可以使用`Komomo`提供的`PlayerJoinEvent`事件。
+
+监听`PlayerJoinEvent`事件的原型如下：
+
+```typescript
+function emplaceListener(
+  event: "PlayerJoinEvent",
+  callback: (player: Player) => boolean,
+  priority?: EventEnum.EventPriority
+): Listener;
+```
+
+`emplaceListener`函数接受三个参数：
+
+1. 事件名称，本例中为`PlayerJoinEvent`。
+2. 回调函数，当事件触发时，该函数将被调用。回调函数接受一个`Player`对象作为参数，该对象表示触发事件的玩家。
+3. 事件优先级，可选参数，用于指定事件的优先级。默认为`EventEnum.EventPriority.NORMAL`。
+
+对于欢迎玩家，我们不需要优先级，所以我们可以省略第三个参数。
+
+现在，我们可以在`index.ts`中添加以下代码：
+```typescript
+/// <reference path="./KomomoHelperLib/index.d.ts" />
+function onPlayerJoin(player: Player): boolean {
+  player.sendMessage("欢迎加入服务器！")
+  return true;
+}
+EventBus.emplaceListener("PlayerJoinEvent", onPlayerJoin);
+```
+
+现在，当玩家进入服务器时，`onPlayerJoin`函数将被调用，并向玩家发送欢迎信息。
+
+当然，为了代码的紧凑性，我们可以将`onPlayerJoin`函数直接作为回调函数传递给`emplaceListener`函数:
+
+```typescript
+/// <reference path="./KomomoHelperLib/index.d.ts" />
+EventBus.emplaceListener("PlayerJoinEvent", (player: Player) => {
+  player.sendMessage("欢迎加入服务器！")
+  return true;
 });
 ```
 
-<!-- > 参考资料: https://docs.litebds.com/zh-Hans/#/LLSEPluginDevelopment/EventAPI/Listen -->
+这样，我们就完成了插件的编写。
 
-为了测试你的插件，只需启动服务器，服务器应该能够识别你的插件并成功加载它。LeviLamina 控制台将记录您创建的任何日志，以及您的插件或API失败时的任何错误。开发时的迭代很重要。经常测试，每一步都要确保当问题出现时，你清楚地知道你改变了什么，并能想出解决方案来解决它。
+## ⚙️ 编译代码
 
-你可以引用类，以及其他特殊的类和构造函数。这些类你的插件的面包和黄油，将允许你做很多很酷的事情。游戏内容接口有所有的方法和属性供你使用。
-<!-- >参考：https://docs.litebds.com/en/#/LLSEPluginDevelopment/GameAPI/Basic -->
+现在，我们已经完成了代码的编写，接下来我们需要编译代码。
 
-例如，我们可以使用玩家对象并直接对其采取行动，以发送信息/操纵玩家。
+在命令行中，进入模板根目录，然后运行以下命令：
 
-```js
-EventBus.emplaceListener("PlayerJoinEvent", (player) => {
-    player.sendMessage("欢迎加入服务器！")
-});
+```bash
+npm run build
 ```
 
-我们可以引用玩家对象的属性，并使用它来执行其他动作。
+之后命令行会出现`Build successful`的消息，表示编译成功。
 
-<!-- ```js
-EventBus.emplaceListener("PlayerJoinEvent",(player) => {
-    player.sendToast('欢迎！', '感谢您游玩本服！');
-    let loginReward = mc.newItem('minecraft:diamond', 1);
-    mc.spawnItem(loginReward, player.pos)。
-});
-``` -->
+## 🗳️ 运行插件
 
-这给我们带来了最后的考虑。在制作插件时，尽量想一些简单的、自我封闭的东西。每个开发者都想建立一个具有大量功能的大型插件，但这样的项目很容易被放弃，因为它们从未真正完成。做一系列有特定目的的小插件。为这些插件添加功能，以实现配置和定制。找到你希望游戏拥有的功能或事物，并使用Komomo中的方法来实现它们。使用Komomo的API确实有无限可能。
+编译成功后，脚本已经把所需文件拷贝到了`bin/`文件夹中。
+
+我们只需要把`bin/`文件夹复制到`BDS`根目录的`plugins/`文件夹中，将文件夹的名字改成`JoinWelcome`，即可完成安装。
+
+然后启动服务器，当玩家进入服务器时，玩家将会收到欢迎信息。
+
+## 📦 分发插件
+
+您可能希望把插件分发给其他人使用，那么您需要把插件打包成`.zip`文件。
+
+您只需要把`bin/`文件夹内的文件打包成zip归档，然后分发给其他人即可。
+
+## 📖 总结
+
+通过本教程，您已经学会了如何创建一个简单的`Komomo`插件，并且学会了如何编译和运行插件。
+
+不过，此插件的功能非常简单，您可以根据自己的需求，编写更复杂的插件。
+
+利用您的发散性思维，仔细考虑一下这个插件：
+
+- 也许可以增加逻辑，实现一个签到功能?
+- 也许可以把发送消息改动成发送一个表单?
+- 也许可以增加一个配置文件，让用户可以自定义欢迎信息?
+
+若您想进阶您的开发技能，请阅读[API文档](/zh/development/api/README.md)，了解`Komomo`提供的API。
+

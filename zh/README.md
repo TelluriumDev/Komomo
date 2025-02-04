@@ -1,4 +1,4 @@
-# Komomo 文档
+# Komomo
 
 **Komomo**是一个依托于[**`LeviLamina`**](https://github.com/LiteLDev/LeviLamina)的脚本语言加载器，旨在允许开发者以更加简便灵活的方式为 Minecraft 基岩版专属服务端（BDS）开发脚本插件，增添额外功能。
 
