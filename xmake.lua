@@ -9,9 +9,8 @@ add_requires("levilamina 1.0.0", {configs = {target_type = "server"}})
 add_requires("levibuildscript 0.3.0")
 add_requires(
     "microsoft-gsl 4.0.0",
-    "boost 1.85.0",
-    "ilistenattentively 0.2.2",
-    "uwebsockets"
+    "ilistenattentively 0.2.2"
+    -- "uwebsockets"
 )
 
 if not has_config("vs_runtime") then
@@ -35,12 +34,11 @@ target("Komomo")
         "entt",
         "microsoft-gsl",
         "nlohmann_json",
-        "boost",
         "glm",
         "concurrentqueue",
         "magic_enum",
-        "ilistenattentively",
-        "uwebsockets"
+        "ilistenattentively"
+        -- "uwebsockets"
     )
     set_kind("shared")
     set_languages("cxx20")

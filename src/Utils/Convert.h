@@ -1,9 +1,11 @@
 #pragma once
 #include "Utils/Using.h"
 
-#include "boost/pfr.hpp" // IWYU pragma: keep
+// #include "boost/pfr.hpp"
 #include <fmt/format.h>
+#include <ll/api/reflection/Reflection.h>
 #include <magic_enum/magic_enum.hpp>
+
 
 #include <cstddef>
 #include <type_traits>
@@ -140,13 +142,13 @@ template <typename T>
 constexpr bool IsScriptTypeConvertible = !std::is_same_v<typename ToScriptType<T>::Type, void>;
 template <typename T>
 void DoReflectConvert(const T& value, Local<Object>& res) {
-    boost::pfr::for_each_field(value, [&](auto& field, std::size_t index) {
+    ll::reflection::forEachMember(value, [&](auto& field, std::size_t index) {
         if constexpr (IsScriptTypeConvertible<std::remove_cvref_t<decltype(field)>>) {
-            res.set(boost::pfr::names_as_array<std::remove_cvref_t<T>>()[index], DoScriptTypeConvert(field));
+            res.set(ll::reflection::member_name_array_v<T>()[index], DoScriptTypeConvert(field));
         } else if constexpr (IsReflectable<std::remove_cvref_t<decltype(field)>>) {
             Local<Object> obj = Object::newObject();
             DoReflectConvert(field, obj);
-            res.set(boost::pfr::names_as_array<std::remove_cvref_t<T>>()[index], obj);
+            res.set(ll::reflection::member_name_array_v<T>()[index], obj);
         }
     });
 }
