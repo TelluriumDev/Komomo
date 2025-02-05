@@ -7,4 +7,4 @@
 
 **🔑 技术细节**
 
-- [📓 API参考](/zh/development/api/README.md)
+- [📓 API 参考](/zh/development/api/README.md)

@@ -89,10 +89,11 @@ function emplaceListener(
 对于欢迎玩家，我们不需要优先级，所以我们可以省略第三个参数。
 
 现在，我们可以在`index.ts`中添加以下代码：
+
 ```typescript
 /// <reference path="./KomomoHelperLib/index.d.ts" />
 function onPlayerJoin(player: Player): boolean {
-  player.sendMessage("欢迎加入服务器！")
+  player.sendMessage("欢迎加入服务器！");
   return true;
 }
 EventBus.emplaceListener("PlayerJoinEvent", onPlayerJoin);
@@ -105,7 +106,7 @@ EventBus.emplaceListener("PlayerJoinEvent", onPlayerJoin);
 ```typescript
 /// <reference path="./KomomoHelperLib/index.d.ts" />
 EventBus.emplaceListener("PlayerJoinEvent", (player: Player) => {
-  player.sendMessage("欢迎加入服务器！")
+  player.sendMessage("欢迎加入服务器！");
   return true;
 });
 ```
@@ -136,7 +137,7 @@ npm run build
 
 您可能希望把插件分发给其他人使用，那么您需要把插件打包成`.zip`文件。
 
-您只需要把`bin/`文件夹内的文件打包成zip归档，然后分发给其他人即可。
+您只需要把`bin/`文件夹内的文件打包成 zip 归档，然后分发给其他人即可。
 
 ## 📖 总结
 
@@ -150,5 +151,4 @@ npm run build
 - 也许可以把发送消息改动成发送一个表单?
 - 也许可以增加一个配置文件，让用户可以自定义欢迎信息?
 
-若您想进阶您的开发技能，请阅读[API文档](/zh/development/api/README.md)，了解`Komomo`提供的API。
-
+若您想进阶您的开发技能，请阅读[API 文档](/zh/development/api/README.md)，了解`Komomo`提供的 API。

@@ -1,3 +1,3 @@
-* 语言/Language
-  * [English](/en/guide/)
-  * [简体中文](/zh/guide/)
+- 语言/Language
+  - [English](/en/guide/)
+  - [简体中文](/zh/guide/)
