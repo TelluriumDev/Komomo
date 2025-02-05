@@ -13,6 +13,7 @@
 #include "Utils/Convert.h"
 
 #include <mc/common/Brightness.h>
+#include <mc/deps/core/string/HashedString.h>
 
 using namespace Komomo;
 
@@ -22,7 +23,6 @@ ClassDefine<BlockClass> blockClassBuilder =
 
         .instanceProperty("allowsRunes", &BlockClass::getAllowsRunes)
         .instanceProperty("blockEntityType", &BlockClass::getBlockEntityType)
-        // .instanceProperty("blockState", &BlockClass::getBlockState)
         .instanceProperty("blockTintType", &BlockClass::getBlockTintType)
         .instanceProperty("blockItemId", &BlockClass::getBlockItemId)
         .instanceProperty("burnOdds", &BlockClass::getBurnOdds)
@@ -80,7 +80,7 @@ ClassDefine<BlockClass> blockClassBuilder =
 
         .InstanceFunction(addAABBs, BlockClass)
         // .InstanceFunction(addCollisionShapes, BlockClass)
-        // .InstanceFunction(addTags, BlockClass)
+        .InstanceFunction(addTag, BlockClass)
         .InstanceFunction(allowStateMismatchOnPlacement, BlockClass)
         // .InstanceFunction(asItemInstance, BlockClass)
         .InstanceFunction(attack, BlockClass)
@@ -109,6 +109,7 @@ ClassDefine<BlockClass> blockClassBuilder =
         // .InstanceFunction(executeItemEvent, BlockClass)
         // .InstanceFunction(executeTrigger, BlockClass)
         // .InstanceFunction(forEachState, BlockClass)
+        .InstanceFunction(getBlockState, BlockClass)
         // .InstanceFunction(getClientPredictionOverride, BlockClass)
         // .InstanceFunction(getCollisionShape, BlockClass)
         // .InstanceFunction(getCollisionShapeForCamera, BlockClass)
@@ -126,12 +127,12 @@ ClassDefine<BlockClass> blockClassBuilder =
         .InstanceFunction(getSecondPart, BlockClass)
         .InstanceFunction(getVisualShape, BlockClass)
         // .InstanceFunction(getVisualShapeInWorld, BlockClass)
-        // .InstanceFunction(hasProperty, BlockClass)
-        // .InstanceFunction(hasState, BlockClass)
+        .InstanceFunction(hasProperty, BlockClass)
+        .InstanceFunction(hasState, BlockClass)
         .InstanceFunction(hasTag, BlockClass)
         .InstanceFunction(ignoreEntitiesOnPistonMove, BlockClass)
         .InstanceFunction(isAttachedTo, BlockClass)
-        // .InstanceFunction(isFilteredOut, BlockClass)
+        .InstanceFunction(isFilteredOut, BlockClass)
         .InstanceFunction(isObstructingChests, BlockClass)
         .InstanceFunction(isPartialBlock, BlockClass)
         .InstanceFunction(isPreservingMediumWhenPlaced, BlockClass)
@@ -145,7 +146,7 @@ ClassDefine<BlockClass> blockClassBuilder =
         .InstanceFunction(neighborChanged, BlockClass)
         .InstanceFunction(onExploded, BlockClass)
         .InstanceFunction(onFallOn, BlockClass)
-        // .InstanceFunction(onFertilized, BlockClass)
+        .InstanceFunction(onFertilized, BlockClass)
         .InstanceFunction(onHitByActivatingAttack, BlockClass)
         .InstanceFunction(onLightningHit, BlockClass)
         .InstanceFunction(onPlace, BlockClass)
@@ -337,7 +338,16 @@ Local<Value> BlockClass::addAABBs(const Arguments& args) {
 // Local<Value> BlockClass::addCollisionShapes(const Arguments& args) { CallVoidMethod(addCollisionShapes, shapes); }
 
 // MCAPI class Block& addTag(class HashedString const& tag);
-// Local<Value> BlockClass::addTag(const Arguments& args) { }
+Local<Value> BlockClass::addTag(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kString);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto tag = HashedString(args[0].asString().toString());
+        return BlockClass::newBlock(&mBlock->addTag(tag));
+    }
+    Catch;
+}
 
 Local<Value> BlockClass::allowStateMismatchOnPlacement(const Arguments& args) {
     CheckArgsCount(args, 1);
@@ -611,12 +621,21 @@ Local<Value> BlockClass::entityInside(const Arguments& args) {
 //     ) const;
 // Local<Value> BlockClass::executeItemEvent(const Arguments& args) {}
 
-// BlockState not implemented
 // MCAPI void forEachState(std::function<bool(class BlockState const&, int)> callback) const;
 // Local<Value> BlockClass::forEachState(const Arguments& args) {}
 
 // MCAPI ::BlockState const* getBlockState(::HashedString const& name) const;
-// Local<Value> getBlockState(const Arguments& args) {}
+Local<Value> BlockClass::getBlockState(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kString);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto name = HashedString(args[0].asString().toString());
+        auto result = const_cast<BlockState*>(mBlock->getBlockState(name));
+        return BlockStateClass::newBlockState(result);
+    }
+    Catch;
+}
 
 // MCAPI bool getClientPredictionOverride(::BlockClientPredictionOverrides) const;
 // Local<Value> getClientPredictionOverride(const Arguments& args) {}
@@ -771,23 +790,39 @@ Local<Value> BlockClass::getVisualShape(const Arguments& args) {
 //     getVisualShapeInWorld(::IConstBlockSource const& region, ::BlockPos const& pos, ::AABB& bufferAABB) const;
 // Local<Value> BlockClass::getVisualShapeInWorld(const Arguments& args) {}
 
-// BlockProperty not implemented
 // MCAPI bool hasProperty(::BlockProperty type) const;
-// Local<Value> BlockClass::hasProperty(const Arguments& args) {}
-
-// BlockState not implemented
-// MCAPI bool hasState(::BlockState const& stateType) const;
-// Local<Value> BlockClass::hasState(const Arguments& args) {}
-
-// another overload: HashedString not implemented
-// MCAPI bool hasTag(::HashedString const& tagName) const;
-Local<Value> BlockClass::hasTag(const Arguments& args) {
+Local<Value> BlockClass::hasProperty(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
         if (!mBlock) return Local<Value>();
-        auto hash = static_cast<uint64>(args[0].asNumber().toInt64());
-        return Boolean::newBoolean(mBlock->hasTag(hash));
+        auto type = ConvertFromScriptX<BlockProperty>(args[0]);
+        return Boolean::newBoolean(mBlock->hasProperty(type));
+    }
+    Catch;
+}
+
+
+// MCAPI bool hasState(::BlockState const& stateType) const;
+Local<Value> BlockClass::hasState(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckInstanceType(args[0], BlockStateClass);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto state = EngineScope::currentEngine()->getNativeInstance<BlockStateClass>(args[0])->mBlockState;
+        return Boolean::newBoolean(mBlock->hasState(*state));
+    }
+    Catch;
+}
+
+// MCAPI bool hasTag(::HashedString const& tagName) const;
+Local<Value> BlockClass::hasTag(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kString);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto tagName = HashedString(args[0].asString().toString());
+        return Boolean::newBoolean(mBlock->hasTag(tagName));
     }
     Catch;
 }
@@ -810,9 +845,18 @@ Local<Value> BlockClass::isAttachedTo(const Arguments& args) {
     Catch;
 }
 
-// BlockRenderLayer not implemented
+
 // MCAPI bool isFilteredOut(::BlockRenderLayer heldItemRenderLayer) const;
-// Local<Value> BlockClass::isFaceSturdy(const Arguments& args) {}
+Local<Value> BlockClass::isFilteredOut(const Arguments& args) {
+    CheckArgsCount(args, 1);
+    CheckArgType(args[0], ValueKind::kNumber);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto heldItemRenderLayer = ConvertFromScriptX<BlockRenderLayer>(args[0]);
+        return Boolean::newBoolean(mBlock->isFilteredOut(heldItemRenderLayer));
+    }
+    Catch;
+}
 
 Local<Value> BlockClass::isObstructingChests(const Arguments& args) {
     CheckArgsCount(args, 2);
@@ -1012,10 +1056,25 @@ Local<Value> BlockClass::onFallOn(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-// FertilizerType not implemented
 // MCAPI bool
 // onFertilized(::BlockSource& region, ::BlockPos const& pos, ::Actor* entity, ::FertilizerType fType) const;
-// Local<Value> BlockClass::onFertilized(const Arguments& args) {}
+Local<Value> BlockClass::onFertilized(const Arguments& args) {
+    CheckArgsCount(args, 4);
+    CheckInstanceType(args[0], BlockSourceClass);
+    CheckInstanceType(args[1], BlockPosClass);
+    CheckInstanceType(args[2], ActorClass);
+    CheckArgType(args[3], ValueKind::kNumber);
+    try {
+        if (!mBlock) return Local<Value>();
+        auto engine       = EngineScope::currentEngine();
+        auto region       = engine->getNativeInstance<BlockSourceClass>(args[0])->mBlockSource;
+        auto pos          = engine->getNativeInstance<BlockPosClass>(args[1])->mBlockPos;
+        auto entity       = engine->getNativeInstance<ActorClass>(args[2])->mActor;
+        auto fertilizerId = ConvertFromScriptX<FertilizerType>(args[3]);
+        return Boolean::newBoolean(mBlock->onFertilized(*region, pos, entity, fertilizerId));
+    }
+    Catch;
+}
 
 Local<Value> BlockClass::onHitByActivatingAttack(const Arguments& args) {
     CheckArgsCountReturn(args, 3, Boolean::newBoolean(false));
