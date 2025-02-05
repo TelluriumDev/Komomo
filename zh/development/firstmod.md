@@ -42,13 +42,13 @@
 
 ```json
 {
-  "entry": "index.js", // 插件入口文件
-  "type": "KomomoJS", // 插件类型，不应更改
-  "version": "1.0.0", // 插件版本
+  "entry": "index.js",   // 插件入口文件
+  "type": "KomomoJS",    // 插件类型，不应更改
+  "version": "1.0.0",    // 插件版本
   "name": "JoinWelcome", // 插件名称
   "dependencies": [
     {
-      "name": "Komomo" // 插件依赖的库，不应更改
+      "name": "Komomo"   // 插件依赖的库，不应更改
     }
   ]
 }

@@ -1,0 +1,3 @@
+- 语言/Language
+  - [English](/en/development/api/GameAPI/)
+  - [简体中文](/zh/development/api/GameAPI/)

@@ -1,20 +1,28 @@
 <!-- Thanks to LiteLoader Script Engine Document -->
 
-- 游戏内容接口
-<!-- - [🎨 基础游戏接口](zh_cn/development/GameAPI/Basic.md) -->
-- [🎯 命令系统](/zh/development/api/Command/)
-  <!-- - [🏃‍♂️ 玩家对象](zh_cn/development/Player/Player.md) -->
-  <!-- - [📦 方块对象](zh_cn/development/Block/Block.md) -->
-  <!-- - [🎈 实体对象](zh_cn/development/Actor/Actor.md) -->
-  <!-- - [🧰 物品对象](zh_cn/development/Item/Item.md) -->
-  <!-- - [📮 方块实体对象](zh_cn/development/Block/BlockEntity.md) -->
-  <!-- - [✨ 粒子生成器对象](LLSEPluginDevelopment/GameAPI/Particle.md) -->
-  <!-- - [👜 容器对象](zh_cn/development/Container/Container.md) -->
-  <!-- - [📝 记分板](zh_cn/development/ScoreBoard/ScoreBoard.md) -->
-  <!-- - [📩 数据包接口](zh_cn/development/GameAPI/Packet.md) -->
-  <!-- - [📱 玩家设备信息](zh_cn/development/GameAPI/Device.md) -->
-  <!-- - [💻 服务端设置](zh_cn/development/GameAPI/Server.md) -->
-  <!-- - [🎮 游戏实用工具](zh_cn/development/GameAPI/GameUtils.md) -->
+**Komomo API 参考**
+
+- [📖 导言](/zh/development/api/README.md)
+- [📖 API 使用说明](/zh/development/api/usage.md)
+
+**游戏内容接口**
+
+- [🎨 基础游戏接口](/zh/development/api/GameAPI/README.md)
+  - [🎯 命令系统](/zh/development/api/GameAPI/Command/README.md)
+    - [🔮 对象信息](/zh/development/api/GameAPI/Command/object.md)
+    - [⛓️ 枚举信息](/zh/development/api/GameAPI/Command/enum.md)
+    <!-- - [🏃‍♂️ 玩家对象](zh_cn/development/Player/Player.md) -->
+    <!-- - [📦 方块对象](zh_cn/development/Block/Block.md) -->
+    <!-- - [🎈 实体对象](zh_cn/development/Actor/Actor.md) -->
+    <!-- - [🧰 物品对象](zh_cn/development/Item/Item.md) -->
+    <!-- - [📮 方块实体对象](zh_cn/development/Block/BlockEntity.md) -->
+    <!-- - [✨ 粒子生成器对象](LLSEPluginDevelopment/GameAPI/Particle.md) -->
+    <!-- - [👜 容器对象](zh_cn/development/Container/Container.md) -->
+    <!-- - [📝 记分板](zh_cn/development/ScoreBoard/ScoreBoard.md) -->
+    <!-- - [📩 数据包接口](zh_cn/development/GameAPI/Packet.md) -->
+    <!-- - [📱 玩家设备信息](zh_cn/development/GameAPI/Device.md) -->
+    <!-- - [💻 服务端设置](zh_cn/development/GameAPI/Server.md) -->
+    <!-- - [🎮 游戏实用工具](zh_cn/development/GameAPI/GameUtils.md) -->
 
 <!-- - 事件系统 -->
 
