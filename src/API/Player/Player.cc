@@ -589,10 +589,8 @@ Local<Value> PlayerClass::getCapePos(const Arguments& args) {
     CheckArgType(args[0], ValueKind::kNumber);
     try {
         if (!mPlayer) return Local<Value>();
-        return Vec3Class::newVec3(
-            mPlayer->getCapePos(args[0].asNumber().toFloat()).x,
-            mPlayer->getCapePos(args[0].asNumber().toFloat()).y,
-            mPlayer->getCapePos(args[0].asNumber().toFloat()).z
+        return Vec3Class::newVec3Class(
+            mPlayer->getCapePos(args[0].asNumber().toFloat()).x
         );
     }
     Catch;

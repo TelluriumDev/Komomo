@@ -8,19 +8,13 @@ class Vec2Class : public ScriptClass {
 public:
     Vec2 mVec2;
 
-    float x = 0;
-    float y = 0;
-
 public:
-    Vec2Class(float x, float y);
+    Vec2Class(Vec2 vec2);
 
 
 public:
-    static Local<Object> newVec2(float x, float y);
+    static Local<Object> newVec2Class(Vec2 vec2);
 
-public: /* Method */
-    Local<Value> setX(float x);
-    Local<Value> setY(float y);
 };
 
 extern ClassDefine<Vec2Class> vec2ClassBuilder;

@@ -5,15 +5,11 @@ on:
     paths:
       - xmake.lua
       - src/**
-      - patch/**
-      - third-party/**
       - .github/workflows/build.yml
   pull_request:
     paths:
       - xmake.lua
       - src/**
-      - patch/**
-      - third-party/**
       - .github/workflows/build.yml
   workflow_dispatch:
 
@@ -39,8 +35,8 @@ jobs:
             xmake-
 
       - uses: xmake-io/github-action-setup-xmake@v1
-        # with:
-        #   xmake-version: branch@master
+        with:
+          xmake-version: v2.9.7
       - run: |
           git submodule update --init --recursive
 
@@ -67,9 +63,9 @@ jobs:
       - name: Unzip depends
         run: |
           New-Item -ItemType Directory -Path "deps"
-          New-Item -ItemType Directory -Path "deps/node_modules"
+          New-Item -ItemType Directory -Path "deps/npm"
           Expand-Archive -Path "bin-windows.zip" -DestinationPath "deps" -Force
-          Expand-Archive -Path "node_modules.zip" -DestinationPath "deps/node_modules" -Force
+          Expand-Archive -Path "node_modules.zip" -DestinationPath "deps/npm" -Force
 
       - name: Pack
         run: |
@@ -77,9 +73,9 @@ jobs:
           New-Item -ItemType Directory -Path "full/plugins"
 
           Copy-Item -Recurse -Force bin\* full\plugins\
-          Copy-Item -Recurse -Force -Container deps\node_modules\.\* full\plugins\Komomo\node_modules\
-          Copy-Item -Force deps\libnode.dll full\
-          Copy-Item -Force deps\node.exe full\
+          Copy-Item -Recurse -Force -Container deps\npm\.\* full\plugins\Komomo\npm\
+          Copy-Item -Force deps\libnode.dll full\plugins\Komomo\
+          Copy-Item -Force deps\node.exe full\plugins\Komomo\
 
       - uses: actions/upload-artifact@v4
         with:

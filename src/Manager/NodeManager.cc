@@ -1,25 +1,15 @@
 #include "Manager/NodeManager.h"
-#include "API/APIHelper.h"
-#include "Entry.h"
 #include "Manager/BindAPI.h"
-#include "Manager/EngineData.h"
-#include "Utils/Util.h"
 
-#include <fmt/core.h>
-#include <nlohmann/json.hpp>
-#include <node.h>
-#include <uv.h>
-#include <v8-exception.h>
+#include <ll/api/chrono/GameChrono.h>
+#include <ll/api/coro/CoroTask.h>
+#include <ll/api/service/GamingStatus.h>
+#include <ll/api/thread/ServerThreadExecutor.h>
 
 #include <Windows.h>
-
 #include <shellapi.h>
-#include <thread>
+#include <uv.h>
 
-#include "ll/api/chrono/GameChrono.h"
-#include "ll/api/coro/CoroTask.h"
-#include "ll/api/service/GamingStatus.h"
-#include "ll/api/thread/ServerThreadExecutor.h"
 
 #pragma warning(disable : 4996)
 #pragma comment(lib, "Shell32.lib")
@@ -216,15 +206,16 @@ bool NodeManager::NpmInstall(string npmExecuteDir) {
             const path = require("path");
             const cwd = path.join(process.cwd());
 
-            let node = path.join(cwd, "node.exe");
+            global.__dirname = cwd
+            let node = path.join(path.join(cwd,")"+Entry::getInstance().getSelf().getModDir().string()+R"("), "node.exe");
 
             const execute_dir = path.join(")"+npmExecuteDir+R"(");
-            const npm_cli = path.join(cwd, "plugins/Komomo/npm/bin/npm-cli.js");
+            const npm_cli = path.join(cwd, "")"+Entry::getInstance().getSelf().getModDir().string()+R"("/npm/bin/npm-cli.js");
             require("child_process").execFileSync(node, [npm_cli, "install"], { cwd: execute_dir });
 
             console.log("npm install success");
         } catch (e) {
-            console.error(`Failed to run npm install:\n${e.stack}`);
+            console.error(`Failed to run npm install:\n${e}`);
         }
     )";
     // clang-format on

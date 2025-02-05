@@ -32,7 +32,6 @@
 #include <mc/world/item/ItemStack.h>
 
 
-
 #include <string>
 #include <unordered_map>
 
@@ -131,14 +130,13 @@ public:
             }
             return arr;
         } else if (result.hold(ParamKind::Kind::BlockPos)) {
-            auto pos = std::get<CommandPosition>(result.value())
-                           .getBlockPos(CommandVersion::CurrentVersion(), origin, Vec3::ZERO());
-            return BlockPosClass::newBlockPos(pos.x, pos.y, pos.z);
+            return BlockPosClass::newBlockPosClass(
+                std::get<CommandPosition>(result.value())
+                    .getBlockPos(CommandVersion::CurrentVersion(), origin, Vec3::ZERO())
+            );
         } else if (result.hold(ParamKind::Kind::Vec3)) {
-            auto dim  = origin.getDimension();
-            auto vec3 = std::get<CommandPosition>(result.value())
-                            .getPosition(CommandVersion::CurrentVersion(), origin, Vec3::ZERO());
-            return Vec3Class::newVec3(vec3.x, vec3.y, vec3.z);
+            return Vec3Class::newVec3Class(std::get<CommandPosition>(result.value())
+                                               .getPosition(CommandVersion::CurrentVersion(), origin, Vec3::ZERO()));
         } else if (result.hold(ParamKind::Kind::Message)) {
             return String::newString(std::get<CommandMessage>(result.value())
                                          .generateMessage(origin, CommandVersion::CurrentVersion())
