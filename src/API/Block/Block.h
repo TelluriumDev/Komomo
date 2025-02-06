@@ -76,7 +76,7 @@ public: /* Member */
 public: /* Method */
     Local<Value> addAABBs(const Arguments& args);
     // Local<Value> addCollisionShapes(const Arguments& args);
-    // Local<Value> addTag(const Arguments& args);
+    Local<Value> addTag(const Arguments& args);
     Local<Value> allowStateMismatchOnPlacement(const Arguments& args);
     // Local<Value> asItemInstance(const Arguments& args);
     Local<Value> attack(const Arguments& args);
@@ -105,7 +105,7 @@ public: /* Method */
     // Local<Value> executeItemEvent(const Arguments& args);
     // Local<Value> executeTrigger(const Arguments& args);
     // Local<Value> forEachState(const Arguments& args);
-    // Local<Value> getBlockState(const Arguments& args);
+    Local<Value> getBlockState(const Arguments& args);
     // Local<Value> getClientPredictionOverride(const Arguments& args);
     // Local<Value> getCollisionShape(const Arguments& args);
     // Local<Value> getCollisionShapeForCamera(const Arguments& args);
@@ -123,12 +123,12 @@ public: /* Method */
     Local<Value> getSecondPart(const Arguments& args);
     Local<Value> getVisualShape(const Arguments& args);
     // Local<Value> getVisualShapeInWorld(const Arguments& args);
-    // Local<Value> hasProperty(const Arguments& args);
-    // Local<Value> hasState(const Arguments& args);
+    Local<Value> hasProperty(const Arguments& args);
+    Local<Value> hasState(const Arguments& args);
     Local<Value> hasTag(const Arguments& args);
     Local<Value> ignoreEntitiesOnPistonMove();
     Local<Value> isAttachedTo(const Arguments& args);
-    // Local<Value> isFilteredOut(const Arguments& args);
+    Local<Value> isFilteredOut(const Arguments& args);
     Local<Value> isObstructingChests(const Arguments& args);
     Local<Value> isPartialBlock(const Arguments& args);
     Local<Value> isPreservingMediumWhenPlaced(const Arguments& args);
@@ -142,7 +142,7 @@ public: /* Method */
     Local<Value> neighborChanged(const Arguments& args);
     Local<Value> onExploded(const Arguments& args);
     Local<Value> onFallOn(const Arguments& args);
-    // Local<Value> onFertilized(const Arguments& args);
+    Local<Value> onFertilized(const Arguments& args);
     Local<Value> onHitByActivatingAttack(const Arguments& args);
     Local<Value> onLightningHit(const Arguments& args);
     Local<Value> onPlace(const Arguments& args);

@@ -35,8 +35,8 @@ jobs:
             xmake-
 
       - uses: xmake-io/github-action-setup-xmake@v1
-        with:
-          xmake-version: v2.9.7
+        # with:
+        #   xmake-version: v2.9.7
       - run: |
           git submodule update --init --recursive
 

@@ -200,6 +200,8 @@ void RegisterEnum(ScriptEngine* engine) {
     REGISTER_ENUM_MACRO(BlockEnum, BlockActorType, "BlockActorType");
     REGISTER_ENUM_MACRO(BlockEnum, BlockSupportType, "BlockSupportType");
     REGISTER_ENUM_MACRO(BlockEnum, BlockTintType, "BlockTintType");
+    REGISTER_ENUM_MACRO(BlockEnum, BlockProperty, "BlockProperty");
+    REGISTER_ENUM_MACRO(BlockEnum, BlockRenderLayer, "BlockRenderLayer");
     REGISTER_ENUM_MACRO(BlockEnum, MaterialType, "MaterialType");
     engine->set("BlockEnum", ConvertToScriptX(BlockEnum));
 
