@@ -21,9 +21,9 @@ public:
     };
 
 public: /* Member */
-    Member(isSimulated);
-    Member(getXuid);
-    Member(_getSpawnChunkLimit);
+    virtual Member(isSimulated);
+    virtual Member(getXuid);
+    virtual Member(_getSpawnChunkLimit);
 
 public: /* Method */
     static Local<Object> newSimulatedPlayer(const Arguments& args);
@@ -33,12 +33,12 @@ public: /* Method */
     Method(simulateUseItem); // two overloads
     Method(simulateDestroyLookAt);
 
-    // Method(initializeComponents);
-    Method(aiStep);
-    // Method(getMovementSettings);
-    Method(teleportTo);
-    // Method(_createChunkSource);
-    Method(_updateChunkPublisherView);
+    // virtual Method(initializeComponents);
+    virtual Method(aiStep);
+    // virtual Method(getMovementSettings);
+    virtual Method(teleportTo);
+    // virtual Method(_createChunkSource);
+    virtual Method(_updateChunkPublisherView);
     Method(_addMoveComponent);
     // Method(_createNavigationResult);
     Method(_trySwing);

@@ -24,7 +24,11 @@ public:
 
     Local<Value> set(const Arguments& args);
 
+    Local<Value> init(const Arguments& args);
+
     Local<Value> del(const Arguments& args);
+
+    Local<Value> has(const Arguments& args);
 
     Local<Value> reloadConfig(const Arguments& args);
 

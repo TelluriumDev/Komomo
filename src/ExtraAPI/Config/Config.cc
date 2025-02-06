@@ -1,8 +1,11 @@
 #include "ExtraAPI/Config/Config.h"
+#include "API/APIHelper.h"
+#include "Utils/Convert.h"
 
 #include <ll/api/io/FileUtils.h>
 
 #include <fstream>
+#include <string>
 
 ClassDefine<ConfigClass> configClassBuilder = defineClass<ConfigClass>("Config")
                                                   .constructor(nullptr)
@@ -11,6 +14,8 @@ ClassDefine<ConfigClass> configClassBuilder = defineClass<ConfigClass>("Config")
                                                   .instanceFunction("get", &ConfigClass::get)
                                                   .instanceFunction("set", &ConfigClass::set)
                                                   .instanceFunction("del", &ConfigClass::del)
+                                                  .instanceFunction("has", &ConfigClass::has)
+                                                  .instanceFunction("init", &ConfigClass::init)
                                                   .instanceFunction("reload", &ConfigClass::reloadConfig)
                                                   .instanceFunction("getVersion", &ConfigClass::getVersion)
 
@@ -93,18 +98,40 @@ Local<Value> ConfigClass::set(const Arguments& args) {
     CheckArgType(args[0], ValueKind::kString);
     try {
         if (args.size() == 1) {
-            return (new ConfigClass(this->mConfigPath, mConfig[args[0].asString().toString()]))->getScriptObject();
+            // return (new ConfigClass(this->mConfigPath, mConfig[args[0].asString().toString()]))->getScriptObject();
         } else if (args.size() == 2) {
             mConfig[args[0].asString().toString()] = ordered_json::parse(ConvertFromScriptX<std::string>(args[1]));
             flush();
         }
     } catch (const std::out_of_range& e) {
-        PrintScriptError("Key not found in config: " + args[0].asString().toString());
+        PrintScriptError("Error in set config");
         return Local<Value>();
     }
     return Local<Value>();
 }
 
+Local<Value> ConfigClass::init(const Arguments& args) {
+    CheckArgsCount(args, 2);
+    CheckArgType(args[0], ValueKind::kString);
+    try {
+        if (!has(args).asBoolean().value()) {
+            mConfig[args[0].asString().toString()] = ordered_json::parse(ConvertFromScriptX<std::string>(args[1]));
+            flush();
+        } else {
+            return ConvertToScriptX(mConfig[args[0].asString().toString()]);
+        }
+    } catch (const std::out_of_range& e) {
+        PrintScriptError("Error in init config");
+        return Local<Value>();
+    }
+    return Local<Value>();
+}
+
+Local<Value> ConfigClass::has(const Arguments& args) {
+    CheckArgsCountReturn(args, 1, Boolean::newBoolean(false));
+    CheckArgTypeReturn(args[0], ValueKind::kString, Boolean::newBoolean(false));
+    return Boolean::newBoolean(mConfig.contains(args[0].asString().toString()));
+}
 Local<Value> ConfigClass::del(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);

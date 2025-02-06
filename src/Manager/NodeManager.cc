@@ -1,5 +1,6 @@
 #include "Manager/NodeManager.h"
 #include "Manager/BindAPI.h"
+#include "NodeManager.h"
 
 #include <ll/api/chrono/GameChrono.h>
 #include <ll/api/coro/CoroTask.h>
@@ -7,6 +8,7 @@
 #include <ll/api/thread/ServerThreadExecutor.h>
 
 #include <Windows.h>
+#include <memory>
 #include <shellapi.h>
 #include <uv.h>
 
@@ -426,6 +428,5 @@ bool NodeManager::packageIsEsm(const fs::path& packagePath) {
         return false;
     }
 }
-
 
 } // namespace Komomo
