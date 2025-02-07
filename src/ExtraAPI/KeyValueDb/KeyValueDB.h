@@ -11,9 +11,9 @@ class KeyValueDBClass : public ScriptClass {
 
 
 public:
-    explicit KeyValueDBClass(std::filesystem::path const& path);
+    KeyValueDBClass(std::filesystem::path const& path);
 
-    explicit KeyValueDBClass(std::filesystem::path const& path, bool createIfMiss, bool fixIfError, int bloomFilterBit);
+    KeyValueDBClass(std::filesystem::path const& path, bool createIfMiss, bool fixIfError, int bloomFilterBit);
 
     static Local<Object> newKeyValueDB(const Arguments& args);
 

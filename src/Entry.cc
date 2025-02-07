@@ -3,12 +3,14 @@
 #include "Manager/NodeManager.h"
 
 #include "ll/api/io/LogLevel.h"
+#include <ll/api/mod/ModManager.h>
 #include <ll/api/mod/ModManagerRegistry.h>
 
 #include <memory>
 
 void registerModManager(const std::shared_ptr<Komomo::KomomoModManager>& pm) {
     auto& modManagerRegistry = ll::mod::ModManagerRegistry::getInstance();
+
     if (!modManagerRegistry.addManager(pm)) {
         throw std::runtime_error("Failed to register mod manager");
     }
@@ -27,10 +29,12 @@ Entry& Entry::getInstance() {
     return instance;
 }
 
-bool Entry::load()  {
+bool Entry::load() {
+
 #ifdef DEBUG
     getSelf().getLogger().setLevel(ll::io::LogLevel::Debug);
 #endif
+
     NodeManager::getInstance().initNodeJs();
     Entry::getInstance().getSelf().getLogger().info("Load javascript mod...");
 
