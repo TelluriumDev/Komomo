@@ -12,9 +12,11 @@ ClassDefine<SimulatedPlayerClass> simulatedPlayerClassBuilder =
         .constructor(nullptr)
 
         .function("newSimulatedPlayer", &SimulatedPlayerClass::newSimulatedPlayer)
+
         .instanceProperty("isSimulated", &SimulatedPlayerClass::isSimulated)
         .instanceProperty("xuid", &SimulatedPlayerClass::getXuid)
         .instanceProperty("_getSpawnChunkLimit", &SimulatedPlayerClass::_getSpawnChunkLimit)
+
         .InstanceFunction(simulateSneaking, SimulatedPlayerClass)
         .InstanceFunction(simulateStopSneaking, SimulatedPlayerClass)
         .InstanceFunction(simulateUseItem, SimulatedPlayerClass)
@@ -76,7 +78,7 @@ Local<Object> SimulatedPlayerClass::newSimulatedPlayer(const Arguments& args) {
     }
     CheckArgTypeReturn(args[0], ValueKind::kString, Object::newObject());
     string name   = args[0].asString().toString();
-    auto engine = EngineScope::currentEngine();
+    auto   engine = EngineScope::currentEngine();
     if (args.size() == 1) {
         return (new SimulatedPlayerClass(SimulatedPlayer::create(name)))->getScriptObject();
     }
@@ -153,7 +155,6 @@ Local<Value> SimulatedPlayerClass::simulateUseItem(const Arguments& args) {
         if (args.size() == 0) {
             return Boolean::newBoolean(mSimulatedPlayer->simulateUseItem());
         } else if (args.size() == 1 && IsInstanceOf<ItemStackClass>(args[0])) {
-
             return Boolean::newBoolean(mSimulatedPlayer->simulateUseItem(
                 *EngineScope::currentEngine()->getNativeInstance<ItemStackClass>(args[0])->mItemStack
             ));
@@ -165,7 +166,7 @@ Local<Value> SimulatedPlayerClass::simulateUseItem(const Arguments& args) {
 
 Local<Value> SimulatedPlayerClass::simulateDestroyLookAt(const Arguments& args) {
     CheckArgsCount(args, 1);
-    CheckArgType(args[0], ValueKind::kBoolean);
+    CheckArgType(args[0], ValueKind::kNumber);
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
         return Boolean::newBoolean(mSimulatedPlayer->simulateDestroyLookAt(args[0].asNumber().toFloat()));

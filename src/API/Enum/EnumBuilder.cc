@@ -178,6 +178,7 @@ void RegisterEnum(ScriptEngine* engine) {
     REGISTER_ENUM_MACRO(CommandEnum, VolumeAreaCommand::TargetDimensions, "TargetDimensions");
     REGISTER_ENUM_MACRO(CommandEnum, WeatherCommand::WeatherType, "WeatherType");
     REGISTER_ENUM_MACRO(CommandEnum, WeatherCommand::WeatherRequest, "WeatherRequest");
+    REGISTER_ENUM_MACRO(CommandEnum, ll::command::ParamKind::Kind, "ParamKindKind");
     engine->set("CommandEnum", ConvertToScriptX(CommandEnum));
 
     static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> CommonEnum;
@@ -194,7 +195,7 @@ void RegisterEnum(ScriptEngine* engine) {
     REGISTER_ENUM_MACRO(CommonEnum, TitleInfo::TitleId, "TitleId");
     engine->set("CommonEnum", ConvertToScriptX(CommonEnum));
 
-    //Block
+    // Block
     static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> BlockEnum;
     REGISTER_ENUM_MACRO(BlockEnum, BlockActorType, "BlockActorType");
     REGISTER_ENUM_MACRO(BlockEnum, BlockSupportType, "BlockSupportType");

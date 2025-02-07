@@ -1,5 +1,4 @@
 #include "ExtraAPI/KeyValueDb/KeyValueDB.h"
-#include "API/APIHelper.h"
 
 ClassDefine<KeyValueDBClass> keyValueDBClassBuilder = defineClass<KeyValueDBClass>("KeyValueDB")
                                                           .constructor(nullptr)
