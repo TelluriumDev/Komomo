@@ -1,6 +1,7 @@
 build
 *.lnk
 bin
+.idea
 .vs
 .xmake
 compile_commands.json

@@ -6,25 +6,25 @@ Komomo 基于 ScriptX 和 NodeJs 实现，支持在 LeviLamina 中运行 JavaScr
 
 > 目前项目处于开发阶段，请手动前往 Actions 查看最新版本。
 
-1. 下载对应平台的 Komomo-full.zip 文件，如: `Komomo-windows-full-x64.zip`
+1. 下载对应平台的 `Komomo-full.zip` 文件，如: `Komomo-windows-full-x64.zip`
 
 > full 为完整包，包含 LibNodeJs 和 Komomo 的依赖库
 
-2. 将 Komomo-full.zip 解压，将压缩包内 libnode.dll 和 plugins 目录复制到 bedrock_server 的根目录下
+2. 将 `Komomo-full.zip`内的`Komomo/`文件夹解压到`BDS`根目录的`./plugins/`文件夹下
 
 > 示例结构
 
 ```tree
 .
-├── bedrock_server
-│   ├── bedrock_server_mod.exe
-│   ├── node.exe
-│   ├── libnode.dll
-│   └── plugins
-│       ├── Komomo
-│       │   ├── Komomo.dll
-│       │   ├── manifest.json
-│       │   ├── node_modules
+├── 📁 bedrock_server
+│   ├── 📄 bedrock_server_mod.exe
+│   └── 📁 plugins
+│       ├── 📁 Komomo
+│       │   ├── 📄 Komomo.dll
+│       │   ├── 📄 manifest.json
+│       │   ├── 📄 node.exe
+│       │   ├── 📄 libnode.dll
+│       │   └── 📁 npm/
 └── ...
 ```
 
