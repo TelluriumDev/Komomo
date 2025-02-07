@@ -98,9 +98,8 @@ Local<Value> KeyValueDBClass::has(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> KeyValueDBClass::empty(const Arguments& args) {
+Local<Value> KeyValueDBClass::empty(const Arguments&) {
     if (!db) return Boolean::newBoolean(true);
-
     try {
         return Boolean::newBoolean(db->empty());
     }

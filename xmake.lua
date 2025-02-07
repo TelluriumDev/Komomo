@@ -72,4 +72,3 @@ target("Komomo")
     end
 
     set_basename("Komomo")
-    -- after_build(function(target)end)
