@@ -38,6 +38,15 @@ public: /* Method */
     static Local<Value> getRootDir();
 
     static Local<Value> getModRootDir();
+
+    static Local<Value> onLoad(const Arguments &args);
+
+    static Local<Value> onEnable(const Arguments &args);
+
+    static Local<Value> onDisable(const Arguments &args);
+
+    static Local<Value> onUnload(const Arguments &args);
+
 };
 
 extern ClassDefine<ModClass> modClassBuilder;

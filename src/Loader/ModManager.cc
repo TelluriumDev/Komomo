@@ -60,10 +60,45 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             return ll::makeStringError("Failed to load mod");
         }
 
-        mod->onLoad([](ll::mod::Mod& mod) { return true; });
-        mod->onEnable([](ll::mod::Mod& mod) { return true; });
-        mod->onDisable([](ll::mod::Mod& mod) { return true; });
-        mod->onUnload([](ll::mod::Mod& mod) { return true; });
+        mod->onLoad([id](ll::mod::Mod &) {
+            auto engineWrapper = NodeManager::getInstance().getEngine(id);
+            auto engine = engineWrapper->mEngine;
+            try {
+                EngineScope enter(engine);
+                ENGINE_DATA()->onLoad.get().call();
+            } CatchNotReturn;
+            return true;
+        });
+
+
+        mod->onEnable([id](ll::mod::Mod &mod) {
+            auto engineWrapper = NodeManager::getInstance().getEngine(id);
+            auto engine = engineWrapper->mEngine;
+            try {
+                EngineScope enter(engine);
+                ENGINE_DATA()->onEnable.get().call();
+            } CatchNotReturn;
+            return true;
+            return true;
+        });
+        mod->onDisable([id](ll::mod::Mod &mod) {
+            auto engineWrapper = NodeManager::getInstance().getEngine(id);
+            auto engine = engineWrapper->mEngine;
+            try {
+                EngineScope enter(engine);
+                ENGINE_DATA()->onDisable.get().call();
+            } CatchNotReturn;
+            return true;
+        });
+        mod->onUnload([id](ll::mod::Mod &mod) {
+            auto engineWrapper = NodeManager::getInstance().getEngine(id);
+            auto engine = engineWrapper->mEngine;
+            try {
+                EngineScope enter(engine);
+                ENGINE_DATA()->onUnload.get().call();
+            } CatchNotReturn;
+            return true;
+        });
 
         return mod->onLoad().transform([&, this] { addMod(manifest.name, mod); });
     } catch (script::Exception& e) {

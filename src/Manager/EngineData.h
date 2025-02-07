@@ -17,6 +17,12 @@ struct EngineData {
 
 public:
     explicit EngineData(uint64_t engineID) : mID(engineID) {}
+
+    Global <Function> onLoad = Global<Function>(Function::newFunction([] {}));
+    Global <Function> onEnable = Global<Function>(Function::newFunction([] {}));
+    Global <Function> onDisable = Global<Function>(Function::newFunction([] {}));
+    Global <Function> onUnload = Global<Function>(Function::newFunction([] {}));
+
 };
 
 

@@ -36,7 +36,7 @@ bool Entry::load() {
 #endif
 
     NodeManager::getInstance().initNodeJs();
-    Entry::getInstance().getSelf().getLogger().info("Load javascript mod...");
+    getInstance().getSelf().getLogger().info("Load javascript mod...");
 
     komomoModManager = std::make_shared<KomomoModManager>();
     selfModInstance  = std::make_unique<std::reference_wrapper<ll::mod::NativeMod>>(getSelf());

@@ -10,7 +10,6 @@
 #include "API/Math/HitResult.h"
 #include "API/Math/Vec3.h"
 #include "API/Player/Player.h"
-#include "Utils/Convert.h"
 
 #include <mc/common/Brightness.h>
 #include <mc/deps/core/string/HashedString.h>

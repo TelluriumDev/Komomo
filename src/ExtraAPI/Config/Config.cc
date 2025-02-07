@@ -1,6 +1,4 @@
 #include "ExtraAPI/Config/Config.h"
-#include "API/APIHelper.h"
-#include "Utils/Convert.h"
 
 #include <ll/api/io/FileUtils.h>
 
@@ -20,6 +18,153 @@ ClassDefine<ConfigClass> configClassBuilder = defineClass<ConfigClass>("Config")
                                                   .instanceFunction("getVersion", &ConfigClass::getVersion)
 
                                                   .build();
+
+Local<Value> BigInteger_Helper(ordered_json &i) {
+    if (i.is_number_integer()) {
+        if (i.is_number_unsigned()) {
+            auto ui = i.get<uint64_t>();
+            if (ui <= LLONG_MAX) return Number::newNumber((int64_t) ui);
+            return Number::newNumber((double) ui);
+        }
+        return Number::newNumber(i.get<int64_t>());
+    }
+    return Local<Value>();
+}
+
+void JsonToValue_Helper(Local<Array> &res, ordered_json &j);
+
+void JsonToValue_Helper(Local<Object> &res, const string &key, ordered_json &j) {
+    switch (j.type()) {
+        case ordered_json::value_t::string:
+            res.set(key, String::newString(j.get<string>()));
+            break;
+        case ordered_json::value_t::number_integer:
+        case ordered_json::value_t::number_unsigned:
+            res.set(key, BigInteger_Helper(j));
+            break;
+        case ordered_json::value_t::number_float:
+            res.set(key, Number::newNumber(j.get<double>()));
+            break;
+        case ordered_json::value_t::boolean:
+            res.set(key, Boolean::newBoolean(j.get<bool>()));
+            break;
+        case ordered_json::value_t::null:
+            res.set(key, Local<Value>());
+            break;
+        case ordered_json::value_t::array: {
+            Local<Array> arrToAdd = Array::newArray();
+            for (ordered_json::iterator it = j.begin(); it != j.end(); ++it) JsonToValue_Helper(arrToAdd, *it);
+            res.set(key, arrToAdd);
+            break;
+        }
+        case ordered_json::value_t::object: {
+            Local<Object> objToAdd = Object::newObject();
+            for (ordered_json::iterator it = j.begin(); it != j.end(); ++it)
+                JsonToValue_Helper(objToAdd, it.key(), it.value());
+            res.set(key, objToAdd);
+            break;
+        }
+        default:
+            res.set(key, Local<Value>());
+            break;
+    }
+}
+
+void JsonToValue_Helper(Local<Array> &res, ordered_json &j) {
+    switch (j.type()) {
+        case ordered_json::value_t::string:
+            res.add(String::newString(j.get<string>()));
+            break;
+        case ordered_json::value_t::number_integer:
+        case ordered_json::value_t::number_unsigned:
+            res.add(BigInteger_Helper(j));
+            break;
+        case ordered_json::value_t::number_float:
+            res.add(Number::newNumber(j.get<double>()));
+            break;
+        case ordered_json::value_t::boolean:
+            res.add(Boolean::newBoolean(j.get<bool>()));
+            break;
+        case ordered_json::value_t::null:
+            res.add(Local<Value>());
+            break;
+        case ordered_json::value_t::array: {
+            Local<Array> arrToAdd = Array::newArray();
+            for (ordered_json::iterator it = j.begin(); it != j.end(); ++it) JsonToValue_Helper(arrToAdd, *it);
+            res.add(arrToAdd);
+            break;
+        }
+        case ordered_json::value_t::object: {
+            Local<Object> objToAdd = Object::newObject();
+            for (ordered_json::iterator it = j.begin(); it != j.end(); ++it)
+                JsonToValue_Helper(objToAdd, it.key(), it.value());
+            res.add(objToAdd);
+            break;
+        }
+        default:
+            res.add(Local<Value>());
+            break;
+    }
+}
+
+Local<Value> JsonToValue(ordered_json j) {
+    Local<Value> res;
+
+    switch (j.type()) {
+        case ordered_json::value_t::string:
+            res = String::newString(j.get<string>());
+            break;
+        case ordered_json::value_t::number_integer:
+        case ordered_json::value_t::number_unsigned:
+            res = BigInteger_Helper(j);
+            break;
+        case ordered_json::value_t::number_float:
+            res = Number::newNumber(j.get<double>());
+            break;
+        case ordered_json::value_t::boolean:
+            res = Boolean::newBoolean(j.get<bool>());
+            break;
+        case ordered_json::value_t::null:
+            res = Local<Value>();
+            break;
+        case ordered_json::value_t::array: {
+            Local<Array> resArr = Array::newArray();
+            for (ordered_json::iterator it = j.begin(); it != j.end(); ++it) JsonToValue_Helper(resArr, *it);
+            res = resArr;
+            break;
+        }
+        case ordered_json::value_t::object: {
+            Local<Object> resObj = Object::newObject();
+            for (ordered_json::iterator it = j.begin(); it != j.end(); ++it)
+                JsonToValue_Helper(resObj, it.key(), it.value());
+            res = resObj;
+            break;
+        }
+        default:
+            res = Local<Value>();
+            break;
+    }
+
+    return res;
+}
+
+Local<Value> JsonToValue(std::string jsonStr) {
+    try {
+        if (jsonStr.empty()) return String::newString("");
+        if (jsonStr.front() == '\"' && jsonStr.back() == '\"')
+            return String::newString(jsonStr.substr(1, jsonStr.size() - 2));
+        auto j = ordered_json::parse(jsonStr, nullptr, true, true);
+        return JsonToValue(j);
+    } catch (const ordered_json::exception &e) {
+        Komomo::Entry::getInstance().getSelf().getLogger().warn(
+                "{}{}",
+                "JSON parse error",
+                ll::string_utils::tou8str(e.what())
+        );
+        return String::newString(jsonStr);
+    }
+}
+
 
 ConfigClass::ConfigClass(std::string path) : ScriptClass(ConstructFromCpp<ConfigClass>{}) {
     this->mConfigPath = path;
@@ -86,7 +231,7 @@ Local<Value> ConfigClass::get(const Arguments& args) {
     CheckArgType(args[0], ValueKind::kString);
 
     try {
-        return ConvertToScriptX(mConfig.at(args[0].asString().toString()));
+        return JsonToValue(mConfig[args[0].asString().toString()]);
     } catch (const std::out_of_range& e) {
         PrintScriptError("Key not found in config: " + args[0].asString().toString());
         return Local<Value>();
@@ -118,7 +263,7 @@ Local<Value> ConfigClass::init(const Arguments& args) {
             mConfig[args[0].asString().toString()] = ordered_json::parse(ConvertFromScriptX<std::string>(args[1]));
             flush();
         } else {
-            return ConvertToScriptX(mConfig[args[0].asString().toString()]);
+            return JsonToValue(mConfig[args[0].asString().toString()]);
         }
     } catch (const std::out_of_range& e) {
         PrintScriptError("Error in init config");
@@ -147,4 +292,4 @@ Local<Value> ConfigClass::del(const Arguments& args) {
 
 Local<Value> ConfigClass::reloadConfig(const Arguments& args) { return Boolean::newBoolean(reload()); }
 
-Local<Value> ConfigClass::getVersion(const Arguments& args) { return ConvertToScriptX(mConfig["version"]); }
+Local<Value> ConfigClass::getVersion(const Arguments &args) { return JsonToValue(mConfig["version"]); }

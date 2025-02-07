@@ -18,6 +18,11 @@ ClassDefine<ModClass> modClassBuilder = defineClass<ModClass>("Mod")
                                             .function("getRootDir", &ModClass::getRootDir)
                                             .function("getModRootDir", &ModClass::getModRootDir)
 
+        .function("onLoad", &ModClass::onLoad)
+        .function("onEnable", &ModClass::onEnable)
+        .function("onDisable", &ModClass::onDisable)
+        .function("onUnload", &ModClass::onUnload)
+
                                             .build();
 
 ModClass::ModClass() : ScriptClass(ConstructFromCpp<ModClass>{}) {}
@@ -49,3 +54,32 @@ Local<Value> ModClass::getLogger() { return LoggerClass::newLoggerClass(ENGINE_D
 Local<Value> ModClass::getRootDir() { return String::newString(fs::current_path().string()); }
 
 Local<Value> ModClass::getModRootDir() { return String::newString(ll::mod::getModsRoot().string()); }
+
+Local<Value> ModClass::onLoad(const Arguments &args) {
+    CheckArgsCount(args, 0);
+    CheckArgType(args[0], ValueKind::kFunction);
+    ENGINE_DATA()->onLoad = Global(args[0].asFunction());
+    return Local<Value>();
+}
+
+Local<Value> ModClass::onEnable(const Arguments &args) {
+    CheckArgsCount(args, 0);
+    CheckArgType(args[0], ValueKind::kFunction);
+    ENGINE_DATA()->onEnable = Global(args[0].asFunction());
+    return Local<Value>();
+}
+
+Local<Value> ModClass::onDisable(const Arguments &args) {
+    CheckArgsCount(args, 0);
+    CheckArgType(args[0], ValueKind::kFunction);
+    ENGINE_DATA()->onDisable = Global(args[0].asFunction());
+    return Local<Value>();
+}
+
+Local<Value> ModClass::onUnload(const Arguments &args) {
+    CheckArgsCount(args, 0);
+    CheckArgType(args[0], ValueKind::kFunction);
+    ENGINE_DATA()->onUnload = Global(args[0].asFunction());
+    return Local<Value>();
+}
+

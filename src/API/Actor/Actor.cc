@@ -1102,7 +1102,7 @@ Local<Value> ActorClass::getFiringPos(const Arguments& args) {
         if (!mActor) {
             return Local<Value>();
         }
-        return ConvertToScriptX(mActor->getFiringPos());
+        return Vec3Class::newVec3Class(mActor->getFiringPos());
     }
     Catch;
     return Local<Value>();
@@ -1183,7 +1183,7 @@ Local<Value> ActorClass::getInterpolatedRidingOffset(const Arguments& args) {
         if (!mActor) {
             return Local<Value>();
         }
-        return ConvertToScriptX(
+        return Vec3Class::newVec3Class(
             mActor->getInterpolatedRidingOffset(args[0].asNumber().toFloat(), args[1].asNumber().toInt32())
         );
     }
