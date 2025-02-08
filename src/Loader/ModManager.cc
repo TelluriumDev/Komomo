@@ -10,6 +10,7 @@
 #include <ll/api/Expected.h>
 #include <ll/api/mod/Mod.h>
 
+#include <algorithm>
 #include <filesystem>
 #include <memory>
 
@@ -60,10 +61,107 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             return ll::makeStringError("Failed to load mod");
         }
 
-        mod->onLoad([](ll::mod::Mod& mod) { return true; });
-        mod->onEnable([](ll::mod::Mod& mod) { return true; });
-        mod->onDisable([](ll::mod::Mod& mod) { return true; });
-        mod->onUnload([](ll::mod::Mod& mod) { return true; });
+        {
+            auto        engine_ = wrapper->mEngine;
+            EngineScope enter(engine_);
+            engine_->set("onLoad", Function::newFunction([mod](const Arguments& args) {
+                             CheckArgsCount(args, 1);
+                             CheckArgType(args[0], ValueKind::kFunction);
+                             try {
+                                 auto func = args[0].asFunction();
+                                 script::Global<Function> callbackFunc(func);
+                                 mod->onLoadCallbacks.push_back([engine_{EngineScope::currentEngine()},
+                                                                 callback{std::move(callbackFunc)}]() {
+                                     EngineScope enter(engine_);
+                                     try {
+                                         callback.get().call();
+                                     }
+                                     CatchNotReturn;
+                                 });
+                             }
+                             Catch;
+                             return Local<Value>();
+                         }));
+
+            engine_->set("onEnable", Function::newFunction([mod](const Arguments& args) {
+                             CheckArgsCount(args, 1);
+                             CheckArgType(args[0], ValueKind::kFunction);
+                             try {
+                                 auto func = args[0].asFunction();
+                                 script::Global<Function> callbackFunc(func);
+                                 mod->onEnableCallbacks.push_back([engine_{EngineScope::currentEngine()},
+                                                                 callback{std::move(callbackFunc)}]() {
+                                     EngineScope enter(engine_);
+                                     try {
+                                         callback.get().call();
+                                     }
+                                     CatchNotReturn;
+                                 });
+                             }
+                             Catch;
+                             return Local<Value>();
+                         }));
+
+            engine_->set("onDisable", Function::newFunction([mod](const Arguments& args) {
+                             CheckArgsCount(args, 1);
+                             CheckArgType(args[0], ValueKind::kFunction);
+                             try {
+                                 auto func = args[0].asFunction();
+                                 script::Global<Function> callbackFunc(func);
+                                 mod->onDisableCallbacks.push_back([engine_{EngineScope::currentEngine()},
+                                                                 callback{std::move(callbackFunc)}]() {
+                                     EngineScope enter(engine_);
+                                     try {
+                                         callback.get().call();
+                                     }
+                                     CatchNotReturn;
+                                 });
+                             }
+                             Catch;
+                             return Local<Value>();
+                         }));
+
+            engine_->set("onUnload", Function::newFunction([mod](const Arguments& args) {
+                             CheckArgsCount(args, 1);
+                             CheckArgType(args[0], ValueKind::kFunction);
+                             try {
+                                 auto func = args[0].asFunction();
+                                 script::Global<Function> callbackFunc(func);
+                                 mod->onUnloadCallbacks.push_back([engine_{EngineScope::currentEngine()},
+                                                                 callback{std::move(callbackFunc)}]() {
+                                     EngineScope enter(engine_);
+                                     try {
+                                         callback.get().call();
+                                     }
+                                     CatchNotReturn;
+                                 });
+                             }
+                             Catch;
+                             return Local<Value>();
+                         }));
+        }
+
+
+        mod->onLoad([mod_{std::weak_ptr{mod}}](ll::mod::Mod& mod) {
+            auto callbacks = mod_.lock()->onLoadCallbacks;
+            std::for_each(callbacks.begin(), callbacks.end(), [](std::function<void()> func) { std::invoke(func); });
+            return true;
+        });
+        mod->onEnable([mod_{std::weak_ptr{mod}}](ll::mod::Mod& mod) {
+            auto callbacks = mod_.lock()->onEnableCallbacks;
+            std::for_each(callbacks.begin(), callbacks.end(), [](std::function<void()> func) { std::invoke(func); });
+            return true;
+        });
+        mod->onDisable([mod_{std::weak_ptr{mod}}](ll::mod::Mod& mod) {
+            auto callbacks = mod_.lock()->onDisableCallbacks;
+            std::for_each(callbacks.begin(), callbacks.end(), [](std::function<void()> func) { std::invoke(func); });
+            return true;
+        });
+        mod->onUnload([mod_{std::weak_ptr{mod}}](ll::mod::Mod& mod) {
+            auto callbacks = mod_.lock()->onUnloadCallbacks;
+            std::for_each(callbacks.begin(), callbacks.end(), [](std::function<void()> func) { std::invoke(func); });
+            return true;
+        });
 
         return mod->onLoad().transform([&, this] { addMod(manifest.name, mod); });
     } catch (script::Exception& e) {

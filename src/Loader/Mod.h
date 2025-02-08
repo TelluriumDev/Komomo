@@ -7,13 +7,20 @@
 #include <ll/api/mod/Mod.h>
 #include <ll/api/mod/ModManager.h>
 
+#include <functional>
+#include <vector>
+
 namespace Komomo {
 
 class KomomoMod : public ll::mod::Mod {
     friend KomomoModManager;
 
 private:
-    EngineID id;
+    EngineID                           id;
+    std::vector<std::function<void()>> onLoadCallbacks;
+    std::vector<std::function<void()>> onEnableCallbacks;
+    std::vector<std::function<void()>> onDisableCallbacks;
+    std::vector<std::function<void()>> onUnloadCallbacks;
 
 public:
     KomomoMod(const ll::mod::Manifest& manifest);
