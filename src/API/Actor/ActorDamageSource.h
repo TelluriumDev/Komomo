@@ -2,7 +2,7 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-// #include <mc/common/ActorDamageSource.h>
+#include <mc/world/actor/ActorDamageSource.h>
 
 class ActorDamageSource;
 

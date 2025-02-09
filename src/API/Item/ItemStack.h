@@ -2,14 +2,23 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
+#include "API/Item/ItemStackBase.h"
 #include <mc/world/item/ItemStack.h>
 
-class ItemStackClass : public ScriptClass {
+class ItemStackClass : public ItemStackBaseClass {
 public:
-    ItemStack* mItemStack;
+    optional_ref<ItemStack> mItemStack;
 
 public:
-    ItemStackClass(ItemStack* itemStack);
+    template <typename T>
+    explicit ItemStackClass(ItemStack* itemStack, ScriptClass::ConstructFromCpp<T> tag)
+    : ItemStackBaseClass(itemStack, tag) {
+        this->mItemStack = itemStack;
+    };
+
+    explicit ItemStackClass(ItemStack* itemStack) : ItemStackBaseClass(itemStack, ConstructFromCpp<ItemStackClass>{}) {
+        this->mItemStack = itemStack;
+    };
 
 public:
     static Local<Object> newItemStack(ItemStack* itemStack);
