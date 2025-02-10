@@ -1,4 +1,4 @@
-#include "API/Actor/Agent.h"
+#include "API/Mob/Agent.h"
 
 
 ClassDefine<AgentClass> agentClassBuilder = defineClass<AgentClass>("Agent")

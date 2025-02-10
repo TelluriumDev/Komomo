@@ -265,6 +265,7 @@ public:
     Method(getArmorColorInSlot);
     Method(setEquippedSlot);
     Method(setCarriedItem);
+    Method(getCarriedItem);
     Method(setOffhandSlot);
     Method(getEquippedTotem);
     Method(load);
@@ -289,6 +290,7 @@ public:
     Method(swing);
     Method(useItem);
     Method(getDebugText);
+    Method(getPassengerYRotation);
     Method(add);
     Method(drop);
     Method(getInteraction);
@@ -328,6 +330,7 @@ public:
     Method(closerThan);
     Method(consumeItem);
     Method(createUpdateEquipPacket);
+    Method(createUpdateTradePacket);
     Method(deregisterTagsFromLevelCache);
     Method(distanceSqrToBlockPosCenter);
     Method(distanceTo);

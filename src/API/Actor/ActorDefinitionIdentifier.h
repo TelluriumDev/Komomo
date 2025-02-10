@@ -2,7 +2,7 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-// #include <mc/world/item/ActorDefinitionIdentifier.h>
+#include <mc/world/Actor/ActorDefinitionIdentifier.h>
 
 struct ActorDefinitionIdentifier;
 

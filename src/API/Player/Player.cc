@@ -2,12 +2,12 @@
 #include "API/APIHelper.h"
 #include "API/Actor/Actor.h"
 #include "API/Actor/ActorUniqueID.h"
-#include "API/Actor/Agent.h"
 #include "API/Block/BlockSource.h"
 #include "API/Container/Container.h"
 #include "API/Item/Item.h"
 #include "API/Item/ItemStack.h"
 #include "API/Math/Vec3.h"
+#include "API/Mob/Agent.h"
 #include "API/Player/Gamemode.h"
 #include "API/Player/LayeredAbilities.h"
 
@@ -586,9 +586,7 @@ Local<Value> PlayerClass::getCapePos(const Arguments& args) {
     CheckArgType(args[0], ValueKind::kNumber);
     try {
         if (!mPlayer) return Local<Value>();
-        return Vec3Class::newVec3Class(
-            mPlayer->getCapePos(args[0].asNumber().toFloat()).x
-        );
+        return Vec3Class::newVec3Class(mPlayer->getCapePos(args[0].asNumber().toFloat()));
     }
     Catch;
 }
