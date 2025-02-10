@@ -1,4 +1,4 @@
-#include "API/Network/ChangeDimensionPacket.h"
+#include "API/Network/Packet/ChangeDimensionPacket.h"
 
 
 ClassDefine<ChangeDimensionPacketClass> changeDimensionPacketClassBuilder =

@@ -1,4 +1,4 @@
-#include "API/Item/ItemActor.h"
+#include "API/Actor/ItemActor.h"
 
 ClassDefine<ItemActorClass> itemActorClassBuilder =
     defineClass<ItemActorClass>("ItemActor").constructor(nullptr).build();
