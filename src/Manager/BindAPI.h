@@ -116,8 +116,8 @@ inline void BindAPI(ScriptEngine* engine) {
     engine->registerNativeClass<BlockClass>(blockClassBuilder);
     engine->registerNativeClass<BlockPosClass>(blockPosClassBuilder);
     engine->registerNativeClass<BlockSourceClass>(blockSourceClassBuilder);
-    engine->registerNativeClass<BlockStateClass>(blockStateClassBuilder);
-    engine->registerNativeClass<IConstBlockSourceClass>(iConstBlockSourceClassBuilder);
+    // engine->registerNativeClass<BlockStateClass>(blockStateClassBuilder);
+    // engine->registerNativeClass<IConstBlockSourceClass>(iConstBlockSourceClassBuilder);
     engine->registerNativeClass<MaterialClass>(materialClassBuilder);
 
     engine->registerNativeClass<CommandClass>(commandClassBuilder);
