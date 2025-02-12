@@ -857,7 +857,7 @@ void EventBusClass::registerCallback() {
                                 try {
                                     func.get().call(
                                             {},
-                                            MobClass::newMob(&event.mob().value()),
+                                            MobClass::newMobClass(&event.mob().value()),
                                             BlockSourceClass::newBlockSource(
                                                     const_cast<BlockSource *>(&event.blockSource())),
                                             ActorDefinitionIdentifierClass::newActorDefinitionIdentifier(
@@ -914,7 +914,7 @@ void EventBusClass::registerCallback() {
                         try {
                             func.get().call(
                                     {},
-                                    MobClass::newMob(&event.self()),
+                                    MobClass::newMobClass(&event.self()),
                                     ActorDamageSourceClass::newActorDamageSource(
                                             const_cast<ActorDamageSource *>(&event.source())
                                     )
@@ -1145,11 +1145,11 @@ void EventBusClass::registerCallback() {
                                 try {
                                     auto result = func.get().call(
                                             {},
-                                            MobClass::newMob(&event.self()),
+                                            MobClass::newMobClass(&event.self()),
                                             ItemActorClass::newItemActor(&event.getItemActor())
                                     );
                                     if (result.isBoolean()) {
-                                        if (result.asBoolean().value() == false) event.cancel();
+                                        if (!result.asBoolean().value()) event.cancel();
                                     }
                                 }
                                 CatchNotReturn;
@@ -1170,7 +1170,7 @@ void EventBusClass::registerCallback() {
                                 try {
                                     func.get().call(
                                             {},
-                                            MobClass::newMob(&event.self()),
+                                            MobClass::newMobClass(&event.self()),
                                             ItemActorClass::newItemActor(const_cast<ItemActor *>(&event.getItemActor()))
                                     );
                                 }
@@ -1521,7 +1521,7 @@ void EventBusClass::registerCallback() {
                                 try {
                                     auto result = func.get().call(
                                             {},
-                                            MobClass::newMob(&event.self()),
+                                            MobClass::newMobClass(&event.self()),
                                             ActorClass::newActor(&event.getSource().get()),
                                             Number::newNumber(event.getValue()),
                                             ConvertToScriptX(event.getCause())
@@ -1548,7 +1548,7 @@ void EventBusClass::registerCallback() {
                                 try {
                                     func.get().call(
                                             {},
-                                            MobClass::newMob(&event.self()),
+                                            MobClass::newMobClass(&event.self()),
                                             ActorClass::newActor(
                                                     const_cast<Actor *>(&event.getSource().get())),
                                             Number::newNumber(event.getValue()),

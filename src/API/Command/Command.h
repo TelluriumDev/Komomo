@@ -102,66 +102,7 @@ public:
     onExecute(CommandOrigin const& origin, CommandOutput& output, ll::command::RuntimeCommand const& runtime);
 
     static Local<Value>
-    convertResult(ll::command::ParamStorageType const& result, CommandOrigin const& origin, CommandOutput& output) {
-        using namespace ll::command;
-        if (!result.has_value()) return {};
-        if (result.hold(ParamKind::Kind::Enum)) {
-            return String::newString(std::get<RuntimeEnum>(result.value()).name);
-        } else if (result.hold(ParamKind::Kind::SoftEnum)) {
-            return String::newString(std::get<RuntimeSoftEnum>(result.value()));
-        } else if (result.hold(ParamKind::Kind::BlockName)) {
-            return BlockClass::newBlock(
-                const_cast<Block*>(std::get<CommandBlockName>(result.value()).resolveBlock(0).getBlock())
-            );
-        } else if (result.hold(ParamKind::Kind::Item)) {
-            return ItemStackClass::newItemStack(new ItemStack(std::get<CommandItem>(result.value())
-                                                                  .createInstance(1, 1, output, true)
-                                                                  .value_or(ItemInstance::EMPTY_ITEM())));
-        } else if (result.hold(ParamKind::Kind::Actor)) {
-            auto arr = Array::newArray();
-            for (auto i : std::get<CommandSelector<Actor>>(result.value()).results(origin)) {
-                arr.add(ActorClass::newActor(i));
-            }
-            return arr;
-        } else if (result.hold(ParamKind::Kind::Player)) {
-            auto arr = Array::newArray();
-            for (auto i : std::get<CommandSelector<Player>>(result.value()).results(origin)) {
-                arr.add(PlayerClass::newPlayer(i));
-            }
-            return arr;
-        } else if (result.hold(ParamKind::Kind::BlockPos)) {
-            return BlockPosClass::newBlockPosClass(
-                std::get<CommandPosition>(result.value())
-                    .getBlockPos(CommandVersion::CurrentVersion(), origin, Vec3::ZERO())
-            );
-        } else if (result.hold(ParamKind::Kind::Vec3)) {
-            return Vec3Class::newVec3Class(std::get<CommandPosition>(result.value())
-                                               .getPosition(CommandVersion::CurrentVersion(), origin, Vec3::ZERO()));
-        } else if (result.hold(ParamKind::Kind::Message)) {
-            return String::newString(std::get<CommandMessage>(result.value())
-                                         .generateMessage(origin, CommandVersion::CurrentVersion())
-                                         .mMessage->c_str());
-        } else if (result.hold(ParamKind::Kind::RawText)) {
-            return String::newString(std::get<CommandRawText>(result.value()).getText());
-        } else if (result.hold(ParamKind::Kind::JsonValue)) {
-            return String::newString(JsonHelpers::serialize(std::get<Json::Value>(result.value())));
-        } else if (result.hold(ParamKind::Kind::Effect)) {
-            return String::newString(std::get<MobEffect const*>(result.value())->getResourceName());
-        } else if (result.hold(ParamKind::Kind::Command)) {
-            return String::newString(std::get<std::unique_ptr<::Command>>(result.value())->getCommandName());
-        } else if (result.hold(ParamKind::Kind::ActorType)) {
-            return String::newString(std::get<ActorDefinitionIdentifier const*>(result.value())->getCanonicalName());
-        } else if (result.hold(ParamKind::Kind::Bool)) {
-            return Boolean::newBoolean(std::get<bool>(result.value()));
-        } else if (result.hold(ParamKind::Kind::Int)) {
-            return Number::newNumber(std::get<int>(result.value()));
-        } else if (result.hold(ParamKind::Kind::Float)) {
-            return Number::newNumber(std::get<float>(result.value()));
-        } else if (result.hold(ParamKind::Kind::String)) {
-            return String::newString(std::get<std::string>(result.value()));
-        }
-        return {};
-    }
+    convertResult(ll::command::ParamStorageType const &result, CommandOrigin const &origin, CommandOutput &output);
 };
 
 extern ClassDefine<CommandClass> commandClassBuilder;

@@ -6,18 +6,18 @@
 #include <string>
 
 ClassDefine<ConfigClass> configClassBuilder = defineClass<ConfigClass>("Config")
-                                                  .constructor(nullptr)
+        .constructor(nullptr)
 
-                                                  .function("newConfig", &ConfigClass::newConfig)
-                                                  .instanceFunction("get", &ConfigClass::get)
-                                                  .instanceFunction("set", &ConfigClass::set)
-                                                  .instanceFunction("del", &ConfigClass::del)
-                                                  .instanceFunction("has", &ConfigClass::has)
-                                                  .instanceFunction("init", &ConfigClass::init)
-                                                  .instanceFunction("reload", &ConfigClass::reloadConfig)
-                                                  .instanceFunction("getVersion", &ConfigClass::getVersion)
+        .function("newConfig", &ConfigClass::newConfig)
+        .instanceFunction("get", &ConfigClass::get)
+        .instanceFunction("set", &ConfigClass::set)
+        .instanceFunction("del", &ConfigClass::del)
+        .instanceFunction("has", &ConfigClass::has)
+        .instanceFunction("init", &ConfigClass::init)
+        .instanceFunction("reload", &ConfigClass::reloadConfig)
+        .instanceFunction("getVersion", &ConfigClass::getVersion)
 
-                                                  .build();
+        .build();
 
 Local<Value> BigInteger_Helper(ordered_json &i) {
     if (i.is_number_integer()) {
@@ -166,26 +166,31 @@ Local<Value> JsonToValue(std::string jsonStr) {
 }
 
 
-ConfigClass::ConfigClass(std::string path) : ScriptClass(ConstructFromCpp<ConfigClass>{}) {
+ConfigClass::ConfigClass(std::string path) : ScriptClass(ConstructFromCpp < ConfigClass > {}) {
     this->mConfigPath = path;
-    mConfig           = {
-        {"version", 0}
-    };
-    flush();
-}
-
-ConfigClass::ConfigClass(std::string configPath, ordered_json config) : ScriptClass(ConstructFromCpp<ConfigClass>{}) {
-    this->mConfigPath = configPath;
-    if (checkHasVerion(config)) this->mConfig = config;
-    else {
-        config["version"] = 0;
-        this->mConfig     = config;
+    if (!fs::exists(path)) {
+        mConfig = {
+                {"version", 0}
+        };
+    } else {
+        std::ifstream configFile(path);
+        configFile >> mConfig;
     }
     flush();
 }
 
+ConfigClass::ConfigClass(std::string configPath, ordered_json config) : ScriptClass(
+        ConstructFromCpp < ConfigClass > {}) {
+    this->mConfigPath = configPath;
+    if (checkHasVersion(config)) this->mConfig = config;
+    else {
+        config["version"] = 0;
+        this->mConfig = config;
+    }
+    flush();
+}
 
-bool ConfigClass::checkHasVerion(ordered_json config) { return config.contains("version"); }
+bool ConfigClass::checkHasVersion(ordered_json config) { return config.contains("version"); }
 
 bool ConfigClass::flush() {
     std::fstream configFile(mConfigPath);
@@ -193,6 +198,8 @@ bool ConfigClass::flush() {
         configFile << mConfig;
         configFile.close();
         return true;
+    } else {
+        ll::file_utils::writeFile(ll::string_utils::str2u8str(mConfigPath), mConfig.dump(4));
     }
     return false;
 }
@@ -200,7 +207,6 @@ bool ConfigClass::flush() {
 bool ConfigClass::reload() {
     auto jsonTexts = ll::file_utils::readFile(ll::string_utils::str2u8str(mConfigPath));
     if (!jsonTexts) return false;
-
     try {
         mConfig = ordered_json::parse(*jsonTexts, nullptr, true, true);
     } catch (...) {
@@ -210,7 +216,7 @@ bool ConfigClass::reload() {
     return true;
 }
 
-Local<Object> ConfigClass::newConfig(const Arguments& args) {
+Local<Object> ConfigClass::newConfig(const Arguments &args) {
     CheckArgsCountReturn(args, 1, Object::newObject());
     CheckArgTypeReturn(args[0], ValueKind::kString, Object::newObject());
 
@@ -226,36 +232,73 @@ Local<Object> ConfigClass::newConfig(const Arguments& args) {
     CatchNotReturn;
     return Object::newObject();
 }
-Local<Value> ConfigClass::get(const Arguments& args) {
+
+Local<Value> ConfigClass::get(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
 
     try {
-        return JsonToValue(mConfig[args[0].asString().toString()]);
-    } catch (const std::out_of_range& e) {
-        PrintScriptError("Key not found in config: " + args[0].asString().toString());
+        std::string path = args[0].asString().toString();
+        if (path.ends_with(".")) {
+            throw std::invalid_argument("Invalid keys: " + path);
+        }
+        std::vector<std::string> keys;
+        std::istringstream ss(path);
+        std::string key;
+        while (std::getline(ss, key, '.')) {
+            keys.push_back(key);
+        }
+
+        const ordered_json *current = &mConfig;
+        for (const auto &k: keys) {
+            if (!current->contains(k)) {
+                throw std::out_of_range("Key not found in config: " + path);
+            }
+            current = &(*current)[k];
+        }
+
+        return JsonToValue(*current);
+    } catch (const std::out_of_range &e) {
+        PrintScriptError(e.what());
         return Local<Value>();
     }
 }
 
 Local<Value> ConfigClass::set(const Arguments& args) {
-    CheckArgsCount(args, 1);
+    CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kString);
     try {
-        if (args.size() == 1) {
-            // return (new ConfigClass(this->mConfigPath, mConfig[args[0].asString().toString()]))->getScriptObject();
-        } else if (args.size() == 2) {
-            mConfig[args[0].asString().toString()] = ordered_json::parse(ConvertFromScriptX<std::string>(args[1]));
-            flush();
+        std::string path = args[0].asString().toString();
+        if (path.ends_with(".")) {
+            throw std::invalid_argument("Invalid keys: " + path);
         }
-    } catch (const std::out_of_range& e) {
-        PrintScriptError("Error in set config");
-        return Local<Value>();
+        std::vector<std::string> keys;
+        std::istringstream ss(path);
+        std::string key;
+        while (std::getline(ss, key, '.')) {
+            if (key.empty()) continue;
+            keys.push_back(key);
+        }
+
+        ordered_json *current = &mConfig;
+        for (size_t i = 0; i < keys.size() - 1; ++i) {
+            if (!current->contains(keys[i]) || !current->at(keys[i]).is_object()) {
+                (*current)[keys[i]] = ordered_json::object();
+            }
+            current = &(*current)[keys[i]];
+        }
+        ordered_json newValue = ordered_json::parse(ConvertFromScriptX<std::string>(args[1]));
+        (*current)[keys.back()] = newValue;
+
+        flush();
+        return Boolean::newBoolean(true);
+    } catch (const std::exception &e) {
+        PrintScriptError("Error in set config: " + std::string(e.what()));
+        return Boolean::newBoolean(false);
     }
-    return Local<Value>();
 }
 
-Local<Value> ConfigClass::init(const Arguments& args) {
+Local<Value> ConfigClass::init(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kString);
     try {
@@ -265,31 +308,75 @@ Local<Value> ConfigClass::init(const Arguments& args) {
         } else {
             return JsonToValue(mConfig[args[0].asString().toString()]);
         }
-    } catch (const std::out_of_range& e) {
-        PrintScriptError("Error in init config");
+    } catch (const std::out_of_range &e) {
+        PrintScriptError("Error in init config: " + std::string(e.what()));
         return Local<Value>();
     }
     return Local<Value>();
 }
 
-Local<Value> ConfigClass::has(const Arguments& args) {
+Local<Value> ConfigClass::has(const Arguments &args) {
     CheckArgsCountReturn(args, 1, Boolean::newBoolean(false));
     CheckArgTypeReturn(args[0], ValueKind::kString, Boolean::newBoolean(false));
-    return Boolean::newBoolean(mConfig.contains(args[0].asString().toString()));
+
+    try {
+        std::string path = args[0].asString().toString();
+        if (path.ends_with(".")) {
+            throw std::invalid_argument("Invalid keys: " + path);
+        }
+        std::vector<std::string> keys;
+        std::istringstream ss(path);
+        std::string key;
+        while (std::getline(ss, key, '.')) {
+            keys.push_back(key);
+        }
+
+        const ordered_json *current = &mConfig;
+        for (const auto &k: keys) {
+            if (!current->contains(k)) {
+                return Boolean::newBoolean(false);
+            }
+            current = &(*current)[k];
+        }
+        return Boolean::newBoolean(true);
+    } catch (const std::out_of_range &e) {
+        PrintScriptError("Error in has config: " + std::string(e.what()));
+        return Local<Value>();
+    }
 }
-Local<Value> ConfigClass::del(const Arguments& args) {
+
+Local<Value> ConfigClass::del(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     try {
-        mConfig.erase(args[0].asString().toString());
+        std::string path = args[0].asString().toString();
+        if (path.ends_with(".")) {
+            throw std::invalid_argument("Invalid keys: " + path);
+        }
+        std::vector<std::string> keys;
+        std::istringstream ss(path);
+        std::string key;
+        while (std::getline(ss, key, '.')) {
+            keys.push_back(key);
+        }
+
+        ordered_json *current = &mConfig;
+        for (size_t i = 0; i < keys.size() - 1; ++i) {
+            if (!current->contains(keys[i])) {
+                throw std::out_of_range("Key not found in config: " + path);
+            }
+            current = &(*current)[keys[i]];
+        }
+
+        current->erase(keys.back());
         flush();
-    } catch (const std::out_of_range& e) {
-        PrintScriptError("Key not found in config: " + args[0].asString().toString());
+    } catch (const std::out_of_range &e) {
+        PrintScriptError(e.what());
         return Local<Value>();
     }
     return Local<Value>();
 }
 
-Local<Value> ConfigClass::reloadConfig(const Arguments& args) { return Boolean::newBoolean(reload()); }
+Local<Value> ConfigClass::reloadConfig(const Arguments &args) { return Boolean::newBoolean(reload()); }
 
 Local<Value> ConfigClass::getVersion(const Arguments &args) { return JsonToValue(mConfig["version"]); }

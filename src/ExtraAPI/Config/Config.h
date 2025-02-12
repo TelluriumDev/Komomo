@@ -12,7 +12,8 @@ class ConfigClass : public ScriptClass {
 
     bool flush();
     bool reload();
-    bool checkHasVerion(ordered_json json);
+
+    bool checkHasVersion(ordered_json json);
 
 public:
     ConfigClass(std::string path);

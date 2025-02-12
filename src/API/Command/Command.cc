@@ -8,61 +8,123 @@
 using namespace Komomo;
 
 ClassDefine<CommandClass> commandClassBuilder = defineClass<CommandClass>("Command")
-                                                    .constructor(nullptr)
+        .constructor(nullptr)
 
-                                                    .function("newCommand", &CommandClass::newCommand)
-                                                    .function("run", &CommandClass::run)
-                                                    .instanceFunction("setCallback", &CommandClass::setCallback)
-                                                    .instanceFunction("optional", &CommandClass::optional)
-                                                    .instanceFunction("required", &CommandClass::required)
-                                                    .instanceFunction("text", &CommandClass::text)
-                                                    .instanceFunction("addEnum", &CommandClass::addEnum)
-                                                    .instanceFunction("addSoftEnum", &CommandClass::addSoftEnum)
-                                                    .instanceFunction("setSoftEnum", &CommandClass::setSoftEnum)
-                                                    .instanceFunction("removeSoftEnum", &CommandClass::removeSoftEnum)
-                                                    .instanceFunction("overload", &CommandClass::overload)
+        .function("newCommand", &CommandClass::newCommand)
+        .function("run", &CommandClass::run)
+        .instanceFunction("setCallback", &CommandClass::setCallback)
+        .instanceFunction("optional", &CommandClass::optional)
+        .instanceFunction("required", &CommandClass::required)
+        .instanceFunction("text", &CommandClass::text)
+        .instanceFunction("addEnum", &CommandClass::addEnum)
+        .instanceFunction("addSoftEnum", &CommandClass::addSoftEnum)
+        .instanceFunction("setSoftEnum", &CommandClass::setSoftEnum)
+        .instanceFunction("removeSoftEnum", &CommandClass::removeSoftEnum)
+        .instanceFunction("overload", &CommandClass::overload)
 
-                                                    .build();
+        .build();
 
 std::unordered_map<std::string, std::shared_ptr<CommandData>> commands;
 
-CommandClass::CommandClass(std::shared_ptr<CommandData> data) : ScriptClass(ConstructFromCpp<CommandClass>{}) {
+CommandClass::CommandClass(std::shared_ptr<CommandData> data) : ScriptClass(ConstructFromCpp < CommandClass > {}) {
     this->data = data;
 }
 
+Local<Value> CommandClass::convertResult(const ll::command::ParamStorageType &result, const CommandOrigin &origin,
+                                         CommandOutput &output) {
+    using namespace ll::command;
+    if (!result.has_value()) return {};
+    if (result.hold(ParamKind::Kind::Enum)) {
+        return String::newString(std::get<RuntimeEnum>(result.value()).name);
+    } else if (result.hold(ParamKind::Kind::SoftEnum)) {
+        return String::newString(std::get<RuntimeSoftEnum>(result.value()));
+    } else if (result.hold(ParamKind::Kind::BlockName)) {
+        return BlockClass::newBlock(
+                const_cast<Block *>(std::get<CommandBlockName>(result.value()).resolveBlock(0).getBlock())
+        );
+    } else if (result.hold(ParamKind::Kind::Item)) {
+        return ItemStackClass::newItemStack(new ItemStack(std::get<CommandItem>(result.value())
+                                                                  .createInstance(1, 1, output, true)
+                                                                  .value_or(ItemInstance::EMPTY_ITEM())));
+    } else if (result.hold(ParamKind::Kind::Actor)) {
+        auto arr = Array::newArray();
+        for (auto i: std::get<CommandSelector<Actor>>(result.value()).results(origin)) {
+            arr.add(ActorClass::newActor(i));
+        }
+        return arr;
+    } else if (result.hold(ParamKind::Kind::Player)) {
+        auto arr = Array::newArray();
+        for (auto i: std::get<CommandSelector<Player>>(result.value()).results(origin)) {
+            arr.add(PlayerClass::newPlayer(i));
+        }
+        return arr;
+    } else if (result.hold(ParamKind::Kind::BlockPos)) {
+        return BlockPosClass::newBlockPosClass(
+                std::get<CommandPosition>(result.value())
+                        .getBlockPos(CommandVersion::CurrentVersion(), origin, Vec3::ZERO())
+        );
+    } else if (result.hold(ParamKind::Kind::Vec3)) {
+        return Vec3Class::newVec3Class(std::get<CommandPosition>(result.value())
+                                               .getPosition(CommandVersion::CurrentVersion(), origin, Vec3::ZERO()));
+    } else if (result.hold(ParamKind::Kind::Message)) {
+        return String::newString(std::get<CommandMessage>(result.value())
+                                         .generateMessage(origin, CommandVersion::CurrentVersion())
+                                         .mMessage);
+    } else if (result.hold(ParamKind::Kind::RawText)) {
+        return String::newString(std::get<CommandRawText>(result.value()).getText());
+    } else if (result.hold(ParamKind::Kind::JsonValue)) {
+        return String::newString(JsonHelpers::serialize(std::get<Json::Value>(result.value())));
+    } else if (result.hold(ParamKind::Kind::Effect)) {
+        return String::newString(std::get<MobEffect const *>(result.value())->getResourceName());
+    } else if (result.hold(ParamKind::Kind::Command)) {
+        return String::newString(std::get<std::unique_ptr<::Command>>(result.value())->getCommandName());
+    } else if (result.hold(ParamKind::Kind::ActorType)) {
+        return String::newString(std::get<ActorDefinitionIdentifier const *>(result.value())->getCanonicalName());
+    } else if (result.hold(ParamKind::Kind::Bool)) {
+        return Boolean::newBoolean(std::get<bool>(result.value()));
+    } else if (result.hold(ParamKind::Kind::Int)) {
+        return Number::newNumber(std::get<int>(result.value()));
+    } else if (result.hold(ParamKind::Kind::Float)) {
+        return Number::newNumber(std::get<float>(result.value()));
+    } else if (result.hold(ParamKind::Kind::String)) {
+        return String::newString(std::get<std::string>(result.value()));
+    }
+    return {};
+}
 
-ll::command::CommandHandle& CommandClass::getCommandHandle() {
+ll::command::CommandHandle &CommandClass::getCommandHandle() {
     return ll::command::CommandRegistrar::getInstance().getOrCreateCommand(data->name);
 }
+
 Local<Object> CommandClass::newCommandClass(std::shared_ptr<CommandData> data) {
     commands[data->name] = data;
     return (new CommandClass(data))->getScriptObject();
 }
 
-Local<Object> CommandClass::newCommand(const Arguments& args) {
+Local<Object> CommandClass::newCommand(const Arguments &args) {
     try {
         std::shared_ptr<CommandData> data = std::make_shared<CommandData>();
-        data->engine                      = EngineScope::currentEngine();
+        data->engine = EngineScope::currentEngine();
         if (args.size() == 2 && args[0].isString() && args[1].isString()) {
-            data->name        = args[0].asString().toString();
+            data->name = args[0].asString().toString();
             data->description = args[1].asString().toString();
-            auto& cmd = ll::command::CommandRegistrar::getInstance().getOrCreateCommand(data->name, data->description);
+            auto &cmd = ll::command::CommandRegistrar::getInstance().getOrCreateCommand(data->name, data->description);
             return newCommandClass(data);
         } else if (args.size() == 3 && args[0].isString() && args[1].isString() && args[2].isNumber()) {
-            data->name            = args[0].asString().toString();
-            data->description     = args[1].asString().toString();
+            data->name = args[0].asString().toString();
+            data->description = args[1].asString().toString();
             data->permissionLevel = CommandPermissionLevel(args[2].asNumber().toInt32());
-            auto& cmd             = ll::command::CommandRegistrar::getInstance()
-                            .getOrCreateCommand(data->name, data->description, data->permissionLevel);
+            auto &cmd = ll::command::CommandRegistrar::getInstance()
+                    .getOrCreateCommand(data->name, data->description, data->permissionLevel);
             return newCommandClass(data);
         } else if (args.size() == 4 && args[0].isString() && args[1].isString() && args[2].isNumber()
                    && args[3].isNumber()) {
-            data->name            = args[0].asString().toString();
-            data->description     = args[1].asString().toString();
+            data->name = args[0].asString().toString();
+            data->description = args[1].asString().toString();
             data->permissionLevel = CommandPermissionLevel(args[2].asNumber().toInt32());
-            data->flag            = CommandFlagValue(args[3].asNumber().toInt32());
-            auto& cmd             = ll::command::CommandRegistrar::getInstance()
-                            .getOrCreateCommand(data->name, data->description, data->permissionLevel, data->flag);
+            data->flag = CommandFlagValue(args[3].asNumber().toInt32());
+            auto &cmd = ll::command::CommandRegistrar::getInstance()
+                    .getOrCreateCommand(data->name, data->description, data->permissionLevel, data->flag);
             return newCommandClass(data);
         }
     }
@@ -71,21 +133,21 @@ Local<Object> CommandClass::newCommand(const Arguments& args) {
 }
 
 
-Local<Value> CommandClass::setAlias(const Arguments& args) {
+Local<Value> CommandClass::setAlias(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
 
     try {
         ll::command::CommandRegistrar::getInstance()
-            .getOrCreateCommand(args[0].asString().toString())
-            .alias(args[0].asString().toString());
+                .getOrCreateCommand(args[0].asString().toString())
+                .alias(args[0].asString().toString());
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
 
-Local<Value> CommandClass::setCallback(const Arguments& args) {
+Local<Value> CommandClass::setCallback(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kFunction);
 
@@ -97,44 +159,44 @@ Local<Value> CommandClass::setCallback(const Arguments& args) {
 }
 
 void CommandClass::onExecute(
-    CommandOrigin const&               origin,
-    CommandOutput&                     output,
-    ll::command::RuntimeCommand const& runtime
+        CommandOrigin const &origin,
+        CommandOutput &output,
+        ll::command::RuntimeCommand const &runtime
 ) {
-    auto        cmdName = runtime.getCommandName();
-    auto        data    = commands[cmdName];
+    auto cmdName = runtime.getCommandName();
+    auto data = commands[cmdName];
     EngineScope scope(data->engine);
-    auto        func = data->callback;
+    auto func = data->callback;
 
     Local<Object> args = Object::newObject();
 
-    for (auto& info : commands[cmdName]->parameters) {
+    for (auto &info: commands[cmdName]->parameters) {
         try {
             if (info.type == ll::command::ParamKind::Kind::Enum
                 || info.type == ll::command::ParamKind::Kind::SoftEnum) {
-                auto& param = runtime[info.enumName];
+                auto &param = runtime[info.enumName];
                 args.set(info.name, convertResult(param, origin, output));
             } else {
-                auto& param = runtime[info.name];
+                auto &param = runtime[info.name];
                 args.set(info.name, convertResult(param, origin, output));
             }
-        } catch (std::out_of_range&) {
+        } catch (std::out_of_range &) {
             continue;
         }
     }
     try {
         func.get().call(
-            {},
-            CommandClass::newCommandClass(data),
-            CommandOriginClass::newCommandOrigin(&origin),
-            CommandOutputClass::newCommandOutput(&output),
-            args
+                {},
+                CommandClass::newCommandClass(data),
+                CommandOriginClass::newCommandOrigin(&origin),
+                CommandOutputClass::newCommandOutput(&output),
+                args
         );
     }
     CatchNotReturn;
 }
 
-Local<Value> CommandClass::optional(const Arguments& args) {
+Local<Value> CommandClass::optional(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kString);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -142,73 +204,73 @@ Local<Value> CommandClass::optional(const Arguments& args) {
 
     try {
         Parameter p;
-        p.name     = args[0].asString().toString();
-        p.type     = ParamKind::Kind(args[1].asNumber().toInt32());
+        p.name = args[0].asString().toString();
+        p.type = ParamKind::Kind(args[1].asNumber().toInt32());
         p.optional = true;
-        p.option   = CommandParameterOption(args[2].asNumber().toInt32());
+        p.option = CommandParameterOption(args[2].asNumber().toInt32());
         if (args.size() >= 4 && args[3].isString()) {
             p.enumName = args[3].asString().toString();
         }
         data->parameters.push_back(p);
-    } catch (std::runtime_error& e) {
+    } catch (std::runtime_error &e) {
         throw e;
     }
     return this->getScriptObject();
 };
 
-Local<Value> CommandClass::required(const Arguments& args) {
+Local<Value> CommandClass::required(const Arguments &args) {
     CheckArgsCount(args, 3);
     CheckArgType(args[0], ValueKind::kString);
     CheckArgType(args[1], ValueKind::kNumber);
     CheckArgType(args[2], ValueKind::kNumber);
     try {
         Parameter p;
-        p.name     = args[0].asString().toString();
-        p.type     = ParamKind::Kind(args[1].asNumber().toInt32());
+        p.name = args[0].asString().toString();
+        p.type = ParamKind::Kind(args[1].asNumber().toInt32());
         p.optional = false;
-        p.option   = CommandParameterOption(args[2].asNumber().toInt32());
+        p.option = CommandParameterOption(args[2].asNumber().toInt32());
         if (args.size() >= 4 && args[3].isString()) {
             p.enumName = args[3].asString().toString();
         }
         data->parameters.push_back(p);
-    } catch (std::runtime_error& e) {
+    } catch (std::runtime_error &e) {
         throw e;
     }
     return this->getScriptObject();
 };
 
-Local<Value> CommandClass::overload(const Arguments& args) {
+Local<Value> CommandClass::overload(const Arguments &args) {
     try {
         auto cmd = getCommandHandle().runtimeOverload(ENGINE_DATA()->mMod);
-        for (auto& param : data->parameters) {
+        for (auto &param: data->parameters) {
             if (!param.text.empty()) {
-                auto& a = cmd.text(param.text);
+                auto &a = cmd.text(param.text);
                 continue;
             }
             if (param.name.empty()) continue;
             if (param.optional) {
                 if (param.type == ParamKind::Kind::Enum || param.type == ParamKind::Kind::SoftEnum) {
-                    auto& a = cmd.optional(param.name, param.type, param.enumName).option(param.option);
+                    auto &a = cmd.optional(param.name, param.type, param.enumName).option(param.option);
                 } else {
-                    auto& a = cmd.optional(param.name, param.type).option(param.option);
+                    auto &a = cmd.optional(param.name, param.type).option(param.option);
                 }
             } else {
                 if (param.type == ParamKind::Kind::Enum || param.type == ParamKind::Kind::SoftEnum) {
-                    auto& a = cmd.required(param.enumName, param.type, param.enumName).option(param.option);
+                    auto &a = cmd.required(param.enumName, param.type, param.enumName).option(param.option);
                 } else {
-                    auto& a = cmd.required(param.name, param.type).option(param.option);
+                    auto &a = cmd.required(param.name, param.type).option(param.option);
                 }
             }
         }
         cmd.execute(onExecute);
         data->parameters.clear();
-    } catch (std::runtime_error& e) {
+    } catch (std::runtime_error &e) {
         throw e;
     }
     return Local<Value>();
 };
 
-Local<Value> CommandClass::text(const Arguments& args) {
+Local<Value> CommandClass::text(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
 
@@ -222,12 +284,12 @@ Local<Value> CommandClass::text(const Arguments& args) {
 };
 
 
-Local<Value> CommandClass::addEnum(const Arguments& args) {
+Local<Value> CommandClass::addEnum(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kString);
     CheckArgType(args[1], ValueKind::kArray);
 
-    auto enumName  = args[0].asString().toString();
+    auto enumName = args[0].asString().toString();
     auto enumArray = args[1].asArray();
 
     if (enumArray.size() == 0 || !enumArray.get(0).isString()) return Local<Value>();
@@ -241,18 +303,18 @@ Local<Value> CommandClass::addEnum(const Arguments& args) {
 
     try {
         CommandRegistrar::getInstance().tryRegisterRuntimeEnum(enumName, std::move(enumValues));
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         throw e;
     }
     return Local<Value>();
 }
 
-Local<Value> CommandClass::setSoftEnum(const Arguments& args) {
+Local<Value> CommandClass::setSoftEnum(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kString);
     CheckArgType(args[1], ValueKind::kArray);
 
-    auto enumName  = args[0].asString().toString();
+    auto enumName = args[0].asString().toString();
     auto enumArray = args[1].asArray();
 
     std::vector<std::string> enumValues;
@@ -263,18 +325,18 @@ Local<Value> CommandClass::setSoftEnum(const Arguments& args) {
 
     try {
         CommandRegistrar::getInstance().tryRegisterSoftEnum(enumName, std::move(enumValues));
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         throw e;
     }
     return Local<Value>();
 }
 
-Local<Value> CommandClass::addSoftEnum(const Arguments& args) {
+Local<Value> CommandClass::addSoftEnum(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kString);
     CheckArgType(args[1], ValueKind::kArray);
 
-    auto enumName  = args[0].asString().toString();
+    auto enumName = args[0].asString().toString();
     auto enumArray = args[1].asArray();
 
     std::vector<std::string> enumValues;
@@ -285,18 +347,18 @@ Local<Value> CommandClass::addSoftEnum(const Arguments& args) {
 
     try {
         CommandRegistrar::getInstance().addSoftEnumValues(enumName, std::move(enumValues));
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         throw e;
     }
     return Local<Value>();
 }
 
-Local<Value> CommandClass::removeSoftEnum(const Arguments& args) {
+Local<Value> CommandClass::removeSoftEnum(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kString);
     CheckArgType(args[1], ValueKind::kArray);
 
-    auto enumName  = args[0].asString().toString();
+    auto enumName = args[0].asString().toString();
     auto enumArray = args[1].asArray();
 
     std::vector<std::string> enumValues;
@@ -307,24 +369,24 @@ Local<Value> CommandClass::removeSoftEnum(const Arguments& args) {
 
     try {
         CommandRegistrar::getInstance().removeSoftEnumValues(enumName, std::move(enumValues));
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         throw e;
     }
     return Local<Value>();
 }
 
-Local<Value> CommandClass::run(const Arguments& args) {
+Local<Value> CommandClass::run(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     CommandContext context = CommandContext(
-        args[0].asString().toString(),
-        std::make_unique<ServerCommandOrigin>(
-            "Server",
-            ll::service::getLevel()->asServer(),
-            CommandPermissionLevel::Owner,
-            0
-        ),
-        CommandVersion::CurrentVersion()
+            args[0].asString().toString(),
+            std::make_unique<ServerCommandOrigin>(
+                    "Server",
+                    ll::service::getLevel()->asServer(),
+                    CommandPermissionLevel::Owner,
+                    0
+            ),
+            CommandVersion::CurrentVersion()
     );
     try {
         return Boolean::newBoolean(ll::service::getMinecraft()->getCommands().executeCommand(context, false).mSuccess);

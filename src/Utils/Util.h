@@ -1,5 +1,7 @@
 #pragma once
-#include "fmt/format.h"
+
+#include <fmt/format.h>
+
 #include <algorithm>
 #include <optional>
 #include <string>
@@ -32,6 +34,5 @@ inline std::optional<std::string> RuntimeFormat(std::string const& fmt, Args... 
         return std::nullopt;
     }
 }
-
 
 } // namespace Komomo

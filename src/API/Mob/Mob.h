@@ -19,7 +19,7 @@ public:
     explicit MobClass(Mob* mob) : ActorClass(mob, ConstructFromCpp<MobClass>{}) { this->mMob = mob; };
 
 public:
-    static Local<Object> newMob(Mob* mob);
+    static Local<Object> newMobClass(Mob *mob);
 
 public: /* Member */
 public: /* Method */

@@ -1,15 +1,13 @@
 #pragma once
 
-#include "boost/pfr.hpp" // IWYU pragma: keep
-#include "boost/pfr/core.hpp"
-#include "boost/pfr/core_name.hpp"
-#include "fmt/format.h"
-#include "magic_enum/magic_enum.hpp"
-#include "utils/Using.h"
+#include <ll/api/reflection/Reflection.h>
+
+#include <fmt/format.h>
 #include <concepts>
 #include <cstddef>
 #include <string>
 #include <type_traits>
+#include <magic_enum.hpp>
 
 
 namespace Komomo {
