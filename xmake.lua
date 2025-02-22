@@ -9,7 +9,7 @@ add_requires("levilamina 1.0.0", {configs = {target_type = "server"}})
 add_requires("levibuildscript 0.3.0")
 add_requires(
     "microsoft-gsl 4.0.0",
-    "ilistenattentively 0.2.2"
+    "ilistenattentively 0.2.3"
     -- "uwebsockets"
 )
 

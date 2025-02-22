@@ -76,51 +76,48 @@
 
 // LegacyMoney is deprecated, so we don't include it
 // #include "ila/event/legacyMoney/MoneyChangeEvent.h"
-#include "ila/event/minecraft/actor/ActorChangeDimensionEvent.h"
-#include "ila/event/minecraft/actor/ActorGetEffectEvent.h"
-#include "ila/event/minecraft/actor/ActorPickupItemEvent.h"
-#include "ila/event/minecraft/actor/ActorRideEvent.h"
-#include "ila/event/minecraft/actor/ActorTickEvent.h"
-#include "ila/event/minecraft/actor/ActorTriggerPressurePlateEvent.h"
-#include "ila/event/minecraft/actor/ArmorStandSwapItemEvent.h"
-#include "ila/event/minecraft/actor/DeathMessageEvent.h"
-#include "ila/event/minecraft/actor/DragonRespawnEvent.h"
-#include "ila/event/minecraft/actor/MobHurtEffectEvent.h"
-#include "ila/event/minecraft/actor/ProjectileCreateEvent.h"
+#include "ila/event/minecraft/world/actor/ActorChangeDimensionEvent.h"
+#include "ila/event/minecraft/world/actor/ActorGetEffectEvent.h"
+#include "ila/event/minecraft/world/actor/ActorPickupItemEvent.h"
+#include "ila/event/minecraft/world/actor/ActorRideEvent.h"
+#include "ila/event/minecraft/world/actor/ActorTickEvent.h"
+#include "ila/event/minecraft/world/actor/ActorTriggerPressurePlateEvent.h"
+#include "ila/event/minecraft/world/actor/ArmorStandSwapItemEvent.h"
+#include "ila/event/minecraft/world/actor/DeathMessageEvent.h"
+#include "ila/event/minecraft/world/actor/DragonRespawnEvent.h"
+#include "ila/event/minecraft/world/actor/MobHurtEffectEvent.h"
+#include "ila/event/minecraft/world/actor/ProjectileCreateEvent.h"
 
-#include "ila/event/minecraft/level/LevelTickEvent.h"
-#include "ila/event/minecraft/level/SculkCatalystAbsorbExperienceEvent.h"
-#include "ila/event/minecraft/level/WeatherUpdateEvent.h"
+#include "ila/event/minecraft/world/level/LevelTickEvent.h"
+#include "ila/event/minecraft/world/level/block/SculkCatalystAbsorbExperienceEvent.h"
+#include "ila/event/minecraft/world/level/WeatherUpdateEvent.h"
 
-#include "ila/event/minecraft/player/PlayerAttackBlockEvent.h"
-// Warning: maybe typo? (PlayerChangGameTypeEvent -> PlayerChangeGameTypeEvent)
-//                      (PlayerChangPermissionsEvent -> PlayerChangePermissionsEvent)
-#include "ila/event/minecraft/player/PlayerChangGameTypeEvent.h"
-#include "ila/event/minecraft/player/PlayerChangPermissionsEvent.h"
-#include "ila/event/minecraft/player/PlayerChangeDimensionEvent.h"
-#include "ila/event/minecraft/player/PlayerDropItemEvent.h"
-// Seems have problems, so we don't include it
-// #include "ila/event/minecraft/player/PlayerEditSignEvent.h"
-#include "ila/event/minecraft/player/PlayerInteractEntityEvent.h"
-#include "ila/event/minecraft/player/PlayerOpenContainerEvent.h"
-#include "ila/event/minecraft/player/PlayerOperatedItemFrameEvent.h"
-#include "ila/event/minecraft/player/PlayerRequestItemActionEvent.h"
+#include "ila/event/minecraft/world/actor/player/PlayerAttackBlockEvent.h"
+#include "ila/event/minecraft/world/actor/player/PlayerChangeGameTypeEvent.h"
+#include "ila/event/minecraft/world/actor/player/PlayerChangePermissionsEvent.h"
+#include "ila/event/minecraft/world/actor/player/PlayerChangeDimensionEvent.h"
+#include "ila/event/minecraft/world/actor/player/PlayerDropItemEvent.h"
+#include "ila/event/minecraft/world/actor/player/PlayerEditSignEvent.h"
+#include "ila/event/minecraft/world/actor/player/PlayerInteractEntityEvent.h"
+#include "ila/event/minecraft/world/actor/player/PlayerOpenContainerEvent.h"
+#include "ila/event/minecraft/world/actor/player/PlayerOperatedItemFrameEvent.h"
+#include "ila/event/minecraft/world/actor/player/PlayerRequestItemActionEvent.h"
 
 #include "ila/event/minecraft/server/ClientLoginEvent.h"
 #include "ila/event/minecraft/server/RegisterCmdEvent.h"
 #include "ila/event/minecraft/server/SendPacketEvent.h"
 #include "ila/event/minecraft/server/ServerPongEvent.h"
 
-#include "ila/event/minecraft/world/BlockTickEvent.h"
-#include "ila/event/minecraft/world/DragonEggBlockTeleportEvent.h"
+#include "ila/event/minecraft/world/level/block/BlockTickEvent.h"
+#include "ila/event/minecraft/world/level/block/DragonEggBlockTeleportEvent.h"
 #include "ila/event/minecraft/world/ExplosionEvent.h"
-#include "ila/event/minecraft/world/FarmDecayEvent.h"
-#include "ila/event/minecraft/world/LiquidTryFlowEvent.h"
-#include "ila/event/minecraft/world/MossGrowthEvent.h"
+#include "ila/event/minecraft/world/level/block/FarmDecayEvent.h"
+#include "ila/event/minecraft/world/level/block/LiquidTryFlowEvent.h"
+#include "ila/event/minecraft/world/level/block/MossGrowthEvent.h"
 #include "ila/event/minecraft/world/PistonPushEvent.h"
 #include "ila/event/minecraft/world/RedstoneUpdateEvent.h"
 #include "ila/event/minecraft/world/SculkBlockGrowthEvent.h"
-#include "ila/event/minecraft/world/SculkSpreadEvent.h"
+#include "ila/event/minecraft/world/level/block/SculkSpreadEvent.h"
 #include "ila/event/minecraft/world/SpawnItemActorEvent.h"
 #include "ila/event/minecraft/world/SpawnWanderingTraderEvent.h"
 #include "ila/event/minecraft/world/WitherDestroyEvent.h"
@@ -1822,7 +1819,7 @@ void EventBusClass::registerCallback() {
         //   PlayerChangGameTypeAfterEvent
         // }
         addCallback(
-                "PlayerChangGameTypeBeforeEvent",
+                "PlayerChangeGameTypeBeforeEvent",
                 [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
                     return EventBus::getInstance().emplaceListener<ila::mc::PlayerChangGameTypeBeforeEvent>(
                             [&args,
@@ -2027,6 +2024,61 @@ void EventBusClass::registerCallback() {
                                             PlayerClass::newPlayer(&event.self()),
                                             ItemStackClass::newItemStack(
                                                     const_cast<ItemStack *>(&event.getItem()))
+                                    );
+                                }
+                                CatchNotReturn;
+                            },
+                            priority
+                    );
+                }
+        );
+        // PlayerEditSignEvent: {
+        //   [Cancelable] PlayerEditSignBeforeEvent,
+        //   PlayerEditSignAfterEvent
+        // }
+        addCallback(
+                "PlayerEditSignBeforeEvent",
+                [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+                    return EventBus::getInstance().emplaceListener<ila::mc::PlayerEditSignBeforeEvent>(
+                            [&args, engine{EngineScope::currentEngine()}, func{
+                                    Global<Function>(args[1].asFunction())}](
+                                    ila::mc::PlayerEditSignBeforeEvent &event
+                            ) {
+                                EngineScope scope(engine);
+                                try {
+                                    auto result = func.get().call(
+                                            {},
+                                            PlayerClass::newPlayer(&event.self()),
+                                            BlockPosClass::newBlockPosClass(event.getPos()),
+                                            String::newString(event.getText()),
+                                            ConvertToScriptX(event.getTextSide())
+                                    );
+                                    if (result.isBoolean()) {
+                                        if (result.asBoolean().value() == false) event.cancel();
+                                    }
+                                }
+                                CatchNotReturn;
+                            },
+                            priority
+                    );
+                }
+        );
+        addCallback(
+                "PlayerEditSignAfterEvent",
+                [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+                    return EventBus::getInstance().emplaceListener<ila::mc::PlayerEditSignAfterEvent>(
+                            [&args, engine{EngineScope::currentEngine()}, func{
+                                    Global<Function>(args[1].asFunction())}](
+                                    ila::mc::PlayerEditSignAfterEvent &event
+                            ) {
+                                EngineScope scope(engine);
+                                try {
+                                    func.get().call(
+                                            {},
+                                            PlayerClass::newPlayer(&event.self()),
+                                            BlockPosClass::newBlockPosClass(event.getPos()),
+                                            String::newString(event.getText()),
+                                            ConvertToScriptX(event.getTextSide())
                                     );
                                 }
                                 CatchNotReturn;
