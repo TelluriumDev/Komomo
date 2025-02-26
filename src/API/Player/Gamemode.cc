@@ -2,9 +2,9 @@
 
 
 ClassDefine<GameModeClass> gameModeClassBuilder = defineClass<GameModeClass>("GameMode")
-                                                        .constructor(nullptr)
+                                                      .constructor(nullptr)
 
-                                                        .build();
+                                                      .build();
 
 GameModeClass::GameModeClass(GameMode* gameMode) : ScriptClass(ConstructFromCpp<GameModeClass>{}) {
     this->mGameMode = gameMode;

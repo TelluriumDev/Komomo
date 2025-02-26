@@ -90,7 +90,8 @@ Local<Value> ModalFormClass::sendTo(const Arguments& args) {
                     try {
                         EngineScope scope(engine);
                         if (reason.has_value()) {
-                            callback.get().call({}, PlayerClass::newPlayer(&player), ConvertToScriptX(reason.value()));
+                            callback.get()
+                                .call({}, PlayerClass::newPlayer(&player), ConvertToScriptX(reason.value()));
                         } else {
                             callback.get()
                                 .call({}, PlayerClass::newPlayer(&player), ConvertToScriptX(modalFormResult.value()));

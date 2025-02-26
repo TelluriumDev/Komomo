@@ -966,22 +966,22 @@ Local<Value> ActorClass::traceRay(const Arguments& args) {
             return Local<Value>();
         }
         if (args.size() == 0) {
-            return HitResultClass::newHitResult(&mActor->traceRay()); // !
+            // return HitResultClass::newHitResult(&mActor->traceRay()); // !
         }
         CheckArgType(args[0], ValueKind::kNumber);
         auto tMax = args[0].asNumber().toFloat();
         if (args.size() == 1) {
-            return HitResultClass::newHitResult(&mActor->traceRay(tMax));
+            // return HitResultClass::newHitResult(&mActor->traceRay(tMax));
         }
         CheckArgType(args[1], ValueKind::kBoolean);
         auto includeActor = args[1].asBoolean().value();
         if (args.size() == 2) {
-            return HitResultClass::newHitResult(&mActor->traceRay(tMax, includeActor));
+            // return HitResultClass::newHitResult(&mActor->traceRay(tMax, includeActor));
         }
         CheckArgType(args[2], ValueKind::kBoolean);
         auto includeBlock = args[2].asBoolean().value();
         if (args.size() == 3) {
-            return HitResultClass::newHitResult(&mActor->traceRay(tMax, includeActor, includeBlock));
+            // return HitResultClass::newHitResult(&mActor->traceRay(tMax, includeActor, includeBlock));
         }
         // Failed to parse arguments:
         // if (args.size() == 4) {
@@ -2758,9 +2758,9 @@ Local<Value> ActorClass::createUpdateTradePacket(const Arguments& args) {
         if (!mActor) {
             return Local<Value>();
         }
-        return UpdateTradePacketClass::newUpdateTradePacket(
-            &mActor->createUpdateTradePacket(args[0].asNumber().toInt32())
-        );
+        // return UpdateTradePacketClass::newUpdateTradePacket(
+        //     &mActor->createUpdateTradePacket(args[0].asNumber().toInt32())
+        // );
     }
     Catch;
     return Local<Value>();

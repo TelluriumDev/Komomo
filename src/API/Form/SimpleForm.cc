@@ -103,7 +103,8 @@ Local<Value> SimpleFormClass::sendTo(const Arguments& args) {
             form->sendTo(
                 *playerClass->get(),
                 [&engine,
-                 callback{script::Global(args[1].asFunction())
+                 callback{
+                     script::Global(args[1].asFunction())
                  }](Player& player, int id, ll::form::FormCancelReason reason) {
                     try {
                         EngineScope scope(engine);

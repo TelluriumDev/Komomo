@@ -60,7 +60,7 @@
 #include "API/Network/Packet/Packet.h"
 #include "API/Network/Packet/UpdateEquipPacket.h"
 #include "API/Network/Packet/UpdateTradePacket.h"
-#include "API/Player/Gamemode.h"
+#include "API/Player/GameMode.h"
 #include "API/Player/LayeredAbilities.h"
 #include "API/Player/Player.h"
 #include "API/Player/PlayerMovementSettings.h"
@@ -71,103 +71,105 @@
 #include "ExtraAPI/Config/Config.h"
 #include "ExtraAPI/KeyValueDb/KeyValueDB.h"
 #include "ExtraAPI/NetWork/WebSocket.h"
-#include "Utils/Using.h"
+#include "ExtraAPI/I18n/I18n.h"
 
 
 namespace Komomo {
 
-inline void BindAPI(ScriptEngine* engine) {
+    inline void BindAPI(ScriptEngine *engine) {
 
-    EnumAPI::RegisterEnum(engine);
+        EnumAPI::RegisterEnum(engine);
 
-    engine->registerNativeClass<ModClass>(modClassBuilder);
+        engine->registerNativeClass<ModClass>(modClassBuilder);
 
-    engine->registerNativeClass<PlayerClass>(playerClassBuilder);
-    engine->registerNativeClass<GameModeClass>(gameModeClassBuilder);
-    engine->registerNativeClass<LayeredAbilitiesClass>(layeredAbilitiesClassBuilder);
-    engine->registerNativeClass<PlayerMovementSettingsClass>(playerMovementSettingsClassBuilder);
-    // engine->registerNativeClass<ServerPlayerClass>(serverplayerClassBuilder);
-    engine->registerNativeClass<SimulatedPlayerClass>(simulatedPlayerClassBuilder);
+        engine->registerNativeClass<PlayerClass>(playerClassBuilder);
+        engine->registerNativeClass<GameModeClass>(gameModeClassBuilder);
+        engine->registerNativeClass<LayeredAbilitiesClass>(layeredAbilitiesClassBuilder);
+        engine->registerNativeClass<PlayerMovementSettingsClass>(playerMovementSettingsClassBuilder);
+        // engine->registerNativeClass<ServerPlayerClass>(serverplayerClassBuilder);
+        engine->registerNativeClass<SimulatedPlayerClass>(simulatedPlayerClassBuilder);
 
-    engine->registerNativeClass<EventBusClass>(eventBusClassBuilder);
-    engine->registerNativeClass<ListenerClass>(listenerClassBuilder);
+        engine->registerNativeClass<EventBusClass>(eventBusClassBuilder);
+        engine->registerNativeClass<ListenerClass>(listenerClassBuilder);
 
-    engine->registerNativeClass<FormClass>(formClassBuilder);
-    engine->registerNativeClass<SimpleFormClass>(simpleFormClassBuilder);
-    engine->registerNativeClass<CustomFormClass>(customFormClassBuilder);
-    engine->registerNativeClass<ModalFormClass>(modalFormClassBuilder);
+        engine->registerNativeClass<FormClass>(formClassBuilder);
+        engine->registerNativeClass<SimpleFormClass>(simpleFormClassBuilder);
+        engine->registerNativeClass<CustomFormClass>(customFormClassBuilder);
+        engine->registerNativeClass<ModalFormClass>(modalFormClassBuilder);
 
-    engine->registerNativeClass<ContainerClass>(containerClassBuilder);
+        engine->registerNativeClass<ContainerClass>(containerClassBuilder);
 
-    engine->registerNativeClass<ItemClass>(itemClassBuilder);
-    engine->registerNativeClass<ItemStackClass>(itemStackClassBuilder);
-    engine->registerNativeClass<ItemActorClass>(itemActorClassBuilder);
-    engine->registerNativeClass<ItemStackBaseClass>(itemStackBaseClassBuilder);
-    engine->registerNativeClass<ItemStackRequestActionTransferBaseClass>(itemStackRequestActionTransferBaseClassBuilder);
+        engine->registerNativeClass<ItemClass>(itemClassBuilder);
+        engine->registerNativeClass<ItemStackClass>(itemStackClassBuilder);
+        engine->registerNativeClass<ItemActorClass>(itemActorClassBuilder);
+        engine->registerNativeClass<ItemStackBaseClass>(itemStackBaseClassBuilder);
+        engine->registerNativeClass<ItemStackRequestActionTransferBaseClass>(
+                itemStackRequestActionTransferBaseClassBuilder);
 
-    engine->registerNativeClass<ActorClass>(actorClassBuilder);
-    engine->registerNativeClass<ActorDefinitionIdentifierClass>(actorDefinitionIdentifierClassBuilder);
-    engine->registerNativeClass<ActorInteractionClass>(actorInteractionClassBuilder);
-    engine->registerNativeClass<ActorUniqueIDClass>(actorUniqueIDClassBuilder);
-    engine->registerNativeClass<AgentClass>(agentClassBuilder);
-    engine->registerNativeClass<ActorDamageSourceClass>(actorDamageSourceClassBuilder);
-    engine->registerNativeClass<SculkCatalystBlockActorClass>(sculkCatalystBlockActorClassBuilder);
+        engine->registerNativeClass<ActorClass>(actorClassBuilder);
+        engine->registerNativeClass<ActorDefinitionIdentifierClass>(actorDefinitionIdentifierClassBuilder);
+        engine->registerNativeClass<ActorInteractionClass>(actorInteractionClassBuilder);
+        engine->registerNativeClass<ActorUniqueIDClass>(actorUniqueIDClassBuilder);
+        engine->registerNativeClass<AgentClass>(agentClassBuilder);
+        engine->registerNativeClass<ActorDamageSourceClass>(actorDamageSourceClassBuilder);
+        engine->registerNativeClass<SculkCatalystBlockActorClass>(sculkCatalystBlockActorClassBuilder);
 
-    engine->registerNativeClass<BlockClass>(blockClassBuilder);
-    engine->registerNativeClass<BlockPosClass>(blockPosClassBuilder);
-    engine->registerNativeClass<BlockSourceClass>(blockSourceClassBuilder);
-    // engine->registerNativeClass<BlockStateClass>(blockStateClassBuilder);
-    // engine->registerNativeClass<IConstBlockSourceClass>(iConstBlockSourceClassBuilder);
-    engine->registerNativeClass<MaterialClass>(materialClassBuilder);
+        engine->registerNativeClass<BlockClass>(blockClassBuilder);
+        engine->registerNativeClass<BlockPosClass>(blockPosClassBuilder);
+        engine->registerNativeClass<BlockSourceClass>(blockSourceClassBuilder);
+        // engine->registerNativeClass<BlockStateClass>(blockStateClassBuilder);
+        // engine->registerNativeClass<IConstBlockSourceClass>(iConstBlockSourceClassBuilder);
+        engine->registerNativeClass<MaterialClass>(materialClassBuilder);
 
-    engine->registerNativeClass<CommandClass>(commandClassBuilder);
-    engine->registerNativeClass<CommandFlagClass>(commandFlagClassBuilder);
-    engine->registerNativeClass<CommandOriginClass>(commandOriginClassBuilder);
-    engine->registerNativeClass<CommandOutputClass>(commandOutputClassBuilder);
-    engine->registerNativeClass<CommandContextClass>(commandContextClassBuilder);
-    engine->registerNativeClass<CommandRegistryClass>(commandRegistryClassBuilder);
-    // engine->registerNativeClass<RuntimeOverloadClass>(runtimeOverloadClassBuilder);
-    engine->registerNativeClass<MinecraftCommandsClass>(minecraftCommandsClassBuilder);
-    engine->registerNativeClass<MCRESULTClass>(MCRESULTClassBuilder);
+        engine->registerNativeClass<CommandClass>(commandClassBuilder);
+        engine->registerNativeClass<CommandFlagClass>(commandFlagClassBuilder);
+        engine->registerNativeClass<CommandOriginClass>(commandOriginClassBuilder);
+        engine->registerNativeClass<CommandOutputClass>(commandOutputClassBuilder);
+        engine->registerNativeClass<CommandContextClass>(commandContextClassBuilder);
+        engine->registerNativeClass<CommandRegistryClass>(commandRegistryClassBuilder);
+        // engine->registerNativeClass<RuntimeOverloadClass>(runtimeOverloadClassBuilder);
+        engine->registerNativeClass<MinecraftCommandsClass>(minecraftCommandsClassBuilder);
+        engine->registerNativeClass<MCRESULTClass>(MCRESULTClassBuilder);
 
-    //engine->registerNativeClass<AutomaticIDClass>(automaticIDClassBuilder);
-    engine->registerNativeClass<ChangeDimensionRequestClass>(changeDimensionRequestClassBuilder);
-    engine->registerNativeClass<DimensionClass>(dimensionClassBuilder);
-    engine->registerNativeClass<DimensionTypeClass>(dimensionTypeClassBuilder);
+        //engine->registerNativeClass<AutomaticIDClass>(automaticIDClassBuilder);
+        engine->registerNativeClass<ChangeDimensionRequestClass>(changeDimensionRequestClassBuilder);
+        engine->registerNativeClass<DimensionClass>(dimensionClassBuilder);
+        engine->registerNativeClass<DimensionTypeClass>(dimensionTypeClassBuilder);
 
-    engine->registerNativeClass<EntityContextClass>(entityContextClassBuilder);
+        engine->registerNativeClass<EntityContextClass>(entityContextClassBuilder);
 
-    engine->registerNativeClass<LevelClass>(levelClassBuilder);
-    engine->registerNativeClass<ExplosionClass>(explosionClassBuilder);
+        engine->registerNativeClass<LevelClass>(levelClassBuilder);
+        engine->registerNativeClass<ExplosionClass>(explosionClassBuilder);
 
-    engine->registerNativeClass<AABBClass>(aabbClassBuilder);
-    engine->registerNativeClass<HitResultClass>(hitResultClassBuilder);
-    engine->registerNativeClass<RandomClass>(randomClassBuilder);
-    engine->registerNativeClass<UUIDClass>(uuidClassBuilder);
-    engine->registerNativeClass<VecClass>(vecClassBuilder);
-    engine->registerNativeClass<Vec2Class>(vec2ClassBuilder);
-    engine->registerNativeClass<Vec3Class>(vec3ClassBuilder);
+        engine->registerNativeClass<AABBClass>(aabbClassBuilder);
+        engine->registerNativeClass<HitResultClass>(hitResultClassBuilder);
+        engine->registerNativeClass<RandomClass>(randomClassBuilder);
+        engine->registerNativeClass<UUIDClass>(uuidClassBuilder);
+        engine->registerNativeClass<VecClass>(vecClassBuilder);
+        engine->registerNativeClass<Vec2Class>(vec2ClassBuilder);
+        engine->registerNativeClass<Vec3Class>(vec3ClassBuilder);
 
-    engine->registerNativeClass<MobClass>(mobClassBuilder);
-    engine->registerNativeClass<MobEffectInstanceClass>(mobEffectInstanceClassBuilder);
+        engine->registerNativeClass<MobClass>(mobClassBuilder);
+        engine->registerNativeClass<MobEffectInstanceClass>(mobEffectInstanceClassBuilder);
 
-    engine->registerNativeClass<ConnectionRequestClass>(connectionRequestClassBuilder);
-    engine->registerNativeClass<LoopbackPacketSenderClass>(loopbackPacketSenderClassBuilder);
-    engine->registerNativeClass<NetworkIdentifierClass>(networkIdentifierClassBuilder);
-    engine->registerNativeClass<ServerNetworkHandlerClass>(serverNetworkHandlerClassBuilder);
-    engine->registerNativeClass<ChangeDimensionPacketClass>(changeDimensionPacketClassBuilder);
-    engine->registerNativeClass<PacketClass>(packetClassBuilder);
-    engine->registerNativeClass<UpdateEquipPacketClass>(updateEquipPacketClassBuilder);
-    engine->registerNativeClass<UpdateTradePacketClass>(updateTradePacketClassBuilder);
+        engine->registerNativeClass<ConnectionRequestClass>(connectionRequestClassBuilder);
+        engine->registerNativeClass<LoopbackPacketSenderClass>(loopbackPacketSenderClassBuilder);
+        engine->registerNativeClass<NetworkIdentifierClass>(networkIdentifierClassBuilder);
+        engine->registerNativeClass<ServerNetworkHandlerClass>(serverNetworkHandlerClassBuilder);
+        engine->registerNativeClass<ChangeDimensionPacketClass>(changeDimensionPacketClassBuilder);
+        engine->registerNativeClass<PacketClass>(packetClassBuilder);
+        engine->registerNativeClass<UpdateEquipPacketClass>(updateEquipPacketClassBuilder);
+        engine->registerNativeClass<UpdateTradePacketClass>(updateTradePacketClassBuilder);
 
-    engine->registerNativeClass<ServiceClass>(serviceClassBuilder);
+        engine->registerNativeClass<ServiceClass>(serviceClassBuilder);
 
-    engine->registerNativeClass<LoggerClass>(loggerClassBuilder);
+        engine->registerNativeClass<LoggerClass>(loggerClassBuilder);
 
-    engine->registerNativeClass<ConfigClass>(configClassBuilder);
-    engine->registerNativeClass<KeyValueDBClass>(keyValueDBClassBuilder);
-    // engine->registerNativeClass<WebSocketClass>(webSocketClassBuilder);
-}
+        engine->registerNativeClass<ConfigClass>(configClassBuilder);
+        engine->registerNativeClass<KeyValueDBClass>(keyValueDBClassBuilder);
+//     engine->registerNativeClass<I18nClass>(i18nClassBuilder);
+        // engine->registerNativeClass<WebSocketClass>(webSocketClassBuilder);
+    }
 
 
 } // namespace Komomo

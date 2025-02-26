@@ -53,9 +53,9 @@ struct CommandData {
     CommandFlag            flag            = CommandFlagValue::None;
     ScriptEngine*          engine          = nullptr;
     std::vector<Parameter> parameters      = {};
-    Global<Function>       callback;
-    CommandOutput*         output = nullptr;
-    CommandOrigin*         origin = nullptr;
+    Global<Function>       callback        = Global(Function::newFunction([]() {}));
+    CommandOutput*         output          = nullptr;
+    CommandOrigin*         origin          = nullptr;
 };
 
 
@@ -102,7 +102,7 @@ public:
     onExecute(CommandOrigin const& origin, CommandOutput& output, ll::command::RuntimeCommand const& runtime);
 
     static Local<Value>
-    convertResult(ll::command::ParamStorageType const &result, CommandOrigin const &origin, CommandOutput &output);
+    convertResult(ll::command::ParamStorageType const& result, CommandOrigin const& origin, CommandOutput& output);
 };
 
 extern ClassDefine<CommandClass> commandClassBuilder;

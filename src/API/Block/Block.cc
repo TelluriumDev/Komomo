@@ -535,7 +535,8 @@ Local<Value> BlockClass::clip(const Arguments& args) {
         auto A     = engine->getNativeInstance<Vec3Class>(args[1])->mVec3;
         auto B     = engine->getNativeInstance<Vec3Class>(args[2])->mVec3;
         auto aabb = engine->getNativeInstance<AABBClass>(args[3])->mAABB;
-        return HitResultClass::newHitResult(&(mBlock->clip(pos, A, B, *aabb)));
+        // return HitResultClass::newHitResult(&(mBlock->clip(pos, A, B, *aabb)));
+        return {};
     }
     Catch;
 }

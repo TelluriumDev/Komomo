@@ -14,8 +14,11 @@ public:
 public:
     static Local<Object> newGameMode(GameMode* gameMode);
 
+  
+
 public: /* Member */
 public: /* Method */
 };
 
 extern ClassDefine<GameModeClass> gameModeClassBuilder;
+

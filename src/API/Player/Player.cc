@@ -8,7 +8,7 @@
 #include "API/Item/ItemStack.h"
 #include "API/Math/Vec3.h"
 #include "API/Mob/Agent.h"
-#include "API/Player/Gamemode.h"
+#include "API/Player/GameMode.h"
 #include "API/Player/LayeredAbilities.h"
 
 #include <ll/api/service/PlayerInfo.h>

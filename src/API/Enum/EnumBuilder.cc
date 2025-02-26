@@ -13,10 +13,10 @@
 
 namespace Komomo::EnumAPI {
 
-void RegisterEnum(ScriptEngine* engine) {
-    // Actor
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> ActorEnum;
-    // REGISTER_ENUM_MACRO(ActorEnum, ActionEvent::<unnamed>, "ActionEvent")
+    void RegisterEnum(ScriptEngine *engine) {
+        // Actor
+        static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> ActorEnum;
+//     REGISTER_ENUM_MACRO(ActorEnum, ActionEvent::<unnamed>, "ActionEvent")
 //    REGISTER_ENUM_MACRO(ActorEnum, ActionEvent::ActionState, "ActionState");
 //    REGISTER_ENUM_MACRO(ActorEnum, ActorDamageCause, "ActorDamageCause");
 //    REGISTER_ENUM_MACRO(ActorEnum, ActorCategory, "ActorCategory");
@@ -50,9 +50,9 @@ void RegisterEnum(ScriptEngine* engine) {
 //    REGISTER_ENUM_MACRO(ActorEnum, SpawnRuleEnum, "SpawnRuleEnum");
 //    REGISTER_ENUM_MACRO(ActorEnum, TravelType, "TravelType");
 //    REGISTER_ENUM_MACRO(ActorEnum, TypeExecutingEvent, "TypeExecutingEvent");
-    engine->set("ActorEnum", ConvertToScriptX(ActorEnum));
+        engine->set("ActorEnum", ConvertToScriptX(ActorEnum));
 
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> CommandEnum;
+        static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> CommandEnum;
 //    REGISTER_ENUM_MACRO(CommandEnum, AllowListCommand::Action, "Action");
 //    REGISTER_ENUM_MACRO(CommandEnum, BlockStateCommandParam::Type, "Type");
 //    REGISTER_ENUM_MACRO(CommandEnum, ChangeSettingCommand::Setting, "Setting");
@@ -62,7 +62,7 @@ void RegisterEnum(ScriptEngine* engine) {
 //    REGISTER_ENUM_MACRO(CommandEnum, CommandCompareOperator, "CommandCompareOperator");
 //    REGISTER_ENUM_MACRO(CommandEnum, CommandEditorFlag, "CommandEditorFlag");
 //    REGISTER_ENUM_MACRO(CommandEnum, CommandExecuteFlag, "CommandExecuteFlag");
-    REGISTER_ENUM_MACRO(CommandEnum, CommandFlagValue, "CommandFlagValue");
+        REGISTER_ENUM_MACRO(CommandEnum, CommandFlagValue, "CommandFlagValue");
 //    REGISTER_ENUM_MACRO(CommandEnum, CommandLexer::TokenType, "TokenType");
 //    REGISTER_ENUM_MACRO(CommandEnum, CommandOperator, "CommandOperator");
 //    REGISTER_ENUM_MACRO(CommandEnum, CommandOriginType, "CommandOriginType");
@@ -176,50 +176,50 @@ void RegisterEnum(ScriptEngine* engine) {
 //    REGISTER_ENUM_MACRO(CommandEnum, VolumeAreaCommand::TargetDimensions, "TargetDimensions");
 //    REGISTER_ENUM_MACRO(CommandEnum, WeatherCommand::WeatherType, "WeatherType");
 //    REGISTER_ENUM_MACRO(CommandEnum, WeatherCommand::WeatherRequest, "WeatherRequest");
-    REGISTER_ENUM_MACRO(CommandEnum, ll::command::ParamKind::Kind, "ParamKindKind");
-    engine->set("CommandEnum", ConvertToScriptX(CommandEnum));
+        REGISTER_ENUM_MACRO(CommandEnum, ll::command::ParamKind::Kind, "ParamKindKind");
+        engine->set("CommandEnum", ConvertToScriptX(CommandEnum));
 
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> CommonEnum;
-    REGISTER_ENUM_MACRO(CommonEnum, CompactionStatus, "CompactionStatus");
-    REGISTER_ENUM_MACRO(CommonEnum, FacingID, "FacingID");
-    REGISTER_ENUM_MACRO(CommonEnum, GameUserType, "GameUserType");
-    REGISTER_ENUM_MACRO(CommonEnum, GameVersion::Octet, "Octet");
-    REGISTER_ENUM_MACRO(CommonEnum, SubClientId, "SubClientId");
-    REGISTER_ENUM_MACRO(CommonEnum, XforgeGameVersion::Octet, "Octet");
-    REGISTER_ENUM_MACRO(CommonEnum, Editor::WorldType, "WorldType");
-    REGISTER_ENUM_MACRO(CommonEnum, Facing::Axis, "Axis");
-    REGISTER_ENUM_MACRO(CommonEnum, Facing::Name, "Name");
-    REGISTER_ENUM_MACRO(CommonEnum, Facing::Rotation, "Rotation");
-    REGISTER_ENUM_MACRO(CommonEnum, TitleInfo::TitleId, "TitleId");
-    engine->set("CommonEnum", ConvertToScriptX(CommonEnum));
+        static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> CommonEnum;
+        // REGISTER_ENUM_MACRO(CommonEnum, CompactionStatus, "CompactionStatus");
+        // REGISTER_ENUM_MACRO(CommonEnum, FacingID, "FacingID");
+        // REGISTER_ENUM_MACRO(CommonEnum, GameUserType, "GameUserType");
+        // REGISTER_ENUM_MACRO(CommonEnum, GameVersion::Octet, "Octet");
+        // REGISTER_ENUM_MACRO(CommonEnum, SubClientId, "SubClientId");
+        // REGISTER_ENUM_MACRO(CommonEnum, XforgeGameVersion::Octet, "Octet");
+        // REGISTER_ENUM_MACRO(CommonEnum, Editor::WorldType, "WorldType");
+        // REGISTER_ENUM_MACRO(CommonEnum, Facing::Axis, "Axis");
+        // REGISTER_ENUM_MACRO(CommonEnum, Facing::Name, "Name");
+        // REGISTER_ENUM_MACRO(CommonEnum, Facing::Rotation, "Rotation");
+        // REGISTER_ENUM_MACRO(CommonEnum, TitleInfo::TitleId, "TitleId");
+        engine->set("CommonEnum", ConvertToScriptX(CommonEnum));
 
-    // Block
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> BlockEnum;
+        // Block
+        static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> BlockEnum;
 //    REGISTER_ENUM_MACRO(BlockEnum, BlockActorType, "BlockActorType");
 //    REGISTER_ENUM_MACRO(BlockEnum, BlockSupportType, "BlockSupportType");
 //    REGISTER_ENUM_MACRO(BlockEnum, BlockTintType, "BlockTintType");
 //    REGISTER_ENUM_MACRO(BlockEnum, BlockProperty, "BlockProperty");
 //    REGISTER_ENUM_MACRO(BlockEnum, BlockRenderLayer, "BlockRenderLayer");
 //    REGISTER_ENUM_MACRO(BlockEnum, MaterialType, "MaterialType");
-    engine->set("BlockEnum", ConvertToScriptX(BlockEnum));
+        engine->set("BlockEnum", ConvertToScriptX(BlockEnum));
 
-    // Player
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> PlayerEnum;
-    REGISTER_ENUM_MACRO(PlayerEnum, AbilitiesIndex, "AbilitiesIndex");
-    REGISTER_ENUM_MACRO(PlayerEnum, AbilitiesLayer, "AbilitiesLayer");
-    REGISTER_ENUM_MACRO(PlayerEnum, Ability::Type, "Type");
-    REGISTER_ENUM_MACRO(PlayerEnum, Ability::Options, "Options");
-    REGISTER_ENUM_MACRO(PlayerEnum, BedSleepingResult, "BedSleepingResult");
-    REGISTER_ENUM_MACRO(PlayerEnum, LoadingState, "LoadingState");
-    REGISTER_ENUM_MACRO(PlayerEnum, Player::SpawnPositionState, "SpawnPositionState");
-    REGISTER_ENUM_MACRO(PlayerEnum, PlayerSpawnFallbackType, "PlayerSpawnFallbackType");
-    REGISTER_ENUM_MACRO(PlayerEnum, PlayerUISlot, "PlayerUISlot");
-    REGISTER_ENUM_MACRO(PlayerEnum, SkinAdjustments::AnimBits, "AnimBits");
-    REGISTER_ENUM_MACRO(PlayerEnum, TrustedSkinFlag, "TrustedSkinFlagS");
-    engine->set("PlayerEnum", ConvertToScriptX(PlayerEnum));
+        // Player
+        static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> PlayerEnum;
+        REGISTER_ENUM_MACRO(PlayerEnum, AbilitiesIndex, "AbilitiesIndex");
+        REGISTER_ENUM_MACRO(PlayerEnum, AbilitiesLayer, "AbilitiesLayer");
+        REGISTER_ENUM_MACRO(PlayerEnum, Ability::Type, "Type");
+        REGISTER_ENUM_MACRO(PlayerEnum, Ability::Options, "Options");
+        REGISTER_ENUM_MACRO(PlayerEnum, BedSleepingResult, "BedSleepingResult");
+        REGISTER_ENUM_MACRO(PlayerEnum, LoadingState, "LoadingState");
+        REGISTER_ENUM_MACRO(PlayerEnum, Player::SpawnPositionState, "SpawnPositionState");
+        REGISTER_ENUM_MACRO(PlayerEnum, PlayerSpawnFallbackType, "PlayerSpawnFallbackType");
+        REGISTER_ENUM_MACRO(PlayerEnum, PlayerUISlot, "PlayerUISlot");
+        REGISTER_ENUM_MACRO(PlayerEnum, SkinAdjustments::AnimBits, "AnimBits");
+        REGISTER_ENUM_MACRO(PlayerEnum, TrustedSkinFlag, "TrustedSkinFlagS");
+        engine->set("PlayerEnum", ConvertToScriptX(PlayerEnum));
 
-    // auto generated ItemEnum
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> ItemEnum;
+        // auto generated ItemEnum
+        static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> ItemEnum;
 //    REGISTER_ENUM_MACRO(ItemEnum, ArmorSlot, "ArmorSlot");
 //    REGISTER_ENUM_MACRO(ItemEnum, BannerPatternItem::Type, "Type");
 //    REGISTER_ENUM_MACRO(ItemEnum, BucketFillType, "BucketFillType");
@@ -269,10 +269,10 @@ void RegisterEnum(ScriptEngine* engine) {
 //    REGISTER_ENUM_MACRO(ItemEnum, EnchantResultType, "EnchantResultType");
 //    REGISTER_ENUM_MACRO(ItemEnum, EquipmentFilter, "EquipmentFilter");
 //    REGISTER_ENUM_MACRO(ItemEnum, ItemVersion, "ItemVersion");
-    engine->set("ItemEnum", ConvertToScriptX(ItemEnum));
+        engine->set("ItemEnum", ConvertToScriptX(ItemEnum));
 
-    // auto generated InventoryEnum
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> InventoryEnum;
+        // auto generated InventoryEnum
+        static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> InventoryEnum;
 //    REGISTER_ENUM_MACRO(InventoryEnum, ActorContainerType, "ActorContainerType");
 //    REGISTER_ENUM_MACRO(InventoryEnum, InventoryLayout, "InventoryLayout");
 //    REGISTER_ENUM_MACRO(InventoryEnum, InventoryLeftTabIndex, "InventoryLeftTabIndex");
@@ -302,30 +302,30 @@ void RegisterEnum(ScriptEngine* engine) {
 //    REGISTER_ENUM_MACRO(InventoryEnum, ItemUseInventoryTransaction::TriggerType, "TriggerType");
 //    REGISTER_ENUM_MACRO(InventoryEnum, ItemUseInventoryTransaction::PredictedResult, "PredictedResult");
 //    REGISTER_ENUM_MACRO(InventoryEnum, ItemUseOnActorInventoryTransaction::ActionType, "ActionType");
-    engine->set("InventoryEnum", ConvertToScriptX(InventoryEnum));
+        engine->set("InventoryEnum", ConvertToScriptX(InventoryEnum));
 
-    // Form
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> FormEnum;
-    REGISTER_ENUM_MACRO(FormEnum, ModalFormCancelReason, "ModalFormCancelResult");
-    engine->set("FormEnum", ConvertToScriptX(FormEnum));
+        // Form
+        static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> FormEnum;
+        REGISTER_ENUM_MACRO(FormEnum, ModalFormCancelReason, "ModalFormCancelResult");
+        engine->set("FormEnum", ConvertToScriptX(FormEnum));
 
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> EventEnum = []() {
-        std::unordered_map<std::string, std::unordered_map<std::string_view, int>> map;
-        REGISTER_ENUM_MACRO(EventEnum, ll::event::EventPriority, "EventPriority");
-        map["EventPriority"]["Highest"] = 0;
-        map["EventPriority"]["High"]    = 100;
-        map["EventPriority"]["Normal"]  = 200;
-        map["EventPriority"]["Low"]     = 300;
-        map["EventPriority"]["Lowest"]  = 400;
-        return map;
-    }();
+        static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> EventEnum = []() {
+            std::unordered_map<std::string, std::unordered_map<std::string_view, int>> map;
+            REGISTER_ENUM_MACRO(EventEnum, ll::event::EventPriority, "EventPriority");
+            map["EventPriority"]["Highest"] = 0;
+            map["EventPriority"]["High"] = 100;
+            map["EventPriority"]["Normal"] = 200;
+            map["EventPriority"]["Low"] = 300;
+            map["EventPriority"]["Lowest"] = 400;
+            return map;
+        }();
 
-    engine->set("EventEnum", ConvertToScriptX(EventEnum));
+        engine->set("EventEnum", ConvertToScriptX(EventEnum));
 
-    static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> LoggerEnum;
-    REGISTER_ENUM_MACRO(LoggerEnum, ll::io::LogLevel, "LogLevel");
-    engine->set("LoggerEnum", ConvertToScriptX(LoggerEnum));
-}
+        static std::unordered_map<std::string, std::unordered_map<std::string_view, int>> LoggerEnum;
+        REGISTER_ENUM_MACRO(LoggerEnum, ll::io::LogLevel, "LogLevel");
+        engine->set("LoggerEnum", ConvertToScriptX(LoggerEnum));
+    }
 
 #undef REGISTER_ENUM_MACRO
 
