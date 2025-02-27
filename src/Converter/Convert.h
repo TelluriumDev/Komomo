@@ -3,8 +3,6 @@
 #include "Converter/Converter.h"
 #include "Converter/StlConverter.h"
 
-// #include "ProjectConverters.hpp" // circular reference, please include manually
-
 namespace Komomo {
     template<typename T>
     [[nodiscard]] Local<Value> ConvertToScriptX(T const &value) {
