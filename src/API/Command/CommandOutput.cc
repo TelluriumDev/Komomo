@@ -6,32 +6,32 @@ using namespace Komomo;
 
 
 ClassDefine<CommandOutputClass> commandOutputClassBuilder =
-    defineClass<CommandOutputClass>("CommandOutput")
+        defineClass<CommandOutputClass>("CommandOutput")
         .constructor(nullptr)
 
         .instanceFunction("success", &CommandOutputClass::success)
         .instanceFunction("error", &CommandOutputClass::error)
         .instanceFunction("addToResultList", &CommandOutputClass::addToResultList)
-        .instanceFunction("empty", &CommandOutputClass::empty)
-        .instanceFunction("setHasPlayerText", &CommandOutputClass::setHasPlayerText)
-        .instanceFunction("wantsData", &CommandOutputClass::wantsData)
+        // .instanceFunction("empty", &CommandOutputClass::empty)
+        // .instanceFunction("setHasPlayerText", &CommandOutputClass::setHasPlayerText)
+        // .instanceFunction("wantsData", &CommandOutputClass::wantsData)
 
         .build();
 
-CommandOutputClass::CommandOutputClass(CommandOutput* commandOutput)
-: ScriptClass(ConstructFromCpp<CommandOutputClass>{}) {
+CommandOutputClass::CommandOutputClass(CommandOutput *commandOutput)
+    : ScriptClass(ConstructFromCpp<CommandOutputClass>{}) {
     this->mCommandOutput = commandOutput;
 }
 
-Local<Object> CommandOutputClass::newCommandOutput(CommandOutput* commandOutput) {
+Local<Object> CommandOutputClass::newCommandOutput(CommandOutput *commandOutput) {
     return (new CommandOutputClass(commandOutput))->getScriptObject();
 }
 
-Local<Value> CommandOutputClass::success(const Arguments& args) {
+Local<Value> CommandOutputClass::success(const Arguments &args) {
     if (!mCommandOutput) return Local<Value>();
-    if (args.size() == 0) {
-        mCommandOutput->success();
-    } else if (args.size() == 1) {
+    // if (args.size() == 0) {
+    //     mCommandOutput->success();
+    if (args.size() == 1) {
         CheckArgType(args[0], ValueKind::kString);
         mCommandOutput->success(args[0].asString().toString());
     } else if (args.size() == 2) {
@@ -46,7 +46,7 @@ Local<Value> CommandOutputClass::success(const Arguments& args) {
     return Local<Value>();
 }
 
-Local<Value> CommandOutputClass::error(const Arguments& args) {
+Local<Value> CommandOutputClass::error(const Arguments &args) {
     if (!mCommandOutput) return Local<Value>();
     if (args.size() == 1) {
         CheckArgType(args[0], ValueKind::kString);
@@ -70,14 +70,14 @@ Local<Value> CommandOutputClass::error(const Arguments& args) {
 // ); // TODO: Class
 //  Local<Value> addMessage(const Arguments& args);
 
-Local<Value> CommandOutputClass::addToResultList(const Arguments& args) {
+Local<Value> CommandOutputClass::addToResultList(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kString);
     try {
         if (!mCommandOutput) return Local<Value>();
         if (IsInstanceOf<ActorClass>(args[1])) {
             auto engine = EngineScope::currentEngine();
-            auto actor  = engine->getNativeInstance<ActorClass>(args[1]);
+            auto actor = engine->getNativeInstance<ActorClass>(args[1]);
             mCommandOutput->addToResultList(args[0].asString().toString(), *actor->mActor);
         } else {
             CheckArgType(args[1], ValueKind::kString);
@@ -88,10 +88,10 @@ Local<Value> CommandOutputClass::addToResultList(const Arguments& args) {
     return Local<Value>();
 };
 
-Local<Value> CommandOutputClass::empty() {
-    if (!mCommandOutput) return Local<Value>();
-    return Boolean::newBoolean(mCommandOutput->empty());
-};
+// Local<Value> CommandOutputClass::empty() {
+//     if (!mCommandOutput) return Local<Value>();
+//     return Boolean::newBoolean(mCommandOutput->empty());
+// };
 
 // Local<Value> forceOutput(const Arguments& args); // TODO: Class
 
@@ -109,13 +109,13 @@ Local<Value> CommandOutputClass::empty() {
 // ); //TODO: Class
 // Local<Value> load(const Arguments& args);
 
-Local<Value> CommandOutputClass::setHasPlayerText(const Arguments& args) {
-    if (!mCommandOutput) return Local<Value>();
-    mCommandOutput->setHasPlayerText();
-    return Local<Value>();
-};
+// Local<Value> CommandOutputClass::setHasPlayerText(const Arguments& args) {
+//     if (!mCommandOutput) return Local<Value>();
+//     mCommandOutput->setHasPlayerText();
+//     return Local<Value>();
+// };
 
-Local<Value> CommandOutputClass::wantsData() {
-    if (!mCommandOutput) return Local<Value>();
-    return Boolean::newBoolean(mCommandOutput->wantsData());
-};
+// Local<Value> CommandOutputClass::wantsData() {
+//     if (!mCommandOutput) return Local<Value>();
+//     return Boolean::newBoolean(mCommandOutput->wantsData());
+// };

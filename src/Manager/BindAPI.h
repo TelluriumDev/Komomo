@@ -75,9 +75,7 @@
 
 
 namespace Komomo {
-
     inline void BindAPI(ScriptEngine *engine) {
-
         EnumAPI::RegisterEnum(engine);
 
         engine->registerNativeClass<ModClass>(modClassBuilder);
@@ -104,7 +102,7 @@ namespace Komomo {
         engine->registerNativeClass<ItemActorClass>(itemActorClassBuilder);
         engine->registerNativeClass<ItemStackBaseClass>(itemStackBaseClassBuilder);
         engine->registerNativeClass<ItemStackRequestActionTransferBaseClass>(
-                itemStackRequestActionTransferBaseClassBuilder);
+            itemStackRequestActionTransferBaseClassBuilder);
 
         engine->registerNativeClass<ActorClass>(actorClassBuilder);
         engine->registerNativeClass<ActorDefinitionIdentifierClass>(actorDefinitionIdentifierClassBuilder);
@@ -121,7 +119,7 @@ namespace Komomo {
         // engine->registerNativeClass<IConstBlockSourceClass>(iConstBlockSourceClassBuilder);
         engine->registerNativeClass<MaterialClass>(materialClassBuilder);
 
-        engine->registerNativeClass<CommandClass>(commandClassBuilder);
+        engine->registerNativeClass<CommandClass>(CommandClass::commandClassBuilder);
         engine->registerNativeClass<CommandFlagClass>(commandFlagClassBuilder);
         engine->registerNativeClass<CommandOriginClass>(commandOriginClassBuilder);
         engine->registerNativeClass<CommandOutputClass>(commandOutputClassBuilder);
@@ -167,10 +165,8 @@ namespace Komomo {
 
         engine->registerNativeClass<ConfigClass>(configClassBuilder);
         engine->registerNativeClass<KeyValueDBClass>(keyValueDBClassBuilder);
-//     engine->registerNativeClass<I18nClass>(i18nClassBuilder);
+        //     engine->registerNativeClass<I18nClass>(i18nClassBuilder);
         // engine->registerNativeClass<WebSocketClass>(webSocketClassBuilder);
     }
-
-
 } // namespace Komomo
 

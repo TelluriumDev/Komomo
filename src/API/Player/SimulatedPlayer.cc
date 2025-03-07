@@ -8,7 +8,7 @@
 #include "API/Math/Vec3.h"
 
 ClassDefine<SimulatedPlayerClass> simulatedPlayerClassBuilder =
-    defineClass<SimulatedPlayerClass>("SimulatedPlayer")
+        defineClass<SimulatedPlayerClass>("SimulatedPlayer")
         .constructor(nullptr)
 
         .function("newSimulatedPlayer", &SimulatedPlayerClass::newSimulatedPlayer)
@@ -71,17 +71,14 @@ ClassDefine<SimulatedPlayerClass> simulatedPlayerClassBuilder =
         .build();
 
 
-Local<Object> SimulatedPlayerClass::newSimulatedPlayer(const Arguments& args) {
+Local<Object> SimulatedPlayerClass::newSimulatedPlayer(const Arguments &args) {
     if (args.size() < 1) {
         PrintArgsTooFew();
         return Object::newObject();
     }
     CheckArgTypeReturn(args[0], ValueKind::kString, Object::newObject());
-    string name   = args[0].asString().toString();
-    auto   engine = EngineScope::currentEngine();
-    if (args.size() == 1) {
-        return (new SimulatedPlayerClass(SimulatedPlayer::create(name)))->getScriptObject();
-    }
+    string name = args[0].asString().toString();
+    auto engine = EngineScope::currentEngine();
     if (!IsInstanceOf<Vec3Class>(args[1])) {
         PrintWrongArgType();
         return Object::newObject();
@@ -97,7 +94,7 @@ Local<Object> SimulatedPlayerClass::newSimulatedPlayer(const Arguments& args) {
     auto dimension = engine->getNativeInstance<DimensionTypeClass>(args[2]);
     if (args.size() == 3) {
         return (new SimulatedPlayerClass(SimulatedPlayer::create(name, vec3->mVec3, *dimension->mDimensionType)))
-            ->getScriptObject();
+                ->getScriptObject();
     }
     if (!IsInstanceOf<Vec2Class>(args[3])) {
         PrintWrongArgType();
@@ -106,7 +103,7 @@ Local<Object> SimulatedPlayerClass::newSimulatedPlayer(const Arguments& args) {
     auto vec2 = engine->getNativeInstance<Vec2Class>(args[3]);
     return (new SimulatedPlayerClass(SimulatedPlayer::create(name, vec3->mVec3, *dimension->mDimensionType, vec2->mVec2)
             ))
-        ->getScriptObject();
+            ->getScriptObject();
 }
 
 Local<Value> SimulatedPlayerClass::isSimulated() {
@@ -133,7 +130,7 @@ Local<Value> SimulatedPlayerClass::_getSpawnChunkLimit() {
     CatchReturn(Number::newNumber(0););
 }
 
-Local<Value> SimulatedPlayerClass::simulateSneaking(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateSneaking(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
         return Boolean::newBoolean(mSimulatedPlayer->simulateSneaking());
@@ -141,7 +138,7 @@ Local<Value> SimulatedPlayerClass::simulateSneaking(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateStopSneaking(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateStopSneaking(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
         return Boolean::newBoolean(mSimulatedPlayer->simulateStopSneaking());
@@ -149,22 +146,24 @@ Local<Value> SimulatedPlayerClass::simulateStopSneaking(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateUseItem(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateUseItem(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
         if (args.size() == 0) {
             return Boolean::newBoolean(mSimulatedPlayer->simulateUseItem());
         } else if (args.size() == 1 && IsInstanceOf<ItemStackClass>(args[0])) {
-            return Boolean::newBoolean(mSimulatedPlayer->simulateUseItem(
-                *EngineScope::currentEngine()->getNativeInstance<ItemStackClass>(args[0])->mItemStack
-            ));
-        } else PrintWrongArgType();
+            // return Boolean::newBoolean(mSimulatedPlayer->simulateUseItem(
+            //     *EngineScope::currentEngine()->getNativeInstance<ItemStackClass>(args[0])->mItemStack
+            // ));
+            return {};
+        } else
+            PrintWrongArgType();
         return Boolean::newBoolean(false);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateDestroyLookAt(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateDestroyLookAt(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -176,7 +175,7 @@ Local<Value> SimulatedPlayerClass::simulateDestroyLookAt(const Arguments& args) 
 
 // Local<Value> SimulatedPlayerClass::initializeComponents(const Arguments& args); // TODO
 
-Local<Value> SimulatedPlayerClass::aiStep(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::aiStep(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
         mSimulatedPlayer->aiStep();
@@ -187,7 +186,7 @@ Local<Value> SimulatedPlayerClass::aiStep(const Arguments& args) {
 
 // Local<Value> SimulatedPlayerClass::getMovementSettings(); // TODO
 
-Local<Value> SimulatedPlayerClass::teleportTo(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::teleportTo(const Arguments &args) {
     CheckArgsCount(args, 5);
     CheckInstanceType(args[0], Vec3Class);
     CheckArgType(args[1], ValueKind::kBoolean);
@@ -196,8 +195,8 @@ Local<Value> SimulatedPlayerClass::teleportTo(const Arguments& args) {
     CheckArgType(args[4], ValueKind::kBoolean);
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        ScriptEngine* engine = EngineScope::currentEngine();
-        Vec3Class*    vec3   = engine->getNativeInstance<Vec3Class>(args[0]);
+        ScriptEngine *engine = EngineScope::currentEngine();
+        Vec3Class *vec3 = engine->getNativeInstance<Vec3Class>(args[0]);
         mSimulatedPlayer->teleportTo(
             vec3->mVec3,
             args[1].asBoolean().value(),
@@ -212,20 +211,21 @@ Local<Value> SimulatedPlayerClass::teleportTo(const Arguments& args) {
 
 // Local<Value> SimulatedPlayerClass::_createChunkSource(const Arguments& args) // TODO
 
-Local<Value> SimulatedPlayerClass::_updateChunkPublisherView(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::_updateChunkPublisherView(const Arguments &args) {
     CheckArgsCount(args, 2);
-    CheckInstanceType(args[0], Vec3Class) CheckArgType(args[1], ValueKind::kNumber);
+    CheckInstanceType(args[0], Vec3Class)
+    CheckArgType(args[1], ValueKind::kNumber);
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        ScriptEngine* engine = EngineScope::currentEngine();
-        Vec3Class*    vec3   = engine->getNativeInstance<Vec3Class>(args[0]);
+        ScriptEngine *engine = EngineScope::currentEngine();
+        Vec3Class *vec3 = engine->getNativeInstance<Vec3Class>(args[0]);
         mSimulatedPlayer->_updateChunkPublisherView(vec3->mVec3, args[0].asNumber().toFloat());
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::_addMoveComponent(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::_addMoveComponent(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
         mSimulatedPlayer->_addMoveComponent();
@@ -236,7 +236,7 @@ Local<Value> SimulatedPlayerClass::_addMoveComponent(const Arguments& args) {
 
 // Local<Value> SimulatedPlayerClass::_createNavigationResult(const Arguments& args);  // TODO
 
-Local<Value> SimulatedPlayerClass::_trySwing(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::_trySwing(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
         return Boolean::newBoolean(mSimulatedPlayer->_trySwing());
@@ -244,16 +244,16 @@ Local<Value> SimulatedPlayerClass::_trySwing(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::_updateMovement(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::_updateMovement(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        mSimulatedPlayer->_updateMovement();
+        // mSimulatedPlayer->_updateMovement();
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::_updateRidingComponents(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::_updateRidingComponents(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
         mSimulatedPlayer->_updateRidingComponents();
@@ -264,16 +264,16 @@ Local<Value> SimulatedPlayerClass::_updateRidingComponents(const Arguments& args
 
 // Local<Value> SimulatedPlayerClass::getGameTestHelper(const Arguments& args); // TODO
 
-Local<Value> SimulatedPlayerClass::postAiStep(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::postAiStep(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        mSimulatedPlayer->postAiStep();
+        // mSimulatedPlayer->postAiStep();
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::preAiStep(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::preAiStep(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
         mSimulatedPlayer->preAiStep();
@@ -284,32 +284,34 @@ Local<Value> SimulatedPlayerClass::preAiStep(const Arguments& args) {
 
 // Local<Value> SimulatedPlayerClass::setGameTestHelper(const Arguments& args) // TODO
 
-Local<Value> SimulatedPlayerClass::setXuid(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::setXuid(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        mSimulatedPlayer->setXuid(args[0].asString().toString());
+        // mSimulatedPlayer->setXuid(args[0].asString().toString());
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateAttack(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateAttack(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
         if (args.size() == 0) return Boolean::newBoolean(mSimulatedPlayer->simulateAttack());
         else if (args.size() == 1 && IsInstanceOf<ActorClass>(args[0])) {
-            return Boolean::newBoolean(mSimulatedPlayer->simulateAttack(
-                EngineScope::currentEngine()->getNativeInstance<ActorClass>(args[0])->mActor
-            ));
-        } else PrintWrongArgType();
+            // return Boolean::newBoolean(mSimulatedPlayer->simulateAttack(
+            //     EngineScope::currentEngine()->getNativeInstance<ActorClass>(args[0])->mActor
+            // ));
+            return {};
+        } else
+            PrintWrongArgType();
         return Boolean::newBoolean(false);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateChat(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateChat(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     try {
@@ -320,7 +322,7 @@ Local<Value> SimulatedPlayerClass::simulateChat(const Arguments& args) {
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateDestroyBlock(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateDestroyBlock(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckInstanceType(args[0], BlockPosClass);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -334,67 +336,71 @@ Local<Value> SimulatedPlayerClass::simulateDestroyBlock(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateDisconnect(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateDisconnect(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        mSimulatedPlayer->simulateDisconnect();
+        // mSimulatedPlayer->simulateDisconnect();
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateDropSelectedItem(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateDropSelectedItem(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
-        return Boolean::newBoolean(mSimulatedPlayer->simulateDropSelectedItem());
+        // return Boolean::newBoolean(mSimulatedPlayer->simulateDropSelectedItem());
+        return {};
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateFly(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateFly(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        mSimulatedPlayer->simulateFly();
+        // mSimulatedPlayer->simulateFly();
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateGiveItem(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateGiveItem(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckInstanceType(args[0], ItemStackClass);
     CheckArgType(args[1], ValueKind::kBoolean);
 
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
-        return Boolean::newBoolean(mSimulatedPlayer->simulateGiveItem(
-            *EngineScope::currentEngine()->getNativeInstance<ItemStackClass>(args[0])->mItemStack,
-            args[1].asBoolean().value()
-        ));
+        // return Boolean::newBoolean(mSimulatedPlayer->simulateGiveItem(
+        //     *EngineScope::currentEngine()->getNativeInstance<ItemStackClass>(args[0])->mItemStack,
+        //     args[1].asBoolean().value()
+        // ));
+        return {};
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateInteract(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateInteract(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
         if (args.size() == 0) return Boolean::newBoolean(mSimulatedPlayer->simulateInteract());
         else if (args.size() == 1 && IsInstanceOf<ActorClass>(args[0])) {
-            return Boolean::newBoolean(mSimulatedPlayer->simulateInteract(
-                *EngineScope::currentEngine()->getNativeInstance<ActorClass>(args[0])->mActor
-            ));
+            // return Boolean::newBoolean(mSimulatedPlayer->simulateInteract(
+            //     *EngineScope::currentEngine()->getNativeInstance<ActorClass>(args[0])->mActor
+            // ));
+            return {};
         } else if (args.size() == 2 && IsInstanceOf<BlockPosClass>(args[0]) && IsInstanceOf<Vec3Class>(args[1])) {
             return Boolean::newBoolean(mSimulatedPlayer->simulateInteract(
                 EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[0])->mBlockPos,
                 ScriptModuleMinecraft::ScriptFacing(args[1].asNumber().toInt32())
             ));
-        } else PrintWrongArgType();
+        } else
+            PrintWrongArgType();
         return Boolean::newBoolean(false);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateJump(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateJump(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
         return Boolean::newBoolean(mSimulatedPlayer->simulateJump());
@@ -402,7 +408,7 @@ Local<Value> SimulatedPlayerClass::simulateJump(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateLocalMove(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateLocalMove(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckInstanceType(args[0], Vec3Class);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -417,33 +423,35 @@ Local<Value> SimulatedPlayerClass::simulateLocalMove(const Arguments& args) {
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateLookAt(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateLookAt(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[1], ValueKind::kNumber);
     try {
-        if (!mSimulatedPlayer) return Local<Value>();
-        if (IsInstanceOf<ActorClass>(args[0]))
-            mSimulatedPlayer->simulateLookAt(
-                *EngineScope::currentEngine()->getNativeInstance<ActorClass>(args[0])->mActor,
-                sim::LookDuration(args[1].asNumber().toInt32())
-            );
-        else if (IsInstanceOf<BlockPosClass>(args[0]))
-            mSimulatedPlayer->simulateLookAt(
-                EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[0])->mBlockPos,
-                sim::LookDuration(args[1].asNumber().toInt32())
-            );
-        else if (IsInstanceOf<Vec3Class>(args[0]))
-            mSimulatedPlayer->simulateLookAt(
-                EngineScope::currentEngine()->getNativeInstance<Vec3Class>(args[0])->mVec3,
-                sim::LookDuration(args[1].asNumber().toInt32())
-            );
-        else PrintWrongArgType();
+        // if (!mSimulatedPlayer) return Local<Value>();
+        // if (IsInstanceOf<ActorClass>(args[0]))
+        //     mSimulatedPlayer->simulateLookAt(
+        //         *EngineScope::currentEngine()->getNativeInstance<ActorClass>(args[0])->mActor,
+        //         sim::LookDuration(args[1].asNumber().toInt32())
+        //     );
+        // else if (IsInstanceOf<BlockPosClass>(args[0]))
+        //     mSimulatedPlayer->simulateLookAt(
+        //         EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[0])->mBlockPos,
+        //         sim::LookDuration(args[1].asNumber().toInt32())
+        //     );
+        // else if (IsInstanceOf<Vec3Class>(args[0]))
+        //     mSimulatedPlayer->simulateLookAt(
+        //         EngineScope::currentEngine()->getNativeInstance<Vec3Class>(args[0])->mVec3,
+        //         sim::LookDuration(args[1].asNumber().toInt32())
+        //     );
+        // else
+        //     PrintWrongArgType();
+        return {};
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateMoveToLocation(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateMoveToLocation(const Arguments &args) {
     CheckArgsCount(args, 3);
     CheckInstanceType(args[0], Vec3Class);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -467,7 +475,7 @@ Local<Value> SimulatedPlayerClass::simulateMoveToLocation(const Arguments& args)
 
 // Local<Value> SimulatedPlayerClass::simulateNavigateToLocation(const Arguments& args) // TODO
 
-Local<Value> SimulatedPlayerClass::simulateNavigateToLocations(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateNavigateToLocations(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kArray);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -488,15 +496,16 @@ Local<Value> SimulatedPlayerClass::simulateNavigateToLocations(const Arguments& 
 }
 
 
-Local<Value> SimulatedPlayerClass::simulateRespawn(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateRespawn(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
-        return Boolean::newBoolean(mSimulatedPlayer->simulateRespawn());
+        // return Boolean::newBoolean(mSimulatedPlayer->simulateRespawn());
+        return {};
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateSetBodyRotation(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateSetBodyRotation(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -507,43 +516,45 @@ Local<Value> SimulatedPlayerClass::simulateSetBodyRotation(const Arguments& args
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateSetItem(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateSetItem(const Arguments &args) {
     CheckArgsCountReturn(args, 2, Boolean::newBoolean(false));
     CheckInstanceTypeReturn(args[0], ItemStackClass, Boolean::newBoolean(false));
     CheckArgTypeReturn(args[1], ValueKind::kBoolean, Boolean::newBoolean(false));
     CheckArgTypeReturn(args[2], ValueKind::kNumber, Boolean::newBoolean(false));
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
-        return Boolean::newBoolean(mSimulatedPlayer->simulateSetItem(
-            *EngineScope::currentEngine()->getNativeInstance<ItemStackClass>(args[0])->mItemStack,
-            args[1].asBoolean().value(),
-            args[2].asNumber().toInt32()
-        ));
+        // return Boolean::newBoolean(mSimulatedPlayer->simulateSetItem(
+        //     *EngineScope::currentEngine()->getNativeInstance<ItemStackClass>(args[0])->mItemStack,
+        //     args[1].asBoolean().value(),
+        //     args[2].asNumber().toInt32()
+        // ));
+        return {};
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateStartBuildInSlot(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateStartBuildInSlot(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        mSimulatedPlayer->simulateStartBuildInSlot(args[0].asNumber().toInt32());
+        // mSimulatedPlayer->simulateStartBuildInSlot(args[0].asNumber().toInt32());
+        return {};
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateStopBuild(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateStopBuild(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        mSimulatedPlayer->simulateStopBuild();
+        // mSimulatedPlayer->simulateStopBuild();
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateStopDestroyingBlock(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateStopDestroyingBlock(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
         mSimulatedPlayer->simulateStopDestroyingBlock();
@@ -552,43 +563,43 @@ Local<Value> SimulatedPlayerClass::simulateStopDestroyingBlock(const Arguments& 
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateStopFlying(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateStopFlying(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        mSimulatedPlayer->simulateStopFlying();
+        // mSimulatedPlayer->simulateStopFlying();
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateStopInteracting(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateStopInteracting(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        mSimulatedPlayer->simulateStopInteracting();
+        // mSimulatedPlayer->simulateStopInteracting();
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateStopMoving(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateStopMoving(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        mSimulatedPlayer->simulateStopMoving();
+        // mSimulatedPlayer->simulateStopMoving();
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateStopUsingItem(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateStopUsingItem(const Arguments &args) {
     try {
         if (!mSimulatedPlayer) return Local<Value>();
-        mSimulatedPlayer->simulateStopUsingItem();
+        // mSimulatedPlayer->simulateStopUsingItem();
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> SimulatedPlayerClass::simulateUseItemInSlot(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateUseItemInSlot(const Arguments &args) {
     CheckArgsCountReturn(args, 1, Boolean::newBoolean(false));
     CheckArgTypeReturn(args[0], ValueKind::kNumber, Boolean::newBoolean(false));
 
@@ -599,7 +610,7 @@ Local<Value> SimulatedPlayerClass::simulateUseItemInSlot(const Arguments& args) 
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateUseItemInSlotOnBlock(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateUseItemInSlotOnBlock(const Arguments &args) {
     CheckArgsCountReturn(args, 3, Boolean::newBoolean(false));
     CheckArgTypeReturn(args[0], ValueKind::kNumber, Boolean::newBoolean(false));
     CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
@@ -608,17 +619,18 @@ Local<Value> SimulatedPlayerClass::simulateUseItemInSlotOnBlock(const Arguments&
 
     try {
         if (!mSimulatedPlayer) return Boolean::newBoolean(false);
-        return Boolean::newBoolean(mSimulatedPlayer->simulateUseItemInSlotOnBlock(
-            args[0].asNumber().toInt32(),
-            EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[1])->mBlockPos,
-            ScriptModuleMinecraft::ScriptFacing(args[2].asNumber().toInt32()),
-            EngineScope::currentEngine()->getNativeInstance<Vec3Class>(args[3])->mVec3
-        ));
+        // return Boolean::newBoolean(mSimulatedPlayer->simulateUseItemInSlotOnBlock(
+        //     args[0].asNumber().toInt32(),
+        //     EngineScope::currentEngine()->getNativeInstance<BlockPosClass>(args[1])->mBlockPos,
+        //     ScriptModuleMinecraft::ScriptFacing(args[2].asNumber().toInt32()),
+        //     EngineScope::currentEngine()->getNativeInstance<Vec3Class>(args[3])->mVec3
+        // ));
+        return {};
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateUseItemOnBlock(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateUseItemOnBlock(const Arguments &args) {
     CheckArgsCountReturn(args, 4, Boolean::newBoolean(false));
     CheckInstanceTypeReturn(args[0], ItemStackClass, Boolean::newBoolean(false));
     CheckInstanceTypeReturn(args[1], BlockPosClass, Boolean::newBoolean(false));
@@ -636,7 +648,7 @@ Local<Value> SimulatedPlayerClass::simulateUseItemOnBlock(const Arguments& args)
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> SimulatedPlayerClass::simulateWorldMove(const Arguments& args) {
+Local<Value> SimulatedPlayerClass::simulateWorldMove(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckInstanceType(args[0], Vec3Class);
     CheckArgType(args[1], ValueKind::kNumber);

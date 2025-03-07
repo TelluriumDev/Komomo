@@ -4,7 +4,7 @@
 using namespace Komomo;
 
 ClassDefine<CustomFormClass> customFormClassBuilder =
-    defineClass<CustomFormClass>("CustomForm")
+        defineClass<CustomFormClass>("CustomForm")
         .constructor(nullptr)
 
         .instanceFunction("setTitle", &CustomFormClass::setTitle)
@@ -18,7 +18,7 @@ ClassDefine<CustomFormClass> customFormClassBuilder =
 
         .build();
 
-CustomFormClass::CustomFormClass(std::string const& title) : ScriptClass(ConstructFromCpp<CustomFormClass>{}) {
+CustomFormClass::CustomFormClass(std::string const &title) : ScriptClass(ConstructFromCpp<CustomFormClass>{}) {
     this->form = new ll::form::CustomForm(title);
 }
 
@@ -28,7 +28,7 @@ Local<Object> CustomFormClass::newCustomForm(std::string title) {
     return (new CustomFormClass(title))->getScriptObject();
 }
 
-Local<Value> CustomFormClass::setTitle(const Arguments& args) {
+Local<Value> CustomFormClass::setTitle(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
 
@@ -39,7 +39,7 @@ Local<Value> CustomFormClass::setTitle(const Arguments& args) {
     Catch;
 };
 
-Local<Value> CustomFormClass::appendLabel(const Arguments& args) {
+Local<Value> CustomFormClass::appendLabel(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
 
@@ -50,7 +50,7 @@ Local<Value> CustomFormClass::appendLabel(const Arguments& args) {
     Catch;
 };
 
-Local<Value> CustomFormClass::appendInput(const Arguments& args) {
+Local<Value> CustomFormClass::appendInput(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kString);
     CheckArgType(args[1], ValueKind::kString);
@@ -82,7 +82,7 @@ Local<Value> CustomFormClass::appendInput(const Arguments& args) {
     Catch;
 }
 
-Local<Value> CustomFormClass::appendToggle(const Arguments& args) {
+Local<Value> CustomFormClass::appendToggle(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kString);
     CheckArgType(args[1], ValueKind::kString);
@@ -97,7 +97,6 @@ Local<Value> CustomFormClass::appendToggle(const Arguments& args) {
                 args[2].asBoolean().value()
             );
         } else {
-
             form->appendToggle(args[0].asString().toString(), args[1].asString().toString());
         }
         return this->getScriptObject();
@@ -105,7 +104,7 @@ Local<Value> CustomFormClass::appendToggle(const Arguments& args) {
     Catch;
 }
 
-Local<Value> CustomFormClass::appendDropdown(const Arguments& args) {
+Local<Value> CustomFormClass::appendDropdown(const Arguments &args) {
     CheckArgsCount(args, 3);
     CheckArgType(args[0], ValueKind::kString);
     CheckArgType(args[1], ValueKind::kString);
@@ -134,7 +133,7 @@ Local<Value> CustomFormClass::appendDropdown(const Arguments& args) {
     Catch;
 }
 
-Local<Value> CustomFormClass::appendSlider(const Arguments& args) {
+Local<Value> CustomFormClass::appendSlider(const Arguments &args) {
     CheckArgsCount(args, 4);
     CheckArgType(args[0], ValueKind::kString);
     CheckArgType(args[1], ValueKind::kString);
@@ -175,7 +174,7 @@ Local<Value> CustomFormClass::appendSlider(const Arguments& args) {
     Catch;
 }
 
-Local<Value> CustomFormClass::appendStepSlider(const Arguments& args) {
+Local<Value> CustomFormClass::appendStepSlider(const Arguments &args) {
     CheckArgsCount(args, 3);
     CheckArgType(args[0], ValueKind::kString);
     CheckArgType(args[1], ValueKind::kString);
@@ -204,29 +203,30 @@ Local<Value> CustomFormClass::appendStepSlider(const Arguments& args) {
     Catch;
 }
 
-Local<Value> CustomFormClass::sendTo(const Arguments& args) {
+Local<Value> CustomFormClass::sendTo(const Arguments &args) {
     CheckArgsCount(args, 1);
     try {
         if (!IsInstanceOf<PlayerClass>(args[0])) return Boolean::newBoolean(false);
         if (args.size() >= 2) {
             CheckArgType(args[1], ValueKind::kFunction);
-            auto engine      = EngineScope::currentEngine();
+            auto engine = EngineScope::currentEngine();
             auto playerClass = engine->getNativeInstance<PlayerClass>(args[0]);
             form->sendTo(
                 *playerClass->get(),
                 [_engine{EngineScope::currentEngine()}, callback{script::Global(args[1].asFunction())}](
-                    Player&                           player,
-                    ll::form::CustomFormResult const& customFormResult,
-                    ll::form::FormCancelReason        reason
-                ) {
+            Player &player,
+            ll::form::CustomFormResult const &customFormResult,
+            ll::form::FormCancelReason reason
+        ) {
                     EngineScope scope(_engine);
                     try {
                         if (customFormResult.has_value()) {
                             callback.get()
-                                .call({}, PlayerClass::newPlayer(&player), ConvertToScriptX(customFormResult.value()));
+                                    .call({}, PlayerClass::newPlayer(&player),
+                                          ConvertToScriptX(customFormResult.value()));
                         } else if (reason.has_value()) {
                             callback.get()
-                                .call({}, PlayerClass::newPlayer(&player), ConvertToScriptX(reason.value()));
+                                    .call({}, PlayerClass::newPlayer(&player), ConvertToScriptX(reason.value()));
                         } else {
                             callback.get().call({}, PlayerClass::newPlayer(&player));
                         }
@@ -237,11 +237,12 @@ Local<Value> CustomFormClass::sendTo(const Arguments& args) {
             );
             return Boolean::newBoolean(false);
         } else {
-            auto engine      = EngineScope::currentEngine();
+            auto engine = EngineScope::currentEngine();
             auto playerClass = engine->getNativeInstance<PlayerClass>(args[0]);
             form->sendTo(*playerClass->get());
             return Boolean::newBoolean(true);
         }
     }
-    Catch(Boolean::newBoolean(false));
+    Catch
+    (Boolean::newBoolean(false));
 }

@@ -2,17 +2,17 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-#include <mc/common/ActorUniqueID.h>
+#include <mc/legacy/ActorUniqueID.h>
 
 class ActorUniqueIDClass : public ScriptClass {
 public:
-    ActorUniqueID* mActorUniqueID;
+    ActorUniqueID *mActorUniqueID;
 
 public:
-    ActorUniqueIDClass(ActorUniqueID* actorUniqueID);
+    ActorUniqueIDClass(ActorUniqueID *actorUniqueID);
 
 public:
-    static Local<Object> newActorUniqueID(ActorUniqueID* actorUniqueID);
+    static Local<Object> newActorUniqueID(ActorUniqueID *actorUniqueID);
 
 public: /* Member */
 public: /* Method */

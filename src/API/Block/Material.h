@@ -6,25 +6,25 @@
 
 class MaterialClass : public ScriptClass {
 public:
-    Material* mMaterial;
+    Material *mMaterial;
 
 public:
-    MaterialClass(Material* material);
+    MaterialClass(Material *material);
 
 public:
-    static Local<Object> newMaterial(Material* material);
+    static Local<Object> newMaterial(Material *material);
 
-public: /* Member */
-    Local<Value> getBlocksMotion();
-    Local<Value> getBlocksPrecipitation();
-    Local<Value> isLiquid();
-    Local<Value> isSolid();
-    Local<Value> isSolidBlocking();
-    Local<Value> isSuperHot();
-
-public: /* Method */
-    Local<Value> isTopSolid(const Arguments& args);
-    Local<Value> isType(const Arguments& args);
+    // public: /* Member */
+    //     Local<Value> getBlocksMotion();
+    //     Local<Value> getBlocksPrecipitation();
+    //     Local<Value> isLiquid();
+    //     Local<Value> isSolid();
+    //     Local<Value> isSolidBlocking();
+    //     Local<Value> isSuperHot();
+    //
+    // public: /* Method */
+    //     Local<Value> isTopSolid(const Arguments& args);
+    //     Local<Value> isType(const Arguments& args);
 
     // static
     static Local<Value> getMaterial(int type);

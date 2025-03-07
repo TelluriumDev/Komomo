@@ -1,11 +1,9 @@
 #pragma once
 
+
 #include "Converter/Converter.h"
 
-#include "Utils/Using.h"
-#include "mc/deps/json/ValueType.h"
 #include "nlohmann/json.hpp"
-#include "nlohmann/json_fwd.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -13,7 +11,6 @@
 #include <vector>
 
 namespace Komomo::detail {
-
 // vector
 template <typename T>
 struct Converter<std::vector<T>> {
@@ -100,8 +97,8 @@ struct Converter<std::variant<Ts...>> {
             return Local<Value>();
         }
         return std::visit(
-            [](const auto& v) -> Local<Value> {
-                using ValueType = std::remove_cvref_t<decltype(v)>;
+            []<typename T0>(const T0& v) -> Local<Value> {
+                using ValueType = std::remove_cvref_t<T0>;
                 return Converter<ValueType>::toScript(v);
             },
             val
@@ -238,4 +235,7 @@ struct Converter<nlohmann::ordered_json> {
 
     static nlohmann::ordered_json toCpp(const Local<Value>& val) { return tryConvert<nlohmann::ordered_json>(val); }
 };
+
+
+
 } // namespace Komomo::detail

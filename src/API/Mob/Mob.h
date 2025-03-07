@@ -1,8 +1,8 @@
 #pragma once
 
 #include "API/APIHelper.h" // IWYU pragma: keep
-#include "API/Actor/Actor.h"
 
+#include "API/Actor/Actor.h"
 
 #include <mc/world/actor/Mob.h>
 

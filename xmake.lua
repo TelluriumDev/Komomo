@@ -5,11 +5,11 @@ add_repositories("iceblcokmc https://github.com/IceBlcokMC/xmake-repo.git")
 add_repositories("miracleforest https://github.com/MiracleForest/xmake-repo")
 
 add_requires("nodejs 22.12.0") -- iceblockmc
-add_requires("levilamina 1.0.0", {configs = {target_type = "server"}})
+add_requires("levilamina 1.1.0", {configs = {target_type = "server"}})
 add_requires("levibuildscript 0.3.0")
 add_requires(
     "microsoft-gsl 4.0.0",
-    "ilistenattentively 0.2.2"
+    "ilistenattentively 0.2.3"
     -- "uwebsockets"
 )
 
@@ -66,11 +66,6 @@ target("Komomo")
     add_rules("@levibuildscript/linkrule")
     add_rules("@levibuildscript/modpacker")
 
-    -- add_links("third-party/nodejs/win/lib/libnode.lib"
-
     if is_mode("debug") then
         add_defines("DEBUG")
     end
-
-    set_basename("Komomo")
-    -- after_build(function(target)end)

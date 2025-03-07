@@ -17,13 +17,13 @@
 using namespace Komomo;
 
 ClassDefine<PlayerClass> playerClassBuilder =
-    defineClass<PlayerClass>("Player")
+        defineClass<PlayerClass>("Player")
         .constructor(nullptr)
 
         .instanceProperty("xuid", &PlayerClass::getXuid)
         .instanceProperty("uuid", &PlayerClass::getUUID)
         .instanceProperty("realName", &PlayerClass::getRealName)
-        .instanceProperty("name", &PlayerClass::getName)
+        // .instanceProperty("name", &PlayerClass::getName)
         .instanceProperty("IPAndPort", &PlayerClass::getIPAndPort)
         .instanceProperty("localeCode", &PlayerClass::getLocaleCode)
         .instanceProperty("shadowRadius", &PlayerClass::getShadowRadius)
@@ -33,26 +33,26 @@ ClassDefine<PlayerClass> playerClassBuilder =
         .instanceProperty("itemUseStartupProgress", &PlayerClass::getItemUseStartupProgress)
         .instanceProperty("itemUseIntervalProgress", &PlayerClass::getItemUseIntervalProgress)
         .instanceProperty("maxChunkBuildRadius", &PlayerClass::getMaxChunkBuildRadius)
-        .instanceProperty("blockedUsingDamagedShieldTimeStamp", &PlayerClass::getBlockedUsingDamagedShieldTimeStamp)
-        .instanceProperty("blockedUsingShieldTimeStamp", &PlayerClass::getBlockedUsingShieldTimeStamp)
-        .instanceProperty("blockingStartTimeStamp", &PlayerClass::getBlockingStartTimeStamp)
-        .instanceProperty("chunkRadius", &PlayerClass::getChunkRadius)
-        .instanceProperty("direction", &PlayerClass::getDirection)
-        .instanceProperty("enchantmentSeed", &PlayerClass::getEnchantmentSeed)
-        .instanceProperty("luck", &PlayerClass::getLuck)
-        .instanceProperty("mapIndex", &PlayerClass::getMapIndex)
-        .instanceProperty("maxItemCooldownLeft", &PlayerClass::getMaxItemCooldownLeft)
+        // .instanceProperty("blockedUsingDamagedShieldTimeStamp", &PlayerClass::getBlockedUsingDamagedShieldTimeStamp)
+        // .instanceProperty("blockedUsingShieldTimeStamp", &PlayerClass::getBlockedUsingShieldTimeStamp)
+        // .instanceProperty("blockingStartTimeStamp", &PlayerClass::getBlockingStartTimeStamp)
+        // .instanceProperty("chunkRadius", &PlayerClass::getChunkRadius)
+        // .instanceProperty("direction", &PlayerClass::getDirection)
+        // .instanceProperty("enchantmentSeed", &PlayerClass::getEnchantmentSeed)
+        // .instanceProperty("luck", &PlayerClass::getLuck)
+        // .instanceProperty("mapIndex", &PlayerClass::getMapIndex)
+        // .instanceProperty("maxItemCooldownLeft", &PlayerClass::getMaxItemCooldownLeft)
         // .instanceProperty("getNewEnchantmentSeed", &PlayerClass::getNewEnchantmentSeed)
         .instanceProperty("interactText", &PlayerClass::getInteractText)
-        .instanceProperty("playerIndex", &PlayerClass::getPlayerIndex)
-        .instanceProperty("playerLevel", &PlayerClass::getPlayerLevel)
+        // .instanceProperty("playerIndex", &PlayerClass::getPlayerIndex)
+        // .instanceProperty("playerLevel", &PlayerClass::getPlayerLevel)
         .instanceProperty("selectedItemSlot", &PlayerClass::getSelectedItemSlot)
-        .instanceProperty("PlayerSessionId", &PlayerClass::getPlayerSessionId)
-        .instanceProperty("platformOnlineId", &PlayerClass::getPlatformOnlineId)
-        .instanceProperty("serverId", &PlayerClass::getServerId)
+        // .instanceProperty("PlayerSessionId", &PlayerClass::getPlayerSessionId)
+        // .instanceProperty("platformOnlineId", &PlayerClass::getPlatformOnlineId)
+        // .instanceProperty("serverId", &PlayerClass::getServerId)
         .instanceProperty("sleepRotation", &PlayerClass::getSleepRotation)
-        .instanceProperty("usedPotion", &PlayerClass::getUsedPotion)
-        .instanceProperty("xpEarnedAtCurrentLevel", &PlayerClass::getXpEarnedAtCurrentLevel)
+        // .instanceProperty("usedPotion", &PlayerClass::getUsedPotion)
+        // .instanceProperty("xpEarnedAtCurrentLevel", &PlayerClass::getXpEarnedAtCurrentLevel)
         .instanceProperty("xpNeededForNextLevel", &PlayerClass::getXpNeededForNextLevel)
 
         .instanceProperty("isLoading", &PlayerClass::isLoading)
@@ -65,18 +65,18 @@ ClassDefine<PlayerClass> playerClassBuilder =
         .instanceProperty("isInTrialMode", &PlayerClass::isInTrialMode)
         .instanceProperty("isBlocking", &PlayerClass::isBlocking)
         .instanceProperty("isSilentObserver", &PlayerClass::isSilentObserver)
-        .instanceProperty("isEmoting", &PlayerClass::isEmoting)
+        // .instanceProperty("isEmoting", &PlayerClass::isEmoting)
         .instanceProperty("isFlying", &PlayerClass::isFlying)
         .instanceProperty("isForcedRespawn", &PlayerClass::isForcedRespawn)
-        .instanceProperty("isHostingPlayer", &PlayerClass::isHostingPlayer)
-        .instanceProperty("isHungry", &PlayerClass::isHungry)
-        .instanceProperty("isHurt", &PlayerClass::isHurt)
-        .instanceProperty("isInRaid", &PlayerClass::isInRaid)
-        .instanceProperty("isRespawningFromTheEnd", &PlayerClass::isRespawningFromTheEnd)
-        .instanceProperty("isSleepingLongEnough", &PlayerClass::isSleepingLongEnough)
-        .instanceProperty("isSpawned", &PlayerClass::isSpawned)
-        .instanceProperty("isUsingItem", &PlayerClass::isUsingItem)
-        .instanceProperty("isValidSpawn", &PlayerClass::isValidSpawn)
+        // .instanceProperty("isHostingPlayer", &PlayerClass::isHostingPlayer)
+        // .instanceProperty("isHungry", &PlayerClass::isHungry)
+        // .instanceProperty("isHurt", &PlayerClass::isHurt)
+        // .instanceProperty("isInRaid", &PlayerClass::isInRaid)
+        // .instanceProperty("isRespawningFromTheEnd", &PlayerClass::isRespawningFromTheEnd)
+        // .instanceProperty("isSleepingLongEnough", &PlayerClass::isSleepingLongEnough)
+        // .instanceProperty("isSpawned", &PlayerClass::isSpawned)
+        // .instanceProperty("isUsingItem", &PlayerClass::isUsingItem)
+        // .instanceProperty("isValidSpawn", &PlayerClass::isValidSpawn)
 
         .instanceProperty("canStartSleepInBed", &PlayerClass::canStartSleepInBed)
         .instanceProperty("canExistWhenDisallowMob", &PlayerClass::canExistWhenDisallowMob)
@@ -84,17 +84,17 @@ ClassDefine<PlayerClass> playerClassBuilder =
         .instanceProperty("canChangeDimensionsUsingPortal", &PlayerClass::canChangeDimensionsUsingPortal)
         .instanceProperty("canInteractWithOtherEntitiesInGame", &PlayerClass::canInteractWithOtherEntitiesInGame)
         .instanceProperty("canObstructSpawningAndBlockPlacement", &PlayerClass::canObstructSpawningAndBlockPlacement)
-        .instanceProperty("canBeSeenOnMap", &PlayerClass::canBeSeenOnMap)
+        // .instanceProperty("canBeSeenOnMap", &PlayerClass::canBeSeenOnMap)
         .instanceProperty("canJump", &PlayerClass::canJump)
         .instanceProperty("canOpenContainerScreen", &PlayerClass::canOpenContainerScreen)
         .instanceProperty("canSleep", &PlayerClass::canSleep)
         .instanceProperty("canUseOperatorBlocks", &PlayerClass::canUseOperatorBlocks)
 
         .instanceProperty("hasDiedBefore", &PlayerClass::hasDiedBefore)
-        .instanceProperty("hasBedPosition", &PlayerClass::hasBedPosition)
-        .instanceProperty("hasOpenContainer", &PlayerClass::hasOpenContainer)
+        // .instanceProperty("hasBedPosition", &PlayerClass::hasBedPosition)
+        // .instanceProperty("hasOpenContainer", &PlayerClass::hasOpenContainer)
         .instanceProperty("hasOwnedChunkSource", &PlayerClass::hasOwnedChunkSource)
-        .instanceProperty("hasRespawnAnchorPosition", &PlayerClass::hasRespawnAnchorPosition)
+        // .instanceProperty("hasRespawnAnchorPosition", &PlayerClass::hasRespawnAnchorPosition)
         .instanceProperty("hasRespawnPosition", &PlayerClass::hasRespawnPosition)
 
         .InstanceFunction(disconnect, PlayerClass)
@@ -112,7 +112,7 @@ ClassDefine<PlayerClass> playerClassBuilder =
         .InstanceFunction(eat, PlayerClass)
         .InstanceFunction(equippedArmorItemCanBeMoved, PlayerClass)
         // .InstanceFunction(fireDimensionChangedEvent, PlayerClass)
-        .InstanceFunction(forceAllowEating, PlayerClass)
+        // .InstanceFunction(forceAllowEating, PlayerClass)
         .InstanceFunction(getAbilities, PlayerClass)
         .InstanceFunction(getAgent, PlayerClass)
         // .InstanceFunction(getAgentID, PlayerClass)
@@ -155,13 +155,13 @@ ClassDefine<PlayerClass> playerClassBuilder =
         .InstanceFunction(recheckSpawnPosition, PlayerClass)
         .InstanceFunction(registerTrackedBoss, PlayerClass)
         .InstanceFunction(releaseUsingItem, PlayerClass)
-        .InstanceFunction(resendAllChunks, PlayerClass)
+        // .InstanceFunction(resendAllChunks, PlayerClass)
         .InstanceFunction(resetPlayerLevel, PlayerClass)
-        .InstanceFunction(resetPublisherInitialSpawn, PlayerClass)
-        .InstanceFunction(resetToDefaultGameMode, PlayerClass)
+        // .InstanceFunction(resetPublisherInitialSpawn, PlayerClass)
+        // .InstanceFunction(resetToDefaultGameMode, PlayerClass)
         // .InstanceFunction(saveLastDeathLocation, PlayerClass)
         // .InstanceFunction(sendEventPacket, PlayerClass)
-        .InstanceFunction(sendPlayerTeleported, PlayerClass)
+        // .InstanceFunction(sendPlayerTeleported, PlayerClass)
         // .InstanceFunction(sendSpawnExperienceOrbPacketToServer, PlayerClass)
         .InstanceFunction(setAgent, PlayerClass)
         // .InstanceFunction(setBedRespawnPosition, PlayerClass)
@@ -190,25 +190,25 @@ ClassDefine<PlayerClass> playerClassBuilder =
         // .InstanceFunction(setSelectedSlot, PlayerClass)
         // .InstanceFunction(setSpawnBlockRespawnPosition, PlayerClass)
         .InstanceFunction(setUsedPotion, PlayerClass)
-        .InstanceFunction(shouldShowCredits, PlayerClass)
+        // .InstanceFunction(shouldShowCredits, PlayerClass)
         // .InstanceFunction(startCooldownOverload1, PlayerClass)
         // .InstanceFunction(startCooldownOverload2, PlayerClass)
-        .InstanceFunction(startDestroying, PlayerClass)
+        // .InstanceFunction(startDestroying, PlayerClass)
         // .InstanceFunction(startItemUseOn, PlayerClass)
         .InstanceFunction(startUsingItem, PlayerClass)
-        .InstanceFunction(stopDestroying, PlayerClass)
+        // .InstanceFunction(stopDestroying, PlayerClass)
         .InstanceFunction(stopGliding, PlayerClass)
         // .InstanceFunction(stopItemUseOn, PlayerClass)
         .InstanceFunction(stopUsingItem, PlayerClass)
         // .InstanceFunction(take, PlayerClass)
         .InstanceFunction(tickArmor, PlayerClass)
-        .InstanceFunction(tryDisableShield, PlayerClass)
+        // .InstanceFunction(tryDisableShield, PlayerClass)
         .InstanceFunction(tryStartGliding, PlayerClass)
         // .InstanceFunction(unRegisterTrackedBoss, PlayerClass)
-        .InstanceFunction(updateBlockSourceTick, PlayerClass)
+        // .InstanceFunction(updateBlockSourceTick, PlayerClass)
         .InstanceFunction(updateInventoryTransactions, PlayerClass)
         // .InstanceFunction(updateSkin, PlayerClass)
-        .InstanceFunction(updateTouch, PlayerClass)
+        // .InstanceFunction(updateTouch, PlayerClass)
         .InstanceFunction(updateTrackedBosses, PlayerClass)
         // .InstanceFunction(useSelectedItem, PlayerClass)
 
@@ -225,7 +225,7 @@ ClassDefine<PlayerClass> playerClassBuilder =
         .build();
 
 
-Local<Object> PlayerClass::newPlayer(Player* player) { return (new PlayerClass(player))->getScriptObject(); }
+Local<Object> PlayerClass::newPlayer(Player *player) { return (new PlayerClass(player))->getScriptObject(); }
 
 #define CallFunction(Type, Function)                                                                                   \
     try {                                                                                                              \
@@ -263,32 +263,39 @@ Local<Value> PlayerClass::getItemUseDuration() { CallFunction(Number, getItemUse
 Local<Value> PlayerClass::getItemUseStartupProgress() { CallFunction(Number, getItemUseStartupProgress()); };
 Local<Value> PlayerClass::getItemUseIntervalProgress() { CallFunction(Number, getItemUseIntervalProgress()); };
 Local<Value> PlayerClass::getMaxChunkBuildRadius() { CallFunction(Number, getMaxChunkBuildRadius()); };
-Local<Value> PlayerClass::getBlockedUsingDamagedShieldTimeStamp() {
-    CallFunction(Number, getBlockedUsingDamagedShieldTimeStamp());
-};
-Local<Value> PlayerClass::getBlockedUsingShieldTimeStamp() { CallFunction(Number, getBlockedUsingShieldTimeStamp()); };
-Local<Value> PlayerClass::getBlockingStartTimeStamp() { CallFunction(Number, getBlockingStartTimeStamp()); };
-Local<Value> PlayerClass::getChunkRadius() { CallFunction(Number, getChunkRadius()); };
-Local<Value> PlayerClass::getDirection() { CallFunction(Number, getDirection()); };
-Local<Value> PlayerClass::getEnchantmentSeed() { CallFunction(Number, getEnchantmentSeed()); };
-Local<Value> PlayerClass::getLuck() { CallFunction(Number, getLuck()); };
-Local<Value> PlayerClass::getMapIndex() { CallFunction(Number, getMapIndex()); };
-Local<Value> PlayerClass::getMaxItemCooldownLeft() { CallFunction(Number, getMaxItemCooldownLeft()); };
-Local<Value> PlayerClass::getName() { CallFunction(String, getName()); };
+// Local<Value> PlayerClass::getBlockedUsingDamagedShieldTimeStamp() {
+//     CallFunction(Number, getBlockedUsingDamagedShieldTimeStamp());
+// };
+// Local<Value> PlayerClass::getBlockedUsingShieldTimeStamp() { CallFunction(Number, getBlockedUsingShieldTimeStamp()); };
+// Local<Value> PlayerClass::getBlockingStartTimeStamp() { CallFunction(Number, getBlockingStartTimeStamp()); };
+// Local<Value> PlayerClass::getChunkRadius() { CallFunction(Number, getChunkRadius()); };
+// Local<Value> PlayerClass::getDirection() { CallFunction(Number, getDirection()); };
+// Local<Value> PlayerClass::getEnchantmentSeed() { CallFunction(Number, getEnchantmentSeed()); };
+// Local<Value> PlayerClass::getLuck() { CallFunction(Number, getLuck()); };
+// Local<Value> PlayerClass::getMapIndex() { CallFunction(Number, getMapIndex()); };
+// Local<Value> PlayerClass::getMaxItemCooldownLeft() { CallFunction(Number, getMaxItemCooldownLeft()); };
+// Local<Value> PlayerClass::getName() { CallFunction(String, getName()); };
 // Local<Value> PlayerClass::getNewEnchantmentSeed() {
 //     CallFunction(String, getNewEnchantmentSeed());
 // };
 Local<Value> PlayerClass::getInteractText() { CallFunction(String, getInteractText()); };
-Local<Value> PlayerClass::getPlayerIndex() { CallFunction(Number, getPlayerIndex()); };
-Local<Value> PlayerClass::getPlayerLevel() { CallFunction(Number, getPlayerLevel()); };
+// Local<Value> PlayerClass::getPlayerIndex() { CallFunction(Number, getPlayerIndex()); };
+// Local<Value> PlayerClass::getPlayerLevel() { CallFunction(Number, getPlayerLevel()); };
 Local<Value> PlayerClass::getSelectedItemSlot() { CallFunction(Number, getSelectedItemSlot()); };
-Local<Value> PlayerClass::getServerId() { CallFunction(String, getServerId()); }; // TODO: Reference
+// Local<Value> PlayerClass::getServerId() { CallFunction(String, getServerId()); }; // TODO: Reference
 Local<Value> PlayerClass::getSleepRotation() { CallFunction(Number, getSleepRotation()); };
-Local<Value> PlayerClass::getUsedPotion() { CallFunction(Number, getUsedPotion()); };
-Local<Value> PlayerClass::getXpEarnedAtCurrentLevel() { CallFunction(Number, getXpEarnedAtCurrentLevel()); };
-Local<Value> PlayerClass::getPlayerSessionId(){CallFunction(String, getPlayerSessionId())
-} Local<Value> PlayerClass::getPlatformOnlineId(){CallFunction(String, getPlatformOnlineId())
-} Local<Value> PlayerClass::getXpNeededForNextLevel() {
+// Local<Value> PlayerClass::getUsedPotion() { CallFunction(Number, getUsedPotion()); };
+// Local<Value> PlayerClass::getXpEarnedAtCurrentLevel() { CallFunction(Number, getXpEarnedAtCurrentLevel()); };
+
+// Local<Value> PlayerClass::getPlayerSessionId() {
+//     CallFunction(String, getPlayerSessionId())
+// }
+//
+// Local<Value> PlayerClass::getPlatformOnlineId() {
+//     CallFunction(String, getPlatformOnlineId())
+// }
+
+Local<Value> PlayerClass::getXpNeededForNextLevel() {
     CallFunction(Number, getXpNeededForNextLevel());
 };
 
@@ -302,46 +309,48 @@ Local<Value> PlayerClass::isFireImmune() { CallFunction(Boolean, isFireImmune())
 Local<Value> PlayerClass::isInTrialMode() { CallFunction(Boolean, isInTrialMode()); };
 Local<Value> PlayerClass::isBlocking() { CallFunction(Boolean, isBlocking()); };
 Local<Value> PlayerClass::isSilentObserver() { CallFunction(Boolean, isSilentObserver()); };
-Local<Value> PlayerClass::isEmoting() { CallFunction(Boolean, isEmoting()); };
+// Local<Value> PlayerClass::isEmoting() { CallFunction(Boolean, isEmoting()); };
 Local<Value> PlayerClass::isFlying() { CallFunction(Boolean, isFlying()); };
 Local<Value> PlayerClass::isForcedRespawn() { CallFunction(Boolean, isForcedRespawn()); };
-Local<Value> PlayerClass::isHostingPlayer() { CallFunction(Boolean, isHostingPlayer()); };
-Local<Value> PlayerClass::isHungry() { CallFunction(Boolean, isHungry()); };
-Local<Value> PlayerClass::isHurt() { CallFunction(Boolean, isHurt()); };
+// Local<Value> PlayerClass::isHostingPlayer() { CallFunction(Boolean, isHostingPlayer()); };
+// Local<Value> PlayerClass::isHungry() { CallFunction(Boolean, isHungry()); };
+// Local<Value> PlayerClass::isHurt() { CallFunction(Boolean, isHurt()); };
 Local<Value> PlayerClass::isInRaid() { CallFunction(Boolean, isInRaid()); };
 Local<Value> PlayerClass::isOperator() { CallFunction(Boolean, isOperator()); };
-Local<Value> PlayerClass::isRespawningFromTheEnd() { CallFunction(Boolean, isRespawningFromTheEnd()); };
-Local<Value> PlayerClass::isSleepingLongEnough() { CallFunction(Boolean, isSleepingLongEnough()); };
-Local<Value> PlayerClass::isSpawned() { CallFunction(Boolean, isSpawned()); };
-Local<Value> PlayerClass::isUsingItem() { CallFunction(Boolean, isUsingItem()); };
-Local<Value> PlayerClass::isValidSpawn() { CallFunction(Boolean, isValidSpawn()); };
+// Local<Value> PlayerClass::isRespawningFromTheEnd() { CallFunction(Boolean, isRespawningFromTheEnd()); };
+// Local<Value> PlayerClass::isSleepingLongEnough() { CallFunction(Boolean, isSleepingLongEnough()); };
+// Local<Value> PlayerClass::isSpawned() { CallFunction(Boolean, isSpawned()); };
+// Local<Value> PlayerClass::isUsingItem() { CallFunction(Boolean, isUsingItem()); };
+// Local<Value> PlayerClass::isValidSpawn() { CallFunction(Boolean, isValidSpawn()); };
 
 Local<Value> PlayerClass::canStartSleepInBed() { CallFunction(Boolean, canStartSleepInBed()); };
 Local<Value> PlayerClass::canExistWhenDisallowMob() { CallFunction(Boolean, canExistWhenDisallowMob()); };
 Local<Value> PlayerClass::canFreeze() { CallFunction(Boolean, canFreeze()); };
 Local<Value> PlayerClass::canChangeDimensionsUsingPortal() { CallFunction(Boolean, canChangeDimensionsUsingPortal()); };
+
 Local<Value> PlayerClass::canInteractWithOtherEntitiesInGame() {
     CallFunction(Boolean, canInteractWithOtherEntitiesInGame());
 };
+
 Local<Value> PlayerClass::canObstructSpawningAndBlockPlacement() {
     CallFunction(Boolean, canObstructSpawningAndBlockPlacement());
 };
-Local<Value> PlayerClass::canBeSeenOnMap() { CallFunction(Boolean, canBeSeenOnMap()); };
+// Local<Value> PlayerClass::canBeSeenOnMap() { CallFunction(Boolean, canBeSeenOnMap()); };
 Local<Value> PlayerClass::canJump() { CallFunction(Boolean, canJump()); };
 Local<Value> PlayerClass::canOpenContainerScreen() { CallFunction(Boolean, canOpenContainerScreen()); };
 Local<Value> PlayerClass::canSleep() { CallFunction(Boolean, canSleep()); };
 Local<Value> PlayerClass::canUseOperatorBlocks() { CallFunction(Boolean, canUseOperatorBlocks()); };
 
 Local<Value> PlayerClass::hasDiedBefore() { CallFunction(Boolean, hasDiedBefore()); };
-Local<Value> PlayerClass::hasBedPosition() { CallFunction(Boolean, hasBedPosition()); };
-Local<Value> PlayerClass::hasOpenContainer() { CallFunction(Boolean, hasOpenContainer()); };
+// Local<Value> PlayerClass::hasBedPosition() { CallFunction(Boolean, hasBedPosition()); };
+// Local<Value> PlayerClass::hasOpenContainer() { CallFunction(Boolean, hasOpenContainer()); };
 Local<Value> PlayerClass::hasOwnedChunkSource() { CallFunction(Boolean, hasOwnedChunkSource()); };
-Local<Value> PlayerClass::hasRespawnAnchorPosition() { CallFunction(Boolean, hasRespawnAnchorPosition()); };
+// Local<Value> PlayerClass::hasRespawnAnchorPosition() { CallFunction(Boolean, hasRespawnAnchorPosition()); };
 Local<Value> PlayerClass::hasRespawnPosition() { CallFunction(Boolean, hasRespawnPosition()); };
 
 /* Method */
 
-Local<Value> PlayerClass::disconnect(const Arguments& args) {
+Local<Value> PlayerClass::disconnect(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     try {
@@ -352,7 +361,7 @@ Local<Value> PlayerClass::disconnect(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 };
 
-Local<Value> PlayerClass::sendMessage(const Arguments& args) {
+Local<Value> PlayerClass::sendMessage(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     try {
@@ -363,8 +372,7 @@ Local<Value> PlayerClass::sendMessage(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> PlayerClass::setAbility(const Arguments& args) {
-
+Local<Value> PlayerClass::setAbility(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckArgType(args[1], ValueKind::kBoolean);
@@ -376,37 +384,38 @@ Local<Value> PlayerClass::setAbility(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> PlayerClass::addAndRefresh(const Arguments& args) {
+Local<Value> PlayerClass::addAndRefresh(const Arguments &args) {
     CheckArgsCount(args, 1);
     try {
         if (!mPlayer) return Local<Value>();
         if (IsInstanceOf<ItemStackClass>(args[0])) {
-            auto engine         = EngineScope::currentEngine();
+            auto engine = EngineScope::currentEngine();
             auto itemStackClass = engine->getNativeInstance<ItemStackClass>(args[0]);
             if (!itemStackClass->mItemStack) return Local<Value>();
             return Boolean::newBoolean(mPlayer->addAndRefresh(*itemStackClass->mItemStack));
-        } else PrintWrongArgType();
+        } else
+            PrintWrongArgType();
         return Boolean::newBoolean(false);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> PlayerClass::broadcastPlayerSpawnedMobEvent(const Arguments& args) {
+Local<Value> PlayerClass::broadcastPlayerSpawnedMobEvent(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckArgType(args[1], ValueKind::kNumber);
     try {
         if (!mPlayer) return Local<Value>();
-        mPlayer->broadcastPlayerSpawnedMobEvent(
-            ConvertFromScriptX<ActorType>(args[0]),
-            ConvertFromScriptX<MobSpawnMethod>(args[1])
-        );
+        // mPlayer->broadcastPlayerSpawnedMobEvent(
+        //     ConvertFromScriptX<ActorType>(args[0]),
+        //     ConvertFromScriptX<MobSpawnMethod>(args[1])
+        // );
     }
     Catch;
     return Local<Value>();
 }
 
-Local<Value> PlayerClass::canUseAbility(const Arguments& args) {
+Local<Value> PlayerClass::canUseAbility(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -416,7 +425,7 @@ Local<Value> PlayerClass::canUseAbility(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> PlayerClass::causeFoodExhaustion(const Arguments& args) {
+Local<Value> PlayerClass::causeFoodExhaustion(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -427,7 +436,7 @@ Local<Value> PlayerClass::causeFoodExhaustion(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> PlayerClass::checkBed(const Arguments& args) {
+Local<Value> PlayerClass::checkBed(const Arguments &args) {
     CheckArgsCount(args, 2);
 
     try {
@@ -435,7 +444,7 @@ Local<Value> PlayerClass::checkBed(const Arguments& args) {
         auto engine = EngineScope::currentEngine();
         if (IsInstanceOf<BlockSourceClass>(args[0]) && IsInstanceOf<Vec3Class>(args[1])) {
             auto blockSourceClass = engine->getNativeInstance<BlockSourceClass>(args[0]);
-            auto vec3Class        = engine->getNativeInstance<Vec3Class>(args[1]);
+            auto vec3Class = engine->getNativeInstance<Vec3Class>(args[1]);
             if (blockSourceClass->mBlockSource)
                 return Boolean::newBoolean(mPlayer->checkBed(blockSourceClass->mBlockSource, &vec3Class->mVec3));
             else return Boolean::newBoolean(false);
@@ -445,7 +454,7 @@ Local<Value> PlayerClass::checkBed(const Arguments& args) {
     return Boolean::newBoolean(false);
 }
 
-Local<Value> PlayerClass::checkNeedAutoJump(const Arguments& args) {
+Local<Value> PlayerClass::checkNeedAutoJump(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -458,7 +467,7 @@ Local<Value> PlayerClass::checkNeedAutoJump(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> PlayerClass::checkSpawnBlock(const Arguments& args) {
+Local<Value> PlayerClass::checkSpawnBlock(const Arguments &args) {
     CheckArgsCount(args, 1);
     try {
         if (!mPlayer) return Local<Value>();
@@ -474,16 +483,16 @@ Local<Value> PlayerClass::checkSpawnBlock(const Arguments& args) {
     return Boolean::newBoolean(false);
 }
 
-Local<Value> PlayerClass::clearRespawnPosition(const Arguments& args) {
+Local<Value> PlayerClass::clearRespawnPosition(const Arguments &args) {
     try {
         if (!mPlayer) return Local<Value>();
-        mPlayer->clearRespawnPosition();
+        // mPlayer->clearRespawnPosition();
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> PlayerClass::completeUsingItem(const Arguments& args) {
+Local<Value> PlayerClass::completeUsingItem(const Arguments &args) {
     try {
         if (!mPlayer) return Local<Value>();
         mPlayer->completeUsingItem();
@@ -492,17 +501,18 @@ Local<Value> PlayerClass::completeUsingItem(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> PlayerClass::eat(const Arguments& args) {
+Local<Value> PlayerClass::eat(const Arguments &args) {
     CheckArgsCount(args, 1);
     try {
         if (!mPlayer) return Local<Value>();
         if (args.size() == 1) {
             if (IsInstanceOf<ItemStackClass>(args[0])) {
-                auto engine         = EngineScope::currentEngine();
+                auto engine = EngineScope::currentEngine();
                 auto itemStackClass = engine->getNativeInstance<ItemStackClass>(args[0]);
                 mPlayer->eat(*itemStackClass->mItemStack);
                 return Boolean::newBoolean(true);
-            } else PrintWrongArgType();
+            } else
+                PrintWrongArgType();
             return Boolean::newBoolean(false);
         } else {
             CheckArgType(args[1], ValueKind::kNumber);
@@ -513,15 +523,16 @@ Local<Value> PlayerClass::eat(const Arguments& args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> PlayerClass::equippedArmorItemCanBeMoved(const Arguments& args) {
+Local<Value> PlayerClass::equippedArmorItemCanBeMoved(const Arguments &args) {
     CheckArgsCount(args, 1);
     try {
         if (!mPlayer) return Local<Value>();
         if (IsInstanceOf<ItemStackClass>(args[0])) {
-            auto engine         = EngineScope::currentEngine();
+            auto engine = EngineScope::currentEngine();
             auto itemStackClass = engine->getNativeInstance<ItemStackClass>(args[0]);
             return Boolean::newBoolean(mPlayer->equippedArmorItemCanBeMoved(*itemStackClass->mItemStack));
-        } else PrintWrongArgType();
+        } else
+            PrintWrongArgType();
         return Boolean::newBoolean(false);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -529,7 +540,7 @@ Local<Value> PlayerClass::equippedArmorItemCanBeMoved(const Arguments& args) {
 
 // MCAPI void fireDimensionChangedEvent(::DimensionType fromDimension, ::DimensionType toDimension); // TODO
 
-Local<Value> PlayerClass::forceAllowEating(const Arguments& args) { CallVoidMethod(forceAllowEating()); }
+// Local<Value> PlayerClass::forceAllowEating(const Arguments &args) { CallVoidMethod(forceAllowEating()); }
 
 // MCAPI ::LayeredAbilities const& getAbilities() const;
 Local<Value> PlayerClass::getAbilities() {
@@ -543,7 +554,7 @@ Local<Value> PlayerClass::getAbilities() {
 // MCAPI ::LayeredAbilities& getAbilities(); // TODO : can throw
 
 // MCAPI ::Agent* getAgent() const;
-Local<Value> PlayerClass::getAgent(const Arguments& args) {
+Local<Value> PlayerClass::getAgent(const Arguments &args) {
     try {
         if (!mPlayer) return Local<Value>();
         return AgentClass::newAgent(mPlayer->getAgent());
@@ -563,16 +574,18 @@ Local<Value> PlayerClass::getAgent(const Arguments& args) {
 // TODO
 
 // MCAPI ::Agent* getAgentIfAllowed(bool callerCanAccessOtherAgents, ::ActorUniqueID callerAgentID) const;
-Local<Value> PlayerClass::getAgentIfAllowed(const Arguments& args) {
+Local<Value> PlayerClass::getAgentIfAllowed(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kBoolean);
     try {
         if (!mPlayer) return Local<Value>();
         if (IsInstanceOf<ActorUniqueIDClass>(args[1])) {
-            auto engine             = EngineScope::currentEngine();
+            auto engine = EngineScope::currentEngine();
             auto actorUniqueIDClass = engine->getNativeInstance<ActorUniqueIDClass>(args[1]);
-            return AgentClass::newAgent(mPlayer->getAgentIfAllowed(true, *actorUniqueIDClass->mActorUniqueID));
-        } else PrintWrongArgType();
+            // return AgentClass::newAgent(mPlayer->getAgentIfAllowed(true, *actorUniqueIDClass->mActorUniqueID));
+            return {};
+        } else
+            PrintWrongArgType();
         return Local<Value>();
     }
     Catch;
@@ -581,12 +594,13 @@ Local<Value> PlayerClass::getAgentIfAllowed(const Arguments& args) {
 // MCAPI ::BlockPos const& getBedPosition() const;
 
 // MCAPI ::Vec3 getCapePos(float a);
-Local<Value> PlayerClass::getCapePos(const Arguments& args) {
+Local<Value> PlayerClass::getCapePos(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
         if (!mPlayer) return Local<Value>();
-        return Vec3Class::newVec3Class(mPlayer->getCapePos(args[0].asNumber().toFloat()));
+        // return Vec3Class::newVec3Class(mPlayer->getCapePos(args[0].asNumber().toFloat()));
+        return {};
     }
     Catch;
 }
@@ -598,10 +612,10 @@ Local<Value> PlayerClass::getCapePos(const Arguments& args) {
 // MCAPI ::gsl::not_null<::StackRefResult<::IContainerRegistryTracker>> getContainerRegistryTracker() const;
 
 // MCAPI ::ItemStack const& getCurrentActiveShield() const;
-Local<Value> PlayerClass::getCurrentActiveShield(const Arguments& args) {
+Local<Value> PlayerClass::getCurrentActiveShield(const Arguments &args) {
     try {
         if (!mPlayer) return Local<Value>();
-        return ItemStackClass::newItemStack(const_cast<ItemStack*>(&mPlayer->getCurrentActiveShield()));
+        return ItemStackClass::newItemStack(const_cast<ItemStack *>(&mPlayer->getCurrentActiveShield()));
     }
     Catch;
 }
@@ -616,25 +630,26 @@ Local<Value> PlayerClass::getCurrentActiveShield(const Arguments& args) {
 // MCAPI ::BlockPos const& getExpectedSpawnPosition() const;
 
 // MCAPI ::GameMode& getGameMode() const;
-Local<Value> PlayerClass::getGameMode(const Arguments& args) {
+Local<Value> PlayerClass::getGameMode(const Arguments &args) {
     try {
         if (!mPlayer) return Local<Value>();
-        return GameModeClass::newGameMode(&mPlayer->getGameMode());
+        return GameModeClass::newGameMode(mPlayer->mGameMode.get());
     }
     Catch;
 }
 
 // MCAPI ::Container& getInventory();
-Local<Value> PlayerClass::getInventory(const Arguments& args) {
+Local<Value> PlayerClass::getInventory(const Arguments &args) {
     try {
         if (!mPlayer) return Local<Value>();
-        return ContainerClass::newContainer(&mPlayer->getInventory());
+        // return ContainerClass::newContainer(&mPlayer->getInventory());
+        return {};
     }
     Catch;
 }
 
 // Cannot use getItemCooldownLeft(HashedString) because HashedString not implemented
-Local<Value> PlayerClass::getItemCooldownLeft(const Arguments& args) {
+Local<Value> PlayerClass::getItemCooldownLeft(const Arguments &args) {
     CheckArgsCount(args, 1);
     try {
         if (!mPlayer) return Local<Value>();
@@ -644,31 +659,34 @@ Local<Value> PlayerClass::getItemCooldownLeft(const Arguments& args) {
         //     return Number::newNumber(mPlayer->getItemCooldownLeft(*HashedStringClass->mHashString));
         // } else {
         CheckArgType(args[0], ValueKind::kNumber);
-        return Number::newNumber(mPlayer->getItemCooldownLeft(args[0].asNumber().toInt64()));
+        // return Number::newNumber(mPlayer->getItemCooldownLeft(args[0].asNumber().toInt64()));
         // }
+        return {};
     }
     Catch;
 }
 
 // MCAPI ::ItemStack const& getItemInUse() const;
-Local<Value> PlayerClass::getItemInUse(const Arguments& args) {
+Local<Value> PlayerClass::getItemInUse(const Arguments &args) {
     try {
         if (!mPlayer) return Local<Value>();
-        return ItemStackClass::newItemStack(const_cast<ItemStack*>(&mPlayer->getItemInUse()));
+        // return ItemStackClass::newItemStack(const_cast<ItemStack *>(&mPlayer->getItemInUse()));
+        return {};
     }
     Catch;
 }
 
 // MCAPI ::std::string getItemInteractText(::Item const& item) const;
-Local<Value> PlayerClass::getItemInteractText(const Arguments& args) {
+Local<Value> PlayerClass::getItemInteractText(const Arguments &args) {
     CheckArgsCount(args, 1);
     try {
         if (!mPlayer) return Local<Value>();
         if (IsInstanceOf<ItemClass>(args[0])) {
-            auto engine    = EngineScope::currentEngine();
+            auto engine = EngineScope::currentEngine();
             auto itemClass = engine->getNativeInstance<ItemClass>(args[0]);
             return String::newString(mPlayer->getItemInteractText(*itemClass->mItem));
-        } else PrintWrongArgType();
+        } else
+            PrintWrongArgType();
         return Local<Value>();
     }
     Catch;
@@ -690,10 +708,10 @@ Local<Value> PlayerClass::getItemInteractText(const Arguments& args) {
 // MCAPI ::BlockPos const& getRespawnAnchorPosition() const;
 
 // MCAPI ::ItemStack const& getSelectedItem() const;
-Local<Value> PlayerClass::getSelectedItem(const Arguments& args) {
+Local<Value> PlayerClass::getSelectedItem(const Arguments &args) {
     try {
         if (!mPlayer) return Local<Value>();
-        return ItemStackClass::newItemStack(const_cast<ItemStack*>(&mPlayer->getSelectedItem()));
+        return ItemStackClass::newItemStack(const_cast<ItemStack *>(&mPlayer->getSelectedItem()));
     }
     Catch;
 }
@@ -710,28 +728,29 @@ Local<Value> PlayerClass::getSelectedItem(const Arguments& args) {
 // MCAPI ::PlayerInventory& getSupplies();
 
 // MCAPI ::std::vector<::ActorUniqueID> const& getTrackedBosses();
-Local<Value> PlayerClass::getTrackedBosses(const Arguments& args) {
+Local<Value> PlayerClass::getTrackedBosses(const Arguments &args) {
     try {
         if (!mPlayer) return Local<Value>();
         auto engine = EngineScope::currentEngine();
-        auto array  = Array::newArray();
-        for (auto& boss : mPlayer->getTrackedBosses()) {
-            array.add(ActorUniqueIDClass::newActorUniqueID((ActorUniqueID*)&boss));
-        }
+        auto array = Array::newArray();
+        // for (auto &boss: mPlayer->getTrackedBosses()) {
+        //     array.add(ActorUniqueIDClass::newActorUniqueID((ActorUniqueID *) &boss));
+        // }
         return array;
     }
     Catch;
 }
 
-Local<Value> PlayerClass::getXpNeededForLevelRange(const Arguments& args) {
+Local<Value> PlayerClass::getXpNeededForLevelRange(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckArgType(args[1], ValueKind::kNumber);
     try {
         if (!mPlayer) return Local<Value>();
-        return Number::newNumber(
-            mPlayer->getXpNeededForLevelRange(args[0].asNumber().toInt32(), args[1].asNumber().toInt32())
-        );
+        // return Number::newNumber(
+        // mPlayer->getXpNeededForLevelRange(args[0].asNumber().toInt32(), args[1].asNumber().toInt32())
+        // );
+        return {};
     }
     Catch;
 }
@@ -741,13 +760,13 @@ Local<Value> PlayerClass::getXpNeededForLevelRange(const Arguments& args) {
 // MCAPI bool hasResource(::ItemDescriptor const& resource);
 
 // MCAPI bool interact(::Actor& actor, ::Vec3 const& location);
-Local<Value> PlayerClass::interact(const Arguments& args) {
+Local<Value> PlayerClass::interact(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kObject);
     try {
         if (!mPlayer) return Local<Value>();
         auto engine = EngineScope::currentEngine();
-        auto actor  = engine->getNativeInstance<ActorClass>(args[0]);
+        auto actor = engine->getNativeInstance<ActorClass>(args[0]);
         if (actor->mActor) return Boolean::newBoolean(mPlayer->interact(*actor->mActor, mPlayer->getPosition()));
         else return Boolean::newBoolean(false);
     }
@@ -757,13 +776,13 @@ Local<Value> PlayerClass::interact(const Arguments& args) {
 // MCAPI void
 // inventoryChanged(::Container&, int slot, ::ItemStack const& oldItem, ::ItemStack const& newItem, bool
 // forceBalanced);
-Local<Value> PlayerClass::inventoryChanged(const Arguments& args) {
+Local<Value> PlayerClass::inventoryChanged(const Arguments &args) {
     CheckArgsCount(args, 5);
     CheckArgType(args[1], ValueKind::kNumber);
     CheckArgType(args[4], ValueKind::kBoolean);
     try {
         if (!mPlayer) return Local<Value>();
-        auto engine    = EngineScope::currentEngine();
+        auto engine = EngineScope::currentEngine();
         auto container = engine->getNativeInstance<ContainerClass>(args[0]);
         if (container->mContainer) {
             mPlayer->inventoryChanged(
@@ -785,10 +804,10 @@ Local<Value> PlayerClass::inventoryChanged(const Arguments& args) {
 
 // MCAPI bool isItemOnCooldown(::HashedString const& type) const;
 
-Local<Value> PlayerClass::passengerCheckMovementStats(const Arguments& args) {
+Local<Value> PlayerClass::passengerCheckMovementStats(const Arguments &args) {
     try {
         if (!mPlayer) return Local<Value>();
-        mPlayer->passengerCheckMovementStats();
+        // mPlayer->passengerCheckMovementStats();
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -813,13 +832,13 @@ Local<Value> PlayerClass::passengerCheckMovementStats(const Arguments& args) {
 Local<Value> PlayerClass::recheckSpawnPosition() { CallVoidMethod(recheckSpawnPosition()); }
 
 // MCAPI void   registerTrackedBoss(::ActorUniqueID mob);
-Local<Value> PlayerClass::registerTrackedBoss(const Arguments& args) {
+Local<Value> PlayerClass::registerTrackedBoss(const Arguments &args) {
     CheckArgsCount(args, 1);
     try {
         if (!mPlayer) return Local<Value>();
         auto engine = EngineScope::currentEngine();
-        auto actor  = engine->getNativeInstance<ActorClass>(args[0]);
-        if (actor->mActor) mPlayer->registerTrackedBoss(actor->mActor->getOrCreateUniqueID());
+        auto actor = engine->getNativeInstance<ActorClass>(args[0]);
+        // if (actor->mActor) mPlayer->registerTrackedBoss(actor->mActor->getOrCreateUniqueID());
     }
     Catch;
     return Local<Value>();
@@ -829,34 +848,34 @@ Local<Value> PlayerClass::registerTrackedBoss(const Arguments& args) {
 Local<Value> PlayerClass::releaseUsingItem() { CallVoidMethod(releaseUsingItem()); }
 
 // MCAPI void resendAllChunks();
-Local<Value> PlayerClass::resendAllChunks() { CallVoidMethod(resendAllChunks()); }
+// Local<Value> PlayerClass::resendAllChunks() { CallVoidMethod(resendAllChunks()); }
 
 // MCAPI void resetPlayerLevel();
 Local<Value> PlayerClass::resetPlayerLevel() { CallVoidMethod(resetPlayerLevel()); }
 
 // MCAPI void resetPublisherInitialSpawn();
-Local<Value> PlayerClass::resetPublisherInitialSpawn() { CallVoidMethod(resetPublisherInitialSpawn()); }
+// Local<Value> PlayerClass::resetPublisherInitialSpawn() { CallVoidMethod(resetPublisherInitialSpawn()); }
 
 // MCAPI void resetToDefaultGameMode();
-Local<Value> PlayerClass::resetToDefaultGameMode() { CallVoidMethod(resetToDefaultGameMode()); }
+// Local<Value> PlayerClass::resetToDefaultGameMode() { CallVoidMethod(resetToDefaultGameMode()); }
 
 // MCAPI void saveLastDeathLocation(::CompoundTag& tag) const;
 
 // MCAPI void sendEventPacket(::LegacyTelemetryEventPacket& packet) const;
 
 // MCAPI void sendPlayerTeleported();
-Local<Value> PlayerClass::sendPlayerTeleported() { CallVoidMethod(sendPlayerTeleported()); }
+// Local<Value> PlayerClass::sendPlayerTeleported() { CallVoidMethod(sendPlayerTeleported()); }
 
 // MCAPI void sendSpawnExperienceOrbPacketToServer(::Vec3 const& pos, int count);
 
 // MCAPI void   setAgent(::Agent* agent);
-Local<Value> PlayerClass::setAgent(const Arguments& args) {
+Local<Value> PlayerClass::setAgent(const Arguments &args) {
     CheckArgsCount(args, 1);
     try {
         if (!mPlayer) return Local<Value>();
         auto engine = EngineScope::currentEngine();
-        auto agent  = engine->getNativeInstance<AgentClass>(args[0]);
-        if (agent->mAgent) mPlayer->setAgent(agent->mAgent);
+        auto agent = engine->getNativeInstance<AgentClass>(args[0]);
+        // if (agent->mAgent) mPlayer->setAgent(agent->mAgent);
 
         return Boolean::newBoolean(true);
     }
@@ -866,24 +885,24 @@ Local<Value> PlayerClass::setAgent(const Arguments& args) {
 // MCAPI void setBedRespawnPosition(::BlockPos const& bedPosition);
 
 // MCAPI void setBlockRespawnUntilClientMessage(bool val);
-Local<Value> PlayerClass::setBlockRespawnUntilClientMessage(const Arguments& args) {
+Local<Value> PlayerClass::setBlockRespawnUntilClientMessage(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kBoolean);
     try {
         if (!mPlayer) return Local<Value>();
-        mPlayer->setBlockRespawnUntilClientMessage(args[0].asBoolean().value());
+        // mPlayer->setBlockRespawnUntilClientMessage(args[0].asBoolean().value());
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
 // MCAPI void setChunkRadius(uint chunkRadius);
-Local<Value> PlayerClass::setChunkRadius(const Arguments& args) {
+Local<Value> PlayerClass::setChunkRadius(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
         if (!mPlayer) return Local<Value>();
-        mPlayer->setChunkRadius(args[0].asNumber().toInt32());
+        // mPlayer->setChunkRadius(args[0].asNumber().toInt32());
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -892,16 +911,17 @@ Local<Value> PlayerClass::setChunkRadius(const Arguments& args) {
 // MCAPI void setContainerManagerModel(::std::shared_ptr<::ContainerManagerModel> manager);
 
 // MCAPI void setCursorSelectedItem(::ItemStack const& item);
-Local<Value> PlayerClass::setCursorSelectedItem(const Arguments& args) {
+Local<Value> PlayerClass::setCursorSelectedItem(const Arguments &args) {
     CheckArgsCount(args, 1);
     try {
         if (!mPlayer) return Local<Value>();
         if (IsInstanceOf<ItemStackClass>(args[0])) {
-            auto engine         = EngineScope::currentEngine();
+            auto engine = EngineScope::currentEngine();
             auto itemStackClass = engine->getNativeInstance<ItemStackClass>(args[0]);
-            mPlayer->setCursorSelectedItem(*itemStackClass->mItemStack);
+            // mPlayer->setCursorSelectedItem(*itemStackClass->mItemStack);
             return Boolean::newBoolean(true);
-        } else PrintWrongArgType();
+        } else
+            PrintWrongArgType();
         return Boolean::newBoolean(false);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -910,44 +930,48 @@ Local<Value> PlayerClass::setCursorSelectedItem(const Arguments& args) {
 // MCAPI void setCursorSelectedItemGroup(::ItemGroup const& itemGroup);
 
 // MCAPI void setEmotingStatus(uint emoteTicks);
-Local<Value> PlayerClass::setEmotingStatus(const Arguments& args) {
+Local<Value> PlayerClass::setEmotingStatus(const Arguments &args) {
     CheckArgsCount(args, 1);
-    CheckArgType(args[0], ValueKind::kNumber) try {
+    CheckArgType(args[0], ValueKind::kNumber)
+    try {
         if (!mPlayer) return Local<Value>();
-        mPlayer->setEmotingStatus(args[0].asNumber().toInt32());
+        // mPlayer->setEmotingStatus(args[0].asNumber().toInt32());
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
 // MCAPI void setEnchantmentSeed(int newSeed);
-Local<Value> PlayerClass::setEnchantmentSeed(const Arguments& args) {
+Local<Value> PlayerClass::setEnchantmentSeed(const Arguments &args) {
     CheckArgsCount(args, 1);
-    CheckArgType(args[0], ValueKind::kNumber) try {
+    CheckArgType(args[0], ValueKind::kNumber)
+    try {
         if (!mPlayer) return Local<Value>();
-        mPlayer->setEnchantmentSeed(args[0].asNumber().toInt32());
+        // mPlayer->setEnchantmentSeed(args[0].asNumber().toInt32());
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
 // MCAPI void setHasDied(bool hasDied);
-Local<Value> PlayerClass::setHasDied(const Arguments& args) {
+Local<Value> PlayerClass::setHasDied(const Arguments &args) {
     CheckArgsCount(args, 1);
-    CheckArgType(args[0], ValueKind::kBoolean) try {
+    CheckArgType(args[0], ValueKind::kBoolean)
+    try {
         if (!mPlayer) return Local<Value>();
         mPlayer->setHasDied(args[0].asBoolean().value());
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
+
 // MCAPI void setHasSeenCredits(bool value);
-Local<Value> PlayerClass::setHasSeenCredits(const Arguments& args) {
+Local<Value> PlayerClass::setHasSeenCredits(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kBoolean);
     try {
         if (!mPlayer) return Local<Value>();
-        mPlayer->setHasSeenCredits(args[0].asBoolean().value());
+        // mPlayer->setHasSeenCredits(args[0].asBoolean().value());
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -960,19 +984,19 @@ Local<Value> PlayerClass::setHasSeenCredits(const Arguments& args) {
 // MCAPI void setLastDeathPos(::BlockPos pos);
 
 // MCAPI void setMapIndex(int mapIndex);
-Local<Value> PlayerClass::setMapIndex(const Arguments& args) {
+Local<Value> PlayerClass::setMapIndex(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
         if (!mPlayer) return Local<Value>();
-        mPlayer->setMapIndex(args[0].asNumber().toInt32());
+        // mPlayer->setMapIndex(args[0].asNumber().toInt32());
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
 // MCAPI void setName(::std::string const& newName);
-Local<Value> PlayerClass::setName(const Arguments& args) {
+Local<Value> PlayerClass::setName(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     try {
@@ -986,7 +1010,7 @@ Local<Value> PlayerClass::setName(const Arguments& args) {
 // MCAPI void setPermissions(::CommandPermissionLevel permissions);
 
 // MCAPI void setPlatformOnlineId(::std::string const& platformOnlineId);
-Local<Value> PlayerClass::setPlatformOnlineId(const Arguments& args) {
+Local<Value> PlayerClass::setPlatformOnlineId(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     try {
@@ -996,13 +1020,14 @@ Local<Value> PlayerClass::setPlatformOnlineId(const Arguments& args) {
     }
     CatchReturn(Boolean::newBoolean(false));
 }
+
 // MCAPI void setPlayerIndex(int index);
-Local<Value> PlayerClass::setPlayerIndex(const Arguments& args) {
+Local<Value> PlayerClass::setPlayerIndex(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
         if (!mPlayer) return Local<Value>();
-        mPlayer->setPlayerIndex(args[0].asNumber().toInt32());
+        // mPlayer->setPlayerIndex(args[0].asNumber().toInt32());
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1013,37 +1038,39 @@ Local<Value> PlayerClass::setPlayerIndex(const Arguments& args) {
 // MCAPI void setRespawnPosition(::BlockPos const& inRespawnPosition, ::DimensionType dimension);
 
 // MCAPI void setRespawnPositionCandidate();
-Local<Value> PlayerClass::setRespawnPositionCandidate(){CallVoidMethod(setRespawnPositionCandidate())}
+Local<Value> PlayerClass::setRespawnPositionCandidate() { CallVoidMethod(setRespawnPositionCandidate()) }
 
 
 // MCAPI void setRespawnReady(::Vec3 const& respawnPosition);
-Local<Value> PlayerClass::setRespawnReady(const Arguments& args) {
+Local<Value> PlayerClass::setRespawnReady(const Arguments &args) {
     CheckArgsCount(args, 1);
     try {
         if (!mPlayer) return Local<Value>();
         if (IsInstanceOf<Vec3Class>(args[0])) {
             auto engine = EngineScope::currentEngine();
-            auto vec3   = engine->getNativeInstance<Vec3Class>(args[0]);
+            auto vec3 = engine->getNativeInstance<Vec3Class>(args[0]);
 
-            mPlayer->setRespawnReady(vec3->mVec3);
+            // mPlayer->setRespawnReady(vec3->mVec3);
             return Boolean::newBoolean(true);
-        } else PrintWrongArgType();
+        } else
+            PrintWrongArgType();
         return Boolean::newBoolean(false);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
 // MCAPI void setSelectedItem(::ItemStack const& item);
-Local<Value> PlayerClass::setSelectedItem(const Arguments& args) {
+Local<Value> PlayerClass::setSelectedItem(const Arguments &args) {
     CheckArgsCount(args, 1);
     try {
         if (!mPlayer) return Local<Value>();
         if (IsInstanceOf<ItemStackClass>(args[0])) {
-            auto engine         = EngineScope::currentEngine();
+            auto engine = EngineScope::currentEngine();
             auto itemStackClass = engine->getNativeInstance<ItemStackClass>(args[0]);
             mPlayer->setSelectedItem(*itemStackClass->mItemStack);
             return Boolean::newBoolean(true);
-        } else PrintWrongArgType();
+        } else
+            PrintWrongArgType();
         return Boolean::newBoolean(false);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1065,41 +1092,42 @@ Local<Value> PlayerClass::setSelectedItem(const Arguments& args) {
 // MCAPI bool setSpawnBlockRespawnPosition(::BlockPos const& spawnBlockPosition, ::DimensionType dimension);
 
 // MCAPI void setUsedPotion(bool used);
-Local<Value> PlayerClass::setUsedPotion(const Arguments& args) {
+Local<Value> PlayerClass::setUsedPotion(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kBoolean);
     try {
         if (!mPlayer) return Local<Value>();
-        mPlayer->setUsedPotion(args[0].asBoolean().value());
+        // mPlayer->setUsedPotion(args[0].asBoolean().value());
         return Boolean::newBoolean(true);
     }
     CatchReturn(Boolean::newBoolean(false));
 }
 
 // MCAPI bool shouldShowCredits() const;
-Local<Value> PlayerClass::shouldShowCredits() { CallVoidMethod(shouldShowCredits()); }
+// Local<Value> PlayerClass::shouldShowCredits() { CallVoidMethod(shouldShowCredits()); }
 
 // MCAPI void startCooldown(::Item const* item, bool updateClient);
 // MCAPI void startCooldown(::HashedString const& type, int tickDuration, bool updateClient);
 
 // MCAPI void startDestroying();
-Local<Value> PlayerClass::startDestroying() { CallVoidMethod(startDestroying()); }
+// Local<Value> PlayerClass::startDestroying() { CallVoidMethod(startDestroying()); }
 
 // MCAPI void
 // startItemUseOn(uchar face, ::BlockPos const& blockPos, ::BlockPos const& buildBlockPos, ::ItemStack const& item);
 
 // MCAPI void startUsingItem(::ItemStack const& instance, int duration);
-Local<Value> PlayerClass::startUsingItem(const Arguments& args) {
+Local<Value> PlayerClass::startUsingItem(const Arguments &args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[1], ValueKind::kNumber);
     try {
         if (!mPlayer) return Local<Value>();
         if (IsInstanceOf<ItemStackClass>(args[0])) {
-            auto engine         = EngineScope::currentEngine();
+            auto engine = EngineScope::currentEngine();
             auto itemStackClass = engine->getNativeInstance<ItemStackClass>(args[0]);
             mPlayer->startUsingItem(*itemStackClass->mItemStack, args[1].asNumber().toInt32());
             return Boolean::newBoolean(true);
-        } else PrintWrongArgType();
+        } else
+            PrintWrongArgType();
         return Boolean::newBoolean(false);
     }
     CatchReturn(Boolean::newBoolean(false));
@@ -1107,7 +1135,7 @@ Local<Value> PlayerClass::startUsingItem(const Arguments& args) {
 
 
 // MCAPI void stopDestroying();
-Local<Value> PlayerClass::stopDestroying() { CallVoidMethod(stopDestroying()); }
+// Local<Value> PlayerClass::stopDestroying() { CallVoidMethod(stopDestroying()); }
 
 // MCAPI void stopGliding();
 Local<Value> PlayerClass::stopGliding() { CallVoidMethod(stopGliding()); }
@@ -1123,7 +1151,7 @@ Local<Value> PlayerClass::stopUsingItem() { CallVoidMethod(stopUsingItem()); }
 Local<Value> PlayerClass::tickArmor() { CallVoidMethod(tickArmor()); }
 
 // MCAPI void tryDisableShield();
-Local<Value> PlayerClass::tryDisableShield() { CallVoidMethod(tryDisableShield()); }
+// Local<Value> PlayerClass::tryDisableShield() { CallVoidMethod(tryDisableShield()); }
 
 // MCAPI bool tryStartGliding();
 Local<Value> PlayerClass::tryStartGliding() { CallVoidMethod(tryStartGliding()); }
@@ -1133,7 +1161,7 @@ Local<Value> PlayerClass::tryStartGliding() { CallVoidMethod(tryStartGliding());
 // MCAPI void unRegisterTrackedBoss(::ActorUniqueID mob);
 
 // MCAPI void updateBlockSourceTick();
-Local<Value> PlayerClass::updateBlockSourceTick() { CallVoidMethod(updateBlockSourceTick()); }
+// Local<Value> PlayerClass::updateBlockSourceTick() { CallVoidMethod(updateBlockSourceTick()); }
 
 // MCAPI void updateInventoryTransactions();
 Local<Value> PlayerClass::updateInventoryTransactions() { CallVoidMethod(updateInventoryTransactions()); }
@@ -1141,7 +1169,7 @@ Local<Value> PlayerClass::updateInventoryTransactions() { CallVoidMethod(updateI
 // MCAPI void updateSkin(::SerializedSkin const& skin, int clientSubID);
 
 // MCAPI void updateTouch();
-Local<Value> PlayerClass::updateTouch() { CallVoidMethod(updateTouch()); }
+// Local<Value> PlayerClass::updateTouch() { CallVoidMethod(updateTouch()); }
 
 // MCAPI void updateTrackedBosses();
 Local<Value> PlayerClass::updateTrackedBosses() { CallVoidMethod(updateTrackedBosses()); }

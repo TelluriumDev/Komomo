@@ -2,6 +2,7 @@
 
 #include "Utils/Using.h"
 
+
 #include <ll/api/reflection/Reflection.h>
 
 #include <fmt/format.h>
@@ -14,14 +15,13 @@
 
 namespace Komomo {
     template<typename T>
-    constexpr bool IsReflectable = std::is_class_v<T> &&                  // 只处理类
-                                   std::is_aggregate_v<T> &&              // 可聚合初始化
-                                   !std::is_array_v<T> &&                 // 不是数组
-                                   !requires(T &a) { a.operator[]; } &&   // 没有重载 operator[]
+    constexpr bool IsReflectable = std::is_class_v<T> && // 只处理类
+                                   std::is_aggregate_v<T> && // 可聚合初始化
+                                   !std::is_array_v<T> && // 不是数组
+                                   !requires(T &a) { a.operator[]; } && // 没有重载 operator[]
                                    !requires { typename T::value_type; }; // 不是容器类型
 
     namespace detail {
-
         template<typename T, typename Enable = void>
         struct Converter {
             static Local<Value> toScript() {
@@ -34,7 +34,6 @@ namespace Komomo {
                 return T{};
             }
         };
-
 
         template<size_t N>
         struct Converter<char[N]> {
@@ -72,14 +71,14 @@ namespace Komomo {
         };
 
         template<typename T>
-        struct Converter<T, std::enable_if_t<std::is_enum_v<T>>> {
+        struct Converter<T, std::enable_if_t<std::is_enum_v<T> > > {
             static Local<Value> toScript(T const &val) {
                 return Number::newNumber(static_cast<std::underlying_type_t<T>>(val));
             }
 
             static T toCpp(Local<Value> const &val) {
                 auto enumValue = magic_enum::enum_cast<T>(
-                        static_cast<std::underlying_type_t<T>>(val.asNumber().toInt64()));
+                    static_cast<std::underlying_type_t<T>>(val.asNumber().toInt64()));
                 if (!enumValue.has_value()) {
                     throw script::Exception("Invalid enum value: " + std::to_string(val.asNumber().toInt64()));
                 }
@@ -102,9 +101,9 @@ namespace Komomo {
         };
 
 
-// pfr reflection
+        // pfr reflection
         template<typename T>
-        struct Converter<T, std::enable_if_t<IsReflectable<T>>> {
+        struct Converter<T, std::enable_if_t<IsReflectable<T> > > {
             static Local<Value> toScript(T const &value) {
                 auto obj = Object::newObject();
                 boost::pfr::for_each_field(value, [&](auto const &field, std::size_t index) {
@@ -113,10 +112,10 @@ namespace Komomo {
                         obj.set(boost::pfr::names_as_array<T>()[index], Converter<FieldType>::toScript(field));
                     } catch (const script::Exception &e) {
                         throw script::Exception(fmt::format(
-                                "Failed to convert field '{}' in type '{}': {}",
-                                boost::pfr::names_as_array<T>()[index],
-                                typeid(T).name(),
-                                e.what()
+                            "Failed to convert field '{}' in type '{}': {}",
+                            boost::pfr::names_as_array<T>()[index],
+                            typeid(T).name(),
+                            e.what()
                         ));
                     }
                 });
@@ -131,61 +130,54 @@ namespace Komomo {
                         field = Converter<FieldType>::toCpp(obj.get(boost::pfr::names_as_array<T>()[index]));
                     } catch (const script::Exception &e) {
                         throw script::Exception(fmt::format(
-                                "Failed to convert field '{}' in type '{}': {}",
-                                boost::pfr::names_as_array<T>()[index],
-                                typeid(T).name(),
-                                e.what()
+                            "Failed to convert field '{}' in type '{}': {}",
+                            boost::pfr::names_as_array<T>()[index],
+                            typeid(T).name(),
+                            e.what()
                         ));
                     }
                 });
                 return res;
             }
         };
-
-
     } // namespace detail
 
 
     namespace internal {
-
-// c++ -> scriptx
+        // c++ -> scriptx
         template<typename T, typename = void>
         struct is_convertible_to_script : std::false_type {
         };
 
         template<typename T>
         struct is_convertible_to_script<
-                T,
-                std::void_t<
-                        decltype(detail::Converter<std::remove_cvref_t<T>>::toScript(std::declval<const T &>())),
-                        decltype(detail::Converter<std::remove_cvref_t<T>>::toScript(std::declval<T &>()))>>
+                    T,
+                    std::void_t<
+                        decltype(detail::Converter<std::remove_cvref_t<T> >::toScript(std::declval<const T &>())),
+                        decltype(detail::Converter<std::remove_cvref_t<T> >::toScript(std::declval<T &>()))> >
                 : std::true_type {
         };
 
         template<typename T>
         constexpr bool is_convertible_to_script_v = is_convertible_to_script<T>::value;
 
-// scriptx -> c++
+        // scriptx -> c++
         template<typename T, typename = void>
         struct is_convertible_from_script : std::false_type {
         };
 
         template<typename T>
         struct is_convertible_from_script<
-                T,
-                std::void_t<decltype(detail::Converter<T>::toCpp(std::declval<const Local<Value> &>()))>>
+                    T,
+                    std::void_t<decltype(detail::Converter<T>::toCpp(std::declval<const Local<Value> &>()))> >
                 : std::true_type {
         };
 
         template<typename T>
         constexpr bool is_convertible_to_cpp_v = is_convertible_from_script<T>::value;
 
-// c++ <-> scriptx
+        // c++ <-> scriptx
         template<typename T>
         constexpr bool is_convertible_v = is_convertible_to_script_v<T> && is_convertible_to_cpp_v<T>;
-
-
     } // namespace internal
-
-
 } // namespace Komomo

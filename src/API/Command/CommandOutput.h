@@ -10,19 +10,18 @@ class CommandOutput;
 
 class CommandOutputClass : public ScriptClass {
 private:
-    CommandOutput* mCommandOutput;
+    CommandOutput *mCommandOutput;
 
 public:
-    CommandOutputClass(CommandOutput* commandOutput);
+    CommandOutputClass(CommandOutput *commandOutput);
 
 public:
-    static Local<Object> newCommandOutput(CommandOutput* commandOutput);
-
+    static Local<Object> newCommandOutput(CommandOutput *commandOutput);
 
 public: /* Method */
-    Local<Value> success(const Arguments& args);
+    Local<Value> success(const Arguments &args);
 
-    Local<Value> error(const Arguments& args);
+    Local<Value> error(const Arguments &args);
 
     // MCAPI void addMessage(
     //     ::std::string const&                           msgId,
@@ -31,9 +30,9 @@ public: /* Method */
     // ); // TODO: Class
     //  Local<Value> addMessage(const Arguments& args);
 
-    Local<Value> addToResultList(const Arguments& args);
+    Local<Value> addToResultList(const Arguments &args);
 
-    Local<Value> empty();
+    // Local<Value> empty();
 
     // Local<Value> forceOutput(const Arguments& args); // TODO: Class
 
@@ -51,9 +50,9 @@ public: /* Method */
     // ); //TODO: Class
     // Local<Value> load(const Arguments& args);
 
-    Local<Value> setHasPlayerText(const Arguments& args);
+    // Local<Value> setHasPlayerText(const Arguments& args);
 
-    Local<Value> wantsData();
+    // Local<Value> wantsData();
 };
 
 

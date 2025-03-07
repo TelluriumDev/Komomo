@@ -2,18 +2,18 @@
 
 #include "API/APIHelper.h" // IWYU pragma: keep
 
-#include <mc/world/level/IConstBlockSource.h>
+#include <mc/deps/vanilla_components/IConstBlockSource.h>
 
 class IConstBlockSourceClass : public ScriptClass {
 public:
-    IConstBlockSource* mIConstBlockSource;
+    IConstBlockSource *mIConstBlockSource;
 
 public:
-    IConstBlockSourceClass(IConstBlockSource* iConstBlockSource);
+    IConstBlockSourceClass(IConstBlockSource *iConstBlockSource);
 
 public:
     // static IConstBlockSourceClass* create(const Arguments& args); // TODO
-    static Local<Object> newIConstBlockSource(IConstBlockSource* iConstBlockSource);
+    static Local<Object> newIConstBlockSource(IConstBlockSource *iConstBlockSource);
 
 public: /* Member */
 public: /* Method */

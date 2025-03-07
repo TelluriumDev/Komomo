@@ -6,7 +6,7 @@
 
 #include <mc/world/actor/ActionEvent.h>
 #include <mc/world/actor/ActorCategory.h>
-#include <mc/world/actor/ActorDamageCause.h>
+#include <mc/world/actor/ActorDamageSource.h>
 #include <mc/world/actor/ActorDataIDs.h>
 #include <mc/world/actor/ActorDefinitionEventType.h>
 #include <mc/world/actor/ActorDefinitionGroup.h>
@@ -16,7 +16,7 @@
 #include <mc/world/actor/ActorFlags.h>
 #include <mc/world/actor/ActorInitializationMethod.h>
 #include <mc/world/actor/ActorLinkType.h>
-#include <mc/world/actor/ActorLocation.h>
+#include <mc/deps/shared_types/legacy/actor/ActorLocation.h>
 #include <mc/world/actor/ActorTargetFilter.h>
 #include <mc/world/actor/ActorTerrainInterlockData.h>
 #include <mc/world/actor/ActorType.h>
@@ -28,8 +28,8 @@
 #include <mc/world/actor/HorseInventoryEnum.h>
 #include <mc/world/actor/KeyOrNameResult.h>
 #include <mc/world/actor/MobSpawnMethod.h>
-#include <mc/world/actor/PaletteColor.h>
-#include <mc/world/actor/ParticleType.h>
+#include <mc/deps/shared_types/legacy/actor/PaletteColor.h>
+#include <mc/comprehensive/ParticleType.h>
 #include <mc/world/actor/RenderContextType.h>
 #include <mc/world/actor/RenderParam.h>
 #include <mc/world/actor/SerializedAbilitiesData.h>
@@ -41,7 +41,7 @@
 #include <mc/world/level/block/actor/BlockActorType.h>
 #include <mc/world/level/block/BlockRenderLayer.h>
 #include <mc/world/level/block/BlockSupportType.h>
-#include <mc/world/level/block/BlockTintType.h>
+// #include <mc/world/level/block/BlockTintType.h>
 #include <mc/world/level/block/BlockProperty.h>
 #include <mc/world/level/material/MaterialType.h>
 
@@ -137,8 +137,8 @@
 #include <mc/server/commands\standard\VolumeAreaCommand.h>
 #include <mc/server/commands\standard\WeatherCommand.h>
 #include <mc/server/commands\standard\locate_command_util\Biomes.h>
-#include <mc/server/commands\test\TestAssetCommandType.h>
-#include <mc/server/commands\test\TestCommandType.h>
+// #include <mc/server/commands\test\TestAssetCommandType.h>
+// #include <mc/server/commands\test\TestCommandType.h>
 
 #include <mc\common\CompactionStatus.h>
 #include <mc\common\FacingID.h>
@@ -147,12 +147,12 @@
 #include <mc\common\SubClientId.h>
 #include <mc\common\XforgeGameVersion.h>
 #include <mc\common\editor\WorldType.h>
-#include <mc\common\facing\Axis.h>
-#include <mc\common\facing\Name.h>
-#include <mc\common\facing\Rotation.h>
+#include <mc\legacy\facing\Axis.h>
+#include <mc\legacy\facing\Name.h>
+#include <mc\legacy\facing\Rotation.h>
 #include <mc\common\title_info\TitleId.h>
 
-#include <mc\world\item\ArmorSlot.h>
+// #include <mc\world\item\ArmorSlot.h>
 #include <mc\world\item\BannerPatternItem.h>
 #include <mc\world\item\BucketFillType.h>
 #include <mc\world\item\CameraItemComponentLegacy.h>
@@ -181,7 +181,7 @@
 #include <mc\world\item\PageContent.h>
 #include <mc\world\item\Rarity.h>
 #include <mc\world\item\SaveContext.h>
-#include <mc\world\item\SlotWithDropChance.h>
+// #include <mc\world\item\SlotWithDropChance.h>
 #include <mc\world\item\SmithingTemplateItem.h>
 #include <mc\world\item\SuspiciousStewItem.h>
 #include <mc\world\item\alchemy\Potion.h>

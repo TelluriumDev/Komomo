@@ -1,13 +1,13 @@
 #include "API/Command/Command.h"
 #include "API/Command/CommandContext.h"
 #include "API/Command/CommandOrigin.h"
+#include "API/Command/CommandOutput.h"
 #include "API/Command/MCRESULT.h"
 #include "API/Command/MinecraftCommands.h"
 #include "API/Level/Level.h"
 
-using namespace Komomo;
 
-ClassDefine<CommandClass> commandClassBuilder = defineClass<CommandClass>("Command")
+ClassDefine<CommandClass> CommandClass::commandClassBuilder = defineClass<CommandClass>("Command")
         .constructor(nullptr)
 
         .function("newCommand", &CommandClass::newCommand)
@@ -21,75 +21,12 @@ ClassDefine<CommandClass> commandClassBuilder = defineClass<CommandClass>("Comma
         .instanceFunction("setSoftEnum", &CommandClass::setSoftEnum)
         .instanceFunction("removeSoftEnum", &CommandClass::removeSoftEnum)
         .instanceFunction("overload", &CommandClass::overload)
-
         .build();
 
-std::unordered_map<std::string, std::shared_ptr<CommandData>> commands;
+std::unordered_map<std::string, std::shared_ptr<CommandData> > commands;
 
-CommandClass::CommandClass(std::shared_ptr<CommandData> data) : ScriptClass(ConstructFromCpp < CommandClass > {}) {
+CommandClass::CommandClass(std::shared_ptr<CommandData> data) : ScriptClass(ConstructFromCpp<CommandClass>{}) {
     this->data = data;
-}
-
-Local<Value> CommandClass::convertResult(const ll::command::ParamStorageType &result, const CommandOrigin &origin,
-                                         CommandOutput &output) {
-    using namespace ll::command;
-    if (!result.has_value()) return {};
-    if (result.hold(ParamKind::Kind::Enum)) {
-        return String::newString(std::get<RuntimeEnum>(result.value()).name);
-    } else if (result.hold(ParamKind::Kind::SoftEnum)) {
-        return String::newString(std::get<RuntimeSoftEnum>(result.value()));
-    } else if (result.hold(ParamKind::Kind::BlockName)) {
-        return BlockClass::newBlock(
-                const_cast<Block *>(std::get<CommandBlockName>(result.value()).resolveBlock(0).getBlock())
-        );
-    } else if (result.hold(ParamKind::Kind::Item)) {
-        return ItemStackClass::newItemStack(new ItemStack(std::get<CommandItem>(result.value())
-                                                                  .createInstance(1, 1, output, true)
-                                                                  .value_or(ItemInstance::EMPTY_ITEM())));
-    } else if (result.hold(ParamKind::Kind::Actor)) {
-        auto arr = Array::newArray();
-        for (auto i: std::get<CommandSelector<Actor>>(result.value()).results(origin)) {
-            arr.add(ActorClass::newActor(i));
-        }
-        return arr;
-    } else if (result.hold(ParamKind::Kind::Player)) {
-        auto arr = Array::newArray();
-        for (auto i: std::get<CommandSelector<Player>>(result.value()).results(origin)) {
-            arr.add(PlayerClass::newPlayer(i));
-        }
-        return arr;
-    } else if (result.hold(ParamKind::Kind::BlockPos)) {
-        return BlockPosClass::newBlockPosClass(
-                std::get<CommandPosition>(result.value())
-                        .getBlockPos(CommandVersion::CurrentVersion(), origin, Vec3::ZERO())
-        );
-    } else if (result.hold(ParamKind::Kind::Vec3)) {
-        return Vec3Class::newVec3Class(std::get<CommandPosition>(result.value())
-                                               .getPosition(CommandVersion::CurrentVersion(), origin, Vec3::ZERO()));
-    } else if (result.hold(ParamKind::Kind::Message)) {
-        return String::newString(std::get<CommandMessage>(result.value())
-                                         .generateMessage(origin, CommandVersion::CurrentVersion())
-                                         .mMessage);
-    } else if (result.hold(ParamKind::Kind::RawText)) {
-        return String::newString(std::get<CommandRawText>(result.value()).getText());
-    } else if (result.hold(ParamKind::Kind::JsonValue)) {
-        return String::newString(JsonHelpers::serialize(std::get<Json::Value>(result.value())));
-    } else if (result.hold(ParamKind::Kind::Effect)) {
-        return String::newString(std::get<MobEffect const *>(result.value())->getResourceName());
-    } else if (result.hold(ParamKind::Kind::Command)) {
-        return String::newString(std::get<std::unique_ptr<::Command>>(result.value())->getCommandName());
-    } else if (result.hold(ParamKind::Kind::ActorType)) {
-        return String::newString(std::get<ActorDefinitionIdentifier const *>(result.value())->getCanonicalName());
-    } else if (result.hold(ParamKind::Kind::Bool)) {
-        return Boolean::newBoolean(std::get<bool>(result.value()));
-    } else if (result.hold(ParamKind::Kind::Int)) {
-        return Number::newNumber(std::get<int>(result.value()));
-    } else if (result.hold(ParamKind::Kind::Float)) {
-        return Number::newNumber(std::get<float>(result.value()));
-    } else if (result.hold(ParamKind::Kind::String)) {
-        return String::newString(std::get<std::string>(result.value()));
-    }
-    return {};
 }
 
 ll::command::CommandHandle &CommandClass::getCommandHandle() {
@@ -159,9 +96,9 @@ Local<Value> CommandClass::setCallback(const Arguments &args) {
 }
 
 void CommandClass::onExecute(
-        CommandOrigin const &origin,
-        CommandOutput &output,
-        ll::command::RuntimeCommand const &runtime
+    CommandOrigin const &origin,
+    CommandOutput &output,
+    ll::command::RuntimeCommand const &runtime
 ) {
     auto cmdName = runtime.getCommandName();
     auto data = commands[cmdName];
@@ -175,10 +112,10 @@ void CommandClass::onExecute(
             if (info.type == ll::command::ParamKind::Kind::Enum
                 || info.type == ll::command::ParamKind::Kind::SoftEnum) {
                 auto &param = runtime[info.enumName];
-                args.set(info.name, convertResult(param, origin, output));
+                args.set(info.name, CommandClass::ConvertToScriptX(param, origin, output));
             } else {
                 auto &param = runtime[info.name];
-                args.set(info.name, convertResult(param, origin, output));
+                args.set(info.name, CommandClass::ConvertToScriptX(param, origin, output));
             }
         } catch (std::out_of_range &) {
             continue;
@@ -186,11 +123,11 @@ void CommandClass::onExecute(
     }
     try {
         func.get().call(
-                {},
-                CommandClass::newCommandClass(data),
-                CommandOriginClass::newCommandOrigin(&origin),
-                CommandOutputClass::newCommandOutput(&output),
-                args
+            {},
+            CommandClass::newCommandClass(data),
+            CommandOriginClass::newCommandOrigin(&origin),
+            CommandOutputClass::newCommandOutput(&output),
+            args
         );
     }
     CatchNotReturn;
@@ -294,7 +231,7 @@ Local<Value> CommandClass::addEnum(const Arguments &args) {
 
     if (enumArray.size() == 0 || !enumArray.get(0).isString()) return Local<Value>();
 
-    std::vector<std::pair<std::string, uint64>> enumValues;
+    std::vector<std::pair<std::string, uint64> > enumValues;
     if (enumArray.size() == 0 || !enumArray.get(0).isString()) return Local<Value>();
 
     for (int i = 0; i < enumArray.size(); i++) {
@@ -379,17 +316,17 @@ Local<Value> CommandClass::run(const Arguments &args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     CommandContext context = CommandContext(
-            args[0].asString().toString(),
-            std::make_unique<ServerCommandOrigin>(
-                    "Server",
-                    ll::service::getLevel()->asServer(),
-                    CommandPermissionLevel::Owner,
-                    0
-            ),
-            CommandVersion::CurrentVersion()
+        args[0].asString().toString(),
+        std::make_unique<ServerCommandOrigin>(
+            "Server",
+            ll::service::getLevel()->asServer(),
+            CommandPermissionLevel::Owner,
+            0
+        ),
+        CommandVersion::CurrentVersion()
     );
     try {
-        return Boolean::newBoolean(ll::service::getMinecraft()->getCommands().executeCommand(context, false).mSuccess);
+        return Boolean::newBoolean(ll::service::getMinecraft()->mCommands->executeCommand(context, false).mSuccess);
     }
     CatchNotReturn;
     return Boolean::newBoolean(false);
