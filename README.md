@@ -32,7 +32,8 @@ Komomo 基于 ScriptX 和 NodeJs 实现，支持在 LeviLamina 中运行 JavaScr
 
 ## 开发
 
-目前项目没有任何开发文档，您可以阅读 `lib/dts` 目录下的类型定义文件，了解 Komomo 的 API。
+~~目前项目没有任何开发文档，您可以阅读 `lib/dts` 目录下的类型定义文件，了解 Komomo 的 API。~~
+假的，[Komomo文档（在建）](https://komomo.top)
 
 ## 关于项目
 
@@ -41,7 +42,7 @@ Komomo 基于 ScriptX 和 NodeJs 实现，支持在 LeviLamina 中运行 JavaScr
 目前 LeviLamina 仅支持 Windows 平台，故本插件也仅支持 Windows 平台。
 
 | Backend | Version  | Support | CommonJs | ESM | package manager |
-| :------ | :------- | :------ | :------- | :-- | :-------------- |
+|:--------|:---------|:--------|:---------|:----|:----------------|
 | NodeJs  | v22.12.0 | y       | y        | y   | npm             |
 
 ### 从源码编译
