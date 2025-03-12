@@ -16,11 +16,6 @@ template <typename T>
     }
 }
 
-template <typename T, typename... Args>
-[[nodiscard]] Local<Value> ConvertToScriptX(T const& value, Args&&... args) {
-    return detail::Converter<T>::toScript(value, std::forward<Args>(args)...);
-}
-
 template <typename T>
 [[nodiscard]] T ConvertFromScriptX(Local<Value> const& value) {
     if constexpr (std::is_enum_v<T>) {
