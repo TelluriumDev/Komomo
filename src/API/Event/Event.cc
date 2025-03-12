@@ -2129,959 +2129,959 @@ void EventBusClass::registerCallback() {
         //   [Cancelable] ClientLoginBeforeEvent,
         //   ClientLoginAfterEvent
         // }
-        addCallback(
-            "ClientLoginBeforeEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::ClientLoginBeforeEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::ClientLoginBeforeEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            auto result = func.get().call(
-                                {},
-                                ServerNetworkHandlerClass::newServerNetworkHandler(
-                                    const_cast<ServerNetworkHandler *>(&event.getServerNetworkHandler())
-                                ),
-                                NetworkIdentifierClass::newNetworkIdentifier(
-                                    const_cast<NetworkIdentifier *>(&event.getNetworkIdentifier())
-                                )
-                            );
-                            if (result.isBoolean()) {
-                                if (result.asBoolean().value() == false) event.cancel();
-                            }
-                        }
-                        CatchNotReturn;
-                    },
-                    priority
-                );
-            }
-        );
-        addCallback(
-            "ClientLoginAfterEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::ClientLoginAfterEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::ClientLoginAfterEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            func.get().call(
-                                {},
-                                ServerNetworkHandlerClass::newServerNetworkHandler(
-                                    const_cast<ServerNetworkHandler *>(&event.getServerNetworkHandler())
-                                ),
-                                NetworkIdentifierClass::newNetworkIdentifier(
-                                    const_cast<NetworkIdentifier *>(&event.getNetworkIdentifier())
-                                ),
-                                UUIDClass::newUUID(const_cast<mce::UUID *>(&event.getUuid())),
-                                String::newString(event.getServerAuthXuid()),
-                                String::newString(event.getClientAuthXuid()),
-                                String::newString(event.getRealName()),
-                                String::newString(event.getIpAndPort())
-
-                            );
-                        }
-                        CatchNotReturn;
-                    },
-                    priority
-                );
-            }
-        );
-
-        // RegisterCmdEvent: {
-        //  RegisterCmdBeforeEvent,
-        //  RegisterCmdAfterEvent
-        // }
-        addCallback(
-            "RegisterCmdBeforeEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::RegisterCmdBeforeEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::RegisterCmdBeforeEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            func.get().call(
-                                {},
-                                // TODO: Waiting ila
-                                // CommandRegistryClass::newCommandRegistry(&event.getRegistry()),
-                                String::newString(event.getCommandName()),
-                                String::newString(event.getDescription()),
-                                ConvertToScriptX(event.getRequirement()),
-                                CommandFlagClass::newCommandFlag(&event.getFlag1()),
-                                CommandFlagClass::newCommandFlag(&event.getFlag2())
-                            );
-                        }
-                        CatchNotReturn;
-                    },
-                    priority
-                );
-            }
-        );
-        addCallback(
-            "RegisterCmdAfterEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::RegisterCmdAfterEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::RegisterCmdAfterEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            func.get().call(
-                                {},
-                                // TODO: Waiting ila
-                                // CommandRegistryClass::newCommandRegistry(&event.getRegistry()),
-                                String::newString(event.getCommandName()),
-                                String::newString(event.getDescription()),
-                                ConvertToScriptX(event.getRequirement()),
-                                CommandFlagClass::newCommandFlag(const_cast<CommandFlag *>(&event.getFlag1())),
-                                CommandFlagClass::newCommandFlag(const_cast<CommandFlag *>(&event.getFlag2()))
-                            );
-                        }
-                        CatchNotReturn;
-                    },
-                    priority
-                );
-            }
-        );
-
-        // SendPacketEvent: {
-        //   [Cancelable] SendPacketBeforeEvent,
-        //   SendPacketAfterEvent
-        // }
-        addCallback(
-            "SendPacketBeforeEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::SendPacketBeforeEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::SendPacketBeforeEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            auto result = func.get().call(
-                                {},
-                                LoopbackPacketSenderClass::newLoopbackPacketSender(
-                                    const_cast<LoopbackPacketSender *>(&event.getPacketSender())
-                                ),
-                                PacketClass::newPacket(const_cast<Packet *>(&event.getPacket())),
-                                Boolean::newBoolean(event.getIsBroadcast()),
-                                PlayerClass::newPlayer(&event.getPlayer().get())
-                            );
-                            if (result.isBoolean()) {
-                                if (result.asBoolean().value() == false) event.cancel();
-                            }
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-        addCallback(
-            "SendPacketAfterEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::SendPacketAfterEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::SendPacketAfterEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            func.get().call(
-                                {},
-                                LoopbackPacketSenderClass::newLoopbackPacketSender(
-                                    const_cast<LoopbackPacketSender *>(&event.getPacketSender())
-                                ),
-                                PacketClass::newPacket(const_cast<Packet *>(&event.getPacket())),
-                                Boolean::newBoolean(event.getIsBroadcast()),
-                                PlayerClass::newPlayer(&event.getPlayer().get())
-                            );
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-
-        // ServerPongEvent: {
-        //   [Cancelable] ServerPongBeforeEvent,
-        //   ServerPongAfterEvent
-        // }
-        addCallback(
-            "ServerPongBeforeEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::ServerPongBeforeEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::ServerPongBeforeEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            auto result = func.get().call(
-                                {},
-                                String::newString(event.getMotd()),
-                                Number::newNumber(event.getProtocolVersion()),
-                                String::newString(event.getNetworkVersion()),
-                                Number::newNumber(event.getPlayerCount()),
-                                Number::newNumber(event.getMaxPlayerCount()),
-                                String::newString(event.getGuid()),
-                                String::newString(event.getLevelName()),
-                                ConvertToScriptX(event.getGameMode()),
-                                Number::newNumber(event.getLocalPort()),
-                                Number::newNumber(event.getLocalPortV6())
-                            );
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-        addCallback(
-            "ServerPongAfterEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::ServerPongAfterEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::ServerPongAfterEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            func.get().call(
-                                {},
-                                String::newString(event.getMotd()),
-                                Number::newNumber(event.getProtocolVersion()),
-                                String::newString(event.getNetworkVersion()),
-                                Number::newNumber(event.getPlayerCount()),
-                                Number::newNumber(event.getMaxPlayerCount()),
-                                String::newString(event.getGuid()),
-                                String::newString(event.getLevelName()),
-                                ConvertToScriptX(event.getGameMode()),
-                                Number::newNumber(event.getLocalPort()),
-                                Number::newNumber(event.getLocalPortV6()),
-                                ConvertToScriptX(event.getOther())
-                            );
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-
-        // BlockTickEvent: {
-        //   [Cancelable] BlockTickBeforeEvent,
-        //   BlockTickAfterEvent
-        // }
-        // addCallback(
-        //     "BlockTickBeforeEvent",
-        //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-        //         return EventBus::getInstance().emplaceListener<ila::mc::BlockTickBeforeEvent>(
-        //             [&args,
-        //                 engine{EngineScope::currentEngine()},
-        //                 func{Global<Function>(args[1].asFunction())}](ila::mc::BlockTickBeforeEvent &event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     auto result = func.get().call(
-        //                         {},
-        //                         BlockSourceClass::newBlockSource(&event.blockSource()),
-        //                         BlockPosClass::newBlockPosClass(event.getPos()),
-        //                         RandomClass::newRandom(const_cast<Random *>(&event.getRandom()))
-        //                     );
-        //                     if (result.isBoolean()) {
-        //                         if (result.asBoolean().value() == false) event.cancel();
-        //                     }
-        //                 } catch (...) {
-        //                 }
-        //             },
-        //             priority
-        //         );
-        //     }
-        // );
-        // addCallback(
-        //     "BlockTickAfterEvent",
-        //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-        //         return EventBus::getInstance().emplaceListener<ila::mc::BlockTickAfterEvent>(
-        //             [&args,
-        //                 engine{EngineScope::currentEngine()},
-        //                 func{Global<Function>(args[1].asFunction())}](ila::mc::BlockTickAfterEvent &event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     func.get().call(
-        //                         {},
-        //                         BlockSourceClass::newBlockSource(&event.blockSource()),
-        //                         BlockPosClass::newBlockPosClass(event.getPos()),
-        //                         RandomClass::newRandom(const_cast<Random *>(&event.getRandom()))
-        //                     );
-        //                 } catch (...) {
-        //                 }
-        //             },
-        //             priority
-        //         );
-        //     }
-        // );
-        //
-        // // DragonEggBlockTeleportEvent: {
-        // //   [Cancelable] DragonEggBlockTeleportBeforeEvent,
-        // //   DragonEggBlockTeleportAfterEvent
-        // // }
-        // addCallback(
-        //     "DragonEggBlockTeleportBeforeEvent",
-        //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-        //         return EventBus::getInstance().emplaceListener<ila::mc::DragonEggBlockTeleportBeforeEvent>(
-        //             [&args,
-        //                 engine{EngineScope::currentEngine()},
-        //                 func{Global<Function>(args[1].asFunction())}
-        //             ](ila::mc::DragonEggBlockTeleportBeforeEvent &event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     auto result = func.get().call(
-        //                         {},
-        //                         BlockSourceClass::newBlockSource(&event.blockSource()),
-        //                         BlockPosClass::newBlockPosClass(event.getPos()),
-        //                         RandomClass::newRandom(const_cast<Random *>(&event.getRandom())),
-        //                         BlockPosClass::newBlockPosClass(event.getTargetPos())
-        //                     );
-        //                     if (result.isBoolean()) {
-        //                         if (result.asBoolean().value() == false) event.cancel();
-        //                     }
-        //                 } catch (...) {
-        //                 }
-        //             },
-        //             priority
-        //         );
-        //     }
-        // );
-        // addCallback(
-        //     "DragonEggBlockTeleportAfterEvent",
-        //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-        //         return EventBus::getInstance().emplaceListener<ila::mc::DragonEggBlockTeleportAfterEvent>(
-        //             [&args,
-        //                 engine{EngineScope::currentEngine()},
-        //                 func{Global<Function>(args[1].asFunction())}
-        //             ](ila::mc::DragonEggBlockTeleportAfterEvent &event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     auto pos2 = event.getTargetPos();
-        //                     func.get().call(
-        //                         {},
-        //                         BlockSourceClass::newBlockSource(&event.blockSource()),
-        //                         BlockPosClass::newBlockPosClass(event.getPos()),
-        //                         RandomClass::newRandom(const_cast<Random *>(&event.getRandom())),
-        //                         BlockPosClass::newBlockPosClass(event.getTargetPos())
-        //                     );
-        //                 } catch (...) {
-        //                 }
-        //             },
-        //             priority
-        //         );
-        //     }
-        // );
-
-        // ExplosionEvent: {
-        //   [Cancelable] ExplosionBeforeEvent,
-        //   ExplosionAfterEvent
-        // }
-        addCallback(
-            "ExplosionBeforeEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::ExplosionBeforeEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::ExplosionBeforeEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            auto result = func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                ExplosionClass::newExplosion(&event.getExplosion())
-                            );
-                            if (result.isBoolean()) {
-                                if (result.asBoolean().value() == false) event.cancel();
-                            }
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-        addCallback(
-            "ExplosionAfterEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::ExplosionAfterEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::ExplosionAfterEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                ExplosionClass::newExplosion(const_cast<Explosion *>(&event.getExplosion()))
-                            );
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-
-        // FarmDecayEvent: {
-        //   [Cancelable] FarmDecayBeforeEvent,
-        //   FarmDecayAfterEvent
-        // }
-        // addCallback(
-        //     "FarmDecayBeforeEvent",
-        //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-        //         return EventBus::getInstance().emplaceListener<ila::mc::FarmDecayBeforeEvent>(
-        //             [&args,
-        //                 engine{EngineScope::currentEngine()},
-        //                 func{Global<Function>(args[1].asFunction())}](ila::mc::FarmDecayBeforeEvent &event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     auto result = func.get().call(
-        //                         {},
-        //                         BlockSourceClass::newBlockSource(&event.blockSource()),
-        //                         BlockPosClass::newBlockPosClass(event.getPos()),
-        //                         ActorClass::newActor(*&event.getActor()),
-        //                         Number::newNumber(event.getFallDistance())
-        //                     );
-        //                     if (result.isBoolean()) {
-        //                         if (result.asBoolean().value() == false) event.cancel();
-        //                     }
-        //                 } catch (...) {
-        //                 }
-        //             },
-        //             priority
-        //         );
-        //     }
-        // );
-        // addCallback(
-        //     "FarmDecayAfterEvent",
-        //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-        //         return EventBus::getInstance().emplaceListener<ila::mc::FarmDecayAfterEvent>(
-        //             [&args,
-        //                 engine{EngineScope::currentEngine()},
-        //                 func{Global<Function>(args[1].asFunction())}](ila::mc::FarmDecayAfterEvent &event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     func.get().call(
-        //                         {},
-        //                         BlockSourceClass::newBlockSource(&event.blockSource()),
-        //                         BlockPosClass::newBlockPosClass(event.getPos()),
-        //                         ActorClass::newActor(*&event.getActor()),
-        //                         Number::newNumber(event.getFallDistance())
-        //                     );
-        //                 } catch (...) {
-        //                 }
-        //             },
-        //             priority
-        //         );
-        //     }
-        // );
-        //
-        // // LiquidTryFlowEvent: {
-        // //   [Cancelable] LiquidTryFlowBeforeEvent,
-        // //   LiquidTryFlowAfterEvent
-        // // }
-        // addCallback(
-        //     "LiquidTryFlowBeforeEvent",
-        //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-        //         return EventBus::getInstance().emplaceListener<ila::mc::LiquidTryFlowBeforeEvent>(
-        //             [&args,
-        //                 engine{EngineScope::currentEngine()},
-        //                 func{Global<Function>(args[1].asFunction())}](ila::mc::LiquidTryFlowBeforeEvent &event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     auto result = func.get().call(
-        //                         {},
-        //                         BlockSourceClass::newBlockSource(&event.blockSource()),
-        //                         BlockPosClass::newBlockPosClass(event.getPos()),
-        //                         BlockPosClass::newBlockPosClass(event.getFlowFromPos()),
-        //                         Number::newNumber(event.getFlowFromDirection())
-        //                     );
-        //                     if (result.isBoolean()) {
-        //                         if (result.asBoolean().value() == false) event.cancel();
-        //                     }
-        //                 } catch (...) {
-        //                 }
-        //             },
-        //             priority
-        //         );
-        //     }
-        // );
-        // addCallback(
-        //     "LiquidTryFlowAfterEvent",
-        //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-        //         return EventBus::getInstance().emplaceListener<ila::mc::LiquidTryFlowAfterEvent>(
-        //             [&args,
-        //                 engine{EngineScope::currentEngine()},
-        //                 func{Global<Function>(args[1].asFunction())}](ila::mc::LiquidTryFlowAfterEvent &event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     func.get().call(
-        //                         {},
-        //                         BlockSourceClass::newBlockSource(&event.blockSource()),
-        //                         BlockPosClass::newBlockPosClass(event.getPos()),
-        //                         BlockPosClass::newBlockPosClass(event.getFlowFromPos()),
-        //                         Number::newNumber(event.getFlowFromDirection())
-        //                     );
-        //                 } catch (...) {
-        //                 }
-        //             },
-        //             priority
-        //         );
-        //     }
-        // );
-        //
-        // // MossGrowthEvent: {
-        // //   [Cancelable] MossGrowthBeforeEvent,
-        // //   MossGrowthAfterEvent
-        // // }
-        // addCallback(
-        //     "MossGrowthBeforeEvent",
-        //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-        //         return EventBus::getInstance().emplaceListener<ila::mc::MossGrowthBeforeEvent>(
-        //             [&args,
-        //                 engine{EngineScope::currentEngine()},
-        //                 func{Global<Function>(args[1].asFunction())}](ila::mc::MossGrowthBeforeEvent &event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     auto result = func.get().call(
-        //                         {},
-        //                         BlockSourceClass::newBlockSource(&event.blockSource()),
-        //                         BlockPosClass::newBlockPosClass(event.getPos()),
-        //                         RandomClass::newRandom(const_cast<Random *>(&event.getRandom())),
-        //                         Number::newNumber(event.getXRadius()),
-        //                         Number::newNumber(event.getZRadius())
-        //                     );
-        //                     if (result.isBoolean()) {
-        //                         if (result.asBoolean().value() == false) event.cancel();
-        //                     }
-        //                 } catch (...) {
-        //                 }
-        //             },
-        //             priority
-        //         );
-        //     }
-        // );
-        // addCallback(
-        //     "MossGrowthAfterEvent",
-        //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-        //         return EventBus::getInstance().emplaceListener<ila::mc::MossGrowthAfterEvent>(
-        //             [&args,
-        //                 engine{EngineScope::currentEngine()},
-        //                 func{Global<Function>(args[1].asFunction())}](ila::mc::MossGrowthAfterEvent &event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     auto resArray = Array::newArray();
-        //
-        //                     for (auto a: event.getTargetPoss()) {
-        //                         resArray.add(BlockPosClass::newBlockPosClass(a));
-        //                     }
-        //
-        //
-        //                     func.get().call(
-        //                         {},
-        //                         BlockSourceClass::newBlockSource(&event.blockSource()),
-        //                         BlockPosClass::newBlockPosClass(event.getPos()),
-        //                         RandomClass::newRandom(const_cast<Random *>(&event.getRandom())),
-        //                         Number::newNumber(event.getXRadius()),
-        //                         Number::newNumber(event.getZRadius()),
-        //                         resArray
-        //                     );
-        //                 } catch (...) {
-        //                 }
-        //             },
-        //             priority
-        //         );
-        //     }
-        // );
-
-        // PistonPushEvent: {
-        //   [Cancelable] PistonPushBeforeEvent,
-        //   PistonPushAfterEvent
-        // }
-        addCallback(
-            "PistonPushBeforeEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::PistonPushBeforeEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::PistonPushBeforeEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            auto result = func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPosClass(event.getPushPos()),
-                                BlockPosClass::newBlockPosClass(event.getPistonPos()),
-                                Number::newNumber(event.getBranchFacing()),
-                                Number::newNumber(event.getPistonMoveFacing())
-                            );
-                            if (result.isBoolean()) {
-                                if (result.asBoolean().value() == false) event.cancel();
-                            }
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-        addCallback(
-            "PistonPushAfterEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::PistonPushAfterEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::PistonPushAfterEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPosClass(event.getPushPos()),
-                                BlockPosClass::newBlockPosClass(event.getPistonPos()),
-                                Number::newNumber(event.getBranchFacing()),
-                                Number::newNumber(event.getPistonMoveFacing())
-                            );
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-
-        // RedstoneUpdateEvent: {
-        //   [Cancelable] RedstoneUpdateBeforeEvent,
-        //   RedstoneUpdateAfterEvent
-        // }
-        addCallback(
-            "RedstoneUpdateBeforeEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::RedstoneUpdateBeforeEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::RedstoneUpdateBeforeEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            auto result = func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPosClass(event.getPos()),
-                                Number::newNumber(event.getStrength()),
-                                Number::newNumber(event.getIsFirstTime())
-                            );
-                            if (result.isBoolean()) {
-                                if (result.asBoolean().value() == false) event.cancel();
-                            }
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-        addCallback(
-            "RedstoneUpdateAfterEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::RedstoneUpdateAfterEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::RedstoneUpdateAfterEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPosClass(event.getPos()),
-                                Number::newNumber(event.getStrength()),
-                                Number::newNumber(event.getIsFirstTime())
-                            );
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-
-        // SculkBlockGrowthEvent: {
-        //   [Cancelable] SculkBlockGrowthBeforeEvent,
-        //   SculkBlockGrowthAfterEvent
-        // }
-        addCallback(
-            "SculkBlockGrowthBeforeEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::SculkBlockGrowthBeforeEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::SculkBlockGrowthBeforeEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            auto result = func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPosClass(event.getPos())
-                            );
-                            if (result.isBoolean()) {
-                                if (result.asBoolean().value() == false) event.cancel();
-                            }
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-        addCallback(
-            "SculkBlockGrowthAfterEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::SculkBlockGrowthAfterEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::SculkBlockGrowthAfterEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPosClass(event.getPos())
-                            );
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-
-        // SculkSpreadEvent: {
-        //   [Cancelable] SculkSpreadBeforeEvent,
-        //   SculkSpreadAfterEvent
-        // }
-        // addCallback(
-        //     "SculkSpreadBeforeEvent",
-        //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-        //         return EventBus::getInstance().emplaceListener<ila::mc::SculkSpreadBeforeEvent>(
-        //             [&args,
-        //                 engine{EngineScope::currentEngine()},
-        //                 func{Global<Function>(args[1].asFunction())}](ila::mc::SculkSpreadBeforeEvent &event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     auto pos2 = event.getTargetPos();
-        //                     auto result = func.get().call(
-        //                         {},
-        //                         BlockSourceClass::newBlockSource(&event.blockSource()),
-        //                         BlockPosClass::newBlockPosClass(event.getSelfPos()),
-        //                         BlockClass::newBlock(&event.getSelfBlock()),
-        //                         Number::newNumber(event.getSelfFace()),
-        //                         BlockPosClass::newBlockPosClass(event.getTargetPos()),
-        //                         BlockClass::newBlock(&event.getTargetBlock()),
-        //                         Number::newNumber(event.getTargetFace()),
-        //                         Number::newNumber(event.getFacing())
-        //                     );
-        //                     if (result.isBoolean()) {
-        //                         if (result.asBoolean().value() == false) event.cancel();
-        //                     }
-        //                 } catch (...) {
-        //                 }
-        //             },
-        //             priority
-        //         );
-        //     }
-        // );
-        // addCallback(
-        //     "SculkSpreadAfterEvent",
-        //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-        //         return EventBus::getInstance().emplaceListener<ila::mc::SculkSpreadAfterEvent>(
-        //             [&args,
-        //                 engine{EngineScope::currentEngine()},
-        //                 func{Global<Function>(args[1].asFunction())}](ila::mc::SculkSpreadAfterEvent &event) {
-        //                 EngineScope scope(engine);
-        //                 try {
-        //                     func.get().call(
-        //                         {},
-        //                         BlockSourceClass::newBlockSource(&event.blockSource()),
-        //                         BlockPosClass::newBlockPosClass(event.getSelfPos()),
-        //                         BlockClass::newBlock(const_cast<Block *>(&event.getSelfBlock())),
-        //                         Number::newNumber(event.getSelfFace()),
-        //                         BlockPosClass::newBlockPosClass(event.getTargetPos()),
-        //                         BlockClass::newBlock(const_cast<Block *>(&event.getTargetBlock())),
-        //                         Number::newNumber(event.getTargetFace()),
-        //                         Number::newNumber(event.getFacing())
-        //                     );
-        //                 } catch (...) {
-        //                 }
-        //             },
-        //             priority
-        //         );
-        //     }
-        // );
-
-        // SpawnItemActorEvent: {
-        //   [Cancelable] SpawnItemActorBeforeEvent,
-        //   SpawnItemActorAfterEvent
-        // }
-        addCallback(
-            "SpawnItemActorBeforeEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::SpawnItemActorBeforeEvent>(
-                    [
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::SpawnItemActorBeforeEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            auto result = func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                Vec3Class::newVec3Class(event.getPos()),
-                                ItemStackClass::newItemStack(&event.getItem()),
-                                ActorClass::newActor(*&event.getSpawner()),
-                                Number::newNumber(event.getThrowTime())
-                            );
-                            if (result.isBoolean()) {
-                                if (result.asBoolean().value() == false) event.cancel();
-                            }
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-        addCallback(
-            "SpawnItemActorAfterEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::SpawnItemActorAfterEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::SpawnItemActorAfterEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                Vec3Class::newVec3Class(event.getPos()),
-                                ItemStackClass::newItemStack(const_cast<ItemStack *>(&event.getItem())),
-                                ActorClass::newActor(*&event.getSpawner()),
-                                Number::newNumber(event.getThrowTime()),
-                                ItemActorClass::newItemActor(*&event.getItemActor())
-                            );
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-
-        // SpawnWanderingTraderEvent: {
-        //   [Cancelable] SpawnWanderingTraderBeforeEvent,
-        //   SpawnWanderingTraderAfterEvent
-        // }
-        addCallback(
-            "SpawnWanderingTraderBeforeEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::SpawnWanderingTraderBeforeEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::SpawnWanderingTraderBeforeEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            auto result = func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPosClass(event.getPos())
-                            );
-                            if (result.isBoolean()) {
-                                if (result.asBoolean().value() == false) event.cancel();
-                            }
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-        addCallback(
-            "SpawnWanderingTraderAfterEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::SpawnWanderingTraderAfterEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::SpawnWanderingTraderAfterEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                BlockPosClass::newBlockPosClass(event.getPos())
-                            );
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-
-        // WitherDestroyEvent: {
-        //   [Cancelable] WitherDestroyBeforeEvent,
-        //   WitherDestroyAfterEvent
-        // }
-        addCallback(
-            "WitherDestroyBeforeEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::WitherDestroyBeforeEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::WitherDestroyBeforeEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            auto result = func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                LevelClass::newLevel(&event.level()),
-                                AABBClass::newAABB(&event.getBox()),
-                                Number::newNumber(event.getRadius())
-                            );
-                            if (result.isBoolean()) {
-                                if (result.asBoolean().value() == false) event.cancel();
-                            }
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
-        addCallback(
-            "WitherDestroyAfterEvent",
-            [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
-                return EventBus::getInstance().emplaceListener<ila::mc::WitherDestroyAfterEvent>(
-                    [&args,
-                        engine{EngineScope::currentEngine()},
-                        func{Global<Function>(args[1].asFunction())}](ila::mc::WitherDestroyAfterEvent &event) {
-                        EngineScope scope(engine);
-                        try {
-                            func.get().call(
-                                {},
-                                BlockSourceClass::newBlockSource(&event.blockSource()),
-                                LevelClass::newLevel(&event.level()),
-                                AABBClass::newAABB(const_cast<AABB *>(&event.getBox())),
-                                Number::newNumber(event.getRadius())
-                            );
-                        } catch (...) {
-                        }
-                    },
-                    priority
-                );
-            }
-        );
+//         addCallback(
+//             "ClientLoginBeforeEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::ClientLoginBeforeEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::ClientLoginBeforeEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             auto result = func.get().call(
+//                                 {},
+//                                 ServerNetworkHandlerClass::newServerNetworkHandler(
+//                                     const_cast<ServerNetworkHandler *>(&event.getServerNetworkHandler())
+//                                 ),
+//                                 NetworkIdentifierClass::newNetworkIdentifier(
+//                                     const_cast<NetworkIdentifier *>(&event.getNetworkIdentifier())
+//                                 )
+//                             );
+//                             if (result.isBoolean()) {
+//                                 if (result.asBoolean().value() == false) event.cancel();
+//                             }
+//                         }
+//                         CatchNotReturn;
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+//         addCallback(
+//             "ClientLoginAfterEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::ClientLoginAfterEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::ClientLoginAfterEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             func.get().call(
+//                                 {},
+//                                 ServerNetworkHandlerClass::newServerNetworkHandler(
+//                                     const_cast<ServerNetworkHandler *>(&event.getServerNetworkHandler())
+//                                 ),
+//                                 NetworkIdentifierClass::newNetworkIdentifier(
+//                                     const_cast<NetworkIdentifier *>(&event.getNetworkIdentifier())
+//                                 ),
+//                                 UUIDClass::newUUID(const_cast<mce::UUID *>(&event.getUuid())),
+//                                 String::newString(event.getServerAuthXuid()),
+//                                 String::newString(event.getClientAuthXuid()),
+//                                 String::newString(event.getRealName()),
+//                                 String::newString(event.getIpAndPort())
+// 
+//                             );
+//                         }
+//                         CatchNotReturn;
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+// 
+//         // RegisterCmdEvent: {
+//         //  RegisterCmdBeforeEvent,
+//         //  RegisterCmdAfterEvent
+//         // }
+//         addCallback(
+//             "RegisterCmdBeforeEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::RegisterCmdBeforeEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::RegisterCmdBeforeEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             func.get().call(
+//                                 {},
+//                                 // TODO: Waiting ila
+//                                 // CommandRegistryClass::newCommandRegistry(&event.getRegistry()),
+//                                 String::newString(event.getCommandName()),
+//                                 String::newString(event.getDescription()),
+//                                 ConvertToScriptX(event.getRequirement()),
+//                                 CommandFlagClass::newCommandFlag(&event.getFlag1()),
+//                                 CommandFlagClass::newCommandFlag(&event.getFlag2())
+//                             );
+//                         }
+//                         CatchNotReturn;
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+//         addCallback(
+//             "RegisterCmdAfterEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::RegisterCmdAfterEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::RegisterCmdAfterEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             func.get().call(
+//                                 {},
+//                                 // TODO: Waiting ila
+//                                 // CommandRegistryClass::newCommandRegistry(&event.getRegistry()),
+//                                 String::newString(event.getCommandName()),
+//                                 String::newString(event.getDescription()),
+//                                 ConvertToScriptX(event.getRequirement()),
+//                                 CommandFlagClass::newCommandFlag(const_cast<CommandFlag *>(&event.getFlag1())),
+//                                 CommandFlagClass::newCommandFlag(const_cast<CommandFlag *>(&event.getFlag2()))
+//                             );
+//                         }
+//                         CatchNotReturn;
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+// 
+//         // SendPacketEvent: {
+//         //   [Cancelable] SendPacketBeforeEvent,
+//         //   SendPacketAfterEvent
+//         // }
+//         addCallback(
+//             "SendPacketBeforeEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::SendPacketBeforeEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::SendPacketBeforeEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             auto result = func.get().call(
+//                                 {},
+//                                 LoopbackPacketSenderClass::newLoopbackPacketSender(
+//                                     const_cast<LoopbackPacketSender *>(&event.getPacketSender())
+//                                 ),
+//                                 PacketClass::newPacket(const_cast<Packet *>(&event.getPacket())),
+//                                 Boolean::newBoolean(event.getIsBroadcast()),
+//                                 PlayerClass::newPlayer(&event.getPlayer().get())
+//                             );
+//                             if (result.isBoolean()) {
+//                                 if (result.asBoolean().value() == false) event.cancel();
+//                             }
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+//         addCallback(
+//             "SendPacketAfterEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::SendPacketAfterEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::SendPacketAfterEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             func.get().call(
+//                                 {},
+//                                 LoopbackPacketSenderClass::newLoopbackPacketSender(
+//                                     const_cast<LoopbackPacketSender *>(&event.getPacketSender())
+//                                 ),
+//                                 PacketClass::newPacket(const_cast<Packet *>(&event.getPacket())),
+//                                 Boolean::newBoolean(event.getIsBroadcast()),
+//                                 PlayerClass::newPlayer(&event.getPlayer().get())
+//                             );
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+// 
+//         // ServerPongEvent: {
+//         //   [Cancelable] ServerPongBeforeEvent,
+//         //   ServerPongAfterEvent
+//         // }
+//         addCallback(
+//             "ServerPongBeforeEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::ServerPongBeforeEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::ServerPongBeforeEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             auto result = func.get().call(
+//                                 {},
+//                                 String::newString(event.getMotd()),
+//                                 Number::newNumber(event.getProtocolVersion()),
+//                                 String::newString(event.getNetworkVersion()),
+//                                 Number::newNumber(event.getPlayerCount()),
+//                                 Number::newNumber(event.getMaxPlayerCount()),
+//                                 String::newString(event.getGuid()),
+//                                 String::newString(event.getLevelName()),
+//                                 ConvertToScriptX(event.getGameMode()),
+//                                 Number::newNumber(event.getLocalPort()),
+//                                 Number::newNumber(event.getLocalPortV6())
+//                             );
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+//         addCallback(
+//             "ServerPongAfterEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::ServerPongAfterEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::ServerPongAfterEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             func.get().call(
+//                                 {},
+//                                 String::newString(event.getMotd()),
+//                                 Number::newNumber(event.getProtocolVersion()),
+//                                 String::newString(event.getNetworkVersion()),
+//                                 Number::newNumber(event.getPlayerCount()),
+//                                 Number::newNumber(event.getMaxPlayerCount()),
+//                                 String::newString(event.getGuid()),
+//                                 String::newString(event.getLevelName()),
+//                                 ConvertToScriptX(event.getGameMode()),
+//                                 Number::newNumber(event.getLocalPort()),
+//                                 Number::newNumber(event.getLocalPortV6()),
+//                                 ConvertToScriptX(event.getOther())
+//                             );
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+// 
+//         // BlockTickEvent: {
+//         //   [Cancelable] BlockTickBeforeEvent,
+//         //   BlockTickAfterEvent
+//         // }
+//         // addCallback(
+//         //     "BlockTickBeforeEvent",
+//         //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//         //         return EventBus::getInstance().emplaceListener<ila::mc::BlockTickBeforeEvent>(
+//         //             [&args,
+//         //                 engine{EngineScope::currentEngine()},
+//         //                 func{Global<Function>(args[1].asFunction())}](ila::mc::BlockTickBeforeEvent &event) {
+//         //                 EngineScope scope(engine);
+//         //                 try {
+//         //                     auto result = func.get().call(
+//         //                         {},
+//         //                         BlockSourceClass::newBlockSource(&event.blockSource()),
+//         //                         BlockPosClass::newBlockPosClass(event.getPos()),
+//         //                         RandomClass::newRandom(const_cast<Random *>(&event.getRandom()))
+//         //                     );
+//         //                     if (result.isBoolean()) {
+//         //                         if (result.asBoolean().value() == false) event.cancel();
+//         //                     }
+//         //                 } catch (...) {
+//         //                 }
+//         //             },
+//         //             priority
+//         //         );
+//         //     }
+//         // );
+//         // addCallback(
+//         //     "BlockTickAfterEvent",
+//         //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//         //         return EventBus::getInstance().emplaceListener<ila::mc::BlockTickAfterEvent>(
+//         //             [&args,
+//         //                 engine{EngineScope::currentEngine()},
+//         //                 func{Global<Function>(args[1].asFunction())}](ila::mc::BlockTickAfterEvent &event) {
+//         //                 EngineScope scope(engine);
+//         //                 try {
+//         //                     func.get().call(
+//         //                         {},
+//         //                         BlockSourceClass::newBlockSource(&event.blockSource()),
+//         //                         BlockPosClass::newBlockPosClass(event.getPos()),
+//         //                         RandomClass::newRandom(const_cast<Random *>(&event.getRandom()))
+//         //                     );
+//         //                 } catch (...) {
+//         //                 }
+//         //             },
+//         //             priority
+//         //         );
+//         //     }
+//         // );
+//         //
+//         // // DragonEggBlockTeleportEvent: {
+//         // //   [Cancelable] DragonEggBlockTeleportBeforeEvent,
+//         // //   DragonEggBlockTeleportAfterEvent
+//         // // }
+//         // addCallback(
+//         //     "DragonEggBlockTeleportBeforeEvent",
+//         //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//         //         return EventBus::getInstance().emplaceListener<ila::mc::DragonEggBlockTeleportBeforeEvent>(
+//         //             [&args,
+//         //                 engine{EngineScope::currentEngine()},
+//         //                 func{Global<Function>(args[1].asFunction())}
+//         //             ](ila::mc::DragonEggBlockTeleportBeforeEvent &event) {
+//         //                 EngineScope scope(engine);
+//         //                 try {
+//         //                     auto result = func.get().call(
+//         //                         {},
+//         //                         BlockSourceClass::newBlockSource(&event.blockSource()),
+//         //                         BlockPosClass::newBlockPosClass(event.getPos()),
+//         //                         RandomClass::newRandom(const_cast<Random *>(&event.getRandom())),
+//         //                         BlockPosClass::newBlockPosClass(event.getTargetPos())
+//         //                     );
+//         //                     if (result.isBoolean()) {
+//         //                         if (result.asBoolean().value() == false) event.cancel();
+//         //                     }
+//         //                 } catch (...) {
+//         //                 }
+//         //             },
+//         //             priority
+//         //         );
+//         //     }
+//         // );
+//         // addCallback(
+//         //     "DragonEggBlockTeleportAfterEvent",
+//         //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//         //         return EventBus::getInstance().emplaceListener<ila::mc::DragonEggBlockTeleportAfterEvent>(
+//         //             [&args,
+//         //                 engine{EngineScope::currentEngine()},
+//         //                 func{Global<Function>(args[1].asFunction())}
+//         //             ](ila::mc::DragonEggBlockTeleportAfterEvent &event) {
+//         //                 EngineScope scope(engine);
+//         //                 try {
+//         //                     auto pos2 = event.getTargetPos();
+//         //                     func.get().call(
+//         //                         {},
+//         //                         BlockSourceClass::newBlockSource(&event.blockSource()),
+//         //                         BlockPosClass::newBlockPosClass(event.getPos()),
+//         //                         RandomClass::newRandom(const_cast<Random *>(&event.getRandom())),
+//         //                         BlockPosClass::newBlockPosClass(event.getTargetPos())
+//         //                     );
+//         //                 } catch (...) {
+//         //                 }
+//         //             },
+//         //             priority
+//         //         );
+//         //     }
+//         // );
+// 
+//         // ExplosionEvent: {
+//         //   [Cancelable] ExplosionBeforeEvent,
+//         //   ExplosionAfterEvent
+//         // }
+//         addCallback(
+//             "ExplosionBeforeEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::ExplosionBeforeEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::ExplosionBeforeEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             auto result = func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 ExplosionClass::newExplosion(&event.getExplosion())
+//                             );
+//                             if (result.isBoolean()) {
+//                                 if (result.asBoolean().value() == false) event.cancel();
+//                             }
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+//         addCallback(
+//             "ExplosionAfterEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::ExplosionAfterEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::ExplosionAfterEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 ExplosionClass::newExplosion(const_cast<Explosion *>(&event.getExplosion()))
+//                             );
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+// 
+//         // FarmDecayEvent: {
+//         //   [Cancelable] FarmDecayBeforeEvent,
+//         //   FarmDecayAfterEvent
+//         // }
+//         // addCallback(
+//         //     "FarmDecayBeforeEvent",
+//         //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//         //         return EventBus::getInstance().emplaceListener<ila::mc::FarmDecayBeforeEvent>(
+//         //             [&args,
+//         //                 engine{EngineScope::currentEngine()},
+//         //                 func{Global<Function>(args[1].asFunction())}](ila::mc::FarmDecayBeforeEvent &event) {
+//         //                 EngineScope scope(engine);
+//         //                 try {
+//         //                     auto result = func.get().call(
+//         //                         {},
+//         //                         BlockSourceClass::newBlockSource(&event.blockSource()),
+//         //                         BlockPosClass::newBlockPosClass(event.getPos()),
+//         //                         ActorClass::newActor(*&event.getActor()),
+//         //                         Number::newNumber(event.getFallDistance())
+//         //                     );
+//         //                     if (result.isBoolean()) {
+//         //                         if (result.asBoolean().value() == false) event.cancel();
+//         //                     }
+//         //                 } catch (...) {
+//         //                 }
+//         //             },
+//         //             priority
+//         //         );
+//         //     }
+//         // );
+//         // addCallback(
+//         //     "FarmDecayAfterEvent",
+//         //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//         //         return EventBus::getInstance().emplaceListener<ila::mc::FarmDecayAfterEvent>(
+//         //             [&args,
+//         //                 engine{EngineScope::currentEngine()},
+//         //                 func{Global<Function>(args[1].asFunction())}](ila::mc::FarmDecayAfterEvent &event) {
+//         //                 EngineScope scope(engine);
+//         //                 try {
+//         //                     func.get().call(
+//         //                         {},
+//         //                         BlockSourceClass::newBlockSource(&event.blockSource()),
+//         //                         BlockPosClass::newBlockPosClass(event.getPos()),
+//         //                         ActorClass::newActor(*&event.getActor()),
+//         //                         Number::newNumber(event.getFallDistance())
+//         //                     );
+//         //                 } catch (...) {
+//         //                 }
+//         //             },
+//         //             priority
+//         //         );
+//         //     }
+//         // );
+//         //
+//         // // LiquidTryFlowEvent: {
+//         // //   [Cancelable] LiquidTryFlowBeforeEvent,
+//         // //   LiquidTryFlowAfterEvent
+//         // // }
+//         // addCallback(
+//         //     "LiquidTryFlowBeforeEvent",
+//         //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//         //         return EventBus::getInstance().emplaceListener<ila::mc::LiquidTryFlowBeforeEvent>(
+//         //             [&args,
+//         //                 engine{EngineScope::currentEngine()},
+//         //                 func{Global<Function>(args[1].asFunction())}](ila::mc::LiquidTryFlowBeforeEvent &event) {
+//         //                 EngineScope scope(engine);
+//         //                 try {
+//         //                     auto result = func.get().call(
+//         //                         {},
+//         //                         BlockSourceClass::newBlockSource(&event.blockSource()),
+//         //                         BlockPosClass::newBlockPosClass(event.getPos()),
+//         //                         BlockPosClass::newBlockPosClass(event.getFlowFromPos()),
+//         //                         Number::newNumber(event.getFlowFromDirection())
+//         //                     );
+//         //                     if (result.isBoolean()) {
+//         //                         if (result.asBoolean().value() == false) event.cancel();
+//         //                     }
+//         //                 } catch (...) {
+//         //                 }
+//         //             },
+//         //             priority
+//         //         );
+//         //     }
+//         // );
+//         // addCallback(
+//         //     "LiquidTryFlowAfterEvent",
+//         //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//         //         return EventBus::getInstance().emplaceListener<ila::mc::LiquidTryFlowAfterEvent>(
+//         //             [&args,
+//         //                 engine{EngineScope::currentEngine()},
+//         //                 func{Global<Function>(args[1].asFunction())}](ila::mc::LiquidTryFlowAfterEvent &event) {
+//         //                 EngineScope scope(engine);
+//         //                 try {
+//         //                     func.get().call(
+//         //                         {},
+//         //                         BlockSourceClass::newBlockSource(&event.blockSource()),
+//         //                         BlockPosClass::newBlockPosClass(event.getPos()),
+//         //                         BlockPosClass::newBlockPosClass(event.getFlowFromPos()),
+//         //                         Number::newNumber(event.getFlowFromDirection())
+//         //                     );
+//         //                 } catch (...) {
+//         //                 }
+//         //             },
+//         //             priority
+//         //         );
+//         //     }
+//         // );
+//         //
+//         // // MossGrowthEvent: {
+//         // //   [Cancelable] MossGrowthBeforeEvent,
+//         // //   MossGrowthAfterEvent
+//         // // }
+//         // addCallback(
+//         //     "MossGrowthBeforeEvent",
+//         //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//         //         return EventBus::getInstance().emplaceListener<ila::mc::MossGrowthBeforeEvent>(
+//         //             [&args,
+//         //                 engine{EngineScope::currentEngine()},
+//         //                 func{Global<Function>(args[1].asFunction())}](ila::mc::MossGrowthBeforeEvent &event) {
+//         //                 EngineScope scope(engine);
+//         //                 try {
+//         //                     auto result = func.get().call(
+//         //                         {},
+//         //                         BlockSourceClass::newBlockSource(&event.blockSource()),
+//         //                         BlockPosClass::newBlockPosClass(event.getPos()),
+//         //                         RandomClass::newRandom(const_cast<Random *>(&event.getRandom())),
+//         //                         Number::newNumber(event.getXRadius()),
+//         //                         Number::newNumber(event.getZRadius())
+//         //                     );
+//         //                     if (result.isBoolean()) {
+//         //                         if (result.asBoolean().value() == false) event.cancel();
+//         //                     }
+//         //                 } catch (...) {
+//         //                 }
+//         //             },
+//         //             priority
+//         //         );
+//         //     }
+//         // );
+//         // addCallback(
+//         //     "MossGrowthAfterEvent",
+//         //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//         //         return EventBus::getInstance().emplaceListener<ila::mc::MossGrowthAfterEvent>(
+//         //             [&args,
+//         //                 engine{EngineScope::currentEngine()},
+//         //                 func{Global<Function>(args[1].asFunction())}](ila::mc::MossGrowthAfterEvent &event) {
+//         //                 EngineScope scope(engine);
+//         //                 try {
+//         //                     auto resArray = Array::newArray();
+//         //
+//         //                     for (auto a: event.getTargetPoss()) {
+//         //                         resArray.add(BlockPosClass::newBlockPosClass(a));
+//         //                     }
+//         //
+//         //
+//         //                     func.get().call(
+//         //                         {},
+//         //                         BlockSourceClass::newBlockSource(&event.blockSource()),
+//         //                         BlockPosClass::newBlockPosClass(event.getPos()),
+//         //                         RandomClass::newRandom(const_cast<Random *>(&event.getRandom())),
+//         //                         Number::newNumber(event.getXRadius()),
+//         //                         Number::newNumber(event.getZRadius()),
+//         //                         resArray
+//         //                     );
+//         //                 } catch (...) {
+//         //                 }
+//         //             },
+//         //             priority
+//         //         );
+//         //     }
+//         // );
+// 
+//         // PistonPushEvent: {
+//         //   [Cancelable] PistonPushBeforeEvent,
+//         //   PistonPushAfterEvent
+//         // }
+//         addCallback(
+//             "PistonPushBeforeEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::PistonPushBeforeEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::PistonPushBeforeEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             auto result = func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 BlockPosClass::newBlockPosClass(event.getPushPos()),
+//                                 BlockPosClass::newBlockPosClass(event.getPistonPos()),
+//                                 Number::newNumber(event.getBranchFacing()),
+//                                 Number::newNumber(event.getPistonMoveFacing())
+//                             );
+//                             if (result.isBoolean()) {
+//                                 if (result.asBoolean().value() == false) event.cancel();
+//                             }
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+//         addCallback(
+//             "PistonPushAfterEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::PistonPushAfterEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::PistonPushAfterEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 BlockPosClass::newBlockPosClass(event.getPushPos()),
+//                                 BlockPosClass::newBlockPosClass(event.getPistonPos()),
+//                                 Number::newNumber(event.getBranchFacing()),
+//                                 Number::newNumber(event.getPistonMoveFacing())
+//                             );
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+// 
+//         // RedstoneUpdateEvent: {
+//         //   [Cancelable] RedstoneUpdateBeforeEvent,
+//         //   RedstoneUpdateAfterEvent
+//         // }
+//         addCallback(
+//             "RedstoneUpdateBeforeEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::RedstoneUpdateBeforeEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::RedstoneUpdateBeforeEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             auto result = func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 BlockPosClass::newBlockPosClass(event.getPos()),
+//                                 Number::newNumber(event.getStrength()),
+//                                 Number::newNumber(event.getIsFirstTime())
+//                             );
+//                             if (result.isBoolean()) {
+//                                 if (result.asBoolean().value() == false) event.cancel();
+//                             }
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+//         addCallback(
+//             "RedstoneUpdateAfterEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::RedstoneUpdateAfterEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::RedstoneUpdateAfterEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 BlockPosClass::newBlockPosClass(event.getPos()),
+//                                 Number::newNumber(event.getStrength()),
+//                                 Number::newNumber(event.getIsFirstTime())
+//                             );
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+// 
+//         // SculkBlockGrowthEvent: {
+//         //   [Cancelable] SculkBlockGrowthBeforeEvent,
+//         //   SculkBlockGrowthAfterEvent
+//         // }
+//         addCallback(
+//             "SculkBlockGrowthBeforeEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::SculkBlockGrowthBeforeEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::SculkBlockGrowthBeforeEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             auto result = func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 BlockPosClass::newBlockPosClass(event.getPos())
+//                             );
+//                             if (result.isBoolean()) {
+//                                 if (result.asBoolean().value() == false) event.cancel();
+//                             }
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+//         addCallback(
+//             "SculkBlockGrowthAfterEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::SculkBlockGrowthAfterEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::SculkBlockGrowthAfterEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 BlockPosClass::newBlockPosClass(event.getPos())
+//                             );
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+// 
+//         // SculkSpreadEvent: {
+//         //   [Cancelable] SculkSpreadBeforeEvent,
+//         //   SculkSpreadAfterEvent
+//         // }
+//         // addCallback(
+//         //     "SculkSpreadBeforeEvent",
+//         //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//         //         return EventBus::getInstance().emplaceListener<ila::mc::SculkSpreadBeforeEvent>(
+//         //             [&args,
+//         //                 engine{EngineScope::currentEngine()},
+//         //                 func{Global<Function>(args[1].asFunction())}](ila::mc::SculkSpreadBeforeEvent &event) {
+//         //                 EngineScope scope(engine);
+//         //                 try {
+//         //                     auto pos2 = event.getTargetPos();
+//         //                     auto result = func.get().call(
+//         //                         {},
+//         //                         BlockSourceClass::newBlockSource(&event.blockSource()),
+//         //                         BlockPosClass::newBlockPosClass(event.getSelfPos()),
+//         //                         BlockClass::newBlock(&event.getSelfBlock()),
+//         //                         Number::newNumber(event.getSelfFace()),
+//         //                         BlockPosClass::newBlockPosClass(event.getTargetPos()),
+//         //                         BlockClass::newBlock(&event.getTargetBlock()),
+//         //                         Number::newNumber(event.getTargetFace()),
+//         //                         Number::newNumber(event.getFacing())
+//         //                     );
+//         //                     if (result.isBoolean()) {
+//         //                         if (result.asBoolean().value() == false) event.cancel();
+//         //                     }
+//         //                 } catch (...) {
+//         //                 }
+//         //             },
+//         //             priority
+//         //         );
+//         //     }
+//         // );
+//         // addCallback(
+//         //     "SculkSpreadAfterEvent",
+//         //     [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//         //         return EventBus::getInstance().emplaceListener<ila::mc::SculkSpreadAfterEvent>(
+//         //             [&args,
+//         //                 engine{EngineScope::currentEngine()},
+//         //                 func{Global<Function>(args[1].asFunction())}](ila::mc::SculkSpreadAfterEvent &event) {
+//         //                 EngineScope scope(engine);
+//         //                 try {
+//         //                     func.get().call(
+//         //                         {},
+//         //                         BlockSourceClass::newBlockSource(&event.blockSource()),
+//         //                         BlockPosClass::newBlockPosClass(event.getSelfPos()),
+//         //                         BlockClass::newBlock(const_cast<Block *>(&event.getSelfBlock())),
+//         //                         Number::newNumber(event.getSelfFace()),
+//         //                         BlockPosClass::newBlockPosClass(event.getTargetPos()),
+//         //                         BlockClass::newBlock(const_cast<Block *>(&event.getTargetBlock())),
+//         //                         Number::newNumber(event.getTargetFace()),
+//         //                         Number::newNumber(event.getFacing())
+//         //                     );
+//         //                 } catch (...) {
+//         //                 }
+//         //             },
+//         //             priority
+//         //         );
+//         //     }
+//         // );
+// 
+//         // SpawnItemActorEvent: {
+//         //   [Cancelable] SpawnItemActorBeforeEvent,
+//         //   SpawnItemActorAfterEvent
+//         // }
+//         addCallback(
+//             "SpawnItemActorBeforeEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::SpawnItemActorBeforeEvent>(
+//                     [
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::SpawnItemActorBeforeEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             auto result = func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 Vec3Class::newVec3Class(event.getPos()),
+//                                 ItemStackClass::newItemStack(&event.getItem()),
+//                                 ActorClass::newActor(*&event.getSpawner()),
+//                                 Number::newNumber(event.getThrowTime())
+//                             );
+//                             if (result.isBoolean()) {
+//                                 if (result.asBoolean().value() == false) event.cancel();
+//                             }
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+//         addCallback(
+//             "SpawnItemActorAfterEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::SpawnItemActorAfterEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::SpawnItemActorAfterEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 Vec3Class::newVec3Class(event.getPos()),
+//                                 ItemStackClass::newItemStack(const_cast<ItemStack *>(&event.getItem())),
+//                                 ActorClass::newActor(*&event.getSpawner()),
+//                                 Number::newNumber(event.getThrowTime()),
+//                                 ItemActorClass::newItemActor(*&event.getItemActor())
+//                             );
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+// 
+//         // SpawnWanderingTraderEvent: {
+//         //   [Cancelable] SpawnWanderingTraderBeforeEvent,
+//         //   SpawnWanderingTraderAfterEvent
+//         // }
+//         addCallback(
+//             "SpawnWanderingTraderBeforeEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::SpawnWanderingTraderBeforeEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::SpawnWanderingTraderBeforeEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             auto result = func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 BlockPosClass::newBlockPosClass(event.getPos())
+//                             );
+//                             if (result.isBoolean()) {
+//                                 if (result.asBoolean().value() == false) event.cancel();
+//                             }
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+//         addCallback(
+//             "SpawnWanderingTraderAfterEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::SpawnWanderingTraderAfterEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::SpawnWanderingTraderAfterEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 BlockPosClass::newBlockPosClass(event.getPos())
+//                             );
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+// 
+//         // WitherDestroyEvent: {
+//         //   [Cancelable] WitherDestroyBeforeEvent,
+//         //   WitherDestroyAfterEvent
+//         // }
+//         addCallback(
+//             "WitherDestroyBeforeEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::WitherDestroyBeforeEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::WitherDestroyBeforeEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             auto result = func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 LevelClass::newLevel(&event.level()),
+//                                 AABBClass::newAABB(&event.getBox()),
+//                                 Number::newNumber(event.getRadius())
+//                             );
+//                             if (result.isBoolean()) {
+//                                 if (result.asBoolean().value() == false) event.cancel();
+//                             }
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
+//         addCallback(
+//             "WitherDestroyAfterEvent",
+//             [](const Arguments &args, ScriptEngine *engine, ll::event::EventPriority priority) {
+//                 return EventBus::getInstance().emplaceListener<ila::mc::WitherDestroyAfterEvent>(
+//                     [&args,
+//                         engine{EngineScope::currentEngine()},
+//                         func{Global<Function>(args[1].asFunction())}](ila::mc::WitherDestroyAfterEvent &event) {
+//                         EngineScope scope(engine);
+//                         try {
+//                             func.get().call(
+//                                 {},
+//                                 BlockSourceClass::newBlockSource(&event.blockSource()),
+//                                 LevelClass::newLevel(&event.level()),
+//                                 AABBClass::newAABB(const_cast<AABB *>(&event.getBox())),
+//                                 Number::newNumber(event.getRadius())
+//                             );
+//                         } catch (...) {
+//                         }
+//                     },
+//                     priority
+//                 );
+//             }
+//         );
     } catch (...) {
     }
 }
