@@ -15,10 +15,7 @@ private:
     std::string title;
 
     std::shared_ptr<ll::io::Logger> getLogger() {
-        auto logger = ll::io::LoggerRegistry::getInstance().tryGet(title);
-        if (!logger) {
-            logger = ll::io::LoggerRegistry::getInstance().getOrCreate(title);
-        }
+        auto logger = ll::io::LoggerRegistry::getInstance().getOrCreate(title);
         return logger;
     };
 

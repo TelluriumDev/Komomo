@@ -1,11 +1,12 @@
 add_rules("mode.debug", "mode.release")
 
 add_repositories("liteldev-repo https://github.com/LiteLDev/xmake-repo.git")
-add_repositories("iceblcokmc https://github.com/IceBlcokMC/xmake-repo.git")
+-- add_repositories("iceblcokmc https://github.com/IceBlcokMC/xmake-repo.git")
 add_repositories("miracleforest https://github.com/MiracleForest/xmake-repo")
 
-add_requires("nodejs 22.12.0") -- iceblockmc
+-- add_requires("nodejs 22.12.0") -- iceblockmc
 add_requires("levilamina 1.1.0", {configs = {target_type = "server"}})
+add_requires("quickjs-ng v0.8.0")
 add_requires("levibuildscript 0.3.0")
 add_requires(
     "microsoft-gsl 4.0.0",
@@ -37,7 +38,8 @@ target("Komomo")
         "glm",
         "concurrentqueue",
         "magic_enum",
-        "ilistenattentively"
+        "ilistenattentively",
+        "quickjs-ng"
         -- "uwebsockets"
     )
     set_kind("shared")
@@ -56,11 +58,11 @@ target("Komomo")
     add_includedirs("ScriptX/src/include")
     add_files(
         "ScriptX/src/**.cc",
-        "ScriptX/backend/V8/**.cc"
+        "ScriptX/backend/QuickJs/**.cc"
     )
     add_defines(
-        "SCRIPTX_BACKEND_V8",
-        "SCRIPTX_BACKEND_TRAIT_PREFIX=../ScriptX/backend/V8/trait/Trait"
+        "SCRIPTX_BACKEND_QuickJs",
+        "SCRIPTX_BACKEND_TRAIT_PREFIX=../ScriptX/backend/QuickJs/trait/Trait"
     )
 
     add_rules("@levibuildscript/linkrule")

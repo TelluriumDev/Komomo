@@ -42,7 +42,7 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
         if (NodeManager::packageHasDependency(package) && !fs::exists(file.parent_path() / "node_modules")) {
             Entry::getInstance().getSelf().getLogger().info("Installing dependencies for mod: {}", file.filename());
             EngineScope enter(wrapper->mEngine);
-            manager.NpmInstall(file.parent_path().string());
+            // manager.NpmInstall(file.parent_path().string());
         }
 
 
@@ -54,7 +54,7 @@ ll::Expected<> KomomoModManager::load(ll::mod::Manifest manifest) {
             mod->id          = data->mID;
         }
 
-        if (!NodeManager::loadFile(wrapper, file, NodeManager::packageIsEsm(package))) {
+        if (!NodeManager::loadFile(wrapper, file)) {
             Entry::getInstance().getSelf().getLogger().error("Failed to load mod: {}", file);
             manager.destroyEngine(wrapper->mID);
             return ll::makeStringError("Failed to load mod");
