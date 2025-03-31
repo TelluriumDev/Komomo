@@ -13,6 +13,7 @@ ClassDefine<LoggerClass> loggerClassBuilder = defineClass<LoggerClass>("Logger")
                                                   .instanceFunction("debug", &LoggerClass::debug)
                                                   .instanceFunction("trace", &LoggerClass::trace)
                                                   .instanceFunction("fatal", &LoggerClass::fatal)
+                                                  .instanceFunction("setLevel", &LoggerClass::setLevel)
 
                                                   .build();
 
