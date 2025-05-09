@@ -28,7 +28,7 @@ ClassDefine<CommandOriginClass> commandOriginClassBuilder =
         .instanceFunction("handleCommandOutputCallback", &CommandOriginClass::handleCommandOutputCallback)
         // .instanceFunction("updateValues", &CommandOriginClass::updateValues)
         .instanceFunction("isValid", &CommandOriginClass::isValid)
-        .instanceFunction("sUnknownSource", &CommandOriginClass::sUnknownSource)
+        //.instanceFunction("sUnknownSource", &CommandOriginClass::sUnknownSource)
 
         .build();
 
@@ -161,7 +161,8 @@ Local<Value> CommandOriginClass::requiresValidLevel() {
 };
 
 // Local<Value> _setUUID(const Arguments& args); // TODO
-
+/*
 Local<Value> CommandOriginClass::sUnknownSource() {
     return NetworkIdentifierClass::newNetworkIdentifier(&mCommandOrigin->sUnknownSource());
 };
+*/

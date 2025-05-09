@@ -1090,7 +1090,7 @@ Local<Value> ActorClass::resetUserPos(const Arguments &args) {
         if (!mActor) {
             return Local<Value>();
         }
-        mActor->resetUserPos(args[0].asBoolean().value());
+        mActor->resetUserPos(args[0].asBoolean().value() ? ActorResetRule::Respawn : ActorResetRule::Default);
     }
     Catch;
     return Local<Value>();
