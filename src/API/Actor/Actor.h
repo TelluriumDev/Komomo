@@ -252,7 +252,7 @@ public: /* Members */
 
     // Member(isImmersedInWater);
 
-    Member(isInClouds);
+    //Member(isInClouds);
 
     // Member(isInContactWithWater);
 
