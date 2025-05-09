@@ -27,7 +27,7 @@ public:
     //     Local<Value> isType(const Arguments& args);
 
     // static
-    static Local<Value> getMaterial(int type);
+    //static Local<Value> getMaterial(int type);
 };
 
 extern ClassDefine<MaterialClass> materialClassBuilder;

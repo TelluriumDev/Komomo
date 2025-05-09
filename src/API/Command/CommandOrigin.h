@@ -86,7 +86,7 @@ public:
 
     // Local<Value> _setUUID(const Arguments& args); // TODO
 
-    Local<Value> sUnknownSource();
+    //Local<Value> sUnknownSource();
 };
 
 extern ClassDefine<CommandOriginClass> commandOriginClassBuilder;

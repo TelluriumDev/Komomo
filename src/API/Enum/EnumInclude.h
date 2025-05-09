@@ -145,7 +145,7 @@
 #include <mc\common\GameUserType.h>
 #include <mc\common\GameVersion.h>
 #include <mc\common\SubClientId.h>
-#include <mc\common\XforgeGameVersion.h>
+
 #include <mc\common\editor\WorldType.h>
 #include <mc\legacy\facing\Axis.h>
 #include <mc\legacy\facing\Name.h>

@@ -143,7 +143,7 @@ ClassDefine<ActorClass> actorClassBuilder =
         .instanceProperty("isGlobal", &ActorClass::isGlobal)
         // .instanceProperty("isIgnited", &ActorClass::isIgnited)
         // .instanceProperty("isImmersedInWater", &ActorClass::isImmersedInWater)
-        .instanceProperty("isInClouds", &ActorClass::isInClouds)
+        //.instanceProperty("isInClouds", &ActorClass::isInClouds) 1.21.70被移除
         // .instanceProperty("isInContactWithWater", &ActorClass::isInContactWithWater)
         .instanceProperty("isInLava", &ActorClass::isInLava)
         .instanceProperty("isInLove", &ActorClass::isInLove)
@@ -735,7 +735,7 @@ Local<Value> ActorClass::isDoorOpener() { CallFunction(Number, isDoorOpener()) }
 Local<Value> ActorClass::isGlobal() { CallFunction(Number, isGlobal()) };
 // Local<Value> ActorClass::isIgnited() { CallFunction(Number, isIgnited()) };
 // Local<Value> ActorClass::isImmersedInWater() { CallFunction(Number, isImmersedInWater()) };
-Local<Value> ActorClass::isInClouds() { CallFunction(Number, isInClouds()) };
+//Local<Value> ActorClass::isInClouds() { CallFunction(Number, isInClouds()) };
 // Local<Value> ActorClass::isInContactWithWater() { CallFunction(Number, isInContactWithWater()) };
 Local<Value> ActorClass::isInLava() { CallFunction(Number, isInLava()) };
 Local<Value> ActorClass::isInLove() { CallFunction(Number, isInLove()) };
@@ -1090,7 +1090,7 @@ Local<Value> ActorClass::resetUserPos(const Arguments &args) {
         if (!mActor) {
             return Local<Value>();
         }
-        mActor->resetUserPos(args[0].asBoolean().value());
+        mActor->resetUserPos(args[0].asBoolean().value() ? ActorResetRule::Respawn : ActorResetRule::Default);
     }
     Catch;
     return Local<Value>();
