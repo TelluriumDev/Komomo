@@ -166,7 +166,7 @@ ClassDefine<BlockClass> blockClassBuilder =
         .InstanceFunction(randomlyModifyPosition, BlockClass)
         // .InstanceFunction(requiresCorrectToolForDrops, BlockClass)
         .InstanceFunction(setRuntimeId, BlockClass)
-        .InstanceFunction(shouldRandomTick, BlockClass)
+        //.InstanceFunction(shouldRandomTick, BlockClass) 1.21.70这个函数没有了
         // .InstanceFunction(shouldRandomTickExtraLayer, BlockClass)
         .InstanceFunction(shouldStopFalling, BlockClass)
         // .InstanceFunction(shouldTickOnSetBlock, BlockClass)
@@ -1332,7 +1332,7 @@ Local<Value> BlockClass::setRuntimeId(const Arguments &args) {
     CatchReturn(Boolean::newBoolean(false));
 }
 
-Local<Value> BlockClass::shouldRandomTick() { CallFunction(Boolean, shouldRandomTick()); }
+//Local<Value> BlockClass::shouldRandomTick() { CallFunction(Boolean, shouldRandomTick()); }
 
 // Local<Value> BlockClass::shouldRandomTickExtraLayer() { CallFunction(Boolean, shouldRandomTickExtraLayer()); }
 

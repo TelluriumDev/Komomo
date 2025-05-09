@@ -271,7 +271,7 @@ public: /* Method */
 
     Local<Value> setRuntimeId(const Arguments &args);
 
-    Local<Value> shouldRandomTick();
+    //Local<Value> shouldRandomTick();
 
     // Local<Value> shouldRandomTickExtraLayer();
 
