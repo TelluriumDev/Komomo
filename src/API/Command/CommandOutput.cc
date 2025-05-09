@@ -80,8 +80,9 @@ Local<Value> CommandOutputClass::addToResultList(const Arguments &args) {
             auto actor = engine->getNativeInstance<ActorClass>(args[1]);
             mCommandOutput->addToResultList(args[0].asString().toString(), *actor->mActor);
         } else {
-            CheckArgType(args[1], ValueKind::kString);
-            mCommandOutput->addToResultList(args[0].asString().toString(), args[1].asString().toString());
+            //void addToResultList(::std::string const& key, ::std::string const& element)被删了
+            throw std::runtime_error(
+                "TypeError: Argument 2 of addToResultList must be an Actor instance.");
         }
     }
     CatchNotReturn;
