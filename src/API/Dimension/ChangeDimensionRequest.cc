@@ -14,3 +14,4 @@ ChangeDimensionRequestClass::ChangeDimensionRequestClass(ChangeDimensionRequest*
 Local<Object> ChangeDimensionRequestClass::newChangeDimensionRequest(ChangeDimensionRequest* changeDimensionRequest) {
     return (new ChangeDimensionRequestClass(changeDimensionRequest))->getScriptObject();
 }
+

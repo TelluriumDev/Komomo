@@ -7,7 +7,6 @@
 
 namespace Komomo {
 
-// extern std::shared_ptr<KomomoModManager> komomoModManager;
 class Entry {
 public:
     static Entry& getInstance();
