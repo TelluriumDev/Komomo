@@ -115,11 +115,13 @@ public:
                 const_cast<Block *>(std::get<CommandBlockName>(result.value()).resolveBlock(0).mBlock)
             );
         }
+        /*
         if (result.hold(ParamKind::Kind::Item)) {
             return ItemStackClass::newItemStack(new ItemStack(std::get<CommandItem>(result.value())
                 .createInstance(1, 1, output, true)
                 .value_or(ItemInstance::EMPTY_ITEM())));
         }
+                */
         if (result.hold(ParamKind::Kind::Actor)) {
             auto arr = Array::newArray();
             for (auto i: std::get<CommandSelector<Actor> >(result.value()).results(origin)) {
@@ -144,17 +146,21 @@ public:
             return Vec3Class::newVec3Class(std::get<CommandPosition>(result.value())
                 .getPosition(CommandVersion::CurrentVersion(), origin, Vec3::ZERO()));
         }
+        /*
         if (result.hold(ParamKind::Kind::Message)) {
             return String::newString(std::get<CommandMessage>(result.value())
                 .generateMessage(origin, CommandVersion::CurrentVersion())
                 .mMessage);
         }
+        */
         if (result.hold(ParamKind::Kind::RawText)) {
             return String::newString(std::get<CommandRawText>(result.value()).mText);
         }
+        /*
         if (result.hold(ParamKind::Kind::JsonValue)) {
             return String::newString(JsonHelpers::serialize(std::get<Json::Value>(result.value())));
         }
+            */
         if (result.hold(ParamKind::Kind::Effect)) {
             return String::newString(std::get<MobEffect const *>(result.value())->mResourceName);
         }

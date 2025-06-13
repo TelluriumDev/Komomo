@@ -16,7 +16,7 @@ ClassDefine<MaterialClass> materialClassBuilder =
         // .InstanceFunction(isTopSolid, MaterialClass)
         // .InstanceFunction(isType, MaterialClass)
 
-        .function("getMaterial", &MaterialClass::getMaterial)
+        //.function("getMaterial", &MaterialClass::getMaterial)
 
         .build();
 
@@ -81,8 +81,9 @@ Local<Object> MaterialClass::newMaterial(Material *material) {
 //     }
 //     Catch;
 // }
-
+/*
 Local<Value> MaterialClass::getMaterial(int type) {
     auto &material = const_cast<Material &>(Material::getMaterial(static_cast<MaterialType>(type)));
     return MaterialClass::newMaterial(&material);
 }
+*/
