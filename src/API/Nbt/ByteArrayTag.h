@@ -25,3 +25,4 @@ public:
 };
 
 extern ClassDefine<ByteArrayTagClass> byteArrayTagClassBuilder;
+
