@@ -1,7 +1,5 @@
 #include "API/Logger/Logger.h"
 
-using namespace Komomo;
-
 ClassDefine<LoggerClass> loggerClassBuilder = defineClass<LoggerClass>("Logger")
                                                   .constructor(nullptr)
 

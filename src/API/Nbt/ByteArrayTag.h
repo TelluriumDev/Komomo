@@ -22,7 +22,14 @@ public:
 
 public:
     static Local<Object> newByteArrayTagClass(ByteArrayTag* byteArrayTag);
+
+    static Local<Object> createByteArrayTagClass(const Arguments& args);
+
+    virtual Local<Value> toString();
+
+    virtual Local<Value> getId();
+
+    virtual Local<Value> getData();
 };
 
 extern ClassDefine<ByteArrayTagClass> byteArrayTagClassBuilder;
-

@@ -234,7 +234,7 @@ public: /* Members */
 
     // Member(isClimbing);
 
-    Member(isControlledByLocalInstance);
+    // Member(isControlledByLocalInstance);
 
     Member(isCreative);
 
@@ -635,7 +635,7 @@ public:
 
     Method(distanceToSqr);
 
-    Method(dropLeash);
+    // Method(dropLeash);
 
     Method(dropTowards);
 

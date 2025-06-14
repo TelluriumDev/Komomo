@@ -17,6 +17,22 @@ public:
 
 public:
     static Local<Object> newTagClass(Tag* tag);
+
+    Local<Value> toSnbt();
+
+    virtual Local<Value> toString();
+
+    virtual Local<Value> getId();
+
+    virtual Local<Value> deleteChildren();
+
+    virtual Local<Value> hash();
+
+    static Local<Value> getTagName(const Arguments& args);
+
+    static Local<Value> NullString();
+
+    virtual Local<Value> getData();
 };
 
 extern ClassDefine<TagClass> tagClassBuilder;

@@ -6,12 +6,12 @@ add_repositories("miracleforest https://github.com/MiracleForest/xmake-repo")
 add_repositories("groupmountain-repo https://github.com/GroupMountain/xmake-repo.git")
 
 add_requires("nodejs 22.12.0") -- iceblockmc
-add_requires("levilamina 1.2.0-rc.1")
+add_requires("levilamina 1.3.1")
 add_requires("levibuildscript")
 add_requires(
     "microsoft-gsl 4.0.0",
-    "ilistenattentively 0.4.0",
-    "demangler"
+    "ilistenattentively 0.6.0"
+    -- "demangler"
     -- "uwebsockets"
 )
 add_requires("gmlib")
@@ -41,8 +41,8 @@ target("Komomo")
         "concurrentqueue",
         "magic_enum",
         "ilistenattentively",
-        "gmlib",
-        "demangler"
+        "gmlib"
+        -- "demangler"
         -- "uwebsockets"
     )
     set_kind("shared")

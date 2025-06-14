@@ -25,7 +25,7 @@
 
 
 ClassDefine<ActorClass> actorClassBuilder =
-        defineClass<ActorClass>("Actor")
+    defineClass<ActorClass>("Actor")
         .constructor(nullptr)
 
         .instanceProperty("typeName", &ActorClass::typeName)
@@ -134,7 +134,7 @@ ClassDefine<ActorClass> actorClassBuilder =
         .instanceProperty("isChested", &ActorClass::isChested)
         .instanceProperty("isClientSide", &ActorClass::isClientSide)
         // .instanceProperty("isClimbing", &ActorClass::isClimbing)
-        .instanceProperty("isControlledByLocalInstance", &ActorClass::isControlledByLocalInstance)
+        // .instanceProperty("isControlledByLocalInstance", &ActorClass::isControlledByLocalInstance)
         .instanceProperty("isCreative", &ActorClass::isCreative)
         .instanceProperty("isDancing", &ActorClass::isDancing)
         .instanceProperty("isDead", &ActorClass::isDead)
@@ -593,7 +593,7 @@ ClassDefine<ActorClass> actorClassBuilder =
         .build();
 
 
-Local<Object> ActorClass::newActor(Actor *actor) { return (new ActorClass(actor))->getScriptObject(); }
+Local<Object> ActorClass::newActor(Actor* actor) { return (new ActorClass(actor))->getScriptObject(); }
 
 #define CallFunction(Type, Function)                                                                                   \
     try {                                                                                                              \
@@ -622,7 +622,7 @@ Local<Value> ActorClass::canInteractWithOtherEntitiesInGame() {
 Local<Value> ActorClass::isSilentObserver() { CallFunction(Boolean, isSilentObserver()) };
 Local<Value> ActorClass::isSleeping() { CallFunction(Boolean, isSleeping()) };
 Local<Value> ActorClass::isBlocking() { CallFunction(Boolean, isBlocking()) };
-Local<Value> ActorClass::isAlive() { CallFunction(Boolean, isAlive()) }
+Local<Value> ActorClass::isAlive(){CallFunction(Boolean, isAlive())}
 
 Local<Value> ActorClass::isOnFire() {
     CallFunction(Boolean, isOnFire())
@@ -631,7 +631,8 @@ Local<Value> ActorClass::isSurfaceMob() { CallFunction(Boolean, isSurfaceMob()) 
 Local<Value> ActorClass::isTargetable() { CallFunction(Boolean, isTargetable()) };
 Local<Value> ActorClass::canPowerJump() { CallFunction(Boolean, canPowerJump()) };
 Local<Value> ActorClass::isEnchanted() { CallFunction(Boolean, isEnchanted()) };
-// Local<Value> ActorClass::shouldRender(){CallFunction(Boolean, shouldRender())} Local<Value> ActorClass::consumeTotem() {
+// Local<Value> ActorClass::shouldRender(){CallFunction(Boolean, shouldRender())} Local<Value>
+// ActorClass::consumeTotem() {
 //     CallFunction(Boolean, consumeTotem())
 // };
 Local<Value> ActorClass::canFreeze() { CallFunction(Boolean, canFreeze()) };
@@ -696,16 +697,15 @@ Local<Value> ActorClass::strength() { CallFunction(Number, getStrength()) };
 // Local<Value> ActorClass::strengthMax() { CallFunction(Number, getStrengthMax()) };
 // Local<Value> ActorClass::tradeInterest() { CallFunction(Number, getTradeInterest()) };
 Local<Value> ActorClass::variant() { CallFunction(Number, getVariant()) };
-// Local<Value> ActorClass::verticalSpeedInMetersPerSecond() { CallFunction(Number, getVerticalSpeedInMetersPerSecond()) };
-// Local<Value> ActorClass::yHeadRot() { CallFunction(Number, getYHeadRot()) };
-// Local<Value> ActorClass::hasAnyEffects() { CallFunction(Number, hasAnyEffects()) };
-// Local<Value> ActorClass::hasDimension() { CallFunction(Number, hasDimension()) };
-// Local<Value> ActorClass::hasFishingHook() { CallFunction(Number, hasFishingHook()) };
-// Local<Value> ActorClass::hasLevel() { CallFunction(Number, hasLevel()) };
-// Local<Value> ActorClass::hasPassenger() { CallFunction(Number, hasPassenger()) };
-// Local<Value> ActorClass::hasPersistingTrade() { CallFunction(Number, hasPersistingTrade()) };
-// Local<Value> ActorClass::hasPlayerPassenger() { CallFunction(Number, hasPlayerPassenger()) };
-// Local<Value> ActorClass::hasPriorityAmmunition() { CallFunction(Number, hasPriorityAmmunition()) };
+// Local<Value> ActorClass::verticalSpeedInMetersPerSecond() { CallFunction(Number, getVerticalSpeedInMetersPerSecond())
+// }; Local<Value> ActorClass::yHeadRot() { CallFunction(Number, getYHeadRot()) }; Local<Value>
+// ActorClass::hasAnyEffects() { CallFunction(Number, hasAnyEffects()) }; Local<Value> ActorClass::hasDimension() {
+// CallFunction(Number, hasDimension()) }; Local<Value> ActorClass::hasFishingHook() { CallFunction(Number,
+// hasFishingHook()) }; Local<Value> ActorClass::hasLevel() { CallFunction(Number, hasLevel()) }; Local<Value>
+// ActorClass::hasPassenger() { CallFunction(Number, hasPassenger()) }; Local<Value> ActorClass::hasPersistingTrade() {
+// CallFunction(Number, hasPersistingTrade()) }; Local<Value> ActorClass::hasPlayerPassenger() { CallFunction(Number,
+// hasPlayerPassenger()) }; Local<Value> ActorClass::hasPriorityAmmunition() { CallFunction(Number,
+// hasPriorityAmmunition()) };
 Local<Value> ActorClass::hasRuntimeID() { CallFunction(Number, hasRuntimeID()) };
 Local<Value> ActorClass::hasSaddle() { CallFunction(Number, hasSaddle()) };
 // Local<Value> ActorClass::hasTags() { CallFunction(Number, hasTags()) };
@@ -726,7 +726,7 @@ Local<Value> ActorClass::isBaby() { CallFunction(Number, isBaby()) };
 Local<Value> ActorClass::isChested() { CallFunction(Number, isChested()) };
 Local<Value> ActorClass::isClientSide() { CallFunction(Number, isClientSide()) };
 // Local<Value> ActorClass::isClimbing() { CallFunction(Number, isClimbing()) };
-Local<Value> ActorClass::isControlledByLocalInstance() { CallFunction(Number, isControlledByLocalInstance()) };
+// Local<Value> ActorClass::isControlledByLocalInstance() { CallFunction(Number, isControlledByLocalInstance()) };
 Local<Value> ActorClass::isCreative() { CallFunction(Number, isCreative()) };
 Local<Value> ActorClass::isDancing() { CallFunction(Number, isDancing()) };
 Local<Value> ActorClass::isDead() { CallFunction(Number, isDead()) };
@@ -735,7 +735,7 @@ Local<Value> ActorClass::isDoorOpener() { CallFunction(Number, isDoorOpener()) }
 Local<Value> ActorClass::isGlobal() { CallFunction(Number, isGlobal()) };
 // Local<Value> ActorClass::isIgnited() { CallFunction(Number, isIgnited()) };
 // Local<Value> ActorClass::isImmersedInWater() { CallFunction(Number, isImmersedInWater()) };
-//Local<Value> ActorClass::isInClouds() { CallFunction(Number, isInClouds()) };
+// Local<Value> ActorClass::isInClouds() { CallFunction(Number, isInClouds()) };
 // Local<Value> ActorClass::isInContactWithWater() { CallFunction(Number, isInContactWithWater()) };
 Local<Value> ActorClass::isInLava() { CallFunction(Number, isInLava()) };
 Local<Value> ActorClass::isInLove() { CallFunction(Number, isInLove()) };
@@ -792,7 +792,7 @@ Local<Value> ActorClass::isWorldBuilder() { CallFunction(Number, isWorldBuilder(
 
 // LLNDAPI class EntityContext&       getEntityContext();
 // LLNDAPI class EntityContext const& getEntityContext() const;
-Local<Value> ActorClass::getEntityContext(const Arguments &args) {
+Local<Value> ActorClass::getEntityContext(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -803,7 +803,7 @@ Local<Value> ActorClass::getEntityContext(const Arguments &args) {
 }
 
 // LLAPI void refresh();
-Local<Value> ActorClass::refresh(const Arguments &args) {
+Local<Value> ActorClass::refresh(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -816,7 +816,7 @@ Local<Value> ActorClass::refresh(const Arguments &args) {
 
 // LLAPI optional_ref<Actor> clone(Vec3 const& pos,
 //                           std::optional<DimensionType> dimId = std::nullopt) const;
-Local<Value> ActorClass::clone(const Arguments &args) {
+Local<Value> ActorClass::clone(const Arguments& args) {
     CheckArgsCountReturn(args, 1, Local<Value>());
     CheckInstanceTypeReturn(args[0], Vec3Class, Local<Value>());
     try {
@@ -830,11 +830,11 @@ Local<Value> ActorClass::clone(const Arguments &args) {
         CheckInstanceTypeReturn(args[1], DimensionTypeClass, Local<Value>());
         if (args.size() == 2) {
             return ActorClass::newActor(&mActor
-                ->clone(
-                    engine->getNativeInstance<Vec3Class>(args[0])->mVec3,
-                    *engine->getNativeInstance<DimensionTypeClass>(args[1])->mDimensionType
-                )
-                .value());
+                                             ->clone(
+                                                 engine->getNativeInstance<Vec3Class>(args[0])->mVec3,
+                                                 *engine->getNativeInstance<DimensionTypeClass>(args[1])->mDimensionType
+                                             )
+                                             .value());
         }
     }
     Catch;
@@ -843,7 +843,7 @@ Local<Value> ActorClass::clone(const Arguments &args) {
 
 
 // LLNDAPI class Vec3 getFeetPos() const;
-Local<Value> ActorClass::getFeetPos(const Arguments &args) {
+Local<Value> ActorClass::getFeetPos(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -855,7 +855,7 @@ Local<Value> ActorClass::getFeetPos(const Arguments &args) {
 }
 
 // LLNDAPI class Vec3 getHeadPos() const;
-Local<Value> ActorClass::getHeadPos(const Arguments &args) {
+Local<Value> ActorClass::getHeadPos(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -867,7 +867,7 @@ Local<Value> ActorClass::getHeadPos(const Arguments &args) {
 }
 
 // LLNDAPI class BlockPos getFeetBlockPos() const;
-Local<Value> ActorClass::getFeetBlockPos(const Arguments &args) {
+Local<Value> ActorClass::getFeetBlockPos(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -879,7 +879,7 @@ Local<Value> ActorClass::getFeetBlockPos(const Arguments &args) {
 }
 
 // LLAPI void setOnFire(int time, bool isEffect = true);
-Local<Value> ActorClass::setOnFire(const Arguments &args) {
+Local<Value> ActorClass::setOnFire(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -899,7 +899,7 @@ Local<Value> ActorClass::setOnFire(const Arguments &args) {
 }
 
 // LLAPI void stopFire();
-Local<Value> ActorClass::stopFire(const Arguments &args) {
+Local<Value> ActorClass::stopFire(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -911,7 +911,7 @@ Local<Value> ActorClass::stopFire(const Arguments &args) {
 }
 
 // LLNDAPI float getPosDeltaPerSecLength() const;
-Local<Value> ActorClass::getPosDeltaPerSecLength(const Arguments &args) {
+Local<Value> ActorClass::getPosDeltaPerSecLength(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -928,7 +928,7 @@ Local<Value> ActorClass::getPosDeltaPerSecLength(const Arguments &args) {
 //     ActorDamageCause    cause    = ActorDamageCause::Override,
 //     optional_ref<Actor> attacker = std::nullopt
 // );
-Local<Value> ActorClass::hurtByCause(const Arguments &args) {
+Local<Value> ActorClass::hurtByCause(const Arguments& args) {
     CheckArgsCountReturn(args, 1, Local<Value>());
     CheckArgType(args[1], ValueKind::kNumber);
     try {
@@ -965,7 +965,7 @@ Local<Value> ActorClass::hurtByCause(const Arguments &args) {
 //     std::function<bool(class BlockSource const&, class Block const&, bool)> const& blockCheckFunction =
 //         [](auto&&...) -> bool { return true; }
 // ) const;
-Local<Value> ActorClass::traceRay(const Arguments &args) {
+Local<Value> ActorClass::traceRay(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1005,7 +1005,7 @@ Local<Value> ActorClass::traceRay(const Arguments &args) {
 
 // LLAPI void teleport(class Vec3 const& pos, DimensionType dimId);
 // LLAPI void teleport(class Vec3 const& pos, DimensionType dimId, class Vec2 const& rotation);
-Local<Value> ActorClass::teleport(const Arguments &args) {
+Local<Value> ActorClass::teleport(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckInstanceType(args[0], Vec3Class);
     CheckInstanceType(args[1], DimensionTypeClass);
@@ -1014,8 +1014,8 @@ Local<Value> ActorClass::teleport(const Arguments &args) {
             return Local<Value>();
         }
         auto engine = EngineScope::currentEngine();
-        auto pos = engine->getNativeInstance<Vec3Class>(args[0])->mVec3;
-        auto dimId = engine->getNativeInstance<DimensionTypeClass>(args[1])->mDimensionType;
+        auto pos    = engine->getNativeInstance<Vec3Class>(args[0])->mVec3;
+        auto dimId  = engine->getNativeInstance<DimensionTypeClass>(args[1])->mDimensionType;
         if (args.size() == 1) {
             mActor->teleport(pos, *dimId);
             return Local<Value>();
@@ -1032,7 +1032,7 @@ Local<Value> ActorClass::teleport(const Arguments &args) {
 }
 
 // LLAPI void setName(std::string const& name);
-Local<Value> ActorClass::setName(const Arguments &args) {
+Local<Value> ActorClass::setName(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     try {
@@ -1046,7 +1046,7 @@ Local<Value> ActorClass::setName(const Arguments &args) {
 }
 
 // LLNDAPI float evalMolang(std::string const& expression);
-Local<Value> ActorClass::evalMolang(const Arguments &args) {
+Local<Value> ActorClass::evalMolang(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     try {
@@ -1065,7 +1065,7 @@ Local<Value> ActorClass::evalMolang(const Arguments &args) {
 // virtual bool hasComponent(::HashedString const& name) const;
 
 // virtual void outOfWorld();
-Local<Value> ActorClass::outOfWorld(const Arguments &args) {
+Local<Value> ActorClass::outOfWorld(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1083,7 +1083,7 @@ Local<Value> ActorClass::outOfWorld(const Arguments &args) {
 // virtual void reloadComponents(::ActorInitializationMethod, ::VariantParameterList const&);
 
 // virtual void resetUserPos(bool);
-Local<Value> ActorClass::resetUserPos(const Arguments &args) {
+Local<Value> ActorClass::resetUserPos(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kBoolean);
     try {
@@ -1097,7 +1097,7 @@ Local<Value> ActorClass::resetUserPos(const Arguments &args) {
 }
 
 // virtual ::ActorType getOwnerEntityType();
-Local<Value> ActorClass::getOwnerEntityType(const Arguments &args) {
+Local<Value> ActorClass::getOwnerEntityType(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1109,7 +1109,7 @@ Local<Value> ActorClass::getOwnerEntityType(const Arguments &args) {
 }
 
 // virtual void remove();
-Local<Value> ActorClass::remove(const Arguments &args) {
+Local<Value> ActorClass::remove(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1121,7 +1121,7 @@ Local<Value> ActorClass::remove(const Arguments &args) {
 }
 
 // virtual ::Vec3 getFiringPos() const;
-Local<Value> ActorClass::getFiringPos(const Arguments &args) {
+Local<Value> ActorClass::getFiringPos(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1133,7 +1133,7 @@ Local<Value> ActorClass::getFiringPos(const Arguments &args) {
 }
 
 // virtual float getInterpolatedBodyRot(float a = 0.0f) const;
-Local<Value> ActorClass::getInterpolatedBodyRot(const Arguments &args) {
+Local<Value> ActorClass::getInterpolatedBodyRot(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1151,7 +1151,7 @@ Local<Value> ActorClass::getInterpolatedBodyRot(const Arguments &args) {
 }
 
 // virtual float getInterpolatedHeadRot(float = 0.0f) const;
-Local<Value> ActorClass::getInterpolatedHeadRot(const Arguments &args) {
+Local<Value> ActorClass::getInterpolatedHeadRot(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1169,7 +1169,7 @@ Local<Value> ActorClass::getInterpolatedHeadRot(const Arguments &args) {
 }
 
 // virtual float getInterpolatedBodyYaw(float = 0.0f) const;
-Local<Value> ActorClass::getInterpolatedBodyYaw(const Arguments &args) {
+Local<Value> ActorClass::getInterpolatedBodyYaw(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1187,7 +1187,7 @@ Local<Value> ActorClass::getInterpolatedBodyYaw(const Arguments &args) {
 }
 
 // virtual float getYawSpeedInDegreesPerSecond() const;
-Local<Value> ActorClass::getYawSpeedInDegreesPerSecond(const Arguments &args) {
+Local<Value> ActorClass::getYawSpeedInDegreesPerSecond(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1199,7 +1199,7 @@ Local<Value> ActorClass::getYawSpeedInDegreesPerSecond(const Arguments &args) {
 }
 
 // virtual ::Vec3 getInterpolatedRidingOffset(float, int const) const;
-Local<Value> ActorClass::getInterpolatedRidingOffset(const Arguments &args) {
+Local<Value> ActorClass::getInterpolatedRidingOffset(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -1216,7 +1216,7 @@ Local<Value> ActorClass::getInterpolatedRidingOffset(const Arguments &args) {
 }
 
 // virtual void blockedByShield(::ActorDamageSource const& source, ::Actor& blocker);
-Local<Value> ActorClass::blockedByShield(const Arguments &args) {
+Local<Value> ActorClass::blockedByShield(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckInstanceType(args[0], ActorDamageSourceClass);
     CheckInstanceType(args[1], ActorClass);
@@ -1235,10 +1235,9 @@ Local<Value> ActorClass::blockedByShield(const Arguments &args) {
 }
 
 // virtual void teleportTo(::Vec3 const& pos, bool shouldStopRiding, int, int, bool keepVelocity);
-Local<Value> ActorClass::teleportTo(const Arguments &args) {
+Local<Value> ActorClass::teleportTo(const Arguments& args) {
     CheckArgsCount(args, 5);
-    CheckInstanceType(args[0], Vec3Class)
-    CheckArgType(args[1], ValueKind::kBoolean);
+    CheckInstanceType(args[0], Vec3Class) CheckArgType(args[1], ValueKind::kBoolean);
     CheckArgType(args[2], ValueKind::kNumber);
     CheckArgType(args[3], ValueKind::kNumber);
     CheckArgType(args[4], ValueKind::kBoolean);
@@ -1259,7 +1258,7 @@ Local<Value> ActorClass::teleportTo(const Arguments &args) {
 }
 
 // virtual void lerpMotion(::Vec3 const& delta);
-Local<Value> ActorClass::lerpMotion(const Arguments &args) {
+Local<Value> ActorClass::lerpMotion(const Arguments& args) {
     CheckInstanceType(args[0], Vec3Class);
     try {
         if (!mActor) {
@@ -1286,7 +1285,7 @@ Local<Value> ActorClass::lerpMotion(const Arguments &args) {
 // }
 
 // virtual void normalTick();
-Local<Value> ActorClass::normalTick(const Arguments &args) {
+Local<Value> ActorClass::normalTick(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1298,7 +1297,7 @@ Local<Value> ActorClass::normalTick(const Arguments &args) {
 }
 
 // virtual void baseTick();
-Local<Value> ActorClass::baseTick(const Arguments &args) {
+Local<Value> ActorClass::baseTick(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1310,7 +1309,7 @@ Local<Value> ActorClass::baseTick(const Arguments &args) {
 }
 
 // virtual void passengerTick();
-Local<Value> ActorClass::passengerTick(const Arguments &args) {
+Local<Value> ActorClass::passengerTick(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1322,7 +1321,7 @@ Local<Value> ActorClass::passengerTick(const Arguments &args) {
 }
 
 // virtual bool startRiding(::Actor& vehicle, bool forceRiding);
-Local<Value> ActorClass::startRiding(const Arguments &args) {
+Local<Value> ActorClass::startRiding(const Arguments& args) {
     CheckInstanceTypeReturn(args[0], ActorClass, Boolean::newBoolean(false));
     CheckArgTypeReturn(args[1], ValueKind::kBoolean, Boolean::newBoolean(false));
     try {
@@ -1339,7 +1338,7 @@ Local<Value> ActorClass::startRiding(const Arguments &args) {
 }
 
 // virtual void addPassenger(::Actor& passenger);
-Local<Value> ActorClass::addPassenger(const Arguments &args) {
+Local<Value> ActorClass::addPassenger(const Arguments& args) {
     CheckInstanceTypeReturn(args[0], ActorClass, Boolean::newBoolean(false));
     try {
         if (!mActor) {
@@ -1352,7 +1351,7 @@ Local<Value> ActorClass::addPassenger(const Arguments &args) {
 }
 
 // virtual ::std::string getExitTip(::std::string const& kind, ::InputMode mode, ::NewInteractionModel scheme) const;
-Local<Value> ActorClass::getExitTip(const Arguments &args) {
+Local<Value> ActorClass::getExitTip(const Arguments& args) {
     CheckArgsCount(args, 3);
     CheckArgTypeReturn(args[0], ValueKind::kString, String::newString(""));
     CheckArgTypeReturn(args[1], ValueKind::kNumber, String::newString(""));
@@ -1375,7 +1374,7 @@ Local<Value> ActorClass::getExitTip(const Arguments &args) {
 // virtual ::mce::Color getNameTagTextColor() const;
 
 // virtual ::Vec3 getHeadLookVector(float a = 0.0f) const;
-Local<Value> ActorClass::getHeadLookVector(const Arguments &args) {
+Local<Value> ActorClass::getHeadLookVector(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1394,7 +1393,7 @@ Local<Value> ActorClass::getHeadLookVector(const Arguments &args) {
 
 // MCAPI float getBrightness(float a = 0.0f) const;
 // virtual float getBrightness(float a, ::IConstBlockSource const& region) const;
-Local<Value> ActorClass::getBrightness(const Arguments &args) {
+Local<Value> ActorClass::getBrightness(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckArgTypeReturn(args[0], ValueKind::kNumber, Number::newNumber(0.0));
     CheckInstanceTypeReturn(args[1], IConstBlockSourceClass, Number::newNumber(0.0));
@@ -1417,7 +1416,7 @@ Local<Value> ActorClass::getBrightness(const Arguments &args) {
 }
 
 // virtual void playerTouch(::Player&);
-Local<Value> ActorClass::playerTouch(const Arguments &args) {
+Local<Value> ActorClass::playerTouch(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceTypeReturn(args[0], PlayerClass, Local<Value>());
     try {
@@ -1431,7 +1430,7 @@ Local<Value> ActorClass::playerTouch(const Arguments &args) {
 }
 
 // virtual void setSleeping(bool);
-Local<Value> ActorClass::setSleeping(const Arguments &args) {
+Local<Value> ActorClass::setSleeping(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kBoolean);
     try {
@@ -1445,7 +1444,7 @@ Local<Value> ActorClass::setSleeping(const Arguments &args) {
 }
 
 // virtual void setSneaking(bool value);
-Local<Value> ActorClass::setSneaking(const Arguments &args) {
+Local<Value> ActorClass::setSneaking(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kBoolean);
     try {
@@ -1459,7 +1458,7 @@ Local<Value> ActorClass::setSneaking(const Arguments &args) {
 }
 
 // virtual bool isDamageBlocked(::ActorDamageSource const&) const;
-Local<Value> ActorClass::isDamageBlocked(const Arguments &args) {
+Local<Value> ActorClass::isDamageBlocked(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceTypeReturn(args[0], ActorDamageSourceClass, Boolean::newBoolean(false));
     try {
@@ -1475,7 +1474,7 @@ Local<Value> ActorClass::isDamageBlocked(const Arguments &args) {
 }
 
 // virtual void setTarget(::Actor* entity);
-Local<Value> ActorClass::setTarget(const Arguments &args) {
+Local<Value> ActorClass::setTarget(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceTypeReturn(args[0], ActorClass, Local<Value>());
     try {
@@ -1489,7 +1488,7 @@ Local<Value> ActorClass::setTarget(const Arguments &args) {
 }
 
 // virtual bool isValidTarget(::Actor*) const;
-Local<Value> ActorClass::isValidTarget(const Arguments &args) {
+Local<Value> ActorClass::isValidTarget(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceTypeReturn(args[0], ActorClass, Boolean::newBoolean(false));
     try {
@@ -1505,7 +1504,7 @@ Local<Value> ActorClass::isValidTarget(const Arguments &args) {
 }
 
 // virtual bool attack(::Actor& target, ::ActorDamageCause const&);
-Local<Value> ActorClass::attack(const Arguments &args) {
+Local<Value> ActorClass::attack(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckInstanceTypeReturn(args[0], ActorClass, Boolean::newBoolean(false));
     CheckArgTypeReturn(args[1], ValueKind::kNumber, Boolean::newBoolean(false));
@@ -1523,7 +1522,7 @@ Local<Value> ActorClass::attack(const Arguments &args) {
 }
 
 // virtual void performRangedAttack(::Actor& target, float);
-Local<Value> ActorClass::performRangedAttack(const Arguments &args) {
+Local<Value> ActorClass::performRangedAttack(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckInstanceTypeReturn(args[0], ActorClass, Local<Value>());
     CheckArgTypeReturn(args[1], ValueKind::kNumber, Local<Value>());
@@ -1541,7 +1540,7 @@ Local<Value> ActorClass::performRangedAttack(const Arguments &args) {
 }
 
 // virtual void setOwner(::ActorUniqueID const ownerId);
-Local<Value> ActorClass::setOwner(const Arguments &args) {
+Local<Value> ActorClass::setOwner(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -1555,7 +1554,7 @@ Local<Value> ActorClass::setOwner(const Arguments &args) {
 }
 
 // virtual void setSitting(bool value);
-Local<Value> ActorClass::setSitting(const Arguments &args) {
+Local<Value> ActorClass::setSitting(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgTypeReturn(args[0], ValueKind::kBoolean, Local<Value>());
     try {
@@ -1569,7 +1568,7 @@ Local<Value> ActorClass::setSitting(const Arguments &args) {
 }
 
 // virtual void onTame()
-Local<Value> ActorClass::onTame(const Arguments &args) {
+Local<Value> ActorClass::onTame(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1581,7 +1580,7 @@ Local<Value> ActorClass::onTame(const Arguments &args) {
 }
 
 // virtual void onFailedTame();
-Local<Value> ActorClass::onFailedTame(const Arguments &args) {
+Local<Value> ActorClass::onFailedTame(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1593,7 +1592,7 @@ Local<Value> ActorClass::onFailedTame(const Arguments &args) {
 }
 
 // virtual void setStanding(bool value);
-Local<Value> ActorClass::setStanding(const Arguments &args) {
+Local<Value> ActorClass::setStanding(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kBoolean);
     try {
@@ -1607,7 +1606,7 @@ Local<Value> ActorClass::setStanding(const Arguments &args) {
 }
 
 // virtual ::SharedTypes::Legacy::LevelSoundEvent getAmbientSound() const;
-Local<Value> ActorClass::getAmbientSound(const Arguments &args) {
+Local<Value> ActorClass::getAmbientSound(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1619,7 +1618,7 @@ Local<Value> ActorClass::getAmbientSound(const Arguments &args) {
 }
 
 // virtual bool isInvulnerableTo(::ActorDamageSource const& source) const;
-Local<Value> ActorClass::isInvulnerableTo(const Arguments &args) {
+Local<Value> ActorClass::isInvulnerableTo(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceTypeReturn(args[0], ActorDamageSourceClass, Local<Value>());
     try {
@@ -1635,7 +1634,7 @@ Local<Value> ActorClass::isInvulnerableTo(const Arguments &args) {
 }
 
 // virtual ::ActorDamageCause getBlockDamageCause(::Block const& block) const;
-Local<Value> ActorClass::getBlockDamageCause(const Arguments &args) {
+Local<Value> ActorClass::getBlockDamageCause(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceTypeReturn(args[0], BlockClass, Local<Value>());
     try {
@@ -1651,7 +1650,7 @@ Local<Value> ActorClass::getBlockDamageCause(const Arguments &args) {
 }
 
 // virtual bool doFireHurt(int amount);
-Local<Value> ActorClass::doFireHurt(const Arguments &args) {
+Local<Value> ActorClass::doFireHurt(const Arguments& args) {
     CheckArgsCountReturn(args, 1, Boolean::newBoolean(false));
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -1664,7 +1663,7 @@ Local<Value> ActorClass::doFireHurt(const Arguments &args) {
 }
 
 // virtual void onLightningHit();
-Local<Value> ActorClass::onLightningHit(const Arguments &args) {
+Local<Value> ActorClass::onLightningHit(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1676,7 +1675,7 @@ Local<Value> ActorClass::onLightningHit(const Arguments &args) {
 }
 
 // virtual void feed(int itemId);
-Local<Value> ActorClass::feed(const Arguments &args) {
+Local<Value> ActorClass::feed(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -1690,7 +1689,7 @@ Local<Value> ActorClass::feed(const Arguments &args) {
 }
 
 // virtual void handleEntityEvent(::ActorEvent eventId, int data);
-Local<Value> ActorClass::handleEntityEvent(const Arguments &args) {
+Local<Value> ActorClass::handleEntityEvent(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -1708,7 +1707,7 @@ Local<Value> ActorClass::handleEntityEvent(const Arguments &args) {
 // virtual ::HashedString const& getActorRendererId() const;
 
 // virtual void despawn();
-Local<Value> ActorClass::despawn(const Arguments &args) {
+Local<Value> ActorClass::despawn(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1720,7 +1719,7 @@ Local<Value> ActorClass::despawn(const Arguments &args) {
 }
 
 // virtual void setArmor(::ArmorSlot slot, ::ItemStack const& item);
-Local<Value> ActorClass::setArmor(const Arguments &args) {
+Local<Value> ActorClass::setArmor(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckInstanceTypeReturn(args[1], ItemStackClass, Local<Value>());
@@ -1738,7 +1737,7 @@ Local<Value> ActorClass::setArmor(const Arguments &args) {
 }
 
 // virtual ::ArmorMaterialType getArmorMaterialTypeInSlot(::ArmorSlot) const;
-Local<Value> ActorClass::getArmorMaterialTypeInSlot(const Arguments &args) {
+Local<Value> ActorClass::getArmorMaterialTypeInSlot(const Arguments& args) {
     CheckArgsCountReturn(args, 1, Number::newNumber(0));
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -1754,7 +1753,7 @@ Local<Value> ActorClass::getArmorMaterialTypeInSlot(const Arguments &args) {
 }
 
 // virtual int getArmorTextureIndexInSlot(::ArmorSlot) const;
-Local<Value> ActorClass::getArmorTextureIndexInSlot(const Arguments &args) {
+Local<Value> ActorClass::getArmorTextureIndexInSlot(const Arguments& args) {
     CheckArgsCountReturn(args, 1, Number::newNumber(0));
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -1762,14 +1761,15 @@ Local<Value> ActorClass::getArmorTextureIndexInSlot(const Arguments &args) {
             return Number::newNumber(0);
         }
         return Number::newNumber(
-            mActor->getArmorTextureIndexInSlot(ConvertFromScriptX<SharedTypes::Legacy::ArmorSlot>(args[0])));
+            mActor->getArmorTextureIndexInSlot(ConvertFromScriptX<SharedTypes::Legacy::ArmorSlot>(args[0]))
+        );
     }
     Catch;
     return Number::newNumber(0);
 }
 
 // virtual float getArmorColorInSlot(::ArmorSlot, int) const;
-Local<Value> ActorClass::getArmorColorInSlot(const Arguments &args) {
+Local<Value> ActorClass::getArmorColorInSlot(const Arguments& args) {
     CheckArgsCountReturn(args, 2, Number::newNumber(0.0f));
     CheckArgType(args[0], ValueKind::kNumber);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -1777,17 +1777,17 @@ Local<Value> ActorClass::getArmorColorInSlot(const Arguments &args) {
         if (!mActor) {
             return Number::newNumber(0.0f);
         }
-        return Number::newNumber(
-            mActor->getArmorColorInSlot(ConvertFromScriptX<SharedTypes::Legacy::ArmorSlot>(args[0]),
-                                        args[1].asNumber().toInt32())
-        );
+        return Number::newNumber(mActor->getArmorColorInSlot(
+            ConvertFromScriptX<SharedTypes::Legacy::ArmorSlot>(args[0]),
+            args[1].asNumber().toInt32()
+        ));
     }
     Catch;
     return Number::newNumber(0.0f);
 }
 
 // virtual void setEquippedSlot(::SharedTypes::Legacy::EquipmentSlot, ::ItemStack const&);
-Local<Value> ActorClass::setEquippedSlot(const Arguments &args) {
+Local<Value> ActorClass::setEquippedSlot(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckInstanceTypeReturn(args[1], ItemStackClass, Local<Value>());
@@ -1805,7 +1805,7 @@ Local<Value> ActorClass::setEquippedSlot(const Arguments &args) {
 }
 
 // virtual void setCarriedItem(::ItemStack const& item);
-Local<Value> ActorClass::setCarriedItem(const Arguments &args) {
+Local<Value> ActorClass::setCarriedItem(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceTypeReturn(args[0], ItemStackClass, Local<Value>());
     try {
@@ -1819,20 +1819,20 @@ Local<Value> ActorClass::setCarriedItem(const Arguments &args) {
 }
 
 // virtual ::ItemStack const& getCarriedItem() const;
-Local<Value> ActorClass::getCarriedItem(const Arguments &args) {
+Local<Value> ActorClass::getCarriedItem(const Arguments& args) {
     CheckArgsCountReturn(args, 0, Local<Value>());
     try {
         if (!mActor) {
             return Local<Value>();
         }
-        return ItemStackClass::newItemStack(const_cast<ItemStack *>(&mActor->getCarriedItem()));
+        return ItemStackClass::newItemStack(const_cast<ItemStack*>(&mActor->getCarriedItem()));
     }
     Catch;
     return Local<Value>();
 }
 
 // virtual void setOffhandSlot(::ItemStack const& item);
-Local<Value> ActorClass::setOffhandSlot(const Arguments &args) {
+Local<Value> ActorClass::setOffhandSlot(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceTypeReturn(args[0], ItemStackClass, Local<Value>());
     try {
@@ -1846,13 +1846,13 @@ Local<Value> ActorClass::setOffhandSlot(const Arguments &args) {
 }
 
 // virtual ::ItemStack const& getEquippedTotem() const;
-Local<Value> ActorClass::getEquippedTotem(const Arguments &args) {
+Local<Value> ActorClass::getEquippedTotem(const Arguments& args) {
     CheckArgsCountReturn(args, 0, Local<Value>());
     try {
         if (!mActor) {
             return Local<Value>();
         }
-        return ItemStackClass::newItemStack(const_cast<ItemStack *>(&mActor->getEquippedTotem()));
+        return ItemStackClass::newItemStack(const_cast<ItemStack*>(&mActor->getEquippedTotem()));
     }
     Catch;
     return Local<Value>();
@@ -1862,7 +1862,7 @@ Local<Value> ActorClass::getEquippedTotem(const Arguments &args) {
 // virtual ::HashedString const& queryEntityRenderer() const;
 
 // virtual ::ActorUniqueID getSourceUniqueID() const;
-Local<Value> ActorClass::getSourceUniqueID(const Arguments &args) {
+Local<Value> ActorClass::getSourceUniqueID(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1874,7 +1874,7 @@ Local<Value> ActorClass::getSourceUniqueID(const Arguments &args) {
 }
 
 // virtual ::AABB getLiquidAABB(::MaterialType const liquidType) const;
-Local<Value> ActorClass::getLiquidAABB(const Arguments &args) {
+Local<Value> ActorClass::getLiquidAABB(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -1889,7 +1889,7 @@ Local<Value> ActorClass::getLiquidAABB(const Arguments &args) {
 }
 
 // virtual void handleInsidePortal(::BlockPos const& portalPos);
-Local<Value> ActorClass::handleInsidePortal(const Arguments &args) {
+Local<Value> ActorClass::handleInsidePortal(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], BlockPos);
     try {
@@ -1904,7 +1904,7 @@ Local<Value> ActorClass::handleInsidePortal(const Arguments &args) {
 
 // virtual void changeDimension(::DimensionType toId);
 // virtual void changeDimension(::ChangeDimensionPacket const&); // two overloads
-Local<Value> ActorClass::changeDimension(const Arguments &args) {
+Local<Value> ActorClass::changeDimension(const Arguments& args) {
     CheckArgsCount(args, 1);
     try {
         if (!mActor) {
@@ -1918,8 +1918,8 @@ Local<Value> ActorClass::changeDimension(const Arguments &args) {
         }
         if (IsInstanceOf<ChangeDimensionPacketClass>(args[0])) {
             mActor->changeDimension(*EngineScope::currentEngine()
-                ->getNativeInstance<ChangeDimensionPacketClass>(args[0])
-                ->mChangeDimensionPacket);
+                                         ->getNativeInstance<ChangeDimensionPacketClass>(args[0])
+                                         ->mChangeDimensionPacket);
             return Local<Value>();
         }
 
@@ -1930,7 +1930,7 @@ Local<Value> ActorClass::changeDimension(const Arguments &args) {
 }
 
 // virtual ::ActorUniqueID getControllingPlayer() const;
-Local<Value> ActorClass::getControllingPlayer(const Arguments &args) {
+Local<Value> ActorClass::getControllingPlayer(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -1942,7 +1942,7 @@ Local<Value> ActorClass::getControllingPlayer(const Arguments &args) {
 }
 
 // virtual float causeFallDamageToActor(float, float, ::ActorDamageSource);
-Local<Value> ActorClass::causeFallDamageToActor(const Arguments &args) {
+Local<Value> ActorClass::causeFallDamageToActor(const Arguments& args) {
     CheckArgsCount(args, 3);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -1962,7 +1962,7 @@ Local<Value> ActorClass::causeFallDamageToActor(const Arguments &args) {
 }
 
 // virtual void onSynchedDataUpdate(int dataId);
-Local<Value> ActorClass::onSynchedDataUpdate(const Arguments &args) {
+Local<Value> ActorClass::onSynchedDataUpdate(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -1976,7 +1976,7 @@ Local<Value> ActorClass::onSynchedDataUpdate(const Arguments &args) {
 }
 
 // virtual bool canAddPassenger(::Actor& passenger) const;
-Local<Value> ActorClass::canAddPassenger(const Arguments &args) {
+Local<Value> ActorClass::canAddPassenger(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], ActorClass);
     try {
@@ -1992,7 +1992,7 @@ Local<Value> ActorClass::canAddPassenger(const Arguments &args) {
 }
 
 // virtual bool canPickupItem(::ItemStack const&) const;
-Local<Value> ActorClass::canPickupItem(const Arguments &args) {
+Local<Value> ActorClass::canPickupItem(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], ItemStackClass);
     try {
@@ -2008,16 +2008,17 @@ Local<Value> ActorClass::canPickupItem(const Arguments &args) {
 }
 
 // virtual void sendMotionPacketIfNeeded(::PlayerMovementSettings const& playerMovementSettings);
-Local<Value> ActorClass::sendMotionPacketIfNeeded(const Arguments &args) {
-    CheckArgsCount(args, 1);
-    CheckInstanceType(args[0], PlayerMovementSettingsClass);
+Local<Value> ActorClass::sendMotionPacketIfNeeded(const Arguments& args) {
+    // CheckArgsCount(args, 1);
+    // CheckInstanceType(args[0], PlayerMovementSettingsClass);
     try {
         if (!mActor) {
             return Local<Value>();
         }
-        mActor->sendMotionPacketIfNeeded(*EngineScope::currentEngine()
-            ->getNativeInstance<PlayerMovementSettingsClass>(args[0])
-            ->mPlayerMovementSettings);
+        mActor->sendMotionPacketIfNeeded();
+        // (*EngineScope::currentEngine()
+        //     ->getNativeInstance<PlayerMovementSettingsClass>(args[0])
+        //     ->mPlayerMovementSettings);
         return Local<Value>();
     }
     Catch;
@@ -2026,7 +2027,7 @@ Local<Value> ActorClass::sendMotionPacketIfNeeded(const Arguments &args) {
 
 
 // virtual void startSwimming();
-Local<Value> ActorClass::startSwimming(const Arguments &args) {
+Local<Value> ActorClass::startSwimming(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2039,7 +2040,7 @@ Local<Value> ActorClass::startSwimming(const Arguments &args) {
 }
 
 // virtual void stopSwimming();
-Local<Value> ActorClass::stopSwimming(const Arguments &args) {
+Local<Value> ActorClass::stopSwimming(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2052,7 +2053,7 @@ Local<Value> ActorClass::stopSwimming(const Arguments &args) {
 }
 
 // virtual void buildDebugInfo(::std::string&) const;
-Local<Value> ActorClass::buildDebugInfo(const Arguments &args) {
+Local<Value> ActorClass::buildDebugInfo(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     try {
@@ -2067,7 +2068,7 @@ Local<Value> ActorClass::buildDebugInfo(const Arguments &args) {
 }
 
 // virtual ::CommandPermissionLevel getCommandPermissionLevel() const;
-Local<Value> ActorClass::getCommandPermissionLevel(const Arguments &args) {
+Local<Value> ActorClass::getCommandPermissionLevel(const Arguments& args) {
     CheckInstanceType(args[1], CommandPermissionLevel);
     try {
         if (!mActor) {
@@ -2080,7 +2081,7 @@ Local<Value> ActorClass::getCommandPermissionLevel(const Arguments &args) {
 }
 
 // virtual bool canBeAffected(uint id) const;
-Local<Value> ActorClass::canBeAffected(const Arguments &args) {
+Local<Value> ActorClass::canBeAffected(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kBoolean);
     try {
@@ -2094,7 +2095,7 @@ Local<Value> ActorClass::canBeAffected(const Arguments &args) {
 }
 
 // virtual bool canBeAffectedByArrow(::MobEffectInstance const& effect) const;
-Local<Value> ActorClass::canBeAffectedByArrow(const Arguments &args) {
+Local<Value> ActorClass::canBeAffectedByArrow(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], MobEffectInstanceClass);
     try {
@@ -2110,7 +2111,7 @@ Local<Value> ActorClass::canBeAffectedByArrow(const Arguments &args) {
 }
 
 // virtual void onEffectRemoved(::MobEffectInstance& effect);
-Local<Value> ActorClass::onEffectRemoved(const Arguments &args) {
+Local<Value> ActorClass::onEffectRemoved(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], MobEffectInstanceClass);
     try {
@@ -2131,7 +2132,7 @@ Local<Value> ActorClass::onEffectRemoved(const Arguments &args) {
 // virtual ::AnimationComponent& getAnimationComponent();
 
 // virtual void openContainerComponent(::Player& player);
-Local<Value> ActorClass::openContainerComponent(const Arguments &args) {
+Local<Value> ActorClass::openContainerComponent(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], PlayerClass);
     try {
@@ -2146,7 +2147,7 @@ Local<Value> ActorClass::openContainerComponent(const Arguments &args) {
 }
 
 // virtual void swing();
-Local<Value> ActorClass::swing(const Arguments &args) {
+Local<Value> ActorClass::swing(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2158,7 +2159,7 @@ Local<Value> ActorClass::swing(const Arguments &args) {
 }
 
 // virtual void useItem(::ItemStackBase& item, ::ItemUseMethod itemUseMethod, bool consumeItem);
-Local<Value> ActorClass::useItem(const Arguments &args) {
+Local<Value> ActorClass::useItem(const Arguments& args) {
     CheckArgsCount(args, 3);
     CheckInstanceType(args[0], ItemStackBaseClass);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -2181,7 +2182,7 @@ Local<Value> ActorClass::useItem(const Arguments &args) {
 // virtual void getDebugText(::std::vector<::std::string>& outputInfo);
 
 // virtual float getPassengerYRotation(::Actor const& passenger) const;
-Local<Value> ActorClass::getPassengerYRotation(const Arguments &args) {
+Local<Value> ActorClass::getPassengerYRotation(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], ActorClass);
     try {
@@ -2197,7 +2198,7 @@ Local<Value> ActorClass::getPassengerYRotation(const Arguments &args) {
 }
 
 // virtual bool add(::ItemStack& item);
-Local<Value> ActorClass::add(const Arguments &args) {
+Local<Value> ActorClass::add(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], ItemStackClass);
     try {
@@ -2213,7 +2214,7 @@ Local<Value> ActorClass::add(const Arguments &args) {
 }
 
 // virtual bool drop(::ItemStack const& item, bool const randomly);
-Local<Value> ActorClass::drop(const Arguments &args) {
+Local<Value> ActorClass::drop(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckInstanceType(args[0], ItemStackClass);
     CheckArgType(args[1], ValueKind::kBoolean);
@@ -2231,7 +2232,7 @@ Local<Value> ActorClass::drop(const Arguments &args) {
 }
 
 //  virtual bool getInteraction(::Player& player, ::ActorInteraction& interaction, ::Vec3 const&);
-Local<Value> ActorClass::getInteraction(const Arguments &args) {
+Local<Value> ActorClass::getInteraction(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckInstanceType(args[0], PlayerClass);
     CheckInstanceType(args[1], ActorInteractionClass);
@@ -2250,7 +2251,7 @@ Local<Value> ActorClass::getInteraction(const Arguments &args) {
 }
 
 // virtual bool canDestroyBlock(::Block const&) const;
-Local<Value> ActorClass::canDestroyBlock(const Arguments &args) {
+Local<Value> ActorClass::canDestroyBlock(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], BlockClass);
     try {
@@ -2266,7 +2267,7 @@ Local<Value> ActorClass::canDestroyBlock(const Arguments &args) {
 }
 
 // virtual void setAuxValue(int);
-Local<Value> ActorClass::setAuxValue(const Arguments &args) {
+Local<Value> ActorClass::setAuxValue(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -2284,7 +2285,7 @@ Local<Value> ActorClass::setAuxValue(const Arguments &args) {
 
 
 // virtual void kill();
-Local<Value> ActorClass::kill(const Arguments &args) {
+Local<Value> ActorClass::kill(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2296,7 +2297,7 @@ Local<Value> ActorClass::kill(const Arguments &args) {
 }
 
 // virtual void die(::ActorDamageSource const& source);
-Local<Value> ActorClass::die(const Arguments &args) {
+Local<Value> ActorClass::die(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], ActorDamageSourceClass);
     try {
@@ -2318,7 +2319,7 @@ Local<Value> ActorClass::die(const Arguments &args) {
 // );
 
 // virtual float getNextStep(float const moveDist);
-Local<Value> ActorClass::getNextStep(const Arguments &args) {
+Local<Value> ActorClass::getNextStep(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -2332,7 +2333,7 @@ Local<Value> ActorClass::getNextStep(const Arguments &args) {
 }
 
 // virtual void onPush(::Actor&);
-Local<Value> ActorClass::onPush(const Arguments &args) {
+Local<Value> ActorClass::onPush(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], ActorClass);
     try {
@@ -2346,7 +2347,7 @@ Local<Value> ActorClass::onPush(const Arguments &args) {
 }
 
 // virtual ::std::optional<::BlockPos> getLastDeathPos() const;
-Local<Value> ActorClass::getLastDeathPos(const Arguments &args) {
+Local<Value> ActorClass::getLastDeathPos(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2361,7 +2362,7 @@ Local<Value> ActorClass::getLastDeathPos(const Arguments &args) {
 }
 
 // virtual ::std::optional<::DimensionType> getLastDeathDimension() const;
-Local<Value> ActorClass::getLastDeathDimension(const Arguments &args) {
+Local<Value> ActorClass::getLastDeathDimension(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2376,7 +2377,7 @@ Local<Value> ActorClass::getLastDeathDimension(const Arguments &args) {
 }
 
 // virtual void doEnterWaterSplashEffect();
-Local<Value> ActorClass::doEnterWaterSplashEffect(const Arguments &args) {
+Local<Value> ActorClass::doEnterWaterSplashEffect(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2388,7 +2389,7 @@ Local<Value> ActorClass::doEnterWaterSplashEffect(const Arguments &args) {
 }
 
 // virtual void doExitWaterSplashEffect();
-Local<Value> ActorClass::doExitWaterSplashEffect(const Arguments &args) {
+Local<Value> ActorClass::doExitWaterSplashEffect(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2400,7 +2401,7 @@ Local<Value> ActorClass::doExitWaterSplashEffect(const Arguments &args) {
 }
 
 // virtual void doWaterSplashEffect();
-Local<Value> ActorClass::doWaterSplashEffect(const Arguments &args) {
+Local<Value> ActorClass::doWaterSplashEffect(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2418,7 +2419,7 @@ Local<Value> ActorClass::doWaterSplashEffect(const Arguments &args) {
 /* MCAPI */
 
 // MCAPI void addCategory(::ActorCategory const& category);
-Local<Value> ActorClass::addCategory(const Arguments &args) {
+Local<Value> ActorClass::addCategory(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], ActorCategory);
     try {
@@ -2432,7 +2433,7 @@ Local<Value> ActorClass::addCategory(const Arguments &args) {
 }
 
 // MCAPI void addDefinitionGroup(::std::string const& name);
-Local<Value> ActorClass::addDefinitionGroup(const Arguments &args) {
+Local<Value> ActorClass::addDefinitionGroup(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     try {
@@ -2446,7 +2447,7 @@ Local<Value> ActorClass::addDefinitionGroup(const Arguments &args) {
 }
 
 // MCAPI void addEffect(::MobEffectInstance const& effect);
-Local<Value> ActorClass::addEffect(const Arguments &args) {
+Local<Value> ActorClass::addEffect(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], MobEffectInstanceClass);
     try {
@@ -2462,7 +2463,7 @@ Local<Value> ActorClass::addEffect(const Arguments &args) {
 }
 
 // MCAPI bool addTag(::std::string const& tag);
-Local<Value> ActorClass::addTag(const Arguments &args) {
+Local<Value> ActorClass::addTag(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kString);
     try {
@@ -2476,7 +2477,7 @@ Local<Value> ActorClass::addTag(const Arguments &args) {
 }
 
 // MCAPI void applyImpulse(::Vec3 const& impulse);
-Local<Value> ActorClass::applyImpulse(const Arguments &args) {
+Local<Value> ActorClass::applyImpulse(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], Vec3Class);
     try {
@@ -2490,7 +2491,7 @@ Local<Value> ActorClass::applyImpulse(const Arguments &args) {
 }
 
 // MCAPI void buildDebugGroupInfo(::std::string& out) const;
-Local<Value> ActorClass::buildDebugGroupInfo(const Arguments &args) {
+Local<Value> ActorClass::buildDebugGroupInfo(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2503,7 +2504,7 @@ Local<Value> ActorClass::buildDebugGroupInfo(const Arguments &args) {
 }
 
 // MCAPI ::Vec3 buildForward() const;
-Local<Value> ActorClass::buildForward(const Arguments &args) {
+Local<Value> ActorClass::buildForward(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2515,7 +2516,7 @@ Local<Value> ActorClass::buildForward(const Arguments &args) {
 }
 
 // MCAPI void burn(int dmg, bool bInFire);
-Local<Value> ActorClass::burn(const Arguments &args) {
+Local<Value> ActorClass::burn(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckArgType(args[1], ValueKind::kBoolean);
@@ -2530,7 +2531,7 @@ Local<Value> ActorClass::burn(const Arguments &args) {
 }
 
 // MCAPI ::Vec3 calcCenterPos() const;
-Local<Value> ActorClass::calcCenterPos(const Arguments &args) {
+Local<Value> ActorClass::calcCenterPos(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2543,7 +2544,7 @@ Local<Value> ActorClass::calcCenterPos(const Arguments &args) {
 }
 
 // MCAPI float calculateAttackDamage(::Actor& entity);
-Local<Value> ActorClass::calculateAttackDamage(const Arguments &args) {
+Local<Value> ActorClass::calculateAttackDamage(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], ActorClass);
     try {
@@ -2559,7 +2560,7 @@ Local<Value> ActorClass::calculateAttackDamage(const Arguments &args) {
 }
 
 // MCAPI bool canAttack(::Actor const& entity) const;
-Local<Value> ActorClass::canAttack(const Arguments &args) {
+Local<Value> ActorClass::canAttack(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], ActorClass);
     try {
@@ -2575,7 +2576,7 @@ Local<Value> ActorClass::canAttack(const Arguments &args) {
 }
 
 // MCAPI bool canMate(::Actor const& partner) const;
-Local<Value> ActorClass::canMate(const Arguments &args) {
+Local<Value> ActorClass::canMate(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], ActorClass);
     try {
@@ -2593,15 +2594,14 @@ Local<Value> ActorClass::canMate(const Arguments &args) {
 // MCAPI bool canSee(::Actor const& target, ::ShapeType obstructionType) const;
 // MCAPI bool canSee(::Vec3 const& targetPos, ::ShapeType obstructionType) const;
 // MCAPI bool canSee(::Actor const& target, ::ActorLocation targetLocationPart, ::ShapeType obstructionType) const;
-Local<Value> ActorClass::canSee(const Arguments &args) {
+Local<Value> ActorClass::canSee(const Arguments& args) {
     CheckArgsCount(args, 2);
     try {
         if (!mActor) {
             return Local<Value>();
         }
         if (args.size() == 2) {
-            CheckInstanceType(args[1], ShapeType)
-            const auto obstructionType = ConvertFromScriptX<ShapeType>(args[1]);
+            CheckInstanceType(args[1], ShapeType) const auto obstructionType = ConvertFromScriptX<ShapeType>(args[1]);
             if (IsInstanceOf<ActorClass>(args[0])) {
                 return Boolean::newBoolean(mActor->canSee(
                     *EngineScope::currentEngine()->getNativeInstance<ActorClass>(args[0])->mActor,
@@ -2632,7 +2632,7 @@ Local<Value> ActorClass::canSee(const Arguments &args) {
 }
 
 // MCAPI void celebrateHunt(int duration, bool special);
-Local<Value> ActorClass::celebrateHunt(const Arguments &args) {
+Local<Value> ActorClass::celebrateHunt(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckArgType(args[1], ValueKind::kBoolean);
@@ -2647,7 +2647,7 @@ Local<Value> ActorClass::celebrateHunt(const Arguments &args) {
 }
 
 // MCAPI void checkFallDamage(float ya, bool onGround, bool recheckLiquid);
-Local<Value> ActorClass::checkFallDamage(const Arguments &args) {
+Local<Value> ActorClass::checkFallDamage(const Arguments& args) {
     CheckArgsCount(args, 3);
     CheckArgType(args[0], ValueKind::kNumber);
     CheckArgType(args[1], ValueKind::kBoolean);
@@ -2663,7 +2663,7 @@ Local<Value> ActorClass::checkFallDamage(const Arguments &args) {
 }
 
 // MCAPI void chorusFruitTeleport(::Vec3 const& range);
-Local<Value> ActorClass::chorusFruitTeleport(const Arguments &args) {
+Local<Value> ActorClass::chorusFruitTeleport(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], Vec3Class);
     try {
@@ -2677,7 +2677,7 @@ Local<Value> ActorClass::chorusFruitTeleport(const Arguments &args) {
 }
 
 // MCAPI void clearFishingHookID();
-Local<Value> ActorClass::clearFishingHookID(const Arguments &args) {
+Local<Value> ActorClass::clearFishingHookID(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2690,7 +2690,7 @@ Local<Value> ActorClass::clearFishingHookID(const Arguments &args) {
 
 // MCAPI bool closerThan(::Actor const& e, float distance) const;
 // MCAPI bool closerThan(::Actor const& e, float distanceXZ, float distanceY) const;
-Local<Value> ActorClass::closerThan(const Arguments &args) {
+Local<Value> ActorClass::closerThan(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckInstanceType(args[0], ActorClass);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -2719,7 +2719,7 @@ Local<Value> ActorClass::closerThan(const Arguments &args) {
 }
 
 // MCAPI void consumeItem(::ItemActor& itemActor, int count);
-Local<Value> ActorClass::consumeItem(const Arguments &args) {
+Local<Value> ActorClass::consumeItem(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckInstanceType(args[0], ItemActorClass);
     CheckArgType(args[1], ValueKind::kNumber);
@@ -2737,7 +2737,7 @@ Local<Value> ActorClass::consumeItem(const Arguments &args) {
 }
 
 // MCAPI ::UpdateEquipPacket createUpdateEquipPacket(int containerID);
-Local<Value> ActorClass::createUpdateEquipPacket(const Arguments &args) {
+Local<Value> ActorClass::createUpdateEquipPacket(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -2753,7 +2753,7 @@ Local<Value> ActorClass::createUpdateEquipPacket(const Arguments &args) {
 }
 
 // MCAPI ::UpdateTradePacket createUpdateTradePacket(int containerID);
-Local<Value> ActorClass::createUpdateTradePacket(const Arguments &args) {
+Local<Value> ActorClass::createUpdateTradePacket(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kNumber);
     try {
@@ -2769,7 +2769,7 @@ Local<Value> ActorClass::createUpdateTradePacket(const Arguments &args) {
 }
 
 // MCAPI void deregisterTagsFromLevelCache();
-Local<Value> ActorClass::deregisterTagsFromLevelCache(const Arguments &args) {
+Local<Value> ActorClass::deregisterTagsFromLevelCache(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2781,7 +2781,7 @@ Local<Value> ActorClass::deregisterTagsFromLevelCache(const Arguments &args) {
 }
 
 // MCAPI float distanceSqrToBlockPosCenter(::BlockPos const& pos) const;
-Local<Value> ActorClass::distanceSqrToBlockPosCenter(const Arguments &args) {
+Local<Value> ActorClass::distanceSqrToBlockPosCenter(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], BlockPosClass);
     try {
@@ -2798,7 +2798,7 @@ Local<Value> ActorClass::distanceSqrToBlockPosCenter(const Arguments &args) {
 
 // MCAPI float distanceTo(::Actor const& e) const;
 // MCAPI float distanceTo(::Vec3 const& pos) const;
-Local<Value> ActorClass::distanceTo(const Arguments &args) {
+Local<Value> ActorClass::distanceTo(const Arguments& args) {
     CheckArgsCount(args, 1);
     try {
         if (!mActor) {
@@ -2819,7 +2819,7 @@ Local<Value> ActorClass::distanceTo(const Arguments &args) {
 
 // MCAPI float distanceToSqr(::Actor const& e) const;
 // MCAPI float distanceToSqr(::Vec3 const& pos) const;
-Local<Value> ActorClass::distanceToSqr(const Arguments &args) {
+Local<Value> ActorClass::distanceToSqr(const Arguments& args) {
     CheckArgsCount(args, 1);
     try {
         if (!mActor) {
@@ -2839,22 +2839,22 @@ Local<Value> ActorClass::distanceToSqr(const Arguments &args) {
 }
 
 // MCAPI void dropLeash(bool createItemDrop, bool cutRope);
-Local<Value> ActorClass::dropLeash(const Arguments &args) {
-    CheckArgsCount(args, 2);
-    CheckArgType(args[0], ValueKind::kBoolean);
-    CheckArgType(args[1], ValueKind::kBoolean);
-    try {
-        if (!mActor) {
-            return Local<Value>();
-        }
-        mActor->dropLeash(args[0].asBoolean().value(), args[1].asBoolean().value());
-    }
-    Catch;
-    return Local<Value>();
-}
+// Local<Value> ActorClass::dropLeash(const Arguments& args) {
+    // CheckArgsCount(args, 2);
+    // CheckArgType(args[0], ValueKind::kBoolean);
+    // CheckArgType(args[1], ValueKind::kBoolean);
+    // try {
+    //     if (!mActor) {
+    //         return Local<Value>();
+    //     }
+    //     mActor->dropLeash(args[0].asBoolean().value(), args[1].asBoolean().value());
+    // }
+    // Catch;
+    // return Local<Value>();
+// }
 
 // MCAPI void dropTowards(::ItemStack const& item, ::Vec3 towards);
-Local<Value> ActorClass::dropTowards(const Arguments &args) {
+Local<Value> ActorClass::dropTowards(const Arguments& args) {
     CheckArgsCount(args, 2);
     CheckInstanceType(args[0], ItemStackClass);
     CheckInstanceType(args[1], Vec3Class);
@@ -2872,7 +2872,7 @@ Local<Value> ActorClass::dropTowards(const Arguments &args) {
 }
 
 // MCAPI void enableAutoSendPosRot(bool enable);
-Local<Value> ActorClass::enableAutoSendPosRot(const Arguments &args) {
+Local<Value> ActorClass::enableAutoSendPosRot(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckArgType(args[0], ValueKind::kBoolean);
     try {
@@ -2887,7 +2887,7 @@ Local<Value> ActorClass::enableAutoSendPosRot(const Arguments &args) {
 
 // MCAPI void equip(::EquipmentTable const& equipmentTable);
 // MCAPI void equip(::std::string const& lootTableFilePath);
-Local<Value> ActorClass::equip(const Arguments &args) {
+Local<Value> ActorClass::equip(const Arguments& args) {
     CheckArgsCount(args, 1);
     try {
         if (!mActor) {
@@ -2906,7 +2906,7 @@ Local<Value> ActorClass::equip(const Arguments &args) {
 }
 
 // MCAPI void equipFromEquipmentDefinition();
-Local<Value> ActorClass::equipFromEquipmentDefinition(const Arguments &args) {
+Local<Value> ActorClass::equipFromEquipmentDefinition(const Arguments& args) {
     try {
         if (!mActor) {
             return Local<Value>();
@@ -2918,7 +2918,7 @@ Local<Value> ActorClass::equipFromEquipmentDefinition(const Arguments &args) {
 }
 
 // MCAPI float evaluateSeatRotation(::RideableComponent const& rideable, bool useVehicleRenderParams);
-Local<Value> ActorClass::evaluateSeatRotation(const Arguments &args) {
+Local<Value> ActorClass::evaluateSeatRotation(const Arguments& args) {
     CheckArgsCount(args, 1);
     CheckInstanceType(args[0], RideableComponentClass);
     try {
@@ -2933,4 +2933,3 @@ Local<Value> ActorClass::evaluateSeatRotation(const Arguments &args) {
     Catch;
     return Number::newNumber(0.0f);
 }
-
